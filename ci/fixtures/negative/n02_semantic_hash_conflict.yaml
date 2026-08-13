@@ -1,0 +1,13 @@
+fixture_id: N02-v1.1-semantic-hash-conflict
+description: v1.1 语义哈希冲突，必须停止并交 Founder 裁决。
+checker: check_docx_canonical_hashes
+expected: FAIL
+payload:
+  integrity: []
+  comparisons:
+    - file: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      binary_equal: false
+      canonical_equal: false
+      semantic_equal: false
+      expected_classification: PRODUCT_BASELINE_SEMANTIC_CONFLICT
+      founder_confirmation_required: true

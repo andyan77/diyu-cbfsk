@@ -38,6 +38,9 @@ MUTED = "667085"
 LIGHT = "EEF4F8"
 BORDER = "C7D3DD"
 FONT_BODY = "Microsoft YaHei"
+EXECUTION_RUN_ID = "2fcbfed0-be7e-4b6f-938e-7f84109ab162"
+PARENT_EXECUTION_RUN_ID = "29899f92-c965-4c33-a020-8e7f781fe82d"
+BASELINE_DATE = "2026-08-13"
 
 
 def _source(path: Path) -> Path:
@@ -143,6 +146,36 @@ def clone_table_row(table: Table, values: list[str]) -> _Row:
     return row
 
 
+def insert_table_from_template_before(
+    marker: Paragraph,
+    template: Table,
+    headers: list[str],
+    rows: list[list[str]],
+) -> Table:
+    """Insert a table before *marker* while preserving template geometry/style."""
+    if len(headers) != len(template.columns):
+        raise ValueError("Template column count does not match headers")
+    new_tbl = copy.deepcopy(template._tbl)
+    for tr in list(new_tbl.tr_lst):
+        new_tbl.remove(tr)
+    header_tr = copy.deepcopy(template.rows[0]._tr)
+    new_tbl.append(header_tr)
+    table = Table(new_tbl, marker._parent)
+    for cell, value in zip(table.rows[0].cells, headers):
+        set_cell_text(cell, value)
+    row_template = template.rows[1] if len(template.rows) > 1 else template.rows[0]
+    for values in rows:
+        if len(values) != len(headers):
+            raise ValueError("Inserted table row width mismatch")
+        new_tr = copy.deepcopy(row_template._tr)
+        new_tbl.append(new_tr)
+        row = _Row(new_tr, table)
+        for cell, value in zip(row.cells, values):
+            set_cell_text(cell, value)
+    marker._p.addprevious(new_tbl)
+    return table
+
+
 def set_table_value(table: Table, row_label: str, value: str, *, column: int = 1) -> None:
     matches = [row for row in table.rows if row.cells[0].text.strip() == row_label]
     if len(matches) != 1:
@@ -223,8 +256,9 @@ def build_prd() -> None:
     # Cover, document control, version record, and index.
     set_paragraph_text(doc.paragraphs[4], "跨品牌 · 跨品类 · 多模态商品理解 · 人设连续性 · 专家叙事")
     control = doc.tables[0]
-    set_table_value(control, "Document Version（文档版本）", "PRD v1.2 · 人设连续性、多模态商品理解与扩展兼容基线")
+    set_table_value(control, "Document Version（文档版本）", "PRD v1.2 · 人设连续性、多模态商品理解与治理操作基线")
     set_table_value(control, "Project Status（项目状态）", "PROJECT_INITIATED / EXECUTION_NOT_STARTED / M0_AUTHORIZED_FALSE")
+    set_table_value(control, "Baseline Date（基线日期）", BASELINE_DATE)
     set_cell_text(
         doc.tables[1].cell(0, 0),
         "正式立项裁决\n本项目从笛语现有内容生产与陈列场景中独立立项。项目建设一个可跨品牌、跨品类迁移的顶级服装搭配专家内核；正式范围同时包含商品图片的证据分级理解、长期搭配师人设连续性和自媒体原生语感。完整陈列、实时成交辅助与自动发布按扩展兼容和Founder授权合同管理，不因本版本文档升级翻转执行或生产状态。",
@@ -233,7 +267,7 @@ def build_prd() -> None:
     set_table_value(
         document_control,
         "Scope Status（范围状态）",
-        "产品使命、一级范围及D-17—D-26新增能力合同已冻结；详细Schema、评测阈值与知识单元数量在M0—M2最终冻结。",
+        "D-17—D-29与S1—S8已合并为候选合同；详细Schema、评测阈值与知识单元数量仍须在获授权的M0—M2冻结。当前候选待独立Guardian、ChatGPT总顾问与Founder审查。",
     )
     set_table_value(
         document_control,
@@ -244,9 +278,9 @@ def build_prd() -> None:
         doc.tables[3],
         [
             "v1.2",
-            "2026-08-12",
-            "人设连续性、多模态商品理解与扩展兼容基线",
-            "合并Founder新增裁决D-17—D-26：M11 Founder真实品牌注入与夹具回退双路径、合成封闭未见品牌隔离、Commercial V1.0路线不变、搭配师人设连续性、自媒体原生语感、多模态商品理解、VM/实时成交辅助扩展端口、Founder控制发布模式及五品类激活就绪。M0顶层交付清单仍为14项。",
+            BASELINE_DATE,
+            "人设连续性、多模态商品理解与治理操作基线",
+            "完整合并D-17—D-29、S1—S8、单一Founder角色操作模型、隐藏评测物理隔离、条件/合规台账与Project CI。D-23、D-25按Founder本轮补丁改判；M0顶层交付清单仍为14项。候选待Guardian、总顾问与Founder审查，尚未生效。",
         ],
     )
     index = doc.tables[4]
@@ -292,15 +326,16 @@ def build_prd() -> None:
         ["G-12", "自媒体原生语感", "在不改变专业结论的前提下，产生具有平台原生表达、口播节奏、场景感、镜头可拍性和人设辨识度的内容。"],
         ["G-13", "多模态商品理解", "从商品图片中提取搭配决策需要的视觉属性，并保留来源、模型、置信度、冲突与人工覆盖证据。"],
         ["G-14", "扩展兼容与按需开启", "为视觉陈列、实时成交辅助与Founder授权自动发布保留版本化扩展端口，未开启时不增加V1.0强制交付门。"],
+        ["G-15", "Project CI与治理完整性", "角色、权限、任务分级、产品真源与公开/隐藏边界由单一规范源生成和确定性守卫约束，不形成第三套产品真源。"],
     ]:
         clone_table_row(goals, row)
     set_paragraph_text(
         find_paragraph(doc, "• 自动发布内容：本项目V1.0全生命周期保持人工审核在环，自动发布终态不属于V1.0产品承诺——包括所有商业发布门通过之后。（保留不变：FR-17发布前库存复核、“人工可发布率≥75%”质量门。）"),
-        "• 自动发布默认不开启，且不是Commercial V1.0必须能力。默认publication_mode=human_review；Founder可按品牌、租户、账号、内容类型与风险等级授权publication_mode=founder_authorized_auto_publish。授权前必须通过事实、库存、叙事、安全、合规与账号权限检查，并具备审计、撤回、停止、回滚与Kill Switch；未经Founder授权不得启用。",
+        "• V1.0 默认人工审核在环；自动发布仅在 Founder 按租户/品牌/账号/风险级别显式授权后开启，须具备审计、撤回与 Kill Switch。FR-17 与“人工可发布率≥75%”质量门保留不变。",
     )
     set_paragraph_text(
         find_paragraph(doc, "• 以图像识别自动生成或提取商品属性：商品与货盘属性以品牌专属数据库（品牌真源／PIM／ERP等）为唯一来源，V1.0不立项图像识别属性提取工程线；字段缺失时按FR-05既有路径触发收窄或要求补充，不得脑补属性。"),
-        "• 多模态商品理解属于V1.0正式能力，但不得将图片推断写成权威结构化事实。精确面料成分、实际弹性/保暖/透气/耐磨、专业运动支撑、安全认证、尺码真实适配、库存、价格及医疗或功能效果不得仅凭图片断言。",
+        "• 品牌专属数据库仍为权威事实来源；多模态视觉推断按 D-23 分层引入（authoritative > human_confirmed > model_inferred），推断不得覆盖权威事实，不得推断成分、性能、库存与安全认证。",
     )
     non_goal_marker = find_paragraph(doc, "3.3 核心设计原则")
     insert_before(non_goal_marker, "• 完整门店空间陈列与实时交互式导购工具不是V1.0强制交付物；它们通过扩展端口保留前后向兼容，不是永久退出项目。")
@@ -331,6 +366,11 @@ def build_prd() -> None:
         ["C-15", "Multimodal Garment Understanding（多模态商品理解）", "从商品图片提取或判断类别、廓形、松量、长度、肩/腰线、视觉体量与重心、结构/垂坠/光泽、图案/尺度、色彩关系、装饰复杂度、可见穿法、风格倾向与商品间视觉兼容关系，并对证据分级。"],
     ]:
         clone_table_row(capabilities, row)
+    insert_before(
+        find_paragraph(doc, "5.3 品牌风格空间"),
+        "D-17—D-29合并规则：每项须落到具体锚点，禁止浮动条文——D-20五对象（StylistPersonaProfile、PersonaMemorySnapshot、PublishedViewpointLedger、SeriesContinuityState、PersonaConflictRecord）进入M1 Schema清单、M7实现与M2人设连续性评分卡；D-21设独立FR、M2语感评分卡与M7实现；D-23进入garment_and_inventory.schema与MultimodalGarmentUnderstandingLayer组件注记；D-17进入M11注入测试合同；D-22/D-24进入15.6决策节点表端口条目；D-28进入3.3原则P-14、M2三分类合同与可接受决策边界、M3开放题模板、M4分歧账本、M5合法多解族、M6排序合同与DecisionTrace、M10迁移判据、10.2核心决策逻辑稳定率、16.1风险R-22与16.2停止条件、附录B术语；D-29进入M6通过标准与compiler qualification report的架构符合性检查三条、11.1组件注记与16.2停止条件。v1.2核验回执须对D-17—D-29新增内容重跑“目标→FR→门→里程碑”追溯检查。",
+        "Normal",
+    )
     insert_sections_before(
         doc,
         "6. 输入、输出与事实优先级合同",
@@ -346,8 +386,8 @@ def build_prd() -> None:
             (
                 "5.6 多模态商品视觉机制",
                 [
-                    "MultimodalGarmentUnderstandingLayer将ProductImageAssetBundle转换为VisualAttributeExtractionResult，并为每个属性保存VisualAttributeEvidence、AttributeProvenance、AttributeConfidence、HumanAttributeOverride、图片来源/版本、模型/版本、推断时间、冲突字段与是否允许进入正式决策。",
-                    "属性证据分级为authoritative_structured_fact、human_verified_visual_attribute、multimodal_inferred_visual_attribute。图片不能作为库存、价格、尺码真实适配、精确面料与功能/安全功效的唯一证据。",
+                    "MultimodalGarmentUnderstandingLayer将ProductImageAssetBundle转换为VisualAttributeExtractionResult；garment_and_inventory.schema必须为每个属性保存attribute_provenance、证据、置信度、图片/模型版本、推断时间、冲突、人工修订与是否允许进入正式决策。",
+                    "attribute_provenance固定分层为authoritative、human_confirmed、model_inferred，并兼容authoritative_structured_fact、human_verified_visual_attribute、multimodal_inferred_visual_attribute别名。图片不能作为成分、性能、库存或安全认证的证据。",
                 ],
             ),
             (
@@ -409,11 +449,33 @@ def build_prd() -> None:
         ["FR-27", "扩展端口兼容", "系统必须提供VM与实时成交辅助的版本化扩展端口，不重建专家内核且不破坏现有输出。", "验收：新增模块可选、现有Schema/Bundle向后兼容，端口不绕过安全、授权和库存。失败状态：EXTENSION_COMPATIBILITY_BREAK。里程碑：M0/M1/M12。"],
         ["FR-28", "Founder控制发布模式", "默认human_review；Founder可细粒度授权auto_publish，且必须通过全部前置检查和Kill Switch。", "验收：未授权自动发布率=0，决策、撤回、回滚和紧急停止可审计。失败状态：UNAUTHORIZED_AUTO_PUBLISH。里程碑：M1/M2/M12。"],
         ["FR-29", "五类正式导入就绪", "进入正式真实品牌导入前，五类Category Adapter、安全合同、主要Schema、M10评测、版本/部署/权限/Feature Flag必须全部可开启。", "验收：five_category_activation_readiness=100%。失败状态：FIVE_CATEGORY_NOT_READY。里程碑：M1/M2/M9/M10/M12。"],
+        ["FR-30", "Project CI与角色投影完整性", "系统治理必须以governance/bootstrap/role_operating_model.v0.2.yaml为单一规范源，确定性生成AGENTS/CLAUDE/Work CI投影并守卫产品真源、角色权限和隐藏资产边界。", "验收：instruction_projection_drift=0，双活产品真源=0，公开主仓隐藏内容/真实品牌资料/顾客数据命中=0；角色Prompt不构成第三套产品真源。失败状态：PROJECT_CI_INTEGRITY_FAIL。里程碑：M0/M12。"],
     ]
     for row in new_frs:
         clone_table_row(fr_table, row)
 
     # Chapter 8 distillation, candidate types, and strict data-pool isolation.
+    roles = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "角色" and table.cell(1, 0).text.strip() == "Founder")
+    role_rows = [
+        ["FOUNDER_PRODUCT_AUTHORITY", "唯一人类最终裁决票；承担产品、业务、领域、合规自评、语料/档案、数据与品牌资产、风险、里程碑、知识晋级、发布和最终合并。"],
+        ["GPT_CHIEF_ADVISOR", "只读总顾问；审查战略、产品范围、连续性与远程交付，不写仓、不任Guardian、不作最终批准。ChatGPT Web与Work合计一个独立评审票。"],
+        ["CLAUDE_EXECUTION_PLANNER", "只读执行规划；读取真源，产出任务包、允许/禁止路径、Checker与验收；不得写仓、改Founder裁决或审查自己规划的任务。"],
+        ["CODEX_EXECUTION_ENGINEER", "默认唯一常规仓库写入者；按授权范围施工、Checker、Fixtures、Report、Receipt和候选Commit；仅Founder明确授权后合并。"],
+        ["CLAUDE_INDEPENDENT_GUARDIAN", "隔离上下文只读审查冻结Commit；不得参与规划、施工、修复或产品重设计；只可PASS/CONDITIONAL/BLOCK并给证据。"],
+        ["FUTURE_EXTERNAL_HUMAN_REVIEW_EXTENSION", "当前不启用、不构成基线前置；未来可由Founder另行开启外部领域或法律评审。"],
+    ]
+    for row, values in zip(roles.rows[1:], role_rows):
+        for cell, value in zip(row.cells, values):
+            set_cell_text(cell, value)
+    set_paragraph_text(
+        find_paragraph(doc, "同一个Claude Code会话不得同时充当候选生成者和独立守护者。必须使用独立工作区、独立上下文和不同任务合同。"),
+        "当前采用FOUNDER_PLUS_ISOLATED_AI：Founder是唯一人类裁决票；Planner与Guardian必须为不同工作区、不同会话、不同任务合同，Guardian不得读取规划上下文或编辑候选。工作区记录只能作为程序性佐证；无法提供稳定session ID时须标记session_id_available=false并由Founder人工见证。",
+    )
+    insert_before(
+        find_paragraph(doc, "8.3 问题系统的核心维度"),
+        "当前人类班子：Founder 1人；外部领域专家0人；外部法律评审0人；独立人类数据管理员0人。当前AI工作面为GPT总顾问、Claude执行规划、Codex执行工程、Claude独立Guardian。未来外部人类评审扩展受支持，但不是当前基线的成立条件。",
+        "Normal",
+    )
     dimension = next(table for table in doc.tables if table.cell(0, 0).text.strip().startswith("Category（品类）"))
     set_cell_text(
         dimension.cell(0, 0),
@@ -431,6 +493,11 @@ def build_prd() -> None:
         if row.cells[0].text.strip() == "隐藏未见品牌":
             set_cell_text(row.cells[0], "封闭测试用合成未见品牌")
             set_cell_text(row.cells[2], "开发与知识生成链不可针对性读取品牌资料、配方或答案。")
+    knowledge_states = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "状态" and table.cell(1, 0).text.strip() == "model_elicited_candidate")
+    for row in knowledge_states.rows:
+        if row.cells[0].text.strip() == "expert_reviewed":
+            set_cell_text(row.cells[0], "founder_ai_reviewed")
+            set_cell_text(row.cells[1], "隔离GPT、隔离Claude、规则Checker与Founder按风险分级完成内部评审；不得表述为外部专家共识。")
     set_paragraph_text(
         find_paragraph(doc, "夹具品牌供给路径【已裁决】：试点三品类所需的品牌数据内容由Codex依据已冻结Schema与品类合同模拟合成，经Claude Code完整性审核后冻结为系统的夹具品牌（Fixture Brand）。用途：M1—M6开发调试、M6 golden/negative/boundary fixtures、非隐藏回归评测、M3—M6知识引出所需的仿真货盘、M11仿真试点运行。合成资产必须显式标记synthetic_fixture_brand / non_real_inventory / non_commercial_evidence，不得使用可误认为真实品牌的名称或叙事。"),
         "夹具品牌供给路径【已裁决】：Codex依据已冻结Schema与品类合同模拟合成夹具品牌、商品和图片描述，经Claude Code完整性审核后冻结。用途：M1—M6开发调试、M6 fixtures、非隐藏回归、M3—M6知识引出仿真货盘及M11仿真试点。合成资产必须标记synthetic_fixture_brand / non_real_inventory / non_commercial_evidence。M11未收到Founder真实品牌包时，全部使用该路径。",
@@ -448,6 +515,8 @@ def build_prd() -> None:
         "Founder真实品牌注入路径【已裁决】：M11时Founder可提供FounderProvidedRealBrandPackage进行FounderInjectedRealBrandProductionTest。可包含品牌定位、目标人群、风格、商品名/SKU/款色码/说明/图片/角色、可选库存/可售状态与测试任务。如只提供商品与图片，可验证真实商品理解与测试生产，不得制造库存数量、销售状态或门店现货事实。",
         "Founder注入资料除非另行明确授权，不得用于训练、隐藏测试、隐藏品牌生成/增强/校准、通用专家知识固化或公开，也不得当作真实商业结果证据。合成封闭未见品牌是当前工程基准；Founder真实品牌注入是可选外部能力判断路径，两者用途不同、不得混用。",
         "M11多品牌要求不因Founder注入而变：一个注入真实品牌可替代一个夹具测试位，其余位继续由Codex合成；未注入时全部使用夹具。Founder注入不是M11强制硬门。",
+        "隐藏评测物理隔离【S5/D-27】：隐藏题、答案、保密评分细则、隐藏品牌事实包、生成参数和原始输出不得进入主仓、Git历史、LFS、加密压缩包或Planner/Codex可读位置；只能存入Founder控制的独立私有仓、私有对象存储或离线介质。主仓仅保存benchmark_schema、frozen_manifest、content_hashes、runner_interface、result_summary与非秘密元数据；公开目录名固定为02_benchmark_manifests。",
+        "Project CI【D-27】：governance/bootstrap/role_operating_model.v0.2.yaml是角色与执行治理的单一规范源；AGENTS.md、CLAUDE.md、Work/Copilot指令和角色Prompt均为生成投影或任务约束，不能成为第三套产品真源。GitHub Actions必须确定性守卫投影漂移、双活产品真源、角色越权、隐藏资产与秘密边界。",
     ]:
         insert_before(m8_7_end, text, "Normal")
 
@@ -487,17 +556,30 @@ def build_prd() -> None:
         clone_table_row(hard_gates, row)
     quality_gates = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "指标")
     new_metrics = [
-        "persona_identity_consistency_score", "professional_value_consistency_score", "historical_viewpoint_contradiction_rate", "series_continuity_score", "persona_drift_rate", "topic_repetition_without_new_value_rate", "self_media_native_voice_score", "platform_native_expression_score", "spoken_rhythm_score", "shootability_score", "lecture_style_penalty_rate", "formulaic_template_rate", "ai_generated_tone_detection_rate", "visual_attribute_extraction_accuracy", "visual_attribute_confidence_calibration", "structured_fact_conflict_rate", "authoritative_fact_override_rate", "unverifiable_attribute_claim_rate", "cross_image_consistency_score", "low_quality_image_failure_close_rate", "five_category_activation_readiness", "unauthorized_auto_publish_rate",
+        "persona_identity_consistency_score", "professional_value_consistency_score", "historical_viewpoint_contradiction_rate", "series_continuity_score", "persona_drift_rate", "topic_repetition_without_new_value_rate", "self_media_native_voice_score", "platform_native_expression_score", "spoken_rhythm_score", "shootability_score", "lecture_style_penalty_rate", "formulaic_template_rate", "ai_generated_tone_detection_rate", "visual_attribute_extraction_accuracy", "visual_attribute_confidence_calibration", "structured_fact_conflict_rate", "authoritative_fact_override_rate", "unverifiable_attribute_claim_rate", "cross_image_consistency_score", "low_quality_image_failure_close_rate", "five_category_activation_readiness", "unauthorized_auto_publish_rate", "ai_reviewer_disagreement_rate", "founder_override_rate", "founder_sample_review_rate", "high_risk_founder_full_review_rate",
     ]
     for metric in new_metrics:
-        note = "五类正式导入可开启就绪，M12/导入检查为100%。" if metric == "five_category_activation_readiness" else "人设/语感/多模态/发布治理评测域；由M2冻结口径与阈值。"
-        clone_table_row(quality_gates, [metric, "M2_FREEZE_REQUIRED", note])
+        if metric == "five_category_activation_readiness":
+            threshold, note = "M2_FREEZE_REQUIRED", "五类正式导入可开启就绪，M12/导入检查为100%。"
+        elif metric == "high_risk_founder_full_review_rate":
+            threshold, note = "100%", "童装安全、青少年年龄适当性、运动功能安全、隐私、品牌硬规则及法律/医疗/性能承诺不得抽样。"
+        else:
+            threshold, note = "M2_FREEZE_REQUIRED", "内部评审、人设/语感、多模态或发布治理评测域；由M2冻结口径与阈值。"
+        clone_table_row(quality_gates, [metric, threshold, note])
+    for row in quality_gates.rows:
+        if row.cells[0].text.strip() == "未见品牌专家通过率":
+            set_cell_text(row.cells[0], "internal_review_panel_pass_rate（未见品牌）")
+            set_cell_text(row.cells[2], "由隔离GPT、隔离Claude、规则Checker与Founder按冻结评分卡形成内部面板结论；不是外部专家证明。")
+        if row.cells[0].text.strip() == "未见品类/边缘任务通过率":
+            set_cell_text(row.cells[0], "internal_review_panel_pass_rate（未见品类/边缘任务）")
+            set_cell_text(row.cells[2], "内部评审面板重点检查规则迁移与安全边界；不得称为外部专家通过率。")
     hidden_marker = find_paragraph(doc, "10.4 商业发布八道门")
     for text in [
         "• 给出历史观点、栏目状态与品牌事实变化，检查人设稳定性、合理演进、无依据冲突和无新价值重复。",
         "• 将同一人设与专业结论投影到不同平台，检查核心人格一致性、平台原生表达、口播节奏、可拍性、课件/模板/AI腔。",
         "• 给出多角度、低质量和与结构化事实冲突的商品图片，检查视觉属性准确性、置信度校准、跨图一致性与失败关闭。",
         "• 替换底层模型后重放人设与内容任务，检查核心价值观、历史观点和多模态决策边界漂移。",
+        "• 高风险知识（童装安全、青少年身体/年龄适当性、运动功能安全、隐私与个人信息、品牌硬规则、法律/医疗/性能承诺）Founder审查覆盖率必须为100%，不得抽样；中低风险才允许Founder分层抽样、多个隔离AI评审与确定性Checker组合。",
     ]:
         insert_before(hidden_marker, text, "Normal")
     release_gates = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "发布门")
@@ -514,7 +596,7 @@ def build_prd() -> None:
             set_cell_text(row.cells[1], gate_updates[name])
     set_paragraph_text(
         find_paragraph(doc, "M0须交付compliance_review_contract.v1.0.yaml，确定合规责任人、核验清单与决策时间表；具体法律结论由法务形成。首轮法务核验须在M2冻结前完成，不得整体推迟到M9。首批核验清单六项："),
-        "M0须交付compliance_review_contract.v1.0.yaml，确定合规责任人、核验清单与决策时间表；具体法律结论由法务形成。首轮法务核验须在M2冻结前完成，不得整体推迟到M9。首批核验清单七项：",
+        "当前review_mode=FOUNDER_PLUS_ISOLATED_AI，external_human_review=false，external_legal_opinion=false。Founder须在founder_compliance_decision_ledger.yaml中对每项合规问题分别作ACCEPT/MITIGATE/DEFER/BLOCK裁决，记录理由、证据、控制、下次复核里程碑与external_legal_opinion_obtained=false；AI仅提供对抗支持，不得冒充律师意见。首批核验清单七项：",
     )
     ch11 = find_paragraph(doc, "11. 技术与运营要求")
     insert_before(ch11, "⑦ Founder或品牌提供的商品图片使用权、保密义务、保存期限、模型处理与输出公开范围。", "Normal")
@@ -531,6 +613,9 @@ def build_prd() -> None:
         ["ExtensionPortRegistry", "版本化管理VisualMerchandisingExtensionPort、RealtimeSalesAssistExtensionPort及未来可选扩展，维持Schema/Bundle兼容。"],
     ]:
         clone_table_row(components, row)
+    for row in components.rows:
+        if row.cells[0].text.strip() == "MultimodalGarmentUnderstandingLayer":
+            set_cell_text(row.cells[1], "摄取商品图片并写入garment_and_inventory.schema.attribute_provenance；只允许authoritative > human_confirmed > model_inferred分层，推断不得覆盖权威事实，也不得推断成分、性能、库存与安全认证。")
     nfrs = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "ID" and table.cell(1, 0).text.strip() == "NFR-01")
     for row in [
         ["NFR-09", "人设状态版本化与可重放", "StylistPersonaProfile、PersonaMemorySnapshot、PublishedViewpointLedger、栏目状态、冲突和观点修订必须可版本化、可回放、可回滚。"],
@@ -566,7 +651,7 @@ def build_prd() -> None:
             "platform_voice_profile.schema.v0.1.json",
             "product_image_asset_bundle.schema.v0.1.json",
             "visual_attribute_extraction_result.schema.v0.1.json",
-            "attribute_provenance.schema.v0.1.json",
+            "garment_and_inventory.schema.v0.1.json（新增attribute_provenance：authoritative / human_confirmed / model_inferred）",
             "publication_policy.schema.v0.1.json",
             "extension_port_contracts（VM／实时成交辅助／结果Bundle兼容）",
         ],
@@ -624,6 +709,20 @@ def build_prd() -> None:
     for chapter in (13, 14):
         for milestone, lines in additions.items():
             insert_milestone_deliverables(doc, milestone, chapter, lines)
+    replace_text(doc, "rater_calibration_contract.v0.1.yaml", "reviewer_calibration_contract.v0.1.yaml")
+    # §6.6：单条 reviewer_calibration_contract 兼容扩展，不允许出现两条同名交付物。
+    replace_text(
+        doc,
+        "reviewer_calibration_contract.v0.1.yaml（评分卡培训流程、双盲抽检、评分者一致性阈值）",
+        "reviewer_calibration_contract.v0.1.yaml（兼容旧名rater_calibration_contract；评分卡培训、双盲抽检、评分者一致性阈值、Founder标定锚点题、AI评审员盲评与分歧率、Founder覆盖与推翻记录、模型版本变化后重新标定；内部一致性不得表述为外部专家共识）",
+        count=1,
+    )
+    replace_text(
+        doc,
+        "reviewer_calibration_contract.v0.1.yaml（评分者校准）",
+        "reviewer_calibration_contract.v0.1.yaml（评分者校准；兼容旧名rater_calibration_contract，含Founder锚点题、AI盲评与分歧率、Founder覆盖/推翻记录与模型变更再标定）",
+        count=1,
+    )
 
     # Adjust milestone targets and pass standards in chapter 13 via stable text.
     target_replacements = {
@@ -669,8 +768,8 @@ def build_prd() -> None:
     for text in [
         "• Founder真实品牌注入——决策节点：M11试点基线冻结前；裁决人：Founder；未提供即自动回退Codex夹具合成，不阻断M11。",
         "• 发布模式——决策节点：每个品牌/租户/账号/内容类型首次启用自动发布前；裁决人：Founder；未决策默认human_review。",
-        "• Visual Merchandising扩展——决策节点：Founder提出空间陈列产品化需求时另立Brief；未启动时只维护VisualMerchandisingExtensionPort兼容。",
-        "• 实时成交辅助扩展——决策节点：Founder确认实时终端形态、数据权限、延迟与安全合同后另立Brief；未启动时只维护RealtimeSalesAssistExtensionPort兼容。",
+        "• D-22 / VisualMerchandisingExtensionPort——决策节点：Founder提出空间陈列产品化需求时另立Brief；未启动时只维护端口、Schema版本和向后兼容，不得写成永久退出。",
+        "• D-24 / RealtimeSalesAssistExtensionPort——决策节点：Founder确认实时终端形态、数据权限、延迟与安全合同后另立Brief；未启动时只维护端口、Schema版本和安全路由，不得写成永久退出。",
     ]:
         insert_before(decision_end, text, "Normal")
 
@@ -695,12 +794,229 @@ def build_prd() -> None:
         "• 发现严重历史观点冲突且未形成事实依据、修订原因和版本记录：停止该内容链。",
         "• Founder注入数据进入隐藏集、训练链或通用知识真源：停止测试与候选链，清理污染并重建隔离数据池。",
         "• 任一扩展模块破坏现有输出Schema/Bundle兼容性或绕过安全、授权、库存门：停止扩展发布并回滚。",
+        "• Planner与Guardian同会话/同工作区，或Guardian读取规划上下文、编辑候选：停止审查并重新建立隔离工作面。",
+        "• 隐藏题、答案、保密评分细则、隐藏品牌事实包、生成参数或原始输出进入主仓/Git历史：停止候选链并重建隔离存储。",
+        "• 角色不可用却未在Receipt记录Founder替位/豁免裁决：默认DEFER，不得继续闭环。",
+        "• CONDITIONAL缺少条件台账、证据、复核角色、closure commit或Founder关闭决定：不得声明PASS或CLOSED。",
     ]:
         insert_before(stop_end, text, "Normal")
+    governance_marker = find_paragraph(doc, "17. 首个执行任务")
+    insert_before(governance_marker, "16.4 任务分级、角色降级与条件关闭", "Heading 2")
+    for text in [
+        "L1仅限错别字、标点、无语义格式、机械同步、链接/索引或不改变合同含义的版式修复；须Founder确认L1、Codex修改、确定性Checker和Founder批准具体Commit。涉及范围、能力、角色、状态、阈值、风险、Schema、安全、合规、CI、知识晋级、发布或隐藏评测时不得使用L1。",
+        "L2用于已冻结合同内实现、无产品语义变化的Schema/Checker与常规测试报告；执行Planner→Founder任务包/基线批准→Codex→Guardian→PR→ChatGPT总顾问→Founder批准→合并。",
+        "L3用于PRD、角色权限、知识状态、隐藏评测、安全、合规、发布门、模型切换、知识晋级、Commercial版本和主仓治理；不得未经Founder显式豁免跳过独立Guardian、总顾问远程审查或Founder具体Commit批准。",
+        "关键角色不可用默认DEFER。ChatGPT不可用时Founder可DEFER、指定替位顾问或显式豁免并接受风险；Codex不可用时默认顺延，紧急指定TEMPORARY_EXECUTION_WRITER时不得兼任Guardian，须独立工作区与同等证据。",
+        "CONDITIONAL不等于PASS。每个条件必须进入conditional_decision_ledger.yaml，绑定source commit、owner、due milestone、required evidence、verification role、closure commit与Founder closure decision；修复产生新Commit后旧Guardian和总顾问结论失效，必须重审。",
+        "授权层级固定为PRD→里程碑执行申请→Founder裁决→任务包/执行Prompt→角色Prompt；下层文件不得扩大上层权限。",
+    ]:
+        insert_before(governance_marker, text, "Normal")
+
+    # Single-Founder operating capacity and review contract.
+    effort_baseline = next(table for table in doc.tables if table.cell(0, 0).text.strip().startswith("工程量与工期默认基线"))
+    set_cell_text(
+        effort_baseline.cell(0, 0),
+        "工程量与工期口径（单一Founder模式）\n125—185人月与15—24个月暂不改变；effort_unit=HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH，staffing_commitment=false，founder_approved_estimation_basis=true。该数字是人机工作等价值与路线估算，不是当前必须招聘或配置相同人类团队的承诺。",
+    )
+    set_paragraph_text(
+        find_paragraph(doc, "团队配置维持核心全职8—10人＋外部专家组6—10名兼职；v1.1新增角色见15.3。"),
+        "当前实际班子按单一Founder模式运行，不把8—10人＋外部专家组写成当前强制编制。原配置仅保留为reference_delivery_capacity_model，status=NON_BINDING_REFERENCE，表示工作量等价能力模型，不表示当前人数或招聘承诺。",
+    )
+    replace_heading(doc, "15.3 建议核心团队", "15.3 当前实际班子与非约束容量参考")
+    set_paragraph_text(
+        find_paragraph(doc, "建议核心全职团队为8—10人，并使用分阶段外部专家审查。单一高价搭配师不得成为唯一真源，否则系统容易把个人风格、年龄与客户群偏好误写成通用规律。"),
+        "current_human_team：Founder 1人；外部领域专家0人；外部法律评审0人；独立人类数据管理员0人。current_ai_workspaces：GPT_CHIEF_ADVISOR、CLAUDE_EXECUTION_PLANNER、CODEX_EXECUTION_ENGINEER、CLAUDE_INDEPENDENT_GUARDIAN。未来外部人类评审可由Founder开启，但不要求当前基线先行配置。",
+    )
+    replace_heading(doc, "15.4 专家审查量级", "15.4 内部评审容量参考")
+    set_paragraph_text(find_paragraph(doc, "• POC：约40—60个专家工作日。"), "• POC：约40—60个内部评审工作日等价值，仅作非约束容量参考。")
+    set_paragraph_text(find_paragraph(doc, "• Pilot MVP：累计约100—150个专家工作日。"), "• Pilot MVP：累计约100—150个内部评审工作日等价值；由隔离AI、规则Checker与Founder组合完成。")
+    set_paragraph_text(find_paragraph(doc, "• Commercial V1.0：累计约180—260个专家工作日，分布于五类品类、隐藏评测、仿真试点与真实品牌补验批次。"), "• Commercial V1.0：累计约180—260个内部评审工作日等价值，分布于五类品类、隐藏评测、仿真试点与真实品牌补验批次；不代表外部专家已参与。")
+    team = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "角色" and table.cell(1, 0).text.strip() == "Founder / Product Authority")
+    replacements = [
+        ["FOUNDER_PRODUCT_AUTHORITY", "1人；唯一人类裁决票", "产品、业务、领域、合规自评、风险、里程碑、知识晋级、发布与最终合并。"],
+        ["GPT_CHIEF_ADVISOR", "AI只读工作面", "战略、产品范围、连续性和远程交付审查；不写仓、不任Guardian。"],
+        ["CLAUDE_EXECUTION_PLANNER", "AI只读工作面", "读取真源，输出任务包、边界、Checker与验收；不得写仓或自审。"],
+        ["CODEX_EXECUTION_ENGINEER", "AI范围写入工作面", "默认唯一常规落盘；候选Commit、Checker、Fixtures、Report、Receipt；无Founder授权不合并。"],
+        ["CLAUDE_INDEPENDENT_GUARDIAN", "AI隔离只读工作面", "只审冻结Commit；不规划、不施工、不修复。"],
+        ["FUTURE_EXTERNAL_HUMAN_REVIEW", "当前0人；可选扩展", "外部领域/法律评审由Founder未来另行开启；当前external_human_review=false、external_legal_opinion=false。"],
+        ["REFERENCE_DELIVERY_CAPACITY_MODEL", "非约束参考", "旧8—10人及外部专家配置仅解释工作量等价，不构成当前编制或招聘承诺。"],
+        ["FOUNDER_COMPLIANCE_SELF_ASSESSMENT", "Founder逐项裁决", "六类合规问题逐项进入台账；AI提供对抗支持，不冒充外部法律意见。"],
+        ["DATA_AND_ARCHIVE_OWNERSHIP", "Founder当前兼任", "语料、品牌档案、数据与隐藏集存储责任；隐藏集实际内容必须物理隔离于主仓。"],
+        ["ROLE_UNAVAILABILITY_FALLBACK", "默认DEFER", "替位或豁免必须Founder显式裁决、独立会话/工作区并写Receipt；不得静默绕过。"],
+    ]
+    for row, values in zip(team.rows[1:], replacements):
+        for cell, value in zip(row.cells, values):
+            set_cell_text(cell, value)
+
+    decision_rights = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "角色" and table.cell(1, 0).text.strip() == "Founder" and len(table.rows) == 7)
+    boundaries = [
+        ["FOUNDER_PRODUCT_AUTHORITY", "唯一最终裁决：产品、风险、合规自评、里程碑、知识晋级、发布与合并。"],
+        ["GPT_CHIEF_ADVISOR", "只读建议与远程对齐审查；无写入、Guardian或最终批准权。"],
+        ["CLAUDE_EXECUTION_PLANNER", "只读规划；不得写仓、改裁决或自审。"],
+        ["CODEX_EXECUTION_ENGINEER", "范围写入与候选冻结；无权改产品合同或未经Founder合并。"],
+        ["CLAUDE_INDEPENDENT_GUARDIAN", "只读独立审查冻结Commit；无编辑、规划、修复与商业批准权。"],
+        ["FUTURE_EXTERNAL_HUMAN_REVIEW", "当前未启用；未来意见不自动取代Founder裁决。"],
+    ]
+    for row, values in zip(decision_rights.rows[1:], boundaries):
+        for cell, value in zip(row.cells, values):
+            set_cell_text(cell, value)
+
+    # ---- Supplement SUPP-01: D-28 合理多解原则 / D-29 M6 反退化验收 ----
+    # 编号约束：原Prompt「原有编号一律不重排」。P-10—P-13 与 R-15—R-21 已被 D-20—D-26 占用，
+    # 因此补充Prompt文字中的 "P-10" / "R-15" 在本版落为下一可用编号 P-14 / R-22，语义不变。
+    principles = find_table(doc, "原则")
+    clone_table_row(
+        principles,
+        [
+            "P-14",
+            "Non-Uniqueness by Design（合理多解原则）",
+            "除具体运行事实、库存、品类安全、品牌硬规则及明确合同约束外，搭配诊断、候选组合、视觉取舍、风格表达与叙事命题"
+            "不得假设存在唯一标准答案。评测对象是约束遵守、机制成立性、取舍质量、可解释性与决策边界，而非与单一参考答案的相似度。",
+        ],
+    )
+    insert_before(
+        find_paragraph(doc, "4. 领域范围、用户与核心场景"),
+        "P-14落地口径：评测任务强制三分类——① constraint_correctness（硬约束题，唯一0/1）；② mechanism_correctness"
+        "（评可接受推理区间）；③ open_decision（评可接受解空间与多解族质量）。②③类禁止设置唯一Gold Answer，"
+        "冻结对象是Acceptable Decision Boundary（可接受决策边界），不是参考答案。",
+        "Normal",
+    )
+
+    # D-28 · M2：EvaluationCard 与 benchmark_capability_matrix 强制三分类。
+    knowledge_objects = find_table(doc, "知识对象")
+    for row in knowledge_objects.rows:
+        if row.cells[0].text.strip() == "EvaluationCard":
+            set_cell_text(
+                row.cells[1],
+                "题目、输入、预期边界、评分标准、硬失败和裁决说明；必须标注evaluation_task_class"
+                "（constraint_correctness／mechanism_correctness／open_decision），②③类不得写入唯一Gold Answer。",
+            )
+    replace_text(
+        doc,
+        "benchmark_capability_matrix.v0.1.yaml",
+        "benchmark_capability_matrix.v0.1.yaml（每条能力项须标注evaluation_task_class：constraint_correctness／mechanism_correctness／open_decision）",
+        count=2,
+    )
+
+    supplement_additions = {
+        "2": [
+            "evaluation_task_class_contract.v0.1.yaml（D-28强制三分类：constraint_correctness唯一0/1；mechanism_correctness评可接受推理区间；open_decision评可接受解空间与多解族质量）",
+            "acceptable_decision_boundary_registry.v0.1.yaml（②③类冻结对象＝可接受决策边界；禁止设置唯一Gold Answer）",
+        ],
+        "3": [
+            "open_decision_question_template_contract.v0.1.yaml（D-28：开放型问题须要求至少两个成立但取舍不同的方案，并说明什么条件变化会交换优先级；与FR-08对齐）",
+        ],
+        "5": [
+            "disagreement_classification_and_solution_family_ledger.v0.1.yaml（D-28二分类：错误分歧＝违反硬约束/安全/机制必须裁决；合法审美分歧＝约束全满足但取舍不同，保留为合法多解族并给知识对象加solution_family标记）",
+        ],
+        "6": [
+            "architecture_conformance_check_report（D-29架构符合性检查三条：硬约束确定性代码＋fixtures单测、LLM-off不变性可重放、DecisionTrace显示每个排除项的确定性规则）",
+            "llm_off_invariance_replay_fixtures（关闭LLM解释/生成组件后的约束过滤与候选排除结果比对）",
+            "acceptable_solution_family_trace（D-28：DecisionTrace记录被舍弃的合法候选族与取舍理由）",
+        ],
+        "10": [
+            "legal_decision_space_conformance_report（D-28：迁移判据为是否持续落在合法决策空间内，不与隐藏参考答案比对唯一一致性）",
+        ],
+    }
+    for chapter in (13, 14):
+        for milestone, lines in supplement_additions.items():
+            insert_milestone_deliverables(doc, milestone, chapter, lines)
+
+    # D-28 · M4 分歧账本保留合法分歧。
+    replace_text(
+        doc,
+        "model_disagreement_ledger.v0.1.jsonl",
+        "model_disagreement_ledger.v0.1.jsonl（D-28：保留合法分歧，不得为评分便利消灭）",
+        count=2,
+    )
+
+    # D-28 / D-29 · 里程碑通过标准（第13章正文与第14章验收门同步）。
+    pass_standard_updates = {
+        "隐藏集、评分卡、硬门和阈值冻结；后续失败不得降标；泄漏与同质性双检查通过。":
+            "隐藏集、评分卡、硬门和阈值冻结；后续失败不得降标；泄漏与同质性双检查通过；"
+            "EvaluationCard与benchmark_capability_matrix三分类齐备，②③类未设置唯一Gold Answer，冻结对象为可接受决策边界。",
+        "问题覆盖多条件冲突、排除理由、副作用、规则失效、跨品牌/品类迁移与叙事真实性；禁止以知识清单题为主。":
+            "问题覆盖多条件冲突、排除理由、副作用、规则失效、跨品牌/品类迁移与叙事真实性；禁止以知识清单题为主；"
+            "开放型问题模板须给出至少两个成立但取舍不同的方案及优先级交换条件。",
+        "所有物理调用、失败、重试与候选均可追踪；不得把候选标为accepted。":
+            "所有物理调用、失败、重试与候选均可追踪；不得把候选标为accepted；合法分歧在分歧账本中保留，不得为评分便利消灭。",
+        "知识状态链完整；个人审美不得伪装为普遍规律；高风险知识有多人审查。":
+            "知识状态链完整；个人审美不得伪装为普遍规律；高风险知识Founder审查覆盖率100%，AI分歧与Founder推翻均可审计；"
+            "分歧已按错误分歧与合法审美分歧二分类，合法多解族带solution_family标记保留。",
+        "库存、品牌、品类、用户拒绝项等硬约束确定性执行；所有选择与排除可解释。":
+            "库存、品牌、品类、用户拒绝项等硬约束确定性执行；所有选择与排除可解释；架构符合性检查三条全部通过——"
+            "① 硬约束由确定性代码执行且可用fixtures单测；② LLM-off不变性：关闭LLM解释/生成组件后约束过滤与候选排除结果不变且可重放；"
+            "③ DecisionTrace可显示每个排除项由哪条确定性规则触发。StylingRanker在可行解集合上排序而非唯一argmax，"
+            "被舍弃的合法候选族及理由须进入DecisionTrace。",
+        "硬门全通过，质量门达到M2冻结阈值；失败不得通过补写隐藏品牌专属规则修复。":
+            "硬门全通过，质量门达到M2冻结阈值；失败不得通过补写隐藏品牌专属规则修复；"
+            "迁移判据为输出是否持续落在合法决策空间内，不是与隐藏参考答案一致。",
+    }
+    for old, new in pass_standard_updates.items():
+        replace_text(doc, old, new, count=2)
+
+    # D-29 · M6 目标：禁止单层 Prompt/RAG 端到端直答。
+    replace_text(
+        doc,
+        "目标：用结构化知识、权威商品事实、有来源与置信度的多模态视觉推断、人工覆盖、硬约束、候选组合、排序与LLM解释形成受约束决策。",
+        "目标：用结构化知识、权威商品事实、有来源与置信度的多模态视觉推断、人工覆盖、硬约束、候选组合、排序与LLM解释形成受约束决策。"
+        "M6不得实现为“把已接受知识注入Prompt/RAG后由LLM端到端直接作答”的单层结构：硬约束执行（库存/品牌/品类/安全/用户拒绝项）、"
+        "候选生成与排序必须是确定性、可审计步骤；LLM用于语义解析、解释与叙事生成，不得作为硬约束的唯一执行者。",
+        count=1,
+    )
+
+    # D-28 / D-29 · 11.1 组件注记。
+    component_updates = {
+        "ConstraintEngine": "执行库存、品牌、品类、安全、用户拒绝和场景硬约束。D-29：必须由确定性、可审计代码执行并可用fixtures单测；"
+                            "关闭LLM组件后过滤与排除结果不变。",
+        "StylingRanker": "在可行解集合上按品牌、个体、场景、功能与经营目标排序和取舍；输出是有序的合法候选族，不是唯一argmax（D-28）。",
+        "DecisionTraceEngine": "保存事实、知识、候选、排除、不确定性和版本；每个排除项须标注触发它的确定性规则，"
+                               "被舍弃的合法候选族及取舍理由一并记录（D-28/D-29）。",
+    }
+    components_table = find_table(doc, "组件")
+    for row in components_table.rows:
+        name = row.cells[0].text.strip()
+        if name in component_updates:
+            set_cell_text(row.cells[1], component_updates[name])
+
+    # D-28 · 10.2 指标更名，阈值不变。
+    gates_table = find_table(doc, "指标")
+    renamed = 0
+    for row in gates_table.rows:
+        if row.cells[0].text.strip() == "核心判断重复一致率":
+            set_cell_text(row.cells[0], "核心决策逻辑稳定率")
+            set_cell_text(
+                row.cells[2],
+                "相同输入与约束下，核心专业逻辑（机制判断、约束处理、取舍原则）不得无依据漂移；具体选品与方案族允许不同。"
+                "反例＝同条件下先“弱化肩部”后“强化肩部”（失败）；非反例＝同条件下一次裤装方案、一次裙装方案且均成立（不计失败）。",
+            )
+            renamed += 1
+    if renamed != 1:
+        raise ValueError(f"expected exactly one 核心判断重复一致率 row, got {renamed}")
+
+    # D-28 · 16.1 风险 R-22。
+    risks_table = find_table(doc, "风险")
+    clone_table_row(
+        risks_table,
+        [
+            "R-22",
+            "唯一答案偏误",
+            "benchmark被做成单一标准答案型，把开放决策题当成有唯一Gold Answer的考试，考错对象。",
+            "严重度对标R-09：D-28三分类合同、②③类禁设唯一Gold Answer、M2冻结前checker与独立Guardian审查。",
+        ],
+    )
+
+    # D-28 / D-29 · 16.2 停止条件。
+    supplement_stop_end = find_paragraph(doc, "16.3 决策权")
+    for text in [
+        "• mechanism_correctness或open_decision类任务被设置唯一Gold Answer：停止M2冻结，改回可接受决策边界后重跑。",
+        "• M6以纯Prompt/RAG端到端直答实现，或硬约束由LLM单独执行、LLM-off后过滤与排除结果改变：停止M6通过判定并重建确定性执行层。",
+    ]:
+        insert_before(supplement_stop_end, text, "Normal")
 
     # Chapter 17 keeps exactly 14 top-level M0 deliverables.
     first_task = find_paragraph(doc, "该任务只完成M0并为M1—M2建立可执行基础，不进行大规模知识蒸馏，不接真实品牌生产，不翻Serving状态。")
-    set_paragraph_text(first_task, first_task.text + " D-17—D-26新增能力只写入既有合同和M1/M2 Brief，不增加M0第15项，不在M0处理Founder真实品牌数据、运行多模态识别、建立人设记忆生产库或启用自动发布。")
+    set_paragraph_text(first_task, first_task.text + " D-17—D-29新增能力与治理只写入既有合同和M1/M2 Brief，不增加M0第15项，不在M0处理Founder真实品牌数据、运行多模态识别、建立人设记忆生产库或启用自动发布。")
 
     # Appendix terminology.
     terms = next(table for table in doc.tables if table.cell(0, 0).text.strip() == "术语")
@@ -717,6 +1033,11 @@ def build_prd() -> None:
         ["Visual Merchandising Extension Port", "面向未来空间陈列上下文、Planogram与执行结果的版本化扩展端口；非V1.0强制交付门。"],
         ["Realtime Sales Assist Extension Port", "面向未来导购会话、顾客交互状态与实时推荐的版本化扩展端口；非V1.0强制交付门。"],
         ["Five-category Activation Readiness（五品类激活就绪）", "五类首发品类的Adapter、安全合同、主要Schema、M10评测、版本/部署/权限/Feature Flag全部可开启的正式真实品牌导入前置状态。"],
+        ["Non-Uniqueness by Design（合理多解原则）", "除具体运行事实、库存、品类安全、品牌硬规则与明确合同约束外，搭配诊断、候选组合、视觉取舍、风格表达与叙事命题不假设唯一标准答案；评测对象是约束遵守、机制成立性、取舍质量、可解释性与决策边界。"],
+        ["Acceptable Decision Boundary（可接受决策边界）", "mechanism_correctness与open_decision类任务的冻结对象：界定哪些推理区间与解空间成立、哪些越界，取代唯一参考答案。"],
+        ["Legitimate Solution Family（合法多解族）", "在全部硬约束、安全与品牌规则均满足前提下取舍不同的一组成立方案；合法审美分歧保留为该族，知识对象以solution_family标记，不作为错误分歧裁决消灭。"],
+        ["Decision Logic Stability Rate（核心决策逻辑稳定率）", "相同输入与约束下核心专业逻辑（机制判断、约束处理、取舍原则）不无依据漂移的比率；具体选品与方案族允许不同，原名“核心判断重复一致率”，阈值≥85%不变。"],
+        ["LLM-off Invariance（LLM-off不变性）", "关闭LLM解释与生成组件后，约束过滤与候选排除结果保持不变且可重放；D-29的M6架构符合性检查项之一。"],
     ]
     for row in term_rows:
         clone_table_row(terms, row)
@@ -728,13 +1049,25 @@ def build_prd() -> None:
         "一个专家内核适配不同品牌与品类；权威事实与证据分级多模态理解约束专业判断；专业判断通过持续人设与原生语感生成叙事；模型知识只能经评测与裁决晋级；扩展能力按Founder裁决开启且不破坏内核合同。",
         count=1,
     )
+    replace_text(doc, "D-17—D-26", "D-17—D-29")
+    replace_text(doc, "D-17~D-26", "D-17~D-29")
+    replace_text(doc, "02_benchmarks_hidden/", "02_benchmark_manifests/")
+    replace_text(doc, "外部专家对高价值、高风险与高分歧候选进行校准并形成接受基线。", "隔离GPT、隔离Claude与规则Checker对中低风险候选进行内部盲评；Founder对高风险候选100%审查，并裁决知识晋级。")
+    replace_text(doc, "专家抽评≥100件", "内部评审抽检≥100件")
+    replace_text(doc, "专家通过率初值", "internal_review_panel_pass_rate初值")
+    replace_text(doc, "知识蒸馏、知识工程与专家审查", "知识蒸馏、知识工程与内部评审")
+    replace_text(doc, "专家知识门", "内部知识评审门")
+    replace_text(doc, "专家审查工作台", "内部评审工作台")
+    replace_text(doc, "专家复核", "Founder与隔离AI复核")
+    replace_text(doc, "引入多专家与真实案例", "引入隔离多评审、Founder裁决与可验证案例")
+    replace_text(doc, "原生语感评分、anti-template checker、专家/内容评审与跨平台测试", "原生语感评分、anti-template checker、隔离AI/Founder内部评审与跨平台测试")
     replace_text(doc, "— Founder正式立项基线 v1.0 · 2026-08-12 ｜ v1.1 独立解耦与审查修复基线 · 2026-08-12 —", "— PRD v1.2 · 人设连续性、多模态商品理解与扩展兼容基线 · 2026-08-12 · 待Founder签署生效 —", count=1)
     for section in doc.sections:
         if section.header.paragraphs:
             set_paragraph_text(section.header.paragraphs[0], "DIYU-CBFSK-001  |  笛语跨品牌服装搭配专家内核  |  PRD v1.2")
     doc.core_properties.title = "笛语跨品牌服装搭配专家内核 PRD 与执行里程碑 v1.2"
-    doc.core_properties.subject = "人设连续性、多模态商品理解与扩展兼容基线"
-    doc.core_properties.comments = "PROJECT_INITIATED; EXECUTION_NOT_STARTED; M0_AUTHORIZED_FALSE; PRODUCTION_SERVABLE_FALSE"
+    doc.core_properties.subject = "D-17—D-29、单一Founder治理操作模型与Project CI候选基线"
+    doc.core_properties.comments = f"EXECUTION_RUN_ID={EXECUTION_RUN_ID}; PROJECT_INITIATED; EXECUTION_NOT_STARTED; M0_AUTHORIZED_FALSE; PRODUCTION_SERVABLE_FALSE"
     doc.save(PRD_OUTPUT)
 
 
@@ -744,19 +1077,19 @@ def build_m0() -> None:
     replace_text(doc, "PRD v1.1", "PRD v1.2")
     replace_text(doc, "PRD / v1.1", "PRD / v1.2")
     replace_text(doc, "_v1.1.docx", "_v1.2.docx")
-    replace_text(doc, "与 v1.1 Delta 冲突条文", "与 PRD v1.2 及 D-17—D-26 冲突条文")
+    replace_text(doc, "与 v1.1 Delta 冲突条文", "与 PRD v1.2 及 D-17—D-29 冲突条文")
     replace_text(doc, "人工发布与夹具品牌不可证明范围", "Founder控制发布、多模态事实分级与夹具/Founder注入品牌不可证明范围")
 
     control = doc.tables[0]
     set_table_value(control, "申请 ID", "DIYU-CBFSK-EXEC-REQ-M0-003")
     set_table_value(control, "生效前置条件", "PRD v1.2全文（笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx）经Founder签署生效，且本申请经Founder签署。两项均未满足前，m0_authorized=false，不得开工。")
-    set_table_value(control, "依据文件", "PRD v1.2全文（可独立阅读的合并版）＋PRD_v1.2_change_map.yaml＋PRD_v1.2_核验回执.docx。PRD v1.1、M0申请v1.1与v1.1核验回执已归档至归档_v1.1/，仅作历史证据。")
-    set_table_value(control, "任务范围", "仅完成M0，并为M1–M2建立可执行基础；产出PRD v1.2第13/14/17.1节统一的十四项顶层交付物。D-17—D-26内容写入现有合同文件和M1/M2 Brief，不增加第15项。")
+    set_table_value(control, "依据文件", "待Founder签署的PRD v1.2全文候选＋PRD_v1.2_change_map.yaml＋PRD_v1.2_核验回执.docx＋治理角色规范源。v1.2生效前，根目录v1.1仍保持远程当前活基线且状态PENDING_FOUNDER_SIGNATURE；不得提前归档。")
+    set_table_value(control, "任务范围", "仅申请完成M0，并为M1–M2建立可执行基础；产出PRD v1.2第13/14/17.1节统一的十四项顶层交付物。D-17—D-29与S1—S8写入现有合同文件和M1/M2 Brief，不增加第15项。")
     set_table_value(control, "本申请取代", "本申请取代DIYU-CBFSK-EXEC-REQ-M0-002（M0执行申请v1.1）。更早的001及18项版均仍为已归档历史文件，不得作为执行依据。")
     set_table_value(
         control,
         "Founder 已裁决冲突项",
-        "① M0顶层交付清单仍为14项，D-17—D-26均内嵌现有合同与M1/M2 Brief。② M11仍为夹具品牌仿真试点，增加Founder真实品牌注入优先路径与Codex夹具回退；注入非M11硬门。③ 未见品牌仍为物理隔离的合成封闭品牌；Founder数据不得进入。④ M12名称、M0—M12顺序与Commercial V1.0路线不变。⑤ 人设连续性、自媒体原生语感和多模态商品理解升为正式能力与评测域。⑥ VM与实时成交辅助当前不强制实现，但保留前后向兼容端口。⑦ 发布默认人工；自动发布由Founder细粒度授权，非M12必要实现。⑧ M11至少三类不变；正式真实品牌导入前五类必须100%可开启就绪。",
+        "① M0顶层交付清单仍为14项，D-17—D-29与S1—S8均内嵌现有合同与M1/M2 Brief。② M11仍为夹具品牌仿真试点，增加Founder真实品牌注入优先路径与Codex夹具回退；注入非M11硬门。③ 未见品牌内容物理隔离于主仓；Founder数据不得进入。④ M12名称、M0—M12顺序与Commercial V1.0路线不变。⑤ 人设连续性、自媒体原生语感和多模态商品理解升为正式能力与评测域。⑥ VM与实时成交辅助当前不强制实现，但保留前后向兼容端口。⑦ 默认人工审核；自动发布仅由Founder按租户/品牌/账号/风险级别显式授权，FR-17与人工可发布率≥75%不变。⑧ M11至少三类不变；正式真实品牌导入前五类必须100%可开启就绪。⑨ 单一Founder＋隔离AI角色模型、任务分级、条件/合规台账和Project CI进入M0合同。",
     )
     replace_heading(doc, "一、交付物清单（与 PRD v1.2 第 13 / 14 / 17.1 节完全一致）", "一、交付物清单（与 PRD v1.2 第 13 / 14 / 17.1 节完全一致）")
 
@@ -781,8 +1114,8 @@ def build_m0() -> None:
 
     review_table = doc.tables[-1]
     set_cell_text(review_table.rows[1].cells[0], "文档一致性预审")
-    set_cell_text(review_table.rows[1].cells[1], "已完成 · PASS（待Founder签署）")
-    set_cell_text(review_table.rows[1].cells[2], "已核对PRD v1.2、D-17—D-26、M0十四项一致性、M1/M2承接、多模态证据分级、Founder注入/隐藏集隔离、发布策略与扩展兼容。此预审不代替Founder授权。核验：Codex文档执行侧 · 2026-08-12")
+    set_cell_text(review_table.rows[1].cells[1], "候选生成侧自检完成 · 非Guardian结论")
+    set_cell_text(review_table.rows[1].cells[2], f"已核对PRD v1.2、D-17—D-29、S1—S8、M0十四项、M1/M2承接、多模态来源分层、隐藏集隔离、单一Founder治理与Project CI。此项只是候选施工侧自检（TEMPORARY_EXECUTION_WRITER），独立Guardian与ChatGPT总顾问尚未审查。execution_run_id={EXECUTION_RUN_ID}")
     set_cell_text(review_table.rows[2].cells[0], "Founder 授权（PRD v1.2 ＋ 本申请）")
     for section in doc.sections:
         header = section.header
@@ -792,7 +1125,7 @@ def build_m0() -> None:
             paragraph = header.add_paragraph("DIYU-CBFSK-001  |  M0 执行申请 v1.2  |  EXEC-REQ-M0-003")
             paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     doc.core_properties.title = "笛语跨品牌服装搭配专家内核 M0 执行申请 v1.2"
-    doc.core_properties.comments = "M0_AUTHORIZED_FALSE; requires Founder signature on PRD v1.2 and this request"
+    doc.core_properties.comments = f"EXECUTION_RUN_ID={EXECUTION_RUN_ID}; M0_AUTHORIZED_FALSE; requires Founder signature on PRD v1.2 and this request"
     doc.save(M0_OUTPUT)
 
 
@@ -842,18 +1175,18 @@ def build_receipt() -> None:
     clear_document_body(doc)
     title = doc.add_paragraph("PRD v1.2 核验回执")
     title.style = doc.styles["Title"] if "Title" in [s.name for s in doc.styles] else doc.styles["Normal"]
-    subtitle = doc.add_paragraph("DIYU-CBFSK-001 · Founder 新增裁决 D-17—D-26 落文、追溯与执行基线核验")
+    subtitle = doc.add_paragraph("DIYU-CBFSK-001 · D-17—D-29、S1—S8、治理操作模型与执行基线核验")
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     add_receipt_table(
         doc,
         ["控制项", "内容"],
         [
             ["回执 ID", "DIYU-CBFSK-PRD-V1.2-VERIFY-RECEIPT-001"],
-            ["核验对象", "PRD v1.2全文＋M0执行申请v1.2＋README＋PRD_v1.2_change_map.yaml＋Checker/审计脚本"],
-            ["核验依据", "Founder新增裁决D-17—D-26 > PRD v1.1未被改判条款 > README/历史证据"],
+            ["核验对象", "PRD v1.2全文＋M0执行申请v1.2＋README＋PRD_v1.2_change_map.yaml＋治理合同＋Checker/审计脚本"],
+            ["核验依据", "Founder最新D-23/D-25补丁＋D-17—D-29＋S1—S8＋已确认Manifest > PRD v1.1未被改判条款 > 历史证据"],
             ["核验方式", "机器Checker＋DOCX OOXML/ZIP完整性＋结构/版本/清单/追溯全文检索＋PDF渲染与版式抽检"],
-            ["核验人／日期", "Codex文档执行侧 · 2026-08-12"],
-            ["核验结论", "PASS — D-17—D-26全部落入PRD正文、里程碑、验收指标与M0执行基线；M0顶层清单仍为14项。文档状态仅为READY_FOR_FOUNDER_REVIEW，不构成Founder签署或M0授权。"],
+            ["核验人／日期", f"候选施工侧自检（TEMPORARY_EXECUTION_WRITER，Founder依§11.3指派；Codex执行面网络中断）· {BASELINE_DATE} · execution_run_id={EXECUTION_RUN_ID} · parent={PARENT_EXECUTION_RUN_ID}"],
+            ["核验结论", "候选施工自检PASS — D-17—D-29、S1—S8与三项补丁均已落到锚点；M0顶层清单仍为14项。独立Guardian、ChatGPT总顾问、Founder签署与M0授权均未完成。"],
         ],
     )
     doc.add_paragraph("一、Founder 裁决落实矩阵", style="Heading 1")
@@ -868,6 +1201,10 @@ def build_receipt() -> None:
         ["D-24", "3/4/5/7/11/13-16/附录", "S-07保留导购辅助投影，RealtimeSalesAssistExtensionPort保留扩展兼容", "PASS"],
         ["D-25", "3/6/7/10/11/13-16/附录", "默认human_review；Founder授权auto_publish、审计/撤回/回滚/Kill Switch；非M12必须实现", "PASS"],
         ["D-26", "3/7/10/13-15/附录", "M11至少三类不变；正式真实品牌导入前五类100%可开启就绪", "PASS"],
+        ["D-27", "8.7/11/16/17/治理与CI", "单一规范源、角色投影与GitHub Actions确定性守卫；主仓禁止真实品牌/顾客/隐藏内容", "PASS"],
+        ["D-28", "3.3/P-14、M2/M3/M4/M5/M6/M10、10.2、16.1 R-22、16.2、附录B", "合理多解原则：评测三分类、②③类禁唯一Gold Answer、可接受决策边界、合法多解族与决策逻辑稳定率", "PASS"],
+        ["D-29", "M6目标/交付物/通过标准、11.1组件、16.2", "M6反退化验收：硬约束确定性执行、LLM-off不变性可重放、DecisionTrace规则归因；禁纯Prompt/RAG端到端直答", "PASS"],
+        ["S1—S8", "8/10/15/16/治理文件", "基线锚定、单次v1.2签署、单一Founder、角色降级、隐藏隔离、工作区佐证、任务分级与Cowork归位", "PASS"],
     ]
     add_receipt_table(doc, ["裁决", "PRD 主要落点", "核验证据", "状态"], matrix)
 
@@ -875,10 +1212,14 @@ def build_receipt() -> None:
     checks = [
         ["M0十四项", "PRD第13/14/17.1节与M0申请均为同一组14项；无18项版回潮", "PASS"],
         ["输入/输出对象", "12个输入与配置对象；15个输出与内部审计对象；M1映射数量同步", "PASS"],
-        ["FR—里程碑—验收", "FR-22—FR-29均含需求、验收、失败状态与里程碑落点", "PASS"],
+        ["目标→FR→门→里程碑", "D-17—D-29新增内容逐项重跑：G-11—G-15→FR-22—FR-30→八门/硬门/10.2指标→M0—M12锚点", "PASS"],
         ["旧措辞残留", "自动发布永久禁止、图像理解永久排除等8类废弃表达检索为0", "PASS"],
-        ["版本/编号", "封面、页眉、版本记录、M0申请ID、回执ID、README均为v1.2/003", "PASS"],
+        ["版本/编号", "封面、页眉、版本记录、M0申请ID、回执ID、README均为v1.2/003；v1.1仍在根目录待签署状态", "PASS"],
         ["M11/M12", "M11双路径与条件交付完整；M12五品类激活就绪与发布兼容完整", "PASS"],
+        ["单一Founder治理", "角色票数、工作区隔离、L1/L2/L3、降级、条件关闭、合规逐项台账与非外部评审声明完整", "PASS"],
+        ["Project CI/隐藏边界", "单一规范源及投影完整；主仓仅允许隐藏基准清单/接口/结果摘要，不含隐藏正文", "PASS"],
+        ["合理多解与反退化", "三分类合同、可接受决策边界、合法多解族、10.2指标更名（阈值≥85%不变）、R-22与两条停止条件、M6架构符合性三条均已落到锚点", "PASS"],
+        ["编号不重排", "补充Prompt文字中的P-10/R-15已被D-20—D-26占用，本版落为P-14/R-22；既有P-01—P-13、R-01—R-21与FR/G/C编号一律未重排", "PASS"],
         ["DOCX包与可打开性", "三份DOCX通过ZIP/OOXML完整性、python-docx打开、LibreOffice PDF渲染与抽检", "PASS"],
         ["Checker", "工具/check_prd_v1_2.py全项通过；哈希写入最终交付报告", "PASS"],
     ]
@@ -889,6 +1230,8 @@ def build_receipt() -> None:
         "本回执的PASS仅表示文档落文与一致性核验通过，不表示PRD v1.2已生效。",
         "Founder须分别签署PRD v1.2与M0执行申请v1.2（DIYU-CBFSK-EXEC-REQ-M0-003），才能另行开始M0。",
         "本轮没有需要Founder重新裁决的内部冲突；M2_FREEZE_REQUIRED指标的具体质量阈值依合同留待M2冻结，不是本轮未落文项。",
+        "独立Guardian与ChatGPT总顾问尚未完成正式审查；本回执不得被解释为其PASS或外部独立验证。",
+        "本轮候选由Founder依执行Prompt §11.3指派的TEMPORARY_EXECUTION_WRITER落盘（Codex执行面网络中断）；Codex作为默认唯一常规写入者的长期规则未改变，Codex恢复后是否复核由Founder另行裁决，本回执不代为假定。",
     ]:
         paragraph = doc.add_paragraph("• " + text)
         paragraph.style = doc.styles["List Paragraph"] if "List Paragraph" in [s.name for s in doc.styles] else doc.styles["Normal"]
@@ -902,12 +1245,17 @@ def build_receipt() -> None:
     )
     doc.add_paragraph("四、最终状态", style="Heading 1")
     status = doc.add_paragraph(
-        "prd_v1_2_documentation_status: READY_FOR_FOUNDER_REVIEW\n"
+        "prd_v1_2_documentation_status: READY_FOR_GUARDIAN\n"
         "prd_v1_2_effective: false\n"
         "m0_authorized: false\n"
         "engineering_execution_started: false\n"
         "knowledge_distillation_started: false\n"
         "production_servable: false"
+        "\nexecution_run_id: " + EXECUTION_RUN_ID + "\n"
+        "guardian_review_completed: false\n"
+        "chatgpt_remote_review_completed: false\n"
+        "founder_prd_signed: false\n"
+        "main_merged: false"
     )
     for run in status.runs:
         run.font.name = "Consolas"
@@ -918,8 +1266,8 @@ def build_receipt() -> None:
         else:
             section.header.add_paragraph("DIYU-CBFSK-001  |  PRD v1.2 核验回执  |  VERIFY-RECEIPT-001")
     doc.core_properties.title = "PRD v1.2 核验回执"
-    doc.core_properties.subject = "D-17—D-26 文档落文与一致性核验"
-    doc.core_properties.comments = "READY_FOR_FOUNDER_REVIEW; PRD not effective; M0 not authorized"
+    doc.core_properties.subject = "D-17—D-29、S1—S8与治理合同的候选落文核验"
+    doc.core_properties.comments = f"EXECUTION_RUN_ID={EXECUTION_RUN_ID}; READY_FOR_GUARDIAN; PRD not effective; M0 not authorized"
     doc.save(RECEIPT_OUTPUT)
 
 

@@ -1,0 +1,24 @@
+fixture_id: N16-unsigned-marked-effective
+description: v1.2 未签署却被标记为有效真源、M0 被标为已授权。
+checker: check_project_state
+expected: FAIL
+payload:
+  flags:
+    prd_v1_2_effective: false
+    m0_authorized: true
+    guardian_review_completed: false
+    chatgpt_remote_review_completed: false
+    founder_prd_signed: false
+    founder_m0_authorized: false
+    founder_merge_approved: false
+    main_merged: false
+    production_servable: false
+  execution_status: EXECUTION_NOT_STARTED
+  m0_execution_started: false
+  m1_started: false
+  m2_started: false
+  knowledge_distillation_started: false
+  candidate_marked_as_effective_truth: true
+  forbidden_claim_hits:
+    - source: README.md
+      claim: "prd_v1_2_effective: true"

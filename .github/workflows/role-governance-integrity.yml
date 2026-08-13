@@ -1,0 +1,45 @@
+name: role-governance-integrity
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 隐藏边界检查需要完整历史
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install --quiet pyyaml python-docx
+
+      - name: Instruction projection drift (D-27 single canonical source)
+        run: python3 ci/compile_role_instructions.py --check
+
+      - name: Role operating model integrity
+        run: |
+          cd ci/checkers
+          python3 check_role_operating_model.py
+          python3 check_workspace_attestation.py
+          python3 check_task_classification.py
+          python3 check_execution_uuid.py
+
+      - name: Ledgers
+        run: |
+          cd ci/checkers
+          python3 check_conditional_ledger.py
+          python3 check_compliance_ledger.py
+
+      - name: Full checker suite and fixtures
+        run: python3 ci/run_all_checks.py

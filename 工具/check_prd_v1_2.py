@@ -96,6 +96,9 @@ def heading_region(doc: Document, start: str, end: str) -> list[str]:
     return [paragraph.text.strip() for paragraph in paragraphs[start_index + 1 : end_index]]
 
 
+GATE_LINE_PREFIXES = ("验收门已通过：", "工作树、版本、输入清单", "Founder已形成明确的")
+
+
 def check_m0_lists(checker: Checker, prd: Document, m0: Document) -> None:
     regions = [
         heading_region(prd, "M0｜独立立项与合同冻结", "M1｜语义骨架与品类适配合同"),
@@ -105,7 +108,10 @@ def check_m0_lists(checker: Checker, prd: Document, m0: Document) -> None:
     lists: list[list[str]] = []
     for region in regions:
         items = [line[4:] for line in region if line.startswith("[ ] ")]
-        lists.append(items[:14])
+        # 第14节的 M0 区还带三行标准验收门；剔除它们，但绝不截断——
+        # 一旦被加到第 15 项交付物，必须当场暴露，而不是被 [:14] 吞掉。
+        items = [i for i in items if not i.startswith(GATE_LINE_PREFIXES)]
+        lists.append(items)
     expected = M0_ITEMS
     for index, items in enumerate(lists, start=1):
         checker.check(len(items) == 14, f"PRD M0 list {index} has 14 items", repr(items))
@@ -154,11 +160,12 @@ def main() -> None:
     for phrase in FORBIDDEN:
         checker.check(phrase not in prd_text, f"forbidden phrase absent: {phrase}")
 
-    checker.check(ids_from_table(prd, "G-01", "G") == list(range(1, 15)), "G IDs are consecutive G-01..G-14")
+    checker.check(ids_from_table(prd, "G-01", "G") == list(range(1, 16)), "G IDs are consecutive G-01..G-15")
     checker.check(ids_from_table(prd, "C-01", "C") == list(range(1, 16)), "C IDs are consecutive C-01..C-15")
-    checker.check(ids_from_table(prd, "FR-01", "FR") == list(range(1, 30)), "FR IDs are consecutive FR-01..FR-29")
+    checker.check(ids_from_table(prd, "FR-01", "FR") == list(range(1, 31)), "FR IDs are consecutive FR-01..FR-30")
     checker.check(ids_from_table(prd, "NFR-01", "NFR") == list(range(1, 13)), "NFR IDs are consecutive NFR-01..NFR-12")
-    checker.check(ids_from_table(prd, "R-01", "R") == list(range(1, 22)), "risk IDs are consecutive R-01..R-21")
+    checker.check(ids_from_table(prd, "R-01", "R") == list(range(1, 23)), "risk IDs are consecutive R-01..R-22")
+    checker.check(ids_from_table(prd, "P-01", "P") == list(range(1, 15)), "principle IDs are consecutive P-01..P-14")
 
     inputs = table_by_second_row(prd, "UniversalExpertKernel")
     outputs = table_by_second_row(prd, "BrandAudienceInterpretation")
@@ -169,7 +176,7 @@ def main() -> None:
 
     checker.contains_all(prd_text, ["C-13", "Stylist Persona Continuity Intelligence", "C-14", "Social-Media Native Voice Intelligence", "C-15", "Multimodal Garment Understanding"], "formal capabilities C-13..C-15")
     checker.contains_all(prd_text, ["VisualMerchandisingExtensionPort", "StoreSpaceContext", "PlanogramContext", "RealtimeSalesAssistExtensionPort", "SalesAssociateSessionContext", "RealtimeRecommendationResult"], "extension-compatible contracts")
-    checker.contains_all(prd_text, ["publication_mode=human_review", "publication_mode=founder_authorized_auto_publish", "PublicationPolicyController", "AutoPublishKillSwitch", "unauthorized_auto_publish_rate = 0"], "Founder-controlled publication contract")
+    checker.contains_all(prd_text, ["V1.0 默认人工审核在环", "Founder 按租户/品牌/账号/风险级别显式授权", "审计、撤回与 Kill Switch", "PublicationPolicyController", "AutoPublishKillSwitch", "unauthorized_auto_publish_rate = 0", "FR-17"], "Founder-controlled publication contract (D-25 patch)")
     checker.contains_all(prd_text, ["authoritative_structured_fact", "human_verified_visual_attribute", "multimodal_inferred_visual_attribute", "authoritative_fact_override_rate = 0", "unverifiable_function_claim_rate = 0"], "multimodal evidence grading and hard gates")
 
     fr_table = table_by_second_row(prd, "FR-01")
@@ -194,17 +201,62 @@ def main() -> None:
 
     check_m0_lists(checker, prd, m0)
     checker.contains_all(m0_text, ["DIYU-CBFSK-EXEC-REQ-M0-003", "PRD v1.2", "M0不得实际接收", "M0不得运行多模态", "M0不得建立搭配师人设记忆生产库", "M0不得启用自动发布", "人设与语感闭环", "多模态事实边界", "扩展兼容"], "M0 v1.2 control and Guardian additions")
-    checker.contains_all(receipt_text, ["DIYU-CBFSK-PRD-V1.2-VERIFY-RECEIPT-001", "D-17", "D-26", "READY_FOR_FOUNDER_REVIEW", "m0_authorized: false", "production_servable: false"], "verification receipt identifiers and final state")
+    checker.contains_all(receipt_text, ["DIYU-CBFSK-PRD-V1.2-VERIFY-RECEIPT-001", "D-17", "D-26", "D-28", "D-29", "S1—S8", "READY_FOR_GUARDIAN", "m0_authorized: false", "production_servable: false", "guardian_review_completed: false", "chatgpt_remote_review_completed: false"], "verification receipt identifiers and final state")
 
-    checker.contains_all(readme_text, ["当前唯一产品真源", "PRD v1.2", "DIYU-CBFSK-EXEC-REQ-M0-003", "待 Founder 签署", "归档_v1.1/", "Founder真实品牌注入", "Codex夹具合成回退", "多模态商品图片理解", "人设连续性", "自媒体原生语感", "VisualMerchandisingExtensionPort", "RealtimeSalesAssistExtensionPort", "five_category_activation_readiness=100%"], "README current-baseline index")
-    checker.contains_all(map_text, ["D-17:", "D-26:", "m0_top_level_deliverable_count: 14", "input_and_configuration_objects: 12", "output_and_internal_audit_objects: 15", "documentation_status: READY_FOR_FOUNDER_REVIEW"], "machine-readable change map")
+    checker.contains_all(readme_text, ["当前活基线", "PENDING_FOUNDER_SIGNATURE", "READY_FOR_GUARDIAN", "PRD v1.2", "DIYU-CBFSK-EXEC-REQ-M0-003", "prd_v1_2_effective: false", "目前没有 `归档_v1.1/`", "Founder 真实品牌注入", "Codex 夹具合成回退", "多模态商品理解", "人设连续性", "自媒体原生语感", "VisualMerchandisingExtensionPort", "RealtimeSalesAssistExtensionPort", "five_category_activation_readiness=100%", "合理多解原则", "LLM-off 不变性"], "README current-baseline index")
+    checker.contains_all(
+        prd_text,
+        [
+            "Non-Uniqueness by Design（合理多解原则）",
+            "evaluation_task_class_contract.v0.1.yaml",
+            "acceptable_decision_boundary_registry.v0.1.yaml",
+            "open_decision_question_template_contract.v0.1.yaml",
+            "disagreement_classification_and_solution_family_ledger.v0.1.yaml",
+            "legal_decision_space_conformance_report",
+            "核心决策逻辑稳定率",
+            "唯一答案偏误",
+            "被设置唯一Gold Answer：停止M2冻结",
+        ],
+        "D-28 non-uniqueness anchors",
+    )
+    checker.contains_all(
+        prd_text,
+        [
+            "architecture_conformance_check_report",
+            "llm_off_invariance_replay_fixtures",
+            "架构符合性检查三条全部通过",
+            "不是唯一argmax（D-28）",
+            "每个排除项须标注触发它的确定性规则",
+            "M6以纯Prompt/RAG端到端直答实现",
+            "LLM-off Invariance（LLM-off不变性）",
+        ],
+        "D-29 anti-degeneration anchors",
+    )
+    checker.check(
+        prd_text.count("reviewer_calibration_contract.v0.1.yaml") == 2,
+        "reviewer_calibration_contract appears once per milestone list (13/14), not duplicated",
+        f"count={prd_text.count('reviewer_calibration_contract.v0.1.yaml')}",
+    )
 
+    checker.contains_all(map_text, ["D-17:", "D-26:", "D-27:", "D-28:", "D-29:", "governance_ruling_map:", "m0_top_level_deliverable_count: 14", "input_and_configuration_objects: 12", "output_and_internal_audit_objects: 15", "functional_requirements: 30", "risks: 22", "documentation_status: READY_FOR_GUARDIAN"], "machine-readable change map")
+
+    archive = ROOT / "归档_v1.1"
+    v1_1_files = [
+        "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx",
+        "笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx",
+        "PRD_v1.1_核验回执.docx",
+    ]
     if args.require_archive:
-        archive = ROOT / "归档_v1.1"
+        # 只有 PRD v1.2 正式生效后才允许带此参数运行。
         checker.check(archive.is_dir(), "v1.1 archive directory exists")
-        for name in ["笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx", "笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx", "PRD_v1.1_核验回执.docx"]:
+        for name in v1_1_files:
             checker.check((archive / name).is_file(), f"archived: {name}")
             checker.check(not (ROOT / name).exists(), f"v1.1 removed from root: {name}")
+    else:
+        # 红线：v1.2 生效前不得归档 v1.1；v1.1 必须留在根目录作为当前活基线。
+        checker.check(not archive.exists(), "v1.1 not archived before PRD v1.2 is effective")
+        for name in v1_1_files:
+            checker.check((ROOT / name).is_file(), f"active baseline stays at root: {name}")
 
     for label in checker.passes:
         print("PASS", label)

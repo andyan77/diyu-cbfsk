@@ -1,0 +1,40 @@
+schema_version: "0.1"
+schema_id: DIYU-CBFSK-WORKSPACE-ATTESTATION-SCHEMA
+purpose: >-
+  记录 Planner / Guardian / 写入工作面的工作区隔离佐证。这些字段只是程序性佐证
+  （procedural corroboration），不得表述为密码学独立性证明。
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+
+record_required_fields:
+  - workspace_id
+  - workspace_path
+  - conversation_or_session_id
+  - session_started_at
+  - base_commit
+  - role
+
+field_rules:
+  workspace_id: 非空字符串，工作区稳定标识。
+  workspace_path: 非空字符串，工作区绝对或仓库相对路径。
+  conversation_or_session_id: 会话标识；工具无法提供稳定值时置 null 并设 session_id_available=false。
+  session_started_at: ISO-8601 时间戳；不可得时置 null 并说明。
+  base_commit: 该工作面所依据的完整 Commit 哈希；禁止写「最新版」。
+  role: 必须是 role_operating_model.v0.2.yaml 中登记的 role_id。
+  status: PENDING / ACTIVE / COMPLETED 之一。
+
+when_session_id_unavailable:
+  session_id_available: false
+  founder_manual_attestation_required: true
+
+founder_workspace_attestation_required_fields:
+  - planner_and_guardian_are_different_sessions
+  - planner_and_guardian_are_different_workspaces
+  - attested_by
+  - attested_at
+
+separation_rules:
+  - Planner 与 Guardian 记录的 conversation_or_session_id 不得相同。
+  - Planner 与 Guardian 记录的 workspace_path 不得相同。
+  - 写入工作面（Codex 或 Founder 指派的 TEMPORARY_EXECUTION_WRITER）不得与同任务 Guardian 同一记录或同一会话。
+  - Guardian 记录的 base_commit 必须等于被审查的冻结候选 Commit。

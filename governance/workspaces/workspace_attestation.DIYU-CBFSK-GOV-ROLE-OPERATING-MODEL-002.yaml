@@ -1,0 +1,69 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+
+records:
+  - workspace_id: codex-phase0-baseline-reconciliation
+    workspace_path: codex/baseline-reconciliation-v2
+    conversation_or_session_id: null
+    session_id_available: false
+    session_id_unavailable_reason: Codex 执行面在本轮中断，接替工作面无法读取其会话标识。
+    session_started_at: "2026-08-13T00:47:18-07:00"
+    base_commit: ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+    role: CODEX_EXECUTION_ENGINEER
+    scope: PHASE_0_BASELINE_RECONCILIATION
+    status: INTERRUPTED
+    founder_manual_attestation_required: true
+
+  - workspace_id: temporary-execution-writer-local
+    workspace_path: /home/faye/笛语跨品牌服装搭配专家内核
+    conversation_or_session_id: eef1de95-7248-4561-bf98-f69bed6c335a
+    session_id_available: true
+    session_started_at: "2026-08-13T02:14:00-07:00"
+    base_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: PHASE_1_TO_PHASE_5_CANDIDATE_CONSTRUCTION
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: 执行 Prompt v2.0 §11.3（Codex 不可用时 Founder 可指定 TEMPORARY_EXECUTION_WRITER）
+
+  - workspace_id: null
+    workspace_path: null
+    conversation_or_session_id: null
+    session_id_available: false
+    session_started_at: null
+    base_commit: null
+    role: CLAUDE_INDEPENDENT_GUARDIAN
+    scope: FROZEN_CANDIDATE_REVIEW
+    status: PENDING
+    note: >-
+      Guardian 尚未实例化。Guardian 必须在独立工作区、独立会话中运行，
+      base_commit 必须等于第一候选 Commit，并在报告中写明
+      guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8。
+    founder_manual_attestation_required: true
+
+  - workspace_id: null
+    workspace_path: null
+    conversation_or_session_id: null
+    session_id_available: false
+    session_started_at: null
+    base_commit: null
+    role: GPT_CHIEF_ADVISOR
+    scope: REMOTE_ALIGNMENT_REVIEW
+    status: PENDING
+    founder_manual_attestation_required: true
+
+founder_workspace_attestation:
+  planner_and_guardian_are_different_sessions: null
+  planner_and_guardian_are_different_workspaces: null
+  attested_by: null
+  attested_at: null
+  status: PENDING_FOUNDER_WITNESS
+  note: >-
+    Guardian 未实例化前无法由 Founder 见证 Planner/Guardian 隔离；本字段保持 null，
+    不得预置为 true。Guardian 运行后由 Founder 填写并签署。

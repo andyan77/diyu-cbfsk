@@ -1,0 +1,127 @@
+schema_version: "0.1"
+package_id: DIYU-CBFSK-GUARDIAN-HANDOFF-002
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+founder_ruling_id:
+  - DIYU-CBFSK-FR-ORG-002
+  - DIYU-CBFSK-FR-EVAL-003
+prompt_version: 2.0.0
+prompt_supplement: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002-SUPP-01
+prompt_hash:
+  value: 82af614b6f3da15deb98e30d032360893a5ce747c65478398d958e1a51edbf09
+  provenance: inherited_from_phase_0_manifest
+  recomputed_by_temporary_execution_writer: false
+  recompute_possible: false
+  note: >-
+    接替工作面无法读取 Codex 侧 Prompt 文件字节，故不重算、不冒充复核；
+    该值按 Phase 0 记录原样继承。补充 Prompt（SUPP-01）由 Founder 在本轮会话中直接下发，
+    未形成独立文件哈希。
+
+baseline_manifest: governance/baseline/founder_pinned_baseline.v0.1.yaml
+baseline_manifest_hash: RECORDED_IN_CANDIDATE_FREEZE_RECEIPT
+baseline_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
+baseline_commit_note: >-
+  本任务起点为 codex/baseline-reconciliation-v2 分支 HEAD 1b6f668（其中含被判为红线的
+  v1.1 提前归档，已在 Phase 1 MIG-01 撤销）。远程 main 固定提交为
+  ce13cf3d6dca3ed6ac918400c8c08c10051832bf。
+candidate_commit: RECORDED_IN_CANDIDATE_FREEZE_RECEIPT
+review_target_note: >-
+  Guardian 的审查对象是冻结候选 Commit 与其后的冻结回执 Commit（后者相对前者只新增
+  governance/receipts/candidate_freeze_receipt.yaml，无任何产品语义改动）。
+  两个 Commit 的完整哈希均记录在该回执中，禁止以「最新版」代指。
+
+guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8
+guardian_bootstrap_rules:
+  - Guardian 不得使用本任务生成后的角色文件作为其自身审查权限来源。
+  - Guardian 只使用 Founder 批准的本 Prompt 实例化。
+  - 本任务合并后，后续 Guardian 改用仓库中的正式角色合同。
+
+workspace_attestation: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+workspace_attestation_status:
+  guardian_record_present: true
+  guardian_record_status: PENDING
+  founder_witness_status: PENDING_FOUNDER_WITNESS
+  evidence_strength: procedural_corroboration_only
+  is_cryptographic_independence_proof: false
+
+changed_files:
+  product_documents:
+    - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+    - PRD_v1.2_核验回执.docx
+    - PRD_v1.2_change_map.yaml
+    - README.md
+  baseline_migration:
+    - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx （R100 从 归档_v1.1/ 移回根目录）
+    - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx （R100 从 归档_v1.1/ 移回根目录）
+    - PRD_v1.1_核验回执.docx （R100 从 归档_v1.1/ 移回根目录）
+  governance:
+    - governance/baseline/founder_pinned_baseline.v0.1.yaml
+    - governance/baseline/baseline_migration_record.yaml
+    - governance/bootstrap/role_operating_model.v0.2.yaml
+    - governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+    - governance/founder_rulings/DIYU-CBFSK-FR-EVAL-003.yaml
+    - governance/conditions/conditional_decision_ledger.yaml
+    - governance/compliance/founder_compliance_decision_ledger.yaml
+    - governance/storage/hidden_benchmark_storage_contract.yaml
+    - governance/workspaces/workspace_attestation.schema.yaml
+    - governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+    - governance/roles/（5 份，生成投影）
+    - governance/prompts/（4 份，生成投影）
+    - governance/reports/baseline_reconciliation_report.md
+    - governance/reports/final_delivery_report.md
+    - governance/receipts/baseline_reconciliation_receipt.yaml
+    - governance/receipts/guardian_handoff_package.yaml
+  projections:
+    - AGENTS.md
+    - CLAUDE.md
+    - .github/copilot-instructions.md
+  ci_and_tools:
+    - ci/compile_role_instructions.py
+    - ci/run_all_checks.py
+    - ci/run_fixtures.py
+    - ci/checkers/（_common + 15 个 checker）
+    - ci/fixtures/（positive 8 份 / negative 22 份，共 30 份）
+    - 工具/build_prd_v1_2.py
+    - 工具/check_prd_v1_2.py
+  github_governance:
+    - .github/CODEOWNERS
+    - .github/pull_request_template.md
+    - .github/workflows/role-governance-integrity.yml
+    - .github/workflows/document-integrity.yml
+    - .github/workflows/secret-and-hidden-boundary.yml
+
+checker_reports:
+  entrypoint: python3 ci/run_all_checks.py
+  checkers: 15
+  fixtures: 30
+  itemised_results: governance/reports/final_delivery_report.md（§4 逐项 PASS/FAIL）
+
+document_reports:
+  prd_contract_checker: python3 工具/check_prd_v1_2.py
+  docx_package_auditor: python3 工具/audit_docx_package.py
+  itemised_results: governance/reports/final_delivery_report.md（§4）
+
+receipt_draft: governance/receipts/baseline_reconciliation_receipt.yaml
+
+hidden_asset_touch_status:
+  hidden_benchmark_generated: false
+  hidden_brand_generated: false
+  fixture_brand_generated: false
+  hidden_asset_read: false
+  hidden_asset_written: false
+  any_hidden_asset_touched_by_this_task: false
+  storage_contract_only: true
+
+m0_execution_started: false
+knowledge_distillation_started: false
+production_servable: false
+prd_v1_2_effective: false
+main_merged: false
+
+excluded_from_package:
+  - 执行侧内部推理
+  - Planner 聊天记录
+  - 说服性说明
+  - 隐藏评测内容

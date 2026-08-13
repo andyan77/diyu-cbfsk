@@ -1,0 +1,124 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FR-ORG-002
+project_id: DIYU-CBFSK-001
+title: 基线迁移、版本策略、单一 Founder 治理角色操作模型与 S1—S8 裁决
+ruling_date: "2026-08-13"
+issued_by: Founder
+issued_via: founder_execution_prompt_v2.0
+applies_to_task: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+supersedes:
+  - DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-001
+  - DIYU-CBFSK-FR-ORG-001-SUPP-01-DRAFT
+authority_level: FOUNDER_RULING
+landed_in:
+  - governance/bootstrap/role_operating_model.v0.2.yaml
+  - governance/baseline/founder_pinned_baseline.v0.1.yaml
+  - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+
+version_strategy:
+  prd_v1_1_status: VERIFIED_UNSIGNED_BASELINE
+  prd_v1_1_must_not_be_signed_now: true
+  next_product_truth_version: PRD_v1.2
+  version_strategy: CONSOLIDATE_ALL_PENDING_RULINGS_AND_SIGN_V1_2_ONCE
+  execution_meaning:
+    - PRD v1.1 修正版作为已核验、未签署的输入基线。
+    - 不再先签 v1.1。
+    - 在 v1.1 基础上合并全部已确认但尚未落入远程产品真源的 Founder 裁决。
+    - 生成可独立阅读的 PRD v1.2 全文。
+    - Founder 只对完整 v1.2 作一次正式签署。
+    - v1.2 生效前 v1.1 仍是远程当前活基线，状态保持 PENDING_FOUNDER_SIGNATURE。
+    - v1.2 生效后 v1.1 转入历史归档。
+  forbidden_sequence: 先签一个已被后续裁决部分推翻的 v1.1，随即再创建 v1.2
+
+governance_rulings:
+  S1:
+    title: 基线锚定
+    decision: ACCEPTED_AND_STRENGTHENED
+    landed: governance/baseline/founder_pinned_baseline.v0.1.yaml（三层哈希 + Founder 确认）
+  S2:
+    title: 版本序列
+    decision: ACCEPTED_WITH_V1_2_SINGLE_SIGNATURE
+    landed: PRD v1.2 全文候选 + README 状态块 + change_map.resulting_state
+  S3:
+    title: 单一 Founder 审查模型
+    decision: ACCEPTED_AND_STRENGTHENED
+    landed: PRD 10.2 / 15.3 / 15.4 / 16.4 + governance/compliance + review_mode 合同
+  S4:
+    title: 角色不可用降级
+    decision: ACCEPTED_WITH_CONTROLLED_EXCEPTION
+    landed: role_operating_model.role_unavailability_fallback + PRD 16.4
+  S5:
+    title: 隐藏评测物理隔离
+    decision: ACCEPTED
+    landed: governance/storage/hidden_benchmark_storage_contract.yaml + PRD 8.7 + 附录A 02_benchmark_manifests/
+  S6:
+    title: 工作区证据与自举
+    decision: ACCEPTED_WITH_EVIDENCE_LIMITATION
+    landed: governance/workspaces/ + role_operating_model.workspace_attestation / bootstrap
+    limitation: 工作区记录只是程序性佐证，不得表述为密码学独立性证明。
+  S7:
+    title: 任务分级
+    decision: ACCEPTED_AND_EXPANDED
+    landed: role_operating_model.task_classification + PRD 16.4
+  S8:
+    title: Cowork 工作面归位
+    decision: ACCEPTED
+    landed: role_operating_model.roles[CLAUDE_PLANNING_AND_VERIFICATION_SURFACE] + CLAUDE.md 投影
+
+cowork_surface_reassignment:
+  role_id: CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+  formal_repository_write_permission: false
+  formal_guardian: false
+  independent_review_vote: false
+  may:
+    - 形成规划建议
+    - 形成核验意见
+    - 生成文档或审查产物供 Founder 审阅
+    - 为 Claude Planner 提供输入
+    - 对 Codex 交付形成非正式预检查
+  must_not:
+    - 直接写正式产品真源
+    - 直接修改主仓活基线
+    - 在参与规划、文档生成或修复后担任同一任务的正式 Guardian
+    - 把其核验意见表述为外部独立审查
+    - 绕过 Codex 成为常规仓库写入者
+  downstream_flow: Cowork产物 → Founder确认 → Codex落盘 → 正式Checker → 独立Guardian
+
+single_founder_model:
+  review_mode: FOUNDER_PLUS_ISOLATED_AI
+  external_human_review: false
+  external_legal_opinion: false
+  independent_external_validation_completed: false
+  effort_baseline_changed: false
+  m0_fourteen_items_changed: false
+
+execution_authorizations:
+  m0_execution_authorized: false
+  m1_execution_authorized: false
+  m2_execution_authorized: false
+  knowledge_distillation_authorized: false
+  production_execution_authorized: false
+  main_merge_authorized: false
+
+founder_patches:
+  - patch_id: PATCH-01
+    ruling: D-23 为对 D-12 的部分改判
+    text: 品牌专属数据库仍为权威事实来源；多模态视觉推断按 authoritative > human_confirmed > model_inferred 分层引入，推断不得覆盖权威事实，不得推断成分、性能、库存与安全认证。
+    anchors: [PRD 3.2 非目标, garment_and_inventory.schema.attribute_provenance, PRD 5.6, PRD 11.1]
+    status: APPLIED
+  - patch_id: PATCH-02
+    ruling: D-25 为对 D-13 的改判
+    text: V1.0 默认人工审核在环；自动发布仅在 Founder 按租户/品牌/账号/风险级别显式授权后开启，须具备审计、撤回与 Kill Switch；FR-17 与「人工可发布率≥75%」质量门保留不变。
+    anchors: [PRD 3.2 非目标, PRD 7/FR-28, PRD 10 硬门, PRD 11.1]
+    status: APPLIED
+  - patch_id: PATCH-03
+    ruling: D-17—D-29 合并规则，禁止浮动条文
+    text: 每项裁决须落到具体锚点；v1.2 核验回执须对新增内容重跑「目标→FR→门→里程碑」追溯检查。
+    anchors: [PRD 5.2 末尾合并规则段, PRD_v1.2_核验回执 一致性核验表]
+    status: APPLIED
+
+founder_confirmation:
+  baseline_manifest_confirmed: true
+  confirmed_at: "2026-08-13"
+  statement: 确认该 Manifest 为本任务 Phase 1—4 输入基线。

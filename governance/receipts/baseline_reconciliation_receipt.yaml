@@ -1,0 +1,94 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-BASELINE-RECONCILIATION-RECEIPT-001
+project_id: DIYU-CBFSK-001
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+prompt_version: 2.0.0
+prompt_sha256: 82af614b6f3da15deb98e30d032360893a5ce747c65478398d958e1a51edbf09
+generated_at: "2026-08-13T00:47:18-07:00"
+
+remote_repository: https://github.com/andyan77/diyu-cbfsk
+remote_head_commit: ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+founder_candidate_location: 'D:\笛语跨品牌服装搭配专家内核'
+temporary_location: 'D:\tmpcodex'
+
+checks:
+  execution_uuid_v4:
+    status: PASS
+    evidence: UUID parser returned version 4 and RFC 4122 variant
+  founder_paths_located:
+    status: PASS
+    evidence: both Founder candidate and temporary directories exist and were inventoried
+  reference_binary_hashes:
+    status: PASS
+    evidence: all five Founder-provided reference SHA-256 values matched
+  active_baseline_binary_comparison:
+    status: PASS
+    evidence: four of four active candidates equal remote main byte-for-byte
+  active_docx_canonical_comparison:
+    status: PASS
+    evidence: three of three active DOCX candidates have equal canonical XML hashes
+  active_docx_semantic_comparison:
+    status: PASS
+    evidence: three of three active DOCX candidates have equal semantic text hashes
+  historical_evidence_comparison:
+    status: PASS
+    evidence: five of five repository historical artifacts equal Founder copies byte-for-byte
+  temporary_inventory:
+    status: PASS
+    evidence: two files are confirmed duplicates of repository v1.0 historical evidence
+  product_baseline_semantic_conflict:
+    status: PASS
+    evidence: no conflict found
+
+founder_confirmation:
+  status: CONFIRMED
+  confirmed_by: Founder
+  confirmed_at: "2026-08-13"
+  statement: 确认该 Manifest 为本任务 Phase 1—4 输入基线。
+
+continuation_execution:
+  reason: CODEX_EXECUTION_SURFACE_NETWORK_FAILURE_MID_TASK
+  executor_role_id: TEMPORARY_EXECUTION_WRITER
+  founder_designation_basis: prompt_v2.0_section_11_3
+  execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+  parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+  supplement_applied: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002-SUPP-01
+  codex_default_writer_rule_changed: false
+  codex_recheck_after_recovery: FOUNDER_DECISION_REQUIRED_NOT_ASSUMED
+
+baseline_effective: true
+document_editing_authorized: true
+phase_0_completed: true
+phase_1_started: true
+phase_1_completed: true
+phase_2_started: true
+phase_2_completed: true
+phase_3_started: true
+phase_3_completed: true
+phase_4_started: true
+phase_4_completed: true
+phase_5_started: true
+candidate_commit_created: true
+guardian_review_completed: false
+chatgpt_remote_review_completed: false
+founder_prd_signed: false
+founder_m0_authorized: false
+founder_merge_approved: false
+main_merged: false
+m0_execution_started: false
+m1_started: false
+m2_started: false
+knowledge_distillation_started: false
+production_servable: false
+
+safe_partial_outputs:
+  - governance/baseline/founder_pinned_baseline.v0.1.yaml
+  - governance/reports/baseline_reconciliation_report.md
+  - governance/receipts/baseline_reconciliation_receipt.yaml
+  - governance/baseline/baseline_migration_record.yaml
+  - governance/reports/final_delivery_report.md
+  - governance/receipts/guardian_handoff_package.yaml
+
+next_required_action: INDEPENDENT_GUARDIAN_REVIEW_OF_FROZEN_CANDIDATE_COMMIT
+

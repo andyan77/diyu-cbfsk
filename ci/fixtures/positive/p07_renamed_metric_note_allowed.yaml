@@ -1,0 +1,15 @@
+fixture_id: P07-renamed-metric-note-allowed
+description: 术语表以「原名」形式提及旧指标名是合法追溯，不算残留。
+checker: check_ruling_coverage
+expected: PASS
+payload:
+  old_metric_name_paragraphs:
+    - 决策逻辑稳定率：原名「核心判断重复一致率」，阈值≥85%不变。
+  rulings_in_change_map: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  rulings_with_anchors: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  governance_rulings: [S1, S2, S3, S4, S5, S6, S7, S8]
+  d28_anchors: {}
+  d29_anchors: {}
+  metric_threshold: "≥ 85%"
+  rulings_in_receipt_matrix: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  prompt_rag_direct_answer_accepted_for_m6: false

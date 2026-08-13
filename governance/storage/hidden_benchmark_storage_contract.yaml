@@ -1,0 +1,112 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-HIDDEN-BENCHMARK-STORAGE-CONTRACT
+project_id: DIYU-CBFSK-001
+generated_at: "2026-08-13"
+founder_ruling_id: DIYU-CBFSK-FR-ORG-002
+ruling_ref: S5 / D-27
+effective: false
+effective_precondition: founder_signature_on_prd_v1_2
+
+principle: >-
+  Git 克隆提供完整对象历史，目录命名不能构成读取权限隔离。因此隐藏评测内容必须物理隔离于主仓，
+  而不是靠命名或 .gitignore 约定。
+
+main_repository:
+  hidden_content_storage_allowed: false
+  forbidden_locations:
+    - 主仓任何目录
+    - 主仓 Git 历史
+    - 主仓 LFS
+    - 主仓加密压缩包
+    - 对 Planner、Codex 或知识引出工作面可读的位置
+  allowed_artifacts:
+    - benchmark_schema
+    - frozen_manifest
+    - content_hashes
+    - runner_interface
+    - result_summary
+    - non_secret_metadata
+  public_directory_name: 02_benchmark_manifests/
+  renamed_from: 02_benchmarks_hidden/
+  forbidden_content_in_public_directory:
+    - 隐藏题正文
+    - 答案
+    - 评分细则的保密部分
+    - 隐藏品牌完整事实包
+    - 生成参数
+    - 隐藏运行原始输出
+
+allowed_storage:
+  - id: STORE-A
+    kind: separate_private_repository_with_restricted_access
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    read_access_forbidden_for:
+      - CLAUDE_EXECUTION_PLANNER
+      - CODEX_EXECUTION_ENGINEER
+      - CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+      - 知识引出工作面
+    provisioned: false
+  - id: STORE-B
+    kind: founder_controlled_private_object_storage
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    provisioned: false
+  - id: STORE-C
+    kind: founder_controlled_offline_storage
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    provisioned: false
+
+current_state:
+  hidden_benchmark_generated: false
+  hidden_brand_generated: false
+  fixture_brand_generated: false
+  any_hidden_asset_touched_by_this_task: false
+  storage_location_selected_by_founder: false
+  note: >-
+    本任务只建立存储合同，不生成任何隐藏题、隐藏品牌或夹具品牌资产，也未选择具体存储位置。
+    存储位置由 Founder 在 M2 冻结前裁决并记录。
+
+runner_interface:
+  contract: 主仓只保存 runner 接口定义与结果摘要；runner 在 Founder 控制环境中读取隐藏内容。
+  result_summary_allowed_fields:
+    - benchmark_id
+    - frozen_manifest_hash
+    - run_id
+    - aggregate_scores
+    - hard_gate_pass_fail
+    - failure_cluster_counts
+  result_summary_forbidden_fields:
+    - 题目正文
+    - 参考答案
+    - 逐题原始输出
+    - 隐藏品牌名称或事实包
+
+leakage_controls:
+  - 夹具池与隐藏池的生成配方、参数空间、随机种子、工作区与上下文物理隔离
+  - Founder 注入的真实品牌资料不得进入隐藏集
+  - 失败不得通过补写隐藏品牌专属 Prompt 或规则修复
+  - 泄漏与同质性双检查报告在 M2 交付
+
+ci_enforcement:
+  checker: ci/checkers/check_hidden_benchmark_boundary.py
+  workflow: .github/workflows/secret-and-hidden-boundary.yml
+  forbidden_path_patterns:
+    - "02_benchmarks_hidden/"
+    - "**/hidden_benchmark_items*"
+    - "**/hidden_brand_fact_pack*"
+    - "**/*_answer_key*"
+  forbidden_content_markers:
+    - HIDDEN_BENCHMARK_ITEM
+    - HIDDEN_BRAND_FACT_PACK
+    - ANSWER_KEY
+    - GOLD_ANSWER_SECRET
+  marker_documentation_allowlist:
+    rationale: >-
+      上列标记只是检测用哨兵字符串。治理文件本身必须能写出这些标记才能定义与审计边界，
+      「提到标记」不等于「存放隐藏内容」。白名单在此显式列出、由 Founder 与 Guardian 审阅，
+      不得在代码里隐式放行，也不得扩展到产品文档或数据文件。
+    paths:
+      - governance/storage/hidden_benchmark_storage_contract.yaml
+      - ci/checkers/check_hidden_benchmark_boundary.py
+      - governance/reports/final_delivery_report.md
+    plus_rule: ci/fixtures/ 下 checker 字段指向 check_hidden_benchmark_boundary 的 fixture（本 checker 自己的测试数据）
+    everything_else: 一律 FAIL，包括别的 checker 的 fixture 与任何产品文档

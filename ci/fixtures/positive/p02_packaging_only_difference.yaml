@@ -1,0 +1,13 @@
+fixture_id: P02-packaging-only-difference
+description: 二进制不同但规范化 XML 与语义文本一致，判为 PACKAGING_ONLY_DIFFERENCE 且需 Founder 确认。
+checker: check_docx_canonical_hashes
+expected: PASS
+payload:
+  integrity: []
+  comparisons:
+    - file: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      binary_equal: false
+      canonical_equal: true
+      semantic_equal: true
+      expected_classification: PACKAGING_ONLY_DIFFERENCE
+      founder_confirmation_required: true

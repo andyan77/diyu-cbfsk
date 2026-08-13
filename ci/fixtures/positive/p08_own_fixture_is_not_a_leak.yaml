@@ -1,0 +1,23 @@
+fixture_id: P08-own-fixture-is-not-a-leak
+description: 隐藏标记出现在本 checker 自己的 fixture 里，是测试数据，不是泄漏。
+checker: check_hidden_benchmark_boundary
+expected: PASS
+payload:
+  main_repository_storage_allowed: false
+  main_repository_allowed_artifacts: [benchmark_schema, frozen_manifest, content_hashes, runner_interface, result_summary, non_secret_metadata]
+  directory_rename:
+    from: 02_benchmarks_hidden/
+    to: 02_benchmark_manifests/
+  forbidden_paths_in_worktree: []
+  forbidden_paths_in_git_history: []
+  forbidden_content_hits:
+    - file: ci/fixtures/negative/n09_hidden_items_in_main_repo.yaml
+      marker: HIDDEN_BENCHMARK_ITEM
+      declared_fixture_for_this_checker: true
+      documentation_allowlisted: false
+    - file: governance/reports/final_delivery_report.md
+      marker: HIDDEN_BENCHMARK_ITEM
+      declared_fixture_for_this_checker: false
+      documentation_allowlisted: true
+  prd_mentions_old_directory: false
+  any_hidden_asset_touched_by_this_task: false

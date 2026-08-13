@@ -1,0 +1,28 @@
+fixture_id: P06-prohibition-sentences-are-compliant
+description: 文档中明确禁止/否认这些说法的句子是合规内容，不得被判为虚假外部评审主张。
+checker: check_external_review_claims
+expected: PASS
+payload:
+  forbidden_phrase_hits:
+    - source: PRD_v1.2
+      phrase: 外部专家共识
+      paragraph: 隔离GPT、隔离Claude、规则Checker与Founder按风险分级完成内部评审；不得表述为外部专家共识。
+    - source: PRD_v1.2
+      phrase: 外部专家通过率
+      paragraph: 内部评审面板重点检查规则迁移与安全边界；不得称为外部专家通过率。
+    - source: PRD_v1.2
+      phrase: 律师意见
+      paragraph: AI 仅提供对抗支持，不得冒充律师意见。
+  metrics_present:
+    - internal_review_panel_pass_rate
+    - ai_reviewer_disagreement_rate
+    - founder_override_rate
+    - founder_sample_review_rate
+    - high_risk_founder_full_review_rate
+  flags:
+    external_human_review: false
+    external_legal_opinion: false
+    independent_external_validation_completed: false
+  domain_review_type: founder_self_review_with_ai_adversarial_support
+  legal_review_type: founder_compliance_self_assessment
+  ai_review_claims: []

@@ -1,0 +1,8 @@
+fixture_id: N01-invalid-execution-uuid
+description: execution_run_id 不是合法 UUIDv4。
+checker: check_execution_uuid
+expected: FAIL
+payload:
+  execution_run_id: "not-a-uuid-2026"
+  parent_execution_run_id: null
+  continuation: false

@@ -1,0 +1,25 @@
+fixture_id: N07-founder-self-assessment-as-legal-opinion
+description: Founder 自评被肯定性地表述为独立法律意见。
+checker: check_external_review_claims
+expected: FAIL
+payload:
+  forbidden_phrase_hits:
+    - source: RECEIPT_v1.2
+      phrase: 独立法律意见
+      paragraph: 合规部分已形成独立法律意见，六类问题均已结清。
+  metrics_present:
+    - internal_review_panel_pass_rate
+    - ai_reviewer_disagreement_rate
+    - founder_override_rate
+    - founder_sample_review_rate
+    - high_risk_founder_full_review_rate
+  flags:
+    external_human_review: false
+    external_legal_opinion: true
+    independent_external_validation_completed: false
+  domain_review_type: founder_self_review_with_ai_adversarial_support
+  legal_review_type: founder_compliance_self_assessment
+  ai_review_claims:
+    - claim_id: CLM-02
+      reviewer_is_founder: true
+      presented_as: legal_opinion

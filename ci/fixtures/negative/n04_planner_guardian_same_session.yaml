@@ -1,0 +1,26 @@
+fixture_id: N04-planner-guardian-same-session
+description: Planner 与 Guardian 同一会话、同一工作区。
+checker: check_workspace_attestation
+expected: FAIL
+payload:
+  is_cryptographic_independence_proof: false
+  records:
+    - workspace_id: shared-ws
+      workspace_path: /work/shared
+      conversation_or_session_id: 33333333-3333-4333-8333-333333333333
+      session_started_at: "2026-08-13T01:00:00-07:00"
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: CLAUDE_EXECUTION_PLANNER
+      status: COMPLETED
+    - workspace_id: shared-ws
+      workspace_path: /work/shared
+      conversation_or_session_id: 33333333-3333-4333-8333-333333333333
+      session_started_at: "2026-08-13T02:00:00-07:00"
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: CLAUDE_INDEPENDENT_GUARDIAN
+      status: COMPLETED
+  founder_workspace_attestation:
+    planner_and_guardian_are_different_sessions: true
+    planner_and_guardian_are_different_workspaces: true
+    attested_by: Founder
+    attested_at: "2026-08-13"

@@ -1,0 +1,19 @@
+fixture_id: N22-marker-outside-allowlist
+description: 白名单之外的治理文档命中隐藏标记必须 FAIL——白名单不得被泛化到任意报告。
+checker: check_hidden_benchmark_boundary
+expected: FAIL
+payload:
+  main_repository_storage_allowed: false
+  main_repository_allowed_artifacts: [benchmark_schema, frozen_manifest, content_hashes, runner_interface, result_summary, non_secret_metadata]
+  directory_rename:
+    from: 02_benchmarks_hidden/
+    to: 02_benchmark_manifests/
+  forbidden_paths_in_worktree: []
+  forbidden_paths_in_git_history: []
+  forbidden_content_hits:
+    - file: governance/reports/some_other_report.md
+      marker: HIDDEN_BENCHMARK_ITEM
+      declared_fixture_for_this_checker: false
+      documentation_allowlisted: false
+  prd_mentions_old_directory: false
+  any_hidden_asset_touched_by_this_task: false

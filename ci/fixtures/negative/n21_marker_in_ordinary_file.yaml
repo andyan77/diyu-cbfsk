@@ -1,0 +1,21 @@
+fixture_id: N21-marker-in-ordinary-file
+description: 隐藏标记出现在普通文件或别的 checker 的 fixture 中，必须 FAIL——例外不得被泛化。
+checker: check_hidden_benchmark_boundary
+expected: FAIL
+payload:
+  main_repository_storage_allowed: false
+  main_repository_allowed_artifacts: [benchmark_schema, frozen_manifest, content_hashes, runner_interface, result_summary, non_secret_metadata]
+  directory_rename:
+    from: 02_benchmarks_hidden/
+    to: 02_benchmark_manifests/
+  forbidden_paths_in_worktree: []
+  forbidden_paths_in_git_history: []
+  forbidden_content_hits:
+    - file: docs/notes.md
+      marker: HIDDEN_BENCHMARK_ITEM
+      declared_fixture_for_this_checker: false
+    - file: ci/fixtures/negative/n05_commit_changed_without_rereview.yaml
+      marker: HIDDEN_BRAND_FACT_PACK
+      declared_fixture_for_this_checker: false
+  prd_mentions_old_directory: false
+  any_hidden_asset_touched_by_this_task: false

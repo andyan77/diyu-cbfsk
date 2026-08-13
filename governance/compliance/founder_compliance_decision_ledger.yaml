@@ -1,0 +1,110 @@
+schema_version: "0.1"
+ledger_id: DIYU-CBFSK-FOUNDER-COMPLIANCE-DECISION-LEDGER
+project_id: DIYU-CBFSK-001
+generated_at: "2026-08-13"
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+
+review_mode: FOUNDER_PLUS_ISOLATED_AI
+external_human_review: false
+external_legal_opinion: false
+legal_review_type: founder_compliance_self_assessment
+blanket_self_assessment_allowed: false
+note: >-
+  六类（现七项）合规问题必须逐项裁决，不得用一次笼统自评替代。AI 只提供对抗性支持，
+  不得冒充律师意见或外部法律结论。本台账的裁决状态由 Founder 填写；执行侧不得代填
+  founder_decision，也不得把 DEFER 写成 ACCEPT。
+
+allowed_decisions: [ACCEPT, MITIGATE, DEFER, BLOCK]
+
+items:
+  - compliance_item_id: CMP-01
+    issue: 未满 14 周岁个人信息与监护人同意机制（童装、青少年为首发品类，直接触发）——《个人信息保护法》。
+    applicable_stage: M0/M1/M9/M12
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - 童装与青少年内容不采集可识别个体信息
+      - 个体适配输入使用中性字段
+      - 高风险知识 Founder 审查覆盖率 100%
+    next_review_milestone: M2
+    decision_date: null
+    external_legal_opinion_obtained: false
+
+  - compliance_item_id: CMP-02
+    issue: AI 生成合成内容标识义务与各平台 AIGC 标注规则（账号矩阵批量发布场景）——《人工智能生成合成内容标识办法》。
+    applicable_stage: M7/M12
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - 发布前标识检查进入发布门
+      - PublicationPolicyController 记录标识状态
+    next_review_milestone: M2
+    decision_date: null
+    external_legal_opinion_obtained: false
+
+  - compliance_item_id: CMP-03
+    issue: 数据出境路径核验：若任何环节使用境外模型 API 处理个体资料——《促进和规范数据跨境流动规定》。
+    applicable_stage: M3/M4/M12
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - 模型调用链登记
+      - 个体资料不出境或去标识化后处理的路径裁决
+    next_review_milestone: M2
+    decision_date: null
+    external_legal_opinion_obtained: false
+
+  - compliance_item_id: CMP-04
+    issue: 面向公众提供生成式 AI 服务的备案适用性（取决于最终产品形态，形态裁决后核验）。
+    applicable_stage: M12
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - 产品形态裁决后重新评估适用性
+    next_review_milestone: M12
+    decision_date: null
+    external_legal_opinion_obtained: false
+
+  - compliance_item_id: CMP-05
+    issue: 模型厂商服务条款对知识蒸馏用途的约束（GPT×Claude 蒸馏链，核验一次并留档）。
+    applicable_stage: M3/M4/M5
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - 蒸馏链用途核验一次并留档
+      - 黑盒行为蒸馏边界不触碰模型权重
+    next_review_milestone: M2
+    decision_date: null
+    external_legal_opinion_obtained: false
+
+  - compliance_item_id: CMP-06
+    issue: 完整顾客档案模式的敏感信息处理、保存期限与删除权流程（含「去标识化≠匿名化」认定）——《网络数据安全管理条例》。
+    applicable_stage: M9/M12
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - 保存期限与删除权流程
+      - 去标识化与匿名化认定分离
+    next_review_milestone: M2
+    decision_date: null
+    external_legal_opinion_obtained: false
+
+  - compliance_item_id: CMP-07
+    issue: Founder 或品牌提供的商品图片使用权、保密义务、保存期限、模型处理与输出公开范围。
+    applicable_stage: M11/M12
+    founder_decision: PENDING_FOUNDER_DECISION
+    rationale: null
+    evidence: []
+    required_controls:
+      - usage_scope=test_production_only 默认
+      - 不进入训练、隐藏集或通用知识，除非另行授权
+      - 权利与保密标记、访问控制、保存期限与删除
+    next_review_milestone: M2
+    decision_date: null
+    external_legal_opinion_obtained: false

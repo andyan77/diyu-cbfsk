@@ -1,0 +1,18 @@
+fixture_id: N18-instruction-projection-drift
+description: 投影文件被手工编辑，与规范源渲染结果不一致。
+checker: check_instruction_projection
+expected: FAIL
+payload:
+  canonical_source: governance/bootstrap/role_operating_model.v0.2.yaml
+  manual_edit_allowed: false
+  drift_tolerance: 0
+  declared_files: [AGENTS.md, CLAUDE.md]
+  files:
+    - path: AGENTS.md
+      exists: true
+      matches_render: false
+      has_generated_marker: true
+    - path: CLAUDE.md
+      exists: true
+      matches_render: true
+      has_generated_marker: true

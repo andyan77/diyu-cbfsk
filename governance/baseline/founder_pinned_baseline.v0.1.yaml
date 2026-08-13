@@ -1,0 +1,193 @@
+schema_version: "0.1"
+manifest_id: DIYU-CBFSK-BASELINE-MANIFEST-001
+project_id: DIYU-CBFSK-001
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+execution_run_id_source: CODEX_RUNTIME
+execution_run_id_uuid_version: 4
+remote_repository: https://github.com/andyan77/diyu-cbfsk
+remote_default_branch: main
+remote_head_commit: ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+generated_at: "2026-08-13T00:47:18-07:00"
+prompt_version: 2.0.0
+prompt_sha256: 82af614b6f3da15deb98e30d032360893a5ce747c65478398d958e1a51edbf09
+
+continuation_execution:
+  reason: CODEX_EXECUTION_SURFACE_NETWORK_FAILURE_MID_TASK
+  founder_designation: TEMPORARY_EXECUTION_WRITER
+  founder_designation_basis: prompt_v2.0_section_11_3
+  executor_role_id: TEMPORARY_EXECUTION_WRITER
+  executor_workspace: CLAUDE_CODE_LOCAL_WORKSPACE
+  executor_is_task_guardian: false
+  executor_is_task_planner_session: false
+  execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+  execution_run_id_source: TEMPORARY_EXECUTION_WRITER_RUNTIME
+  execution_run_id_uuid_version: 4
+  parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+  parent_execution_run_id_scope: phase_0_baseline_reconciliation_only
+  codex_default_writer_rule_changed: false
+  codex_recheck_after_recovery: FOUNDER_DECISION_REQUIRED_NOT_ASSUMED
+  supplement_applied: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002-SUPP-01
+  supplement_founder_ruling_id: DIYU-CBFSK-FR-EVAL-003
+  ruling_range_after_supplement: D-17..D-29
+  inherited_prompt_sha256_provenance: >-
+    82af614b... 由 Phase 0 (Codex) 记录；接替工作面无法读取 Codex 侧 Prompt 文件字节，
+    故不重算、不冒充复核，按继承值原样保留。
+
+baseline_effective: true
+document_editing_authorized: true
+baseline_effective_since: "2026-08-13"
+
+hash_contract:
+  binary_sha256: complete_file_bytes
+  canonical_docx_xml_sha256: >-
+    SHA-256 over sorted XML and RELS parts after XML C14N 2.0; docProps/core.xml,
+    docProps/app.xml, rsid attributes, w14:paraId, w14:textId and w:rsids are excluded.
+  semantic_text_sha256: >-
+    SHA-256 over NFKC-normalized paragraph and table text from word/document.xml,
+    then numbered headers and footers; whitespace is collapsed and part markers retained.
+
+active_baseline_candidates:
+  - file_name: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+    source_path: 'D:\笛语跨品牌服装搭配专家内核\笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx'
+    repository_path: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+    binary_sha256: 1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97
+    canonical_docx_xml_sha256: 752ebe00e09133ca4934ce0bcada01b71f666e1f8720b8f1f97a9169f32782a6
+    semantic_text_sha256: 48b69ab1261b9dbfd6a2b167a9054a02f3a6a7bd661f31ba8409f998e221da37
+    local_remote_binary_equal: true
+    local_remote_canonical_equal: true
+    local_remote_semantic_equal: true
+    status: CONFIRMED_ACTIVE_BASELINE_INPUT
+
+  - file_name: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+    source_path: 'D:\笛语跨品牌服装搭配专家内核\笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx'
+    repository_path: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+    binary_sha256: bc89e25b437f2cd88e55632451be40213ea6b7733ecfb19b91e5cc7e6463c997
+    canonical_docx_xml_sha256: 6e81d91d588400f11d9c4ef851931daa6fee2928e43ece690b42da14bd020e1e
+    semantic_text_sha256: 52426029579c4073de0aa3d6d43b2ad56369ad276728e04e4b0b94533416f32d
+    local_remote_binary_equal: true
+    local_remote_canonical_equal: true
+    local_remote_semantic_equal: true
+    status: CONFIRMED_ACTIVE_BASELINE_INPUT
+
+  - file_name: PRD_v1.1_核验回执.docx
+    source_path: 'D:\笛语跨品牌服装搭配专家内核\PRD_v1.1_核验回执.docx'
+    repository_path: PRD_v1.1_核验回执.docx
+    binary_sha256: 080008393c077b2a92d5c79036cfc25f5b1c8027a5630ae42222eb926316b3c9
+    canonical_docx_xml_sha256: a7f8427a8898d6b58e8525bddb110d32b2c06d8645e6316d7b9d307079bb1fee
+    semantic_text_sha256: 242762f68f9ffd6ffaf7b68a24d26e3ced782a39190623e0106b6bcc69573c31
+    local_remote_binary_equal: true
+    local_remote_canonical_equal: true
+    local_remote_semantic_equal: true
+    status: CONFIRMED_ACTIVE_BASELINE_INPUT
+
+  - file_name: README.md
+    source_path: 'D:\笛语跨品牌服装搭配专家内核\README.md'
+    repository_path: README.md
+    binary_sha256: e5a4d75c7fd4e4e2eb9236b0cb3a7afff5d371eeb295d3ca5523a3783544007b
+    canonical_docx_xml_sha256: null
+    semantic_text_sha256: 0a3293228d1577a6558c3fa8e648926e9ebbb37b2aa24c7ad6272e445dfb9d8a
+    local_remote_binary_equal: true
+    local_remote_semantic_equal: true
+    status: CONFIRMED_ACTIVE_BASELINE_INPUT_MODIFIED_IN_THIS_TASK
+    authorized_modification_in_this_task: true
+    authorization_ref: 执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）
+    post_change_binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
+    post_change_note: >-
+      入参哈希 e5a4d75c… 是 Phase 0 输入快照；本任务按 §15.1 授权改写 README，
+      冻结候选前把交付态哈希写入 post_change_binary_sha256，之后任何再改都会被
+      check_baseline_hashes 当场拦下。
+
+historical_evidence:
+  - file_name: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.0.docx
+    repository_path: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.0.docx
+    binary_sha256: 69ebed07d329956f3f2915f0179ff6ddca955f0dcc6977f837a79274ce03ff41
+    canonical_docx_xml_sha256: 976c1e7df9258efb1b5f4e13934a23f7b3bedc5a67e7f91f24f83a98c91f81a4
+    semantic_text_sha256: 0fba88c976fe90f06e86301c62d9cb3bda60446acb5e18cef2723e1ad0069d32
+    founder_repository_equal: true
+    archive_status: HISTORICAL_EVIDENCE
+  - file_name: 笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx
+    repository_path: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx
+    binary_sha256: e1ee85ff3a105824e5827d9d5540e3d001069978b0150d9c09785ede44bad8af
+    canonical_docx_xml_sha256: 7e655fc27dced8a95245868b58bac06078840346d0e8063e3ba2fc224a0ad654
+    semantic_text_sha256: 20467b4744074550c4a5327a5befab06f95266f74c6a829879633d9208181215
+    founder_repository_equal: true
+    archive_status: HISTORICAL_EVIDENCE
+  - file_name: PRD_v1.0_完整性与对齐性审查报告.docx
+    repository_path: 归档_v1.0/PRD_v1.0_完整性与对齐性审查报告.docx
+    binary_sha256: a51ee41c8689a59e5ae5a923a9027abebe21f4b4cec7361b85a8924c61e3ebaa
+    canonical_docx_xml_sha256: f18696ff6e5dfa3c1bb1bb283d07045d9f4b064b322f49d45f37bc1b12180eac
+    semantic_text_sha256: 6792ec505a336d7b21efb0338f08ec8ac0f4477cd03b554623140cd19b5c1273
+    founder_repository_equal: true
+    archive_status: HISTORICAL_EVIDENCE
+  - file_name: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.0.docx
+    repository_path: 归档_v1.0/笛语跨品牌服装搭配专家内核_M0执行申请_v1.0.docx
+    binary_sha256: 4e034512b78224bc86db59a5aeeb713e4193e9b87f9b037dfe4af42a9bc27fcd
+    canonical_docx_xml_sha256: 398731f32874d77d24e66f37d63ace4eddd23a693219824cbfed5fc38b3dac75
+    semantic_text_sha256: 07ec91d9cb67d97c35ba2fb2b972afe13c16e777aacd2799a0410dc9eb775584
+    founder_repository_equal: true
+    archive_status: HISTORICAL_EVIDENCE
+  - file_name: DIYU-CBFSK-PRD-v1.1-M0-执行申请_20260812.docx
+    repository_path: 归档_v1.0/DIYU-CBFSK-PRD-v1.1-M0-执行申请_20260812.docx
+    binary_sha256: ee2e890fde773ad6b41ab2127284c6193f3caaafe47921f4baec85aa1093c693
+    canonical_docx_xml_sha256: 7a8284689f02151e4e4cc0a2720033dcba13a180375a489fabefe203ff24fcc8
+    semantic_text_sha256: be7f3a4a47ccc1456d91ef4681c1cf0996a52b44e907847365d82032b2d6b8b6
+    founder_repository_equal: true
+    archive_status: HISTORICAL_EVIDENCE_SUPERSEDED
+  - file_name: 治理执行Prompt_分工审计与补强意见书.docx
+    source_path: 'D:\笛语跨品牌服装搭配专家内核\治理执行Prompt_分工审计与补强意见书.docx'
+    repository_path: null
+    binary_sha256: ecf2fc4079fd94aab3e3e12e295d1dc1a2e8b5b6b1f25fe4a46f21c7a04cf3b7
+    canonical_docx_xml_sha256: 8e8691e29a07dab03d88027d7d8172b6b0b7942dc7408bd59be191f6c07d515d
+    semantic_text_sha256: 3d7569e8d88abc636c0a72be95e82ad48aea590cdf7be31ad2be40f049dbbec7
+    archive_status: FOUNDER_LOCAL_HISTORICAL_EVIDENCE_NOT_IMPORTED
+
+derived_artifacts:
+  - file_name: PRD v1.2 candidate set at ace63603f327d61775eff78eef2fbfa9259bb67c
+    based_on_version: PRD_v1.1_plus_D17_to_D26_pre_v2_prompt
+    status: STALE_DERIVED_ARTIFACT_REQUIRES_REGENERATION
+    note: >-
+      Preserved on docs/prd-v1.2-founder-rulings; it predates D-27, S1-S8 and
+      the three Founder patches supplied with this run and is not the pinned baseline.
+
+temporary_locations:
+  - path: 'D:\tmpcodex'
+    files_found: 2
+    proposed_disposition:
+      - file_name: prd.docx
+        binary_sha256: 69ebed07d329956f3f2915f0179ff6ddca955f0dcc6977f837a79274ce03ff41
+        duplicate_of: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.0.docx
+        disposition: DUPLICATE_CONFIRMED
+      - file_name: report.docx
+        binary_sha256: a51ee41c8689a59e5ae5a923a9027abebe21f4b4cec7361b85a8924c61e3ebaa
+        duplicate_of: 归档_v1.0/PRD_v1.0_完整性与对齐性审查报告.docx
+        disposition: DUPLICATE_CONFIRMED
+    deletion_performed: false
+    counts_as_formal_deliverable: false
+
+pending_founder_patch_set:
+  - patch_id: PATCH-01
+    ruling: D-23_PARTIAL_OVERRULE_OF_D-12
+    required_anchor: PRD_v1.2/3.2_and_garment_and_inventory.schema
+    status: APPLIED_IN_PHASE_2_CANDIDATE
+  - patch_id: PATCH-02
+    ruling: D-25_OVERRULE_OF_D-13
+    required_anchor: PRD_v1.2/3.2_and_FR-17_preserved
+    status: APPLIED_IN_PHASE_2_CANDIDATE
+  - patch_id: PATCH-03
+    ruling: D17_TO_D27_NO_FLOATING_CLAUSES
+    required_anchor: PRD_v1.2/5.2_end_and_traceability_receipt
+    status: APPLIED_IN_PHASE_2_CANDIDATE
+
+founder_confirmation:
+  status: CONFIRMED
+  confirmed_by: Founder
+  confirmed_at: "2026-08-13"
+  confirmation_channel: founder_dispatch_message_with_reference_binary_hashes
+  confirmation_statement: 确认该 Manifest 为本任务 Phase 1—4 输入基线。
+  confirmation_scope:
+    - four active candidate records and hashes
+    - remote main commit ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+    - temporary duplicate dispositions
+    - previous v1.2 candidate classified as stale derived artifact
+

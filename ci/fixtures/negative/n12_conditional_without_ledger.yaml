@@ -1,0 +1,16 @@
+fixture_id: N12-conditional-without-ledger
+description: CONDITIONAL 裁决没有条件台账，且被当成 PASS 推进。
+checker: check_conditional_ledger
+expected: FAIL
+payload:
+  rules:
+    conditional_equals_pass: false
+    verbal_resolution_accepted: false
+  conditions: []
+  verdicts:
+    - verdict_id: GUARDIAN-001
+      verdict: CONDITIONAL
+      condition_ids: []
+      treated_as: PASS
+  merge_requested: true
+  founder_explicit_permission_to_advance: false

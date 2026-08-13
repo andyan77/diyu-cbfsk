@@ -1,0 +1,123 @@
+schema_version: "0.1"
+ledger_id: DIYU-CBFSK-CONDITIONAL-DECISION-LEDGER
+project_id: DIYU-CBFSK-001
+generated_at: "2026-08-13"
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+
+rules:
+  conditional_equals_pass: false
+  advance_without_closure_requires_explicit_founder_permission: true
+  closure_requires_evidence_and_commit: true
+  reverification_by_originally_named_role: true
+  verbal_resolution_accepted: false
+  new_commit_invalidates_previous_guardian_and_advisor_verdicts: true
+
+allowed_status: [OPEN, EVIDENCE_SUBMITTED, VERIFIED, CLOSED, WAIVED]
+
+conditions:
+  - condition_id: COND-001
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    description: 第一候选 Commit 必须经独立 Guardian 审查冻结 Commit 并给出 PASS / CONDITIONAL / BLOCK。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - Guardian 报告绑定 candidate_commit 完整哈希
+      - guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8
+      - Guardian 工作区佐证记录已填写
+    status: OPEN
+    verification_role: CLAUDE_INDEPENDENT_GUARDIAN
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-002
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    description: ChatGPT 总顾问必须对同一冻结 Commit 完成远程对齐审查；不可用时 Founder 须显式 DEFER / 指定替位 / 豁免并接受风险。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - 顾问审查结论绑定 candidate_commit
+      - 若豁免，Receipt 写 advisor_review_status=WAIVED_BY_FOUNDER 及理由、风险接受人、时间戳
+    status: OPEN
+    verification_role: GPT_CHIEF_ADVISOR
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-003
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    description: Founder 对完整 PRD v1.2 作一次正式签署，并单独对 M0 执行申请 v1.2 作授权裁决（两个不同决定）。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - prd_file_hash
+      - m0_request_file_hash
+      - candidate_commit
+      - founder_prd_decision 与 founder_m0_request_decision 分别记录
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-004
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
+    description: >-
+      本轮候选由 Founder 依 §11.3 指派的 TEMPORARY_EXECUTION_WRITER 落盘（Codex 执行面网络中断）。
+      Codex 恢复后是否需要复核本候选，必须由 Founder 在例外裁决中明确，不得自动假定。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - Founder 例外裁决文本
+      - 若要求复核：Codex 复核报告绑定 candidate_commit
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-005
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    description: >-
+      Founder 工作区见证行（planner_and_guardian_are_different_sessions / _workspaces）
+      须在 Guardian 实例化后由 Founder 填写；在此之前不得预置为 true。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml 见证字段已签署
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-006
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: 29899f92-c965-4c33-a020-8e7f781fe82d
+    description: >-
+      Founder 存档区 治理执行Prompt_分工审计与补强意见书.docx 是否导入主仓作历史证据，尚未裁决；
+      当前登记为 FOUNDER_LOCAL_HISTORICAL_EVIDENCE_NOT_IMPORTED。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - Founder 导入或不导入的明确裁决
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-007
+    source_decision_id: DIYU-CBFSK-FR-EVAL-003
+    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    description: >-
+      D-21 语感指标与 D-28 三分类相关的具体质量阈值标记为 M2_FREEZE_REQUIRED；
+      执行侧 AI 不得代为冻结阈值。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: M2
+    required_evidence:
+      - M2 冻结时的 evaluation_task_class_contract 与评分卡阈值
+      - Founder 冻结裁决
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null

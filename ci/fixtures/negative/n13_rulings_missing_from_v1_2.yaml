@@ -1,0 +1,14 @@
+fixture_id: N13-rulings-missing-from-v1.2
+description: v1.2 漏掉 D-17 至 D-29 中的裁决。
+checker: check_ruling_coverage
+expected: FAIL
+payload:
+  rulings_in_change_map: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26]
+  rulings_with_anchors: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26]
+  governance_rulings: [S1, S2, S3, S4, S5, S6, S7, S8]
+  d28_anchors: {}
+  d29_anchors: {}
+  old_metric_name_present: false
+  metric_threshold: "≥ 85%"
+  rulings_in_receipt_matrix: [D-17, D-18]
+  prompt_rag_direct_answer_accepted_for_m6: false

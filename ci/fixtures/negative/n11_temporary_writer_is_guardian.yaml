@@ -1,0 +1,65 @@
+fixture_id: N11-temporary-writer-is-guardian
+description: 临时写入者同时担任同任务 Guardian，且未记录 Founder 例外裁决。
+checker: check_role_operating_model
+expected: FAIL
+payload:
+
+  roles:
+    - role_id: FOUNDER_PRODUCT_AUTHORITY
+      human: true
+      final_authority: true
+      repo_write_permission: false
+      formal_guardian: false
+    - role_id: GPT_CHIEF_ADVISOR
+      human: false
+      final_authority: false
+      repo_write_permission: false
+      formal_guardian: false
+    - role_id: CLAUDE_EXECUTION_PLANNER
+      human: false
+      final_authority: false
+      repo_write_permission: false
+      formal_guardian: false
+    - role_id: CODEX_EXECUTION_ENGINEER
+      human: false
+      final_authority: false
+      repo_write_permission: scoped
+      formal_guardian: false
+    - role_id: CLAUDE_INDEPENDENT_GUARDIAN
+      human: false
+      final_authority: false
+      repo_write_permission: false
+      formal_guardian: true
+      planning_context_access: false
+      candidate_edit_permission: false
+    - role_id: CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+      human: false
+      final_authority: false
+      formal_repository_write_permission: false
+      formal_guardian: false
+  role_separation_rules:
+    planner_and_guardian_must_differ:
+      session: true
+      workspace: true
+      task_contract: true
+    after_new_commit:
+      previous_guardian_decision_valid: false
+      previous_advisor_review_valid: false
+  review_mode:
+    mode: FOUNDER_PLUS_ISOLATED_AI
+    external_human_review: false
+    external_legal_opinion: false
+    risk_tiered_review:
+      high_risk:
+        founder_review_coverage: "100%"
+        sampling_allowed: false
+    reviewer_calibration_contract:
+      canonical_name: reviewer_calibration_contract
+  guardian_role_id: CLAUDE_INDEPENDENT_GUARDIAN
+  founder_authorized_temporary_writers: [TEMPORARY_EXECUTION_WRITER]
+  temporary_writers:
+    - role_id: TEMPORARY_EXECUTION_WRITER
+      is_task_guardian: true
+      founder_exception_recorded: false
+      codex_default_writer_rule_changed: true
+  commit_events: []

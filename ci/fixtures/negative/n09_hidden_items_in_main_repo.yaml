@@ -1,0 +1,19 @@
+fixture_id: N09-hidden-items-in-main-repo
+description: 隐藏题进入主仓工作树与 Git 历史。
+checker: check_hidden_benchmark_boundary
+expected: FAIL
+payload:
+  main_repository_storage_allowed: false
+  main_repository_allowed_artifacts: [benchmark_schema, frozen_manifest, content_hashes, runner_interface, result_summary, non_secret_metadata]
+  directory_rename:
+    from: 02_benchmarks_hidden/
+    to: 02_benchmark_manifests/
+  forbidden_paths_in_worktree:
+    - 02_benchmarks_hidden/items.jsonl
+  forbidden_paths_in_git_history:
+    - 02_benchmarks_hidden/answer_key.yaml
+  forbidden_content_hits:
+    - file: benchmarks/leak.md
+      marker: HIDDEN_BENCHMARK_ITEM
+  prd_mentions_old_directory: false
+  any_hidden_asset_touched_by_this_task: false

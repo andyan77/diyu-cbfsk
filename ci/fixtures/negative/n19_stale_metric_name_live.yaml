@@ -1,0 +1,15 @@
+fixture_id: N19-stale-metric-name-live
+description: 旧指标名仍作为活指标名出现在 10.2 质量门表，未完成 D-28 更名。
+checker: check_ruling_coverage
+expected: FAIL
+payload:
+  old_metric_name_paragraphs:
+    - 核心判断重复一致率 ≥ 85% 允许表述变化，不允许关键选择无依据漂移。
+  rulings_in_change_map: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  rulings_with_anchors: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  governance_rulings: [S1, S2, S3, S4, S5, S6, S7, S8]
+  d28_anchors: {}
+  d29_anchors: {}
+  metric_threshold: "≥ 85%"
+  rulings_in_receipt_matrix: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  prompt_rag_direct_answer_accepted_for_m6: false

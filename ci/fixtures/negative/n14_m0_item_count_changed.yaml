@@ -1,0 +1,15 @@
+fixture_id: N14-m0-item-count-changed
+description: M0 顶层交付清单被改为 15 项。
+checker: check_m0_fourteen_items
+expected: FAIL
+payload:
+  canonical_items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+  lists:
+    - name: PRD 13 / M0 交付物
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+    - name: PRD 14 / M0 总清单
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+    - name: PRD 17.1 首任务必须交付
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N, O]
+    - name: M0 执行申请 v1.2
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]

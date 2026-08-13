@@ -2,11 +2,15 @@ schema_version: "1.0"
 project_id: DIYU-CBFSK-001
 change_set:
   version: PRD_v1.2
-  title: 人设连续性、多模态商品理解与扩展兼容基线
-  baseline_date: "2026-08-12"
+  title: 人设连续性、多模态商品理解与治理操作基线
+  baseline_date: "2026-08-13"
   authority: Founder
   source_version: PRD_v1.1
-  rulings: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26]
+  rulings: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  governance_rulings: [S1, S2, S3, S4, S5, S6, S7, S8]
+  founder_ruling_ids: [DIYU-CBFSK-FR-ORG-002, DIYU-CBFSK-FR-EVAL-003]
+  execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+  parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
 
 resulting_state:
   project_status: PROJECT_INITIATED
@@ -14,7 +18,15 @@ resulting_state:
   production_servable: false
   m0_authorized: false
   prd_v1_2_effective: false
-  documentation_status: READY_FOR_FOUNDER_REVIEW
+  documentation_status: READY_FOR_GUARDIAN
+  current_active_baseline: PRD_v1.1
+  current_active_baseline_status: PENDING_FOUNDER_SIGNATURE
+  guardian_review_completed: false
+  chatgpt_remote_review_completed: false
+  founder_prd_signed: false
+  founder_m0_authorized: false
+  founder_merge_approved: false
+  main_merged: false
 
 invariants:
   m0_top_level_deliverable_count: 14
@@ -28,10 +40,13 @@ invariants:
 object_counts:
   input_and_configuration_objects: 12
   output_and_internal_audit_objects: 15
+  goals: 15
+  design_principles: 14
+  scenarios: 9
   capabilities: 15
-  functional_requirements: 29
+  functional_requirements: 30
   non_functional_requirements: 12
-  risks: 21
+  risks: 22
 
 ruling_map:
   D-17:
@@ -106,6 +121,66 @@ ruling_map:
     metric: five_category_activation_readiness=100%
     prd_sections: ["3.1", "7/FR-29", "10", "13-14/M1-M12", "15.5", "16", "附录B"]
     status: PASS
+  D-27:
+    title: Project CI 单一规范源与角色投影完整性
+    canonical_source: governance/bootstrap/role_operating_model.v0.2.yaml
+    projections: [AGENTS.md, CLAUDE.md, .github/copilot-instructions.md]
+    prd_sections: ["8.7", "7/FR-30", "3.1/G-15", "11", "16.2", "16.4", "17", "附录A"]
+    controls:
+      - instruction_projection_drift=0
+      - dual_active_product_truth=0
+      - no_real_brand_or_customer_data_in_public_repo
+      - role_prompt_is_not_third_product_truth
+    status: PASS
+  D-28:
+    title: 合理多解原则（Non-Uniqueness by Design）
+    principle_id: P-14
+    principle_id_note: 补充Prompt文字写作 P-10；P-10—P-13 已被 D-20—D-26 占用，按「原有编号不重排」落为 P-14。
+    evaluation_task_classes:
+      - constraint_correctness   # 硬约束题，唯一 0/1
+      - mechanism_correctness    # 评可接受推理区间
+      - open_decision            # 评可接受解空间/多解族质量
+    gold_answer_forbidden_for: [mechanism_correctness, open_decision]
+    frozen_object: acceptable_decision_boundary
+    renamed_metric:
+      from: 核心判断重复一致率
+      to: 核心决策逻辑稳定率
+      threshold_changed: false
+      threshold: ">= 85%"
+    risk_id: R-22
+    risk_id_note: 补充Prompt文字写作 R-15；R-15—R-21 已被 D-20—D-26 占用，按「原有编号不重排」落为 R-22。
+    prd_sections: ["3.3/P-14", "13-14/M2", "13-14/M3", "13-14/M4", "13-14/M5", "13-14/M6", "13-14/M10", "10.2", "16.1/R-22", "16.2", "附录B"]
+    milestone_anchors:
+      M2: [evaluation_task_class_contract.v0.1.yaml, acceptable_decision_boundary_registry.v0.1.yaml, benchmark_capability_matrix三分类, EvaluationCard三分类]
+      M3: [open_decision_question_template_contract.v0.1.yaml]
+      M4: [model_disagreement_ledger保留合法分歧]
+      M5: [disagreement_classification_and_solution_family_ledger.v0.1.yaml]
+      M6: [acceptable_solution_family_trace, StylingRanker非唯一argmax, DecisionTrace舍弃候选族]
+      M10: [legal_decision_space_conformance_report]
+    status: PASS
+  D-29:
+    title: M6 反退化验收（Anti-Degeneration）
+    forbidden_implementation: single_layer_prompt_or_rag_end_to_end_answer
+    architecture_conformance_checks:
+      - 硬约束由确定性代码执行且可用 fixtures 单测
+      - LLM-off 不变性：关闭 LLM 解释/生成组件后约束过滤与候选排除结果不变且可重放
+      - DecisionTrace 可显示每个排除项由哪条确定性规则触发
+    separate_architecture_audit_task_created: false
+    prd_sections: ["13/M6目标", "13-14/M6交付物", "13-14/M6通过标准", "11.1", "16.2"]
+    milestone_anchors:
+      M6: [architecture_conformance_check_report, llm_off_invariance_replay_fixtures, compiler qualification report扩项]
+    components_annotated: [ConstraintEngine, StylingRanker, DecisionTraceEngine]
+    status: PASS
+
+governance_ruling_map:
+  S1: {title: 基线锚定, landed: governance/baseline/founder_pinned_baseline.v0.1.yaml, status: PASS}
+  S2: {title: 版本序列与单次v1.2签署, landed: PRD_v1.2候选 + README状态块, status: PASS}
+  S3: {title: 单一Founder审查模型, landed: "PRD 15.3/15.4/10.2/16.4 + governance/compliance", status: PASS}
+  S4: {title: 角色不可用降级, landed: "PRD 16.4 + governance/bootstrap/role_operating_model.v0.2.yaml", status: PASS}
+  S5: {title: 隐藏评测物理隔离, landed: governance/storage/hidden_benchmark_storage_contract.yaml, status: PASS}
+  S6: {title: 工作区证据与自举, landed: governance/workspaces/, status: PASS}
+  S7: {title: 任务分级 L1/L2/L3, landed: "PRD 16.4 + governance/bootstrap", status: PASS}
+  S8: {title: Cowork工作面归位, landed: "governance/roles/ + governance/bootstrap", status: PASS}
 
 new_functional_requirement_traceability:
   FR-22: {milestones: [M1, M2, M6, M8, M10], failure_state: MULTIMODAL_ATTRIBUTE_UNSAFE}
@@ -116,6 +191,7 @@ new_functional_requirement_traceability:
   FR-27: {milestones: [M0, M1, M12], failure_state: EXTENSION_COMPATIBILITY_BREAK}
   FR-28: {milestones: [M1, M2, M12], failure_state: UNAUTHORIZED_AUTO_PUBLISH}
   FR-29: {milestones: [M1, M2, M9, M10, M12], failure_state: FIVE_CATEGORY_NOT_READY}
+  FR-30: {milestones: [M0, M12], failure_state: PROJECT_CI_INTEGRITY_FAIL}
 
 m2_threshold_policy:
   quantitative_quality_thresholds: M2_FREEZE_REQUIRED
@@ -129,10 +205,14 @@ m2_threshold_policy:
     - unauthorized_auto_publish_rate=0
 
 files:
-  current_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
-  current_m0_request: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+  current_active_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+  candidate_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  candidate_m0_request: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
   verification_receipt: PRD_v1.2_核验回执.docx
   checker: 工具/check_prd_v1_2.py
   package_auditor: 工具/audit_docx_package.py
   generator: 工具/build_prd_v1_2.py
-  archive_directory: 归档_v1.1
+  governance_canonical_source: governance/bootstrap/role_operating_model.v0.2.yaml
+  ci_entrypoint: ci/run_all_checks.py
+  archive_directory_v1_0: 归档_v1.0
+  archive_directory_v1_1: NOT_CREATED_UNTIL_PRD_V1_2_EFFECTIVE

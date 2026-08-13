@@ -1,0 +1,19 @@
+fixture_id: P01-baseline-local-equals-remote
+description: v1.1 本地与远程完全一致，Founder 已确认基线。
+checker: check_baseline_hashes
+expected: PASS
+payload:
+  founder_confirmation_status: CONFIRMED
+  baseline_effective: true
+  document_editing_authorized: true
+  entries:
+    - repository_path: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      present: true
+      recorded_binary_sha256: "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97"
+      actual_binary_sha256: "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97"
+      local_remote_binary_equal: true
+      local_remote_semantic_equal: true
+  reference_hashes:
+    - file: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      founder_reference: "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97"
+      actual: "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97"

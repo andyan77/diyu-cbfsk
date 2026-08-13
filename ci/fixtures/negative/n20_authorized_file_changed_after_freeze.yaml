@@ -1,0 +1,17 @@
+fixture_id: N20-authorized-file-changed-after-freeze
+description: 本任务授权修改的 README 在钉住交付态哈希后又被改动。
+checker: check_baseline_hashes
+expected: FAIL
+payload:
+  founder_confirmation_status: CONFIRMED
+  baseline_effective: true
+  document_editing_authorized: true
+  entries:
+    - repository_path: README.md
+      present: true
+      recorded_binary_sha256: "e5a4d75c7fd4e4e2eb9236b0cb3a7afff5d371eeb295d3ca5523a3783544007b"
+      actual_binary_sha256: "9999999999999999999999999999999999999999999999999999999999999999"
+      authorized_modification_in_this_task: true
+      authorization_ref: 执行 Prompt v2.0 §15.1
+      post_change_binary_sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+  reference_hashes: []

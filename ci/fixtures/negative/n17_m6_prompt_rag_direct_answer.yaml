@@ -1,0 +1,16 @@
+fixture_id: N17-m6-prompt-rag-direct-answer
+description: D-29 反退化——纯 Prompt/RAG 端到端直答实现被判通过 M6，必须 FAIL。
+checker: check_ruling_coverage
+expected: FAIL
+payload:
+  rulings_in_change_map: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  rulings_with_anchors: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  governance_rulings: [S1, S2, S3, S4, S5, S6, S7, S8]
+  d28_anchors:
+    P-14 原则行: true
+  d29_anchors:
+    架构符合性报告: true
+  old_metric_name_present: false
+  metric_threshold: "≥ 85%"
+  rulings_in_receipt_matrix: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26, D-27, D-28, D-29]
+  prompt_rag_direct_answer_accepted_for_m6: true

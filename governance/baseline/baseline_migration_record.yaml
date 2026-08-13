@@ -1,0 +1,81 @@
+schema_version: "0.1"
+record_id: DIYU-CBFSK-BASELINE-MIGRATION-RECORD-001
+project_id: DIYU-CBFSK-001
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+phase: PHASE_1_BASELINE_MIGRATION
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+generated_at: "2026-08-13"
+depends_on_manifest: governance/baseline/founder_pinned_baseline.v0.1.yaml
+founder_confirmation_status: CONFIRMED
+
+single_source_of_truth_rule:
+  repository_is_only_formal_product_truth: true
+  founder_local_directory_role: archive_and_backup_after_v1_2_effective
+  current_active_baseline: PRD_v1.1
+  current_active_baseline_status: PENDING_FOUNDER_SIGNATURE
+  candidate_version: PRD_v1.2
+  candidate_effective: false
+  v1_1_archive_allowed: false
+  v1_1_archive_precondition: prd_v1_2_effective == true
+
+actions:
+  - action_id: MIG-01
+    description: 撤销 v1.2 合并提交 1b6f668 中对 v1.1 的提前归档，将三份 v1.1 文档移回仓库根目录。
+    reason: 执行 Prompt v2.0 §18 红线「在 v1.2 生效前归档 v1.1」与 §1.1「v1.1 仍是远程仓库中的当前活基线」。
+    files:
+      - from: 归档_v1.1/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+        to: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+        git_change_type: R100
+        bytes_changed: false
+      - from: 归档_v1.1/笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+        to: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+        git_change_type: R100
+        bytes_changed: false
+      - from: 归档_v1.1/PRD_v1.1_核验回执.docx
+        to: PRD_v1.1_核验回执.docx
+        git_change_type: R100
+        bytes_changed: false
+    archive_directory_removed: 归档_v1.1
+    performed_by: TEMPORARY_EXECUTION_WRITER
+    inherited_from_interrupted_codex_run: true
+    status: DONE
+
+  - action_id: MIG-02
+    description: 历史证据保持在 归档_v1.0/，不重新获得活真源地位，不覆盖、不改写、不删除。
+    files_count: 5
+    overwrite_performed: false
+    status: DONE
+
+  - action_id: MIG-03
+    description: Founder 存档区 治理执行Prompt_分工审计与补强意见书.docx 不导入主仓。
+    rationale: Manifest 已登记为 FOUNDER_LOCAL_HISTORICAL_EVIDENCE_NOT_IMPORTED；本任务未获导入授权。
+    imported: false
+    status: DEFERRED_TO_FOUNDER
+
+  - action_id: MIG-04
+    description: 临时目录 D:\tmpcodex 两份文件确认为 归档_v1.0 副本，仅登记不删除。
+    deletion_performed: false
+    deletion_requires_founder_approval: true
+    status: RECORDED_ONLY
+
+  - action_id: MIG-05
+    description: 派生材料版本状态标记。
+    derived_artifacts:
+      - name: docs/prd-v1.2-founder-rulings @ ace63603f327d61775eff78eef2fbfa9259bb67c
+        status: STALE_DERIVED_ARTIFACT
+        preserved: true
+        reason: 早于 D-27、S1—S8、三项补丁与 D-28/D-29，不作为本轮基线。
+      - name: diyu_cbfsk_project_execution_roadmap.html
+        status: NOT_PRESENT_IN_REPOSITORY
+        note: 本仓未收编该派生路线图；若 Founder 侧存在，v1.2 生效后须重新生成或标记 STALE_DERIVED_ARTIFACT。
+      - name: PRD_v1.2_change_map.yaml
+        status: REGENERATED_IN_PHASE_2
+        based_on_version: PRD_v1.2_candidate
+    status: DONE
+
+not_performed:
+  - 未删除任何 Founder 本地或仓库文件
+  - 未覆盖任何存在冲突的文件
+  - 未把仓外产物计为正式交付物
+  - 未推送远程、未合并 main

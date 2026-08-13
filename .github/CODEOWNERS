@@ -1,0 +1,27 @@
+# CODEOWNERS · DIYU-CBFSK-001
+#
+# 唯一人类裁决票是 Founder。本文件让产品真源、治理合同与 CI 守卫的任何改动
+# 都必须经 Founder 审阅；AI 工作面不是 owner，也不能相互批准。
+
+# 兜底：全仓归 Founder
+*                                   @andyan77
+
+# 产品真源（PRD / M0 执行申请 / 核验回执 / 变更映射 / 索引）
+/*.docx                             @andyan77
+/PRD_v1.2_change_map.yaml           @andyan77
+/README.md                          @andyan77
+
+# 治理合同与规范源（D-27 单一规范源）
+/governance/                        @andyan77
+/governance/bootstrap/              @andyan77
+/governance/founder_rulings/        @andyan77
+
+# 指令投影（由规范源生成，禁止手工编辑）
+/AGENTS.md                          @andyan77
+/CLAUDE.md                          @andyan77
+/.github/copilot-instructions.md    @andyan77
+
+# CI 守卫与文档生成器
+/ci/                                @andyan77
+/工具/                              @andyan77
+/.github/                           @andyan77

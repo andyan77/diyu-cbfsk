@@ -1,0 +1,28 @@
+fixture_id: N10-advisor-silently-skipped
+description: ChatGPT 总顾问不可用却被静默跳过，且被标为已完成审查。
+checker: check_task_classification
+expected: FAIL
+payload:
+  task_classification:
+    L1:
+      allowed_scope: [错别字, 标点]
+      forbidden_scope: [产品范围, 能力, 角色, 状态, 阈值, 风险, Schema, 安全, 合规, CI, 知识晋级, 发布, 隐藏评测]
+    L2:
+      scope: [已冻结合同内的实现]
+    L3:
+      scope: [PRD]
+      must_not_skip_without_explicit_founder_waiver: [独立 Guardian, ChatGPT 总顾问远程审查, Founder 具体 Commit 批准]
+    current_task_class: L3
+  role_unavailability_fallback:
+    default_action: DEFER
+    silent_bypass_allowed: false
+  task:
+    task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+    declared_class: L3
+    required_class: L3
+    touched_scope: [角色, 合规]
+  role_availability:
+    - role_id: GPT_CHIEF_ADVISOR
+      available: false
+      founder_decision: null
+      review_completed_claimed: true

@@ -1,0 +1,128 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FR-EVAL-003
+project_id: DIYU-CBFSK-001
+title: D-28 合理多解原则与 D-29 M6 反退化验收
+ruling_date: "2026-08-13"
+issued_by: Founder
+issued_via: cowork_planning_surface → founder_confirmed_dispatch
+supplement_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002-SUPP-01
+applies_to_task: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+authority_basis: 执行 Prompt v2.0 §5.1 第 3 条（v1.2 须承接「此后所有 Founder 产品裁决」）
+restarts_task: false
+changes_m0_fourteen_items: false
+changes_effort_baseline: false
+merged_into: PRD v1.2 Phase 2 合并范围（第一候选 Commit 冻结前并入，未形成额外重审 Commit）
+ruling_range_after_supplement: D-17..D-29
+
+numbering_note:
+  rule: 执行 Prompt v2.0 「原有编号一律不重排」
+  supplement_wrote_P10_landed_as: P-14
+  supplement_wrote_R15_landed_as: R-22
+  reason: P-10—P-13 与 R-15—R-21 已被 D-20—D-26 占用；语义不变，仅顺延编号。
+
+D-28:
+  title: 合理多解原则（Non-Uniqueness by Design）
+  status: FOUNDER_DECIDED
+  principle_id: P-14
+  principle_text: >-
+    除具体运行事实、库存、品类安全、品牌硬规则及明确合同约束外，搭配诊断、候选组合、视觉取舍、风格表达与
+    叙事命题不得假设存在唯一标准答案。评测对象是约束遵守、机制成立性、取舍质量、可解释性与决策边界，
+    而非与单一参考答案的相似度。
+  anchors:
+    - anchor_id: D28-01
+      milestone: M2
+      requirement: EvaluationCard 与 benchmark_capability_matrix 增加强制三分类
+      classes:
+        constraint_correctness: 硬约束题，唯一 0/1
+        mechanism_correctness: 评「可接受推理区间」
+        open_decision: 评「可接受解空间/多解族质量」
+      gold_answer_forbidden_for: [mechanism_correctness, open_decision]
+      frozen_object: Acceptable Decision Boundary
+      landed:
+        - PRD 13/14 M2 交付物 evaluation_task_class_contract.v0.1.yaml
+        - PRD 13/14 M2 交付物 acceptable_decision_boundary_registry.v0.1.yaml
+        - PRD 8.5 知识对象 EvaluationCard 注记
+        - PRD 13/14 M2 benchmark_capability_matrix 注记
+        - PRD 13/14 M2 通过标准
+    - anchor_id: D28-02
+      milestone: M3
+      requirement: 开放型问题模板须要求「至少两个成立但取舍不同的方案 ＋ 说明什么条件变化会交换优先级」，与 FR-08 对齐
+      landed:
+        - PRD 13/14 M3 交付物 open_decision_question_template_contract.v0.1.yaml
+        - PRD 13/14 M3 通过标准
+    - anchor_id: D28-03
+      milestone: M4
+      requirement: model_disagreement_ledger 保留合法分歧，不得为评分便利消灭
+      landed:
+        - PRD 13/14 M4 交付物注记
+        - PRD 13/14 M4 通过标准
+    - anchor_id: D28-04
+      milestone: M5
+      requirement: 分歧二分类——错误分歧（违反硬约束/安全/机制）必须裁决；合法审美分歧保留为合法多解族，知识对象加 solution_family 标记
+      landed:
+        - PRD 13/14 M5 交付物 disagreement_classification_and_solution_family_ledger.v0.1.yaml
+        - PRD 13/14 M5 通过标准
+    - anchor_id: D28-05
+      milestone: M6
+      requirement: StylingRanker 合同注记＝在可行解集合上按品牌/顾客/任务偏好排序，非唯一 argmax；DecisionTrace 须记录被舍弃的合法候选族及理由
+      landed:
+        - PRD 11.1 StylingRanker / DecisionTraceEngine 组件注记
+        - PRD 13/14 M6 交付物 acceptable_solution_family_trace
+        - PRD 13/14 M6 通过标准
+    - anchor_id: D28-06
+      milestone: M10
+      requirement: 迁移测试评「是否持续落在合法决策空间内」，非「与隐藏答案一致」
+      landed:
+        - PRD 13/14 M10 交付物 legal_decision_space_conformance_report
+        - PRD 13/14 M10 通过标准
+    - anchor_id: D28-07
+      section: "10.2"
+      requirement: 指标更名「核心判断重复一致率」→「核心决策逻辑稳定率」，阈值 ≥85% 不变
+      definition: >-
+        相同输入与约束下，核心专业逻辑（机制判断、约束处理、取舍原则）不得无依据漂移；具体选品与方案族允许不同。
+      counterexample: 同条件下先「弱化肩部」后「强化肩部」（失败）
+      non_counterexample: 同条件下一次裤装方案、一次裙装方案且均成立（不计失败）
+      landed: PRD 10.2 质量门表
+    - anchor_id: D28-08
+      section: "16.1 / 16.2"
+      requirement: 新增风险「唯一答案偏误」（严重度对标 R-09）与停止条件「②③类任务被设置唯一 Gold Answer → 停止 M2 冻结」
+      landed:
+        - PRD 16.1 R-22
+        - PRD 16.2 停止条件
+    - anchor_id: D28-09
+      section: 附录B
+      requirement: 新增术语——合理多解原则、可接受决策边界、合法多解族、决策逻辑稳定率
+      landed: PRD 附录B 术语表
+
+D-29:
+  title: M6 反退化验收（Anti-Degeneration）
+  status: FOUNDER_DECIDED
+  decision: >-
+    M6 搭配决策编译器不得实现为「将已接受知识注入 Prompt/RAG 后由 LLM 端到端直接作答」的单层结构。
+    硬约束执行（库存/品牌/品类/安全/用户拒绝项）、候选生成与排序必须是确定性、可审计的步骤；
+    LLM 用于语义解析、解释与叙事生成，不得作为硬约束的唯一执行者。
+  anchors:
+    - anchor_id: D29-01
+      milestone: M6
+      requirement: 通过标准与 compiler qualification report 增加架构符合性检查三条
+      checks:
+        - 硬约束由确定性代码执行且可用 fixtures 单测
+        - LLM-off 不变性：关闭 LLM 解释/生成组件后，约束过滤与候选排除结果不变、可重放
+        - DecisionTrace 可显示每个排除项由哪条确定性规则触发
+      landed:
+        - PRD 13 M6 目标
+        - PRD 13/14 M6 交付物 architecture_conformance_check_report
+        - PRD 13/14 M6 交付物 llm_off_invariance_replay_fixtures
+        - PRD 13/14 M6 通过标准
+    - anchor_id: D29-02
+      scope: CI fixtures
+      requirement: 新增 negative fixture——纯 Prompt/RAG 直答实现通过 M6 必须 FAIL
+      landed: ci/fixtures/negative/m6_prompt_rag_direct_answer.yaml + ci/checkers/check_task_classification.py 无关；由 check_m6_anti_degeneration 断言
+    - anchor_id: D29-03
+      section: "11.1"
+      requirement: 组件注记同步
+      landed: PRD 11.1 ConstraintEngine / StylingRanker / DecisionTraceEngine
+    - anchor_id: D29-04
+      scope: 任务边界
+      requirement: 不另立「四范式架构审计」任务，本验收条款承接该关切
+      separate_architecture_audit_task_created: false

@@ -1,0 +1,25 @@
+fixture_id: N06-ai-review-as-external-expert
+description: AI 评审被肯定性地表述为外部专家共识（不是禁止句）。
+checker: check_external_review_claims
+expected: FAIL
+payload:
+  forbidden_phrase_hits:
+    - source: PRD_v1.2
+      phrase: 外部专家共识
+      paragraph: 未见品牌通过率已获外部专家共识，可作为迁移门证据。
+  metrics_present:
+    - internal_review_panel_pass_rate
+    - ai_reviewer_disagreement_rate
+    - founder_override_rate
+    - founder_sample_review_rate
+    - high_risk_founder_full_review_rate
+  flags:
+    external_human_review: false
+    external_legal_opinion: false
+    independent_external_validation_completed: false
+  domain_review_type: founder_self_review_with_ai_adversarial_support
+  legal_review_type: founder_compliance_self_assessment
+  ai_review_claims:
+    - claim_id: CLM-01
+      reviewer_is_ai: true
+      presented_as: external_expert

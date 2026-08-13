@@ -1,0 +1,26 @@
+fixture_id: P03-planner-guardian-separate-workspaces
+description: Planner 与 Guardian 不同会话、不同工作区，Founder 已见证。
+checker: check_workspace_attestation
+expected: PASS
+payload:
+  is_cryptographic_independence_proof: false
+  records:
+    - workspace_id: planner-ws
+      workspace_path: /work/planner
+      conversation_or_session_id: 11111111-1111-4111-8111-111111111111
+      session_started_at: "2026-08-13T01:00:00-07:00"
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: CLAUDE_EXECUTION_PLANNER
+      status: COMPLETED
+    - workspace_id: guardian-ws
+      workspace_path: /work/guardian
+      conversation_or_session_id: 22222222-2222-4222-8222-222222222222
+      session_started_at: "2026-08-13T03:00:00-07:00"
+      base_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      role: CLAUDE_INDEPENDENT_GUARDIAN
+      status: COMPLETED
+  founder_workspace_attestation:
+    planner_and_guardian_are_different_sessions: true
+    planner_and_guardian_are_different_workspaces: true
+    attested_by: Founder
+    attested_at: "2026-08-13"

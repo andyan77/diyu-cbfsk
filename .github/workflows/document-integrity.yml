@@ -1,0 +1,51 @@
+name: document-integrity
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install --quiet pyyaml python-docx
+
+      - name: DOCX package integrity (ZIP CRC / OOXML parts / XML parse)
+        run: |
+          python3 工具/audit_docx_package.py \
+            "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx" \
+            "笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx" \
+            "PRD_v1.2_核验回执.docx"
+
+      - name: Baseline and three-layer hashes
+        run: |
+          cd ci/checkers
+          python3 check_baseline_hashes.py
+          python3 check_docx_canonical_hashes.py
+
+      - name: Single active product truth and project state
+        run: |
+          cd ci/checkers
+          python3 check_active_product_truth.py
+          python3 check_project_state.py
+
+      - name: M0 fourteen items and ruling coverage D-17..D-29
+        run: |
+          cd ci/checkers
+          python3 check_m0_fourteen_items.py
+          python3 check_ruling_coverage.py
+
+      - name: PRD contract checker
+        run: python3 工具/check_prd_v1_2.py

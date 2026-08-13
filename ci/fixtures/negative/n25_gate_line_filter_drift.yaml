@@ -1,0 +1,23 @@
+fixture_id: N25-gate-line-filter-drift
+description: >-
+  第14节验收门行数不是恰好 3（这里只剔到 2）。旧实现用前缀匹配会静默吞掉或漏掉交付物，
+  必须当场判 FAIL 而不是继续比对清单。
+checker: check_m0_fourteen_items
+expected: FAIL
+payload:
+  canonical_items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+  lists:
+    - name: PRD 13 / M0 交付物
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+      gate_lines_removed: 0
+      expected_gate_lines_removed: 0
+    - name: PRD 14 / M0 总清单
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+      gate_lines_removed: 2
+      expected_gate_lines_removed: 3
+    - name: PRD 17.1 首任务必须交付
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+      gate_lines_removed: 0
+      expected_gate_lines_removed: 0
+    - name: M0 执行申请 v1.2（表格短名）
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]

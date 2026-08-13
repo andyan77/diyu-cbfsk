@@ -39,21 +39,48 @@ document_editing_authorized: true
 baseline_effective_since: "2026-08-13"
 
 hash_contract:
-  binary_sha256: complete_file_bytes
+  implementation: ci/checkers/_common.py
+  implementation_note: >-
+    三层哈希只有这一个实现；任何文件、报告或 checker 都不得再自行推导一套（单一实现原则）。
+    本合同文字必须与该实现严格一致，实现改动时必须同步改本合同并重算下方所有派生哈希。
+  binary_sha256: >-
+    SHA-256 over the complete file bytes.
   canonical_docx_xml_sha256: >-
-    SHA-256 over sorted XML and RELS parts after XML C14N 2.0; docProps/core.xml,
-    docProps/app.xml, rsid attributes, w14:paraId, w14:textId and w:rsids are excluded.
+    NOT XML C14N 2.0. SHA-256 over the concatenation, in sorted ZIP member-name order, of every
+    part whose name ends in .xml or .rels except docProps/core.xml and docProps/app.xml.
+    Each part is serialised recursively as <tag attr=repr(value) ...>stripped-text children</tag>,
+    with attributes sorted by name and any attribute whose local name matches
+    rsid* / paraId / textId dropped. Namespaces are kept in Clark notation as parsed;
+    comments, processing instructions and inter-element whitespace are not preserved.
   semantic_text_sha256: >-
-    SHA-256 over NFKC-normalized paragraph and table text from word/document.xml,
-    then numbered headers and footers; whitespace is collapsed and part markers retained.
+    SHA-256 over newline-joined records: for word/document.xml first, then every
+    word/header<N>.xml and word/footer<N>.xml in sorted name order, a <<PART:name>> marker
+    followed by one record per w:p element. Because w:p inside w:tbl is included by the
+    element walk, table cell text is covered. Each record is the concatenation of its w:t
+    texts, NFKC-normalised, whitespace-collapsed; empty records are dropped.
+  derived_hash_supersession:
+    superseded_at: "2026-08-13"
+    reason: >-
+      Phase 0 (Codex) 的 canonical/semantic 值由一套已不在本仓的实现产出，在候选内实现下无法复现，
+      构成同一功能两套实现并存。按 Founder 修复指令 BLOCK-01 (a)，改由候选内唯一实现重算并写回；
+      Phase 0 原值保留在 phase_0_recorded_* 字段供审计比对。
+    binary_layer_changed: false
+    binary_layer_note: >-
+      binary_sha256 未变，且仍与 Founder 本轮提供的参考值逐一相等——文件身份未变，
+      本次只更正派生层的记录值。
+
 
 active_baseline_candidates:
   - file_name: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
     source_path: 'D:\笛语跨品牌服装搭配专家内核\笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx'
     repository_path: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
     binary_sha256: 1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97
-    canonical_docx_xml_sha256: 752ebe00e09133ca4934ce0bcada01b71f666e1f8720b8f1f97a9169f32782a6
-    semantic_text_sha256: 48b69ab1261b9dbfd6a2b167a9054a02f3a6a7bd661f31ba8409f998e221da37
+    canonical_docx_xml_sha256: 1188f9f17ad24ae363490421580f240a15ec49667e1f34f56b506396431da2e2
+    semantic_text_sha256: eded25fff6123f67f64d7c220afeaddafb61e9a11dc755f7015f16fb789e0838
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: 752ebe00e09133ca4934ce0bcada01b71f666e1f8720b8f1f97a9169f32782a6
+    phase_0_recorded_semantic_text_sha256: 48b69ab1261b9dbfd6a2b167a9054a02f3a6a7bd661f31ba8409f998e221da37
+    phase_0_derived_hashes_reproducible: false
     local_remote_binary_equal: true
     local_remote_canonical_equal: true
     local_remote_semantic_equal: true
@@ -63,8 +90,12 @@ active_baseline_candidates:
     source_path: 'D:\笛语跨品牌服装搭配专家内核\笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx'
     repository_path: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
     binary_sha256: bc89e25b437f2cd88e55632451be40213ea6b7733ecfb19b91e5cc7e6463c997
-    canonical_docx_xml_sha256: 6e81d91d588400f11d9c4ef851931daa6fee2928e43ece690b42da14bd020e1e
-    semantic_text_sha256: 52426029579c4073de0aa3d6d43b2ad56369ad276728e04e4b0b94533416f32d
+    canonical_docx_xml_sha256: e9a4b8d151733320a8990ca7af61921ccaf99c06a505fa3a85dfd86d3e62ea46
+    semantic_text_sha256: b3bbc0a8fd0c6fb55ffda4e8741c011a4aaea75465182dd501011ae51f109515
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: 6e81d91d588400f11d9c4ef851931daa6fee2928e43ece690b42da14bd020e1e
+    phase_0_recorded_semantic_text_sha256: 52426029579c4073de0aa3d6d43b2ad56369ad276728e04e4b0b94533416f32d
+    phase_0_derived_hashes_reproducible: false
     local_remote_binary_equal: true
     local_remote_canonical_equal: true
     local_remote_semantic_equal: true
@@ -74,8 +105,12 @@ active_baseline_candidates:
     source_path: 'D:\笛语跨品牌服装搭配专家内核\PRD_v1.1_核验回执.docx'
     repository_path: PRD_v1.1_核验回执.docx
     binary_sha256: 080008393c077b2a92d5c79036cfc25f5b1c8027a5630ae42222eb926316b3c9
-    canonical_docx_xml_sha256: a7f8427a8898d6b58e8525bddb110d32b2c06d8645e6316d7b9d307079bb1fee
-    semantic_text_sha256: 242762f68f9ffd6ffaf7b68a24d26e3ced782a39190623e0106b6bcc69573c31
+    canonical_docx_xml_sha256: 5c0400dc603f848390e024987990f45b2f63293297590898fc0dc930ba4be815
+    semantic_text_sha256: be1558eafe865a3fd280f2d5f54b839d1008e1daabf9663f174a6f616aa4b990
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: a7f8427a8898d6b58e8525bddb110d32b2c06d8645e6316d7b9d307079bb1fee
+    phase_0_recorded_semantic_text_sha256: 242762f68f9ffd6ffaf7b68a24d26e3ced782a39190623e0106b6bcc69573c31
+    phase_0_derived_hashes_reproducible: false
     local_remote_binary_equal: true
     local_remote_canonical_equal: true
     local_remote_semantic_equal: true
@@ -102,36 +137,56 @@ historical_evidence:
   - file_name: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.0.docx
     repository_path: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.0.docx
     binary_sha256: 69ebed07d329956f3f2915f0179ff6ddca955f0dcc6977f837a79274ce03ff41
-    canonical_docx_xml_sha256: 976c1e7df9258efb1b5f4e13934a23f7b3bedc5a67e7f91f24f83a98c91f81a4
-    semantic_text_sha256: 0fba88c976fe90f06e86301c62d9cb3bda60446acb5e18cef2723e1ad0069d32
+    canonical_docx_xml_sha256: 044eb41bf90ae9c260b23ed1bc278fc65fb9d6f11d7428006dd1a9fd0889fffe
+    semantic_text_sha256: 08b558b5b24e88910b2da49611e78679797afe2332337a0c9fe76619d8eb1ee1
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: 976c1e7df9258efb1b5f4e13934a23f7b3bedc5a67e7f91f24f83a98c91f81a4
+    phase_0_recorded_semantic_text_sha256: 0fba88c976fe90f06e86301c62d9cb3bda60446acb5e18cef2723e1ad0069d32
+    phase_0_derived_hashes_reproducible: false
     founder_repository_equal: true
     archive_status: HISTORICAL_EVIDENCE
   - file_name: 笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx
     repository_path: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx
     binary_sha256: e1ee85ff3a105824e5827d9d5540e3d001069978b0150d9c09785ede44bad8af
-    canonical_docx_xml_sha256: 7e655fc27dced8a95245868b58bac06078840346d0e8063e3ba2fc224a0ad654
-    semantic_text_sha256: 20467b4744074550c4a5327a5befab06f95266f74c6a829879633d9208181215
+    canonical_docx_xml_sha256: 4e5473e40a9df2ba12080b350007bb22d95b83f18b5ad6a55b5e9699f56f924f
+    semantic_text_sha256: 0ea1eb2dd3ced96e9851f0f6bf864c66764f14cf1591d91a3a3b9e51e7cb5b94
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: 7e655fc27dced8a95245868b58bac06078840346d0e8063e3ba2fc224a0ad654
+    phase_0_recorded_semantic_text_sha256: 20467b4744074550c4a5327a5befab06f95266f74c6a829879633d9208181215
+    phase_0_derived_hashes_reproducible: false
     founder_repository_equal: true
     archive_status: HISTORICAL_EVIDENCE
   - file_name: PRD_v1.0_完整性与对齐性审查报告.docx
     repository_path: 归档_v1.0/PRD_v1.0_完整性与对齐性审查报告.docx
     binary_sha256: a51ee41c8689a59e5ae5a923a9027abebe21f4b4cec7361b85a8924c61e3ebaa
-    canonical_docx_xml_sha256: f18696ff6e5dfa3c1bb1bb283d07045d9f4b064b322f49d45f37bc1b12180eac
-    semantic_text_sha256: 6792ec505a336d7b21efb0338f08ec8ac0f4477cd03b554623140cd19b5c1273
+    canonical_docx_xml_sha256: 191365038da866de2a629843520f3cf3db0e1b613a2e9b2d2435fef4dbb35ad2
+    semantic_text_sha256: 97928dd77970a3409ce845f20efbab7ef0e2b55ada2850313efbcba2a4657b28
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: f18696ff6e5dfa3c1bb1bb283d07045d9f4b064b322f49d45f37bc1b12180eac
+    phase_0_recorded_semantic_text_sha256: 6792ec505a336d7b21efb0338f08ec8ac0f4477cd03b554623140cd19b5c1273
+    phase_0_derived_hashes_reproducible: false
     founder_repository_equal: true
     archive_status: HISTORICAL_EVIDENCE
   - file_name: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.0.docx
     repository_path: 归档_v1.0/笛语跨品牌服装搭配专家内核_M0执行申请_v1.0.docx
     binary_sha256: 4e034512b78224bc86db59a5aeeb713e4193e9b87f9b037dfe4af42a9bc27fcd
-    canonical_docx_xml_sha256: 398731f32874d77d24e66f37d63ace4eddd23a693219824cbfed5fc38b3dac75
-    semantic_text_sha256: 07ec91d9cb67d97c35ba2fb2b972afe13c16e777aacd2799a0410dc9eb775584
+    canonical_docx_xml_sha256: 7d870f28cc75b44fa48ea7be5a66fc702b5ae3e064dadc65a7b7a10f9b02fcfc
+    semantic_text_sha256: 577aa67173c6fcdd1b668cabe5c678e64adc3ba63845fec63cc7dfe35a18356a
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: 398731f32874d77d24e66f37d63ace4eddd23a693219824cbfed5fc38b3dac75
+    phase_0_recorded_semantic_text_sha256: 07ec91d9cb67d97c35ba2fb2b972afe13c16e777aacd2799a0410dc9eb775584
+    phase_0_derived_hashes_reproducible: false
     founder_repository_equal: true
     archive_status: HISTORICAL_EVIDENCE
   - file_name: DIYU-CBFSK-PRD-v1.1-M0-执行申请_20260812.docx
     repository_path: 归档_v1.0/DIYU-CBFSK-PRD-v1.1-M0-执行申请_20260812.docx
     binary_sha256: ee2e890fde773ad6b41ab2127284c6193f3caaafe47921f4baec85aa1093c693
-    canonical_docx_xml_sha256: 7a8284689f02151e4e4cc0a2720033dcba13a180375a489fabefe203ff24fcc8
-    semantic_text_sha256: be7f3a4a47ccc1456d91ef4681c1cf0996a52b44e907847365d82032b2d6b8b6
+    canonical_docx_xml_sha256: 2c1dcb6017190a878f855aa208eaf0cc71247fddaebfa117dea7e6ed707c602b
+    semantic_text_sha256: 3bdfe77fe991538a90945a1c5b206ea16aa558809b2f23972bece470d0c89916
+    derived_hash_source: RECOMPUTED_BY_IN_CANDIDATE_IMPLEMENTATION
+    phase_0_recorded_canonical_docx_xml_sha256: 7a8284689f02151e4e4cc0a2720033dcba13a180375a489fabefe203ff24fcc8
+    phase_0_recorded_semantic_text_sha256: be7f3a4a47ccc1456d91ef4681c1cf0996a52b44e907847365d82032b2d6b8b6
+    phase_0_derived_hashes_reproducible: false
     founder_repository_equal: true
     archive_status: HISTORICAL_EVIDENCE_SUPERSEDED
   - file_name: 治理执行Prompt_分工审计与补强意见书.docx
@@ -140,6 +195,9 @@ historical_evidence:
     binary_sha256: ecf2fc4079fd94aab3e3e12e295d1dc1a2e8b5b6b1f25fe4a46f21c7a04cf3b7
     canonical_docx_xml_sha256: 8e8691e29a07dab03d88027d7d8172b6b0b7942dc7408bd59be191f6c07d515d
     semantic_text_sha256: 3d7569e8d88abc636c0a72be95e82ad48aea590cdf7be31ad2be40f049dbbec7
+    derived_hash_source: PHASE_0_CODEX_NOT_REPRODUCIBLE_IN_CANDIDATE
+    derived_hash_reproducible_in_candidate: false
+    derived_hash_note: 文件不在仓内，候选内实现无法读取；本条派生哈希不得被当作已核验值。
     archive_status: FOUNDER_LOCAL_HISTORICAL_EVIDENCE_NOT_IMPORTED
 
 derived_artifacts:

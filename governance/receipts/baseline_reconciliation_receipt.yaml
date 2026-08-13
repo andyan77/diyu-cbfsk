@@ -89,6 +89,14 @@ safe_partial_outputs:
   - governance/baseline/baseline_migration_record.yaml
   - governance/reports/final_delivery_report.md
   - governance/receipts/guardian_handoff_package.yaml
+  - governance/reports/guardian_review_report.f48fed3.md
 
-next_required_action: INDEPENDENT_GUARDIAN_REVIEW_OF_FROZEN_CANDIDATE_COMMIT
+guardian_review_history:
+  - reviewed_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+    decision: REJECT
+    blocking_finding: BLOCK-01
+    report: governance/reports/guardian_review_report.f48fed3.md
+    valid_for_current_candidate: false
+
+next_required_action: FULL_RE_REVIEW_BY_INDEPENDENT_GUARDIAN_OF_THE_NEW_CANDIDATE_COMMIT
 

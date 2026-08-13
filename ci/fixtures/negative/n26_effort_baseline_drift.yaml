@@ -1,0 +1,21 @@
+fixture_id: N26-effort-baseline-drift
+description: PRD 把人月基线悄悄改成 150—200，与规范源和 change_map 不一致——红线「自行改变基线」。
+checker: check_effort_baseline_consistency
+expected: FAIL
+payload:
+  sources:
+    role_operating_model:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+      staffing_commitment: false
+    prd:
+      person_months: "150—200"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+      staffing_commitment: false
+    change_map:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+  changed_by_this_task: false

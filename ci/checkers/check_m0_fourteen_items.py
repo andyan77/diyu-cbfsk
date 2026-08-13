@@ -28,7 +28,13 @@ CANONICAL_M0_ITEMS = [
     "M0 checker / fixtures / report / receipt",
 ]
 
-GATE_LINE_PREFIXES = ("验收门已通过：", "工作树、版本、输入清单", "Founder已形成明确的")
+# 第14节每个里程碑区尾部固定三行验收门。前两行是每个里程碑共用的定值，
+# 第一行是「验收门已通过：」＋该里程碑第13节的通过标准原文，故按精确文本剔除，不用前缀匹配。
+FIXED_GATE_LINES = (
+    "工作树、版本、输入清单、原始输出与报告已可重放。",
+    "Founder已形成明确的PASS / CONDITIONAL / BLOCK裁决。",
+)
+EXPECTED_GATE_LINE_COUNT = 3
 
 
 def validate(payload: dict) -> list[str]:
@@ -43,6 +49,13 @@ def validate(payload: dict) -> list[str]:
         name = entry.get("name", "<unnamed>")
         expected = entry.get("expected") or default_expected
         items = entry.get("items") or []
+        if "gate_lines_removed" in entry:
+            removed = entry["gate_lines_removed"]
+            want = entry.get("expected_gate_lines_removed", 0)
+            if removed != want:
+                errors.append(
+                    f"GATE_LINE_FILTER_DRIFT: {name} removed {removed} gate line(s), expected exactly {want}"
+                )
         if len(items) != 14:
             errors.append(f"M0_ITEM_COUNT_CHANGED: {name} has {len(items)} items, expected 14")
         if items != expected:
@@ -68,34 +81,50 @@ def _region(paragraphs: list[str], start: str, end: str) -> list[str]:
     raise ValueError(f"end marker not found after {start!r}: {end!r}")
 
 
-def _checkbox_items(lines: list[str]) -> list[str]:
-    out = []
-    for line in lines:
-        if not line.startswith("[ ]"):
-            continue
-        item = line[3:].strip()
-        if item.startswith(GATE_LINE_PREFIXES):
-            continue
-        out.append(item)
-    return out
+def _checkbox_items(lines: list[str], *, pass_standard: str | None = None) -> tuple[list[str], int]:
+    """Split checkbox lines into (deliverables, gate_lines_removed) by exact text match.
+
+    第14节每个里程碑区尾部固定三行验收门，按精确文本剔除（不用前缀匹配，前缀会误吞交付物）。
+    pass_standard=None 表示该区不应有验收门行。剔除数交由 validate() 断言，
+    这样 fixture 能真正行使这条判据，而不是只在运行时抛异常。
+    """
+    gate_lines = set(FIXED_GATE_LINES)
+    if pass_standard is not None:
+        gate_lines.add(f"验收门已通过：{pass_standard}")
+    items = [line[3:].strip() for line in lines if line.startswith("[ ]")]
+    kept = [i for i in items if i not in gate_lines]
+    return kept, len(items) - len(kept)
 
 
 def collect() -> dict:
     prd = docx_paragraph_texts(ROOT / "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx")
-    m0 = docx_paragraph_texts(ROOT / "笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx")
 
+    ch13 = _region(prd, "M0｜独立立项与合同冻结", "M1｜语义骨架与品类适配合同")
+    pass_standard = ch13[ch13.index("通过标准") + 1]
+    ch13_items, ch13_removed = _checkbox_items(ch13)
+    ch14_items, ch14_removed = _checkbox_items(
+        _region(prd, "M0 独立立项与合同冻结", "M1 语义骨架与品类适配合同"),
+        pass_standard=pass_standard,
+    )
+    s171_items, s171_removed = _checkbox_items(_region(prd, "17.1 首任务必须交付", "17.2 执行纪律"))
     lists = [
         {
             "name": "PRD 13 / M0 交付物",
-            "items": _checkbox_items(_region(prd, "M0｜独立立项与合同冻结", "M1｜语义骨架与品类适配合同")),
+            "items": ch13_items,
+            "gate_lines_removed": ch13_removed,
+            "expected_gate_lines_removed": 0,
         },
         {
             "name": "PRD 14 / M0 总清单",
-            "items": _checkbox_items(_region(prd, "M0 独立立项与合同冻结", "M1 语义骨架与品类适配合同")),
+            "items": ch14_items,
+            "gate_lines_removed": ch14_removed,
+            "expected_gate_lines_removed": EXPECTED_GATE_LINE_COUNT,
         },
         {
             "name": "PRD 17.1 首任务必须交付",
-            "items": _checkbox_items(_region(prd, "17.1 首任务必须交付", "17.2 执行纪律")),
+            "items": s171_items,
+            "gate_lines_removed": s171_removed,
+            "expected_gate_lines_removed": 0,
         },
     ]
     # M0 执行申请把十四项放在「# | 交付物」表里，且不带括注；单独比对短名清单。

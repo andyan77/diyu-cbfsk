@@ -28,6 +28,7 @@ CHECKERS = [
     "check_external_review_claims",
     "check_m0_fourteen_items",
     "check_project_state",
+    "check_effort_baseline_consistency",
     "check_instruction_projection",
     "check_ruling_coverage",
 ]

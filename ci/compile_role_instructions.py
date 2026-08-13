@@ -241,6 +241,13 @@ def render_prompt(model: dict, role_id: str) -> str:
             "",
             bullets(model["red_lines"]),
             "",
+            "## 工程质量标准（Founder 裁决，长期生效）",
+            "",
+            bullets(
+                f"**{r['id']} {r['name']}**：{r['statement']}"
+                for r in model["engineering_quality_standard"]["rules"]
+            ),
+            "",
         ]
     return "\n".join(parts)
 
@@ -303,6 +310,13 @@ def render_agents_md(model: dict) -> str:
             f"主仓只允许：{'、'.join(model['hidden_benchmark_isolation']['main_repository_allowed_artifacts'])}。"
             f"公开目录名固定为 `{model['hidden_benchmark_isolation']['directory_rename']['to']}`。",
             "",
+            "## 工程质量标准（Founder 裁决，长期生效）",
+            "",
+            bullets(
+                f"**{r['id']} {r['name']}**：{r['statement']}"
+                for r in model["engineering_quality_standard"]["rules"]
+            ),
+            "",
             "## 红线",
             "",
             bullets(model["red_lines"]),
@@ -363,6 +377,13 @@ def render_claude_md(model: dict) -> str:
                     "角色不可用默认 DEFER，不得静默绕过。",
                     "不得把 AI 评审说成外部专家，不得把 Founder 自评说成律师意见。",
                 ]
+            ),
+            "",
+            "## 工程质量标准（Founder 裁决，长期生效）",
+            "",
+            bullets(
+                f"**{r['id']} {r['name']}**：{r['statement']}"
+                for r in model["engineering_quality_standard"]["rules"]
             ),
             "",
             "## 红线",

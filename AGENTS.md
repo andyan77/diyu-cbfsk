@@ -85,6 +85,14 @@ main_merged: false
 
 主仓存放隐藏内容：`false`。主仓只允许：benchmark_schema、frozen_manifest、content_hashes、runner_interface、result_summary、non_secret_metadata。公开目录名固定为 `02_benchmark_manifests/`。
 
+## 工程质量标准（Founder 裁决，长期生效）
+
+- **EQ-1 单一实现原则**：同一功能禁止两套实现并存；派生值只能有一个产出实现，其余一律消费该实现。
+- **EQ-2 合同与实现严格一致**：合同文字必须如实描述实现；实现改动必须同步改合同并重算受影响的派生值。
+- **EQ-3 每个 checker 必有 negative fixture**：每条判据都要有一份声明 expected=FAIL 的 fixture 行使它；只有正向断言不算已验证。
+- **EQ-4 无死代码、无魔法常量**：不留未被消费的数据与分支；常量必须有来源与名字，不得散落字面量。
+- **EQ-5 修复优先重构而非叠补丁**：发现结构性缺陷时先消除重复与短路，不在缺陷之上叠加特例。
+
 ## 红线
 
 - 开始 M0 十四项正式施工

@@ -1,0 +1,13 @@
+fixture_id: P09-all-three-layers-reproduce
+description: 三层全部相等才判 BINARY_EQUAL；binary_equal 为真不再短路。
+checker: check_docx_canonical_hashes
+expected: PASS
+payload:
+  integrity: []
+  comparisons:
+    - file: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      binary_equal: true
+      canonical_equal: true
+      semantic_equal: true
+      expected_classification: BINARY_EQUAL
+      founder_confirmation_required: true

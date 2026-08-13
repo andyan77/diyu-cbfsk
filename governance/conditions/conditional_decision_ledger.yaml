@@ -18,13 +18,21 @@ conditions:
   - condition_id: COND-001
     source_decision_id: DIYU-CBFSK-FR-ORG-002
     source_commit: PENDING_FIRST_CANDIDATE_COMMIT
-    description: 第一候选 Commit 必须经独立 Guardian 审查冻结 Commit 并给出 PASS / CONDITIONAL / BLOCK。
+    description: 冻结候选 Commit 必须经独立 Guardian 审查并给出 PASS / CONDITIONAL / BLOCK。
     owner: FOUNDER_PRODUCT_AUTHORITY
     due_milestone: PRE_MERGE
     required_evidence:
       - Guardian 报告绑定 candidate_commit 完整哈希
       - guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8
       - Guardian 工作区佐证记录已填写
+    review_history:
+      - reviewed_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+        decision: REJECT
+        blocking_finding: BLOCK-01
+        report: governance/reports/guardian_review_report.f48fed3.md
+        guardian_workspace: /home/faye/claude-guardian-diyu-cbfsk-clean
+        review_timestamp: "2026-08-13T04:52:51-07:00"
+        superseded_by_new_commit: true
     status: OPEN
     verification_role: CLAUDE_INDEPENDENT_GUARDIAN
     closure_commit: null
@@ -86,7 +94,11 @@ conditions:
     due_milestone: PRE_MERGE
     required_evidence:
       - governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml 见证字段已签署
-    status: OPEN
+    evidence_submitted:
+      - Founder 于 2026-08-13 签署见证行：planner_and_guardian_are_different_sessions=true、
+        planner_and_guardian_are_different_workspaces=true、attested_by=Founder
+      - Guardian 已在独立工作区 /home/faye/claude-guardian-diyu-cbfsk-clean 完成审查并出具报告
+    status: EVIDENCE_SUBMITTED
     verification_role: FOUNDER_PRODUCT_AUTHORITY
     closure_commit: null
     founder_closure_decision: null
@@ -119,5 +131,46 @@ conditions:
       - Founder 冻结裁决
     status: OPEN
     verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-008
+    source_decision_id: DIYU-CBFSK-FR-ORG-002 / B1 / Guardian NB-06
+    source_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+    description: >-
+      B1 裁决新增的三处路径关系条件：① Founder 存档区 D:\笛语跨品牌服装搭配专家内核
+      （Windows 侧正本存档，v1.2 生效后降级为存档与备份位置）；② WSL 工作区
+      /home/faye/笛语跨品牌服装搭配专家内核（施工与校验发生地）；③ 远程仓库
+      https://github.com/andyan77/diyu-cbfsk 为唯一正式产品真源。三者关系须保持
+      「远程唯一真源 ← WSL 施工推送 ← D:\ 仅存档」，禁止任何反向 ingest 语义。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - Founder 确认三处路径的角色与方向与 B1 一致
+      - 远程唯一真源地位在 README 与规范源 product_truth 中一致表述
+      - D:\ 侧不得被当作上游 ingest 源；任何脚本只能是 WSL→远程推送或双向一致性校验
+    status: OPEN
+    verification_role: CLAUDE_INDEPENDENT_GUARDIAN
+    closure_commit: null
+    founder_closure_decision: null
+    correction_note: >-
+      本条曾被执行侧按候选内「三处路径」误推断为隐藏标记白名单路径（证据等级 inferred）。
+      收到 Guardian 报告全文后更正为 B1 原意；隐藏标记白名单另由
+      hidden_benchmark_storage_contract.marker_documentation_allowlist 管辖，不属本条。
+
+  - condition_id: COND-009
+    source_decision_id: Guardian REJECT f48fed3091384cc459b258dace3c267b1d08d1b0 / §14
+    source_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+    description: >-
+      Guardian 对 f48fed3 判 REJECT（BLOCK-01）。修复已形成新候选 Commit，
+      按 §14「任何修复形成新 Commit 后先前结论一律失效」，该 REJECT 结论对新 Commit 不再适用，
+      必须对新 Commit 全量重审，不得沿用。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+      - Guardian 对新候选 Commit 的全量重审报告
+      - 报告须绑定新 Commit 完整哈希并写明 guardian_bootstrap_source
+    status: OPEN
+    verification_role: CLAUDE_INDEPENDENT_GUARDIAN
     closure_commit: null
     founder_closure_decision: null

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 import sys
 from pathlib import Path
@@ -30,22 +31,6 @@ FORBIDDEN = [
     "叙事质量等同于自媒体语感",
 ]
 
-M0_ITEMS = [
-    "project_charter.v1.0.yaml（项目章程）",
-    "capability_contract.v1.0.yaml（能力合同）",
-    "category_scope_contract.v1.0.yaml（五类品类范围）",
-    "input_output_boundary.v1.0.yaml（输入输出与事实优先级）",
-    "role_and_decision_rights.v1.0.yaml（角色与裁决权）",
-    "non_goals_and_stop_conditions.v1.0.yaml（非目标与停止条件）",
-    "knowledge_state_machine.v1.0.yaml（知识状态机）",
-    "architecture_and_integration_boundary.v1.0.yaml（独立解耦与集成边界合同）",
-    "compliance_review_contract.v1.0.yaml（合规核验合同：责任人、核验清单、决策时间表）",
-    "data_and_fixture_workflow.v1.0.yaml（品牌档案、评测语料与夹具品牌工作流合同）",
-    "execution_critical_path_and_decision_gates.v1.0.yaml（关键路径图＋Discovery继续/转向/停止判据）",
-    "M1 对象模型 Brief",
-    "M2 评测冻结 Brief",
-    "M0 checker / fixtures / report / receipt",
-]
 
 
 class Checker:
@@ -96,31 +81,22 @@ def heading_region(doc: Document, start: str, end: str) -> list[str]:
     return [paragraph.text.strip() for paragraph in paragraphs[start_index + 1 : end_index]]
 
 
-GATE_LINE_PREFIXES = ("验收门已通过：", "工作树、版本、输入清单", "Founder已形成明确的")
 
 
-def check_m0_lists(checker: Checker, prd: Document, m0: Document) -> None:
-    regions = [
-        heading_region(prd, "M0｜独立立项与合同冻结", "M1｜语义骨架与品类适配合同"),
-        heading_region(prd, "M0 独立立项与合同冻结", "M1 语义骨架与品类适配合同"),
-        heading_region(prd, "17.1 首任务必须交付", "17.2 执行纪律"),
-    ]
-    lists: list[list[str]] = []
-    for region in regions:
-        items = [line[4:] for line in region if line.startswith("[ ] ")]
-        # 第14节的 M0 区还带三行标准验收门；剔除它们，但绝不截断——
-        # 一旦被加到第 15 项交付物，必须当场暴露，而不是被 [:14] 吞掉。
-        items = [i for i in items if not i.startswith(GATE_LINE_PREFIXES)]
-        lists.append(items)
-    expected = M0_ITEMS
-    for index, items in enumerate(lists, start=1):
-        checker.check(len(items) == 14, f"PRD M0 list {index} has 14 items", repr(items))
-        checker.check(items == expected, f"PRD M0 list {index} matches canonical list", repr(items))
 
-    app_items = [row.cells[1].text.strip() for row in m0.tables[1].rows[1:]]
-    checker.check(len(app_items) == 14, "M0 application has 14 items", repr(app_items))
-    expected_application = [item.split("（", 1)[0] for item in expected]
-    checker.check(app_items == expected_application, "M0 application matches canonical list", repr(app_items))
+def check_m0_lists(checker: Checker) -> None:
+    """M0 十四项只有一个实现：ci/checkers/check_m0_fourteen_items.py。本文件不再自行提取。"""
+    spec = importlib.util.spec_from_file_location(
+        "check_m0_fourteen_items", ROOT / "ci" / "checkers" / "check_m0_fourteen_items.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.path.insert(0, str(ROOT / "ci" / "checkers"))
+    try:
+        spec.loader.exec_module(module)
+        errors = module.validate(module.collect())
+    finally:
+        sys.path.remove(str(ROOT / "ci" / "checkers"))
+    checker.check(not errors, "M0 fourteen items (delegated to ci/checkers)", "; ".join(errors))
 
 
 def main() -> None:
@@ -199,7 +175,7 @@ def main() -> None:
     term_text = "\n".join(cell.text for row in term_table.rows for cell in row.cells)
     checker.contains_all(term_text, required_terms, "all new terms are in glossary")
 
-    check_m0_lists(checker, prd, m0)
+    check_m0_lists(checker)
     checker.contains_all(m0_text, ["DIYU-CBFSK-EXEC-REQ-M0-003", "PRD v1.2", "M0不得实际接收", "M0不得运行多模态", "M0不得建立搭配师人设记忆生产库", "M0不得启用自动发布", "人设与语感闭环", "多模态事实边界", "扩展兼容"], "M0 v1.2 control and Guardian additions")
     checker.contains_all(receipt_text, ["DIYU-CBFSK-PRD-V1.2-VERIFY-RECEIPT-001", "D-17", "D-26", "D-28", "D-29", "S1—S8", "READY_FOR_GUARDIAN", "m0_authorized: false", "production_servable: false", "guardian_review_completed: false", "chatgpt_remote_review_completed: false"], "verification receipt identifiers and final state")
 

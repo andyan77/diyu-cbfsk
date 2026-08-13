@@ -1,0 +1,15 @@
+fixture_id: N23-manifest-derived-hash-unreproducible
+description: >-
+  字节完全相同，但 Manifest 记录的 canonical/semantic 值用候选内实现算不出来。
+  这是「同一功能两套实现并存」的信号，绝不允许被 BINARY_EQUAL 短路掩盖。
+checker: check_docx_canonical_hashes
+expected: FAIL
+payload:
+  integrity: []
+  comparisons:
+    - file: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      binary_equal: true
+      canonical_equal: false
+      semantic_equal: true
+      expected_classification: BINARY_EQUAL
+      founder_confirmation_required: true

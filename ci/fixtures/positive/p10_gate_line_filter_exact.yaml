@@ -1,0 +1,21 @@
+fixture_id: P10-gate-line-filter-exact
+description: 第13节与 17.1 区剔除 0 行、第14节恰剔 3 行验收门，清单仍为十四项。
+checker: check_m0_fourteen_items
+expected: PASS
+payload:
+  canonical_items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+  lists:
+    - name: PRD 13 / M0 交付物
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+      gate_lines_removed: 0
+      expected_gate_lines_removed: 0
+    - name: PRD 14 / M0 总清单
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+      gate_lines_removed: 3
+      expected_gate_lines_removed: 3
+    - name: PRD 17.1 首任务必须交付
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]
+      gate_lines_removed: 0
+      expected_gate_lines_removed: 0
+    - name: M0 执行申请 v1.2（表格短名）
+      items: [A, B, C, D, E, F, G, H, I, J, K, L, M, N]

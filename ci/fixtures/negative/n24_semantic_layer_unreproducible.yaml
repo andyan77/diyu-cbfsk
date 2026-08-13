@@ -1,0 +1,13 @@
+fixture_id: N24-semantic-layer-unreproducible
+description: 字节相同但 semantic 层算不出记录值，同样判 MANIFEST_DERIVED_HASH_UNREPRODUCIBLE。
+checker: check_docx_canonical_hashes
+expected: FAIL
+payload:
+  integrity: []
+  comparisons:
+    - file: PRD_v1.1_核验回执.docx
+      binary_equal: true
+      canonical_equal: true
+      semantic_equal: false
+      expected_classification: BINARY_EQUAL
+      founder_confirmation_required: true

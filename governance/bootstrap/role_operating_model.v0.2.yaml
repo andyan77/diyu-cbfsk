@@ -498,6 +498,28 @@ instruction_projection:
   drift_tolerance: 0
   manual_edit_allowed: false
 
+engineering_quality_standard:
+  ruling: FOUNDER_RULING
+  effective_from: GUARDIAN_REJECT_REPAIR_BATCH_2026_08_13
+  scope: 自本批次起长期生效，并须写入后续所有执行包
+  rules:
+    - id: EQ-1
+      name: 单一实现原则
+      statement: 同一功能禁止两套实现并存；派生值只能有一个产出实现，其余一律消费该实现。
+      precedent: BLOCK-01 根因——Phase 0 哈希实现与候选内实现并存，短路判据让后两层从未被真正比对。
+    - id: EQ-2
+      name: 合同与实现严格一致
+      statement: 合同文字必须如实描述实现；实现改动必须同步改合同并重算受影响的派生值。
+    - id: EQ-3
+      name: 每个 checker 必有 negative fixture
+      statement: 每条判据都要有一份声明 expected=FAIL 的 fixture 行使它；只有正向断言不算已验证。
+    - id: EQ-4
+      name: 无死代码、无魔法常量
+      statement: 不留未被消费的数据与分支；常量必须有来源与名字，不得散落字面量。
+    - id: EQ-5
+      name: 修复优先重构而非叠补丁
+      statement: 发现结构性缺陷时先消除重复与短路，不在缺陷之上叠加特例。
+
 red_lines:
   - 开始 M0 十四项正式施工
   - 开始 M1 或 M2

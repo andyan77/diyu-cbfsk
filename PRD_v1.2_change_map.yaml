@@ -36,6 +36,10 @@ invariants:
   m12_name: Commercial V1.0生产加固
   commercial_release_gate_count: 8
   unseen_brand_engineering_baseline: synthetic_closed_unseen_brand
+  effort_baseline:
+    person_months: "125—185"
+    duration_months: "15—24"
+    effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
 
 object_counts:
   input_and_configuration_objects: 12

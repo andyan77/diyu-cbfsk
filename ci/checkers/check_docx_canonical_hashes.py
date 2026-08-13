@@ -10,46 +10,37 @@ Classification contract:
 
 from __future__ import annotations
 
-import re
 from xml.etree import ElementTree
 from zipfile import BadZipFile, ZipFile
 
-from _common import ROOT, cli, load_yaml, semantic_text_sha256, sha256_file, sha256_text
+from _common import (
+    ROOT,
+    canonical_docx_xml_sha256,
+    cli,
+    load_yaml,
+    semantic_text_sha256,
+    sha256_file,
+)
 
 LABEL = "check_docx_canonical_hashes"
 
-VOLATILE_ATTR = re.compile(r"\{[^}]*\}(rsid[A-Za-z]*|paraId|textId)$")
-EXCLUDED_PARTS = {"docProps/core.xml", "docProps/app.xml"}
-
-
-def _canonical_element(elem: ElementTree.Element) -> str:
-    attrs = "".join(
-        f" {k}={v!r}" for k, v in sorted(elem.attrib.items()) if not VOLATILE_ATTR.search(k)
-    )
-    text = (elem.text or "").strip()
-    body = "".join(_canonical_element(child) for child in elem)
-    return f"<{elem.tag}{attrs}>{text}{body}</{elem.tag}>"
-
-
-def canonical_docx_xml_sha256(path) -> str:
-    chunks: list[str] = []
-    with ZipFile(path) as archive:
-        for name in sorted(archive.namelist()):
-            if name in EXCLUDED_PARTS or not name.endswith((".xml", ".rels")):
-                continue
-            root = ElementTree.fromstring(archive.read(name))
-            chunks.append(f"<<{name}>>" + _canonical_element(root))
-    return sha256_text("".join(chunks))
-
 
 def classify(binary_equal: bool, canonical_equal: bool, semantic_equal: bool) -> str:
-    if binary_equal:
-        return "BINARY_EQUAL"
-    if canonical_equal and semantic_equal:
-        return "PACKAGING_ONLY_DIFFERENCE"
+    """Classify a comparison. Never short-circuits: all three layers are always considered.
+
+    binary_equal 为真时仍必须比对后两层——同一份字节若算不出同样的 canonical/semantic 值，
+    说明 Manifest 里记录的派生哈希不是本实现产出的，属 MANIFEST_DERIVED_HASH_UNREPRODUCIBLE，
+    不得被 BINARY_EQUAL 掩盖。
+    """
+    if binary_equal and not (canonical_equal and semantic_equal):
+        return "MANIFEST_DERIVED_HASH_UNREPRODUCIBLE"
     if not semantic_equal:
         return "PRODUCT_BASELINE_SEMANTIC_CONFLICT"
-    return "CANONICAL_DIFFERENT"
+    if not canonical_equal:
+        return "CANONICAL_DIFFERENT"
+    if binary_equal:
+        return "BINARY_EQUAL"
+    return "PACKAGING_ONLY_DIFFERENCE"
 
 
 def validate(payload: dict) -> list[str]:
@@ -63,6 +54,11 @@ def validate(payload: dict) -> list[str]:
         expected = cmp_.get("expected_classification")
         if expected and verdict != expected:
             errors.append(f"CLASSIFICATION_MISMATCH: {cmp_['file']} computed {verdict}, expected {expected}")
+        if verdict == "MANIFEST_DERIVED_HASH_UNREPRODUCIBLE":
+            errors.append(
+                f"MANIFEST_DERIVED_HASH_UNREPRODUCIBLE: {cmp_['file']} is byte-identical but its "
+                "canonical/semantic hashes do not reproduce with the in-candidate implementation"
+            )
         if verdict == "PRODUCT_BASELINE_SEMANTIC_CONFLICT":
             errors.append(f"PRODUCT_BASELINE_SEMANTIC_CONFLICT: {cmp_['file']} differs semantically; Founder ruling required")
         if verdict == "PACKAGING_ONLY_DIFFERENCE" and not cmp_.get("founder_confirmation_required"):
@@ -112,6 +108,24 @@ def collect() -> dict:
                 "binary_equal": sha256_file(path) == candidate["binary_sha256"],
                 "canonical_equal": canonical_docx_xml_sha256(path) == candidate["canonical_docx_xml_sha256"],
                 "semantic_equal": semantic_text_sha256(path) == candidate["semantic_text_sha256"],
+                "expected_classification": "BINARY_EQUAL",
+                "founder_confirmation_required": True,
+            }
+        )
+    for evidence in manifest["historical_evidence"]:
+        rel = evidence.get("repository_path")
+        if not rel or not rel.endswith(".docx"):
+            continue
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        integrity.append({"file": rel, "errors": _integrity(path)})
+        comparisons.append(
+            {
+                "file": rel,
+                "binary_equal": sha256_file(path) == evidence["binary_sha256"],
+                "canonical_equal": canonical_docx_xml_sha256(path) == evidence["canonical_docx_xml_sha256"],
+                "semantic_equal": semantic_text_sha256(path) == evidence["semantic_text_sha256"],
                 "expected_classification": "BINARY_EQUAL",
                 "founder_confirmation_required": True,
             }

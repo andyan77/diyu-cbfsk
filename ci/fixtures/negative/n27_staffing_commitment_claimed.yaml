@@ -1,0 +1,21 @@
+fixture_id: N27-staffing-commitment-claimed
+description: 把人月基线写成招聘承诺（staffing_commitment=true），违反单一 Founder 模式口径。
+checker: check_effort_baseline_consistency
+expected: FAIL
+payload:
+  sources:
+    role_operating_model:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+      staffing_commitment: true
+    prd:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+      staffing_commitment: false
+    change_map:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+  changed_by_this_task: false

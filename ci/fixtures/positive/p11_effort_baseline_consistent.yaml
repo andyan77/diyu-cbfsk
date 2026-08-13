@@ -1,0 +1,21 @@
+fixture_id: P11-effort-baseline-consistent
+description: PRD、规范源与 change_map 三处口径完全一致，且未声明招聘承诺。
+checker: check_effort_baseline_consistency
+expected: PASS
+payload:
+  sources:
+    role_operating_model:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+      staffing_commitment: false
+    prd:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+      staffing_commitment: false
+    change_map:
+      person_months: "125—185"
+      duration_months: "15—24"
+      effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+  changed_by_this_task: false

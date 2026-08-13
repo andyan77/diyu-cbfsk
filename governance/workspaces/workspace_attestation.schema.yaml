@@ -37,4 +37,4 @@ separation_rules:
   - Planner 与 Guardian 记录的 conversation_or_session_id 不得相同。
   - Planner 与 Guardian 记录的 workspace_path 不得相同。
   - 写入工作面（Codex 或 Founder 指派的 TEMPORARY_EXECUTION_WRITER）不得与同任务 Guardian 同一记录或同一会话。
-  - Guardian 记录的 base_commit 必须等于被审查的冻结候选 Commit。
+  - Guardian 记录的 base_commit 必须等于被审查的本分支冻结 HEAD。

@@ -26,26 +26,36 @@ records:
     session_started_at: "2026-08-13T02:14:00-07:00"
     base_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
     role: TEMPORARY_EXECUTION_WRITER
-    scope: PHASE_1_TO_PHASE_5_CANDIDATE_CONSTRUCTION
+    scope: PHASE_1_TO_PHASE_5_CANDIDATE_CONSTRUCTION_AND_GUARDIAN_REJECT_REPAIR
     status: ACTIVE
     is_task_guardian: false
     is_task_planner: false
     founder_designation_basis: 执行 Prompt v2.0 §11.3（Codex 不可用时 Founder 可指定 TEMPORARY_EXECUTION_WRITER）
 
-  - workspace_id: null
-    workspace_path: null
-    conversation_or_session_id: null
-    session_id_available: false
-    session_started_at: null
-    base_commit: null
+  - workspace_id: claude-guardian-diyu-cbfsk-clean
+    workspace_path: /home/faye/claude-guardian-diyu-cbfsk-clean
+    conversation_or_session_id: NOT_DISCLOSED_IN_GUARDIAN_REPORT
+    session_id_available: true
+    session_id_value_disclosed_to_executor: false
+    session_id_note: >-
+      Guardian 报告声明 session_id_available: true，但未在报告中披露该标识的具体值；
+      执行侧不得代为填写或构造一个标识。会话隔离由下方 Founder 见证行承担佐证。
+    session_started_at: "2026-08-13T04:02:33-07:00"
+    base_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
     role: CLAUDE_INDEPENDENT_GUARDIAN
     scope: FROZEN_CANDIDATE_REVIEW
-    status: PENDING
-    note: >-
-      Guardian 尚未实例化。Guardian 必须在独立工作区、独立会话中运行，
-      base_commit 必须等于第一候选 Commit，并在报告中写明
-      guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8。
+    status: COMPLETED
+    guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8
+    decision: REJECT
+    blocking_finding: BLOCK-01
+    review_timestamp: "2026-08-13T04:52:51-07:00"
+    report: governance/reports/guardian_review_report.f48fed3.md
+    detached_head_verified: true
+    worktree_dirty: 0
+    tracked_file_count_at_review: 103
     founder_manual_attestation_required: true
+    superseded_by_new_commit: true
+    supersession_basis: 执行 Prompt v2.0 §14——修复形成新 Commit 后先前 Guardian 结论一律失效，须全量重审（COND-009）。
 
   - workspace_id: null
     workspace_path: null
@@ -56,14 +66,25 @@ records:
     role: GPT_CHIEF_ADVISOR
     scope: REMOTE_ALIGNMENT_REVIEW
     status: PENDING
+    pending_reason: >-
+      总顾问远程审查尚未进行（COND-002）。这是尚未发生的事件，不是待填字段；
+      在其实际发生前不得填入任何值，也不得写成 advisor_review_completed: true。
     founder_manual_attestation_required: true
 
 founder_workspace_attestation:
-  planner_and_guardian_are_different_sessions: null
-  planner_and_guardian_are_different_workspaces: null
-  attested_by: null
-  attested_at: null
-  status: PENDING_FOUNDER_WITNESS
-  note: >-
-    Guardian 未实例化前无法由 Founder 见证 Planner/Guardian 隔离；本字段保持 null，
-    不得预置为 true。Guardian 运行后由 Founder 填写并签署。
+  planner_and_guardian_are_different_sessions: true
+  planner_and_guardian_are_different_workspaces: true
+  attested_by: Founder
+  attested_at: "2026-08-13"
+  status: WITNESSED
+  supplementary_attestation: >-
+    本次施工由临时执行写入者（§11.3）完成；Founder 见证该施工会话与 Guardian 会话为两个不同的
+    窗口与会话；Cowork 规划面与 ChatGPT 顾问面均未参与 Guardian 会话。
+  witnessed_workspaces:
+    execution: /home/faye/笛语跨品牌服装搭配专家内核
+    guardian: /home/faye/claude-guardian-diyu-cbfsk-clean
+  evidence_strength: procedural_corroboration_only
+  is_cryptographic_independence_proof: false
+  machine_record_precedence: >-
+    见证行不凌驾机器记录：Guardian 在隔离工作区实测「只改见证行仍判 FAIL」，
+    该反向探针结论保留于 guardian_review_report.f48fed3.md 第 6 项。

@@ -24,6 +24,10 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 
 W_NS = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
+# canonical 层：排除 Word 封装元数据与易变编辑标识；其余 XML/RELS 部件按名称排序后递归序列化。
+CANONICAL_EXCLUDED_PARTS = ("docProps/core.xml", "docProps/app.xml")
+CANONICAL_VOLATILE_ATTR = re.compile(r"\{[^}]*\}(rsid[A-Za-z]*|paraId|textId)$")
+
 UUID_V4_RE = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
     re.IGNORECASE,
@@ -79,6 +83,32 @@ def docx_table_column(path: Path, header: tuple[str, ...], column: int) -> list[
 
 def docx_all_text(path: Path) -> str:
     return "\n".join(docx_paragraph_texts(path))
+
+
+def _canonical_element(elem: ElementTree.Element) -> str:
+    attrs = "".join(
+        f" {k}={v!r}"
+        for k, v in sorted(elem.attrib.items())
+        if not CANONICAL_VOLATILE_ATTR.search(k)
+    )
+    text = (elem.text or "").strip()
+    body = "".join(_canonical_element(child) for child in elem)
+    return f"<{elem.tag}{attrs}>{text}{body}</{elem.tag}>"
+
+
+def canonical_docx_xml_sha256(path: Path) -> str:
+    """Structural hash over the DOCX XML parts. See hash_contract in the pinned baseline manifest.
+
+    This is the single implementation of the canonical layer; nothing may re-derive it elsewhere.
+    """
+    chunks: list[str] = []
+    with ZipFile(path) as archive:
+        for name in sorted(archive.namelist()):
+            if name in CANONICAL_EXCLUDED_PARTS or not name.endswith((".xml", ".rels")):
+                continue
+            root = ElementTree.fromstring(archive.read(name))
+            chunks.append(f"<<{name}>>" + _canonical_element(root))
+    return sha256_text("".join(chunks))
 
 
 def semantic_text_sha256(path: Path) -> str:

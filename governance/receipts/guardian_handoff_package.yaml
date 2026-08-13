@@ -40,10 +40,25 @@ guardian_bootstrap_rules:
 workspace_attestation: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
 workspace_attestation_status:
   guardian_record_present: true
-  guardian_record_status: PENDING
-  founder_witness_status: PENDING_FOUNDER_WITNESS
+  guardian_record_status: COMPLETED
+  founder_witness_status: WITNESSED
+  founder_witness_attested_by: Founder
+  founder_witness_attested_at: "2026-08-13"
   evidence_strength: procedural_corroboration_only
   is_cryptographic_independence_proof: false
+
+prior_guardian_review:
+  reviewed_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+  decision: REJECT
+  blocking_finding: BLOCK-01
+  report: governance/reports/guardian_review_report.f48fed3.md
+  guardian_workspace: /home/faye/claude-guardian-diyu-cbfsk-clean
+  review_timestamp: "2026-08-13T04:52:51-07:00"
+  valid_for_current_candidate: false
+  supersession_basis: 执行 Prompt v2.0 §14——修复形成新 Commit 后先前 Guardian 结论一律失效。
+  required_action: 对本轮新候选 Commit 全量重审，不得沿用（COND-009）。
+  founder_required_delta_selected: BLOCK-01 (a)+(c)
+  repair_batch: GUARDIAN_REJECT_REPAIR_BATCH_2026_08_13
 
 changed_files:
   product_documents:
@@ -71,6 +86,7 @@ changed_files:
     - governance/prompts/（4 份，生成投影）
     - governance/reports/baseline_reconciliation_report.md
     - governance/reports/final_delivery_report.md
+    - governance/reports/guardian_review_report.f48fed3.md（Guardian 原文，一字未改）
     - governance/receipts/baseline_reconciliation_receipt.yaml
     - governance/receipts/guardian_handoff_package.yaml
   projections:
@@ -81,8 +97,8 @@ changed_files:
     - ci/compile_role_instructions.py
     - ci/run_all_checks.py
     - ci/run_fixtures.py
-    - ci/checkers/（_common + 15 个 checker）
-    - ci/fixtures/（positive 8 份 / negative 22 份，共 30 份）
+    - ci/checkers/（_common + 16 个 checker）
+    - ci/fixtures/（positive 11 份 / negative 27 份，共 38 份）
     - 工具/build_prd_v1_2.py
     - 工具/check_prd_v1_2.py
   github_governance:
@@ -94,9 +110,10 @@ changed_files:
 
 checker_reports:
   entrypoint: python3 ci/run_all_checks.py
-  checkers: 15
-  fixtures: 30
+  checkers: 16
+  fixtures: 38
   itemised_results: governance/reports/final_delivery_report.md（§4 逐项 PASS/FAIL）
+  repair_batch_summary: governance/reports/final_delivery_report.md（§4.7）
 
 document_reports:
   prd_contract_checker: python3 工具/check_prd_v1_2.py

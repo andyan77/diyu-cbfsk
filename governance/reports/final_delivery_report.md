@@ -26,8 +26,13 @@ Phase 0（基线对账）由 Codex 完成并停在「等待 Founder 确认 Manif
 - 远程仓库：`https://github.com/andyan77/diyu-cbfsk`
 - 远程 `main` 固定提交：`ce13cf3d6dca3ed6ac918400c8c08c10051832bf`
 - 本任务起点提交：`1b6f66864b288b8ebd3ff5894fae839d57ae6655`（分支 `codex/baseline-reconciliation-v2`）
-- 三份 v1.1 DOCX 与 README 在 binary / canonical XML / semantic text 三层与远程完全相等，
-  且与 Founder 本轮提供的参考 binary 哈希逐一一致；**无语义差异，无需逐段裁决**。
+- **binary 层（本候选内实测）**：三份 v1.1 DOCX 与 README 的 binary SHA-256 与 Founder 本轮提供的
+  参考值、与 Manifest 记录值逐一相等。
+- **canonical / semantic 两层**：「本地＝远程」这一结论由 Phase 0 作出，其哈希实现不在本候选内，
+  **本候选无法重新验证该结论**。按 Founder 修复指令 BLOCK-01(a)，这两层已由候选内唯一实现重算并钉入
+  Manifest（Phase 0 原值保留在 `phase_0_recorded_*` 供审计），此后用于漂移检测。实测发现 8 份仓内 DOCX
+  的 Phase 0 派生值在候选内实现下**均不可复现**，说明此前存在两套哈希实现。
+- 未发现产品语义差异，无需逐段逐表提交 Founder 裁决。
 - 临时目录 `D:\tmpcodex` 两份文件确认为 `归档_v1.0/` 副本，登记为 `DUPLICATE_CONFIRMED`，
   **未删除**（删除仍需 Founder 批准）。
 - Founder 存档区 `治理执行Prompt_分工审计与补强意见书.docx` 登记为仓外历史证据，**未导入**（COND-006）。
@@ -88,6 +93,10 @@ D-20—D-26 占用。执行 Prompt v2.0 明令「原有编号一律不重排」�
 
 ## 3. 文件清单与哈希
 
+> **Commit 哈希的唯一权威载体是 `governance/receipts/candidate_freeze_receipt.yaml`。**
+> 本节只列文件级 SHA-256；候选 Commit、冻结回执 Commit、candidate_tree 与基线 Commit
+> 一律以该回执为准，本报告不再另行复述，避免出现第二处可能漂移的口径。
+
 ### 3.1 新建（21 + 角色/Prompt/Checker/Fixture 目录）
 
 | `governance/baseline/baseline_migration_record.yaml` | `9a3f117195137742a4187f7978d7e18529cbc353203859908511b7d8dbabe90b` |
@@ -116,9 +125,9 @@ D-20—D-26 占用。执行 Prompt v2.0 明令「原有编号一律不重排」�
 
 角色 Prompt（生成投影，4 份）：`governance/prompts/chatgpt_chief_advisor.prompt.md`, `governance/prompts/claude_execution_planner.prompt.md`, `governance/prompts/claude_independent_guardian.prompt.md`, `governance/prompts/codex_execution_engineer.prompt.md`
 
-Checker（15 个）：`check_active_product_truth.py`, `check_baseline_hashes.py`, `check_compliance_ledger.py`, `check_conditional_ledger.py`, `check_docx_canonical_hashes.py`, `check_execution_uuid.py`, `check_external_review_claims.py`, `check_hidden_benchmark_boundary.py`, `check_instruction_projection.py`, `check_m0_fourteen_items.py`, `check_project_state.py`, `check_role_operating_model.py`, `check_ruling_coverage.py`, `check_task_classification.py`, `check_workspace_attestation.py`
+Checker（16 个）：`check_active_product_truth.py`, `check_baseline_hashes.py`, `check_compliance_ledger.py`, `check_conditional_ledger.py`, `check_docx_canonical_hashes.py`, `check_effort_baseline_consistency.py`, `check_execution_uuid.py`, `check_external_review_claims.py`, `check_hidden_benchmark_boundary.py`, `check_instruction_projection.py`, `check_m0_fourteen_items.py`, `check_project_state.py`, `check_role_operating_model.py`, `check_ruling_coverage.py`, `check_task_classification.py`, `check_workspace_attestation.py`
 
-Fixtures（30 份）：positive 8 / negative 22
+Fixtures（38 份）：positive 11 / negative 27
 
 ### 3.2 修改
 
@@ -146,7 +155,7 @@ Fixtures（30 份）：positive 8 / negative 22
 
 ## 4. Checker 结果（逐项，不写「全绿」）
 
-### 4.1 治理 Checker（15 项）
+### 4.1 治理 Checker（16 项）
 
 ```
 PASS check_execution_uuid
@@ -162,11 +171,12 @@ PASS check_hidden_benchmark_boundary
 PASS check_external_review_claims
 PASS check_m0_fourteen_items
 PASS check_project_state
+PASS check_effort_baseline_consistency
 PASS check_instruction_projection
 PASS check_ruling_coverage
 ```
 
-### 4.2 Fixtures（30 项，positive 必须 PASS、negative 必须 FAIL）
+### 4.2 Fixtures（38 项，positive 必须 PASS、negative 必须 FAIL）
 
 ```
 PASS fixture N01-invalid-execution-uuid (check_execution_uuid) expected=FAIL [INVALID_EXECUTION_RUN_UUID: execution_run_id='not-a-uuid-2026' is not a valid UUIDv4]
@@ -191,6 +201,11 @@ PASS fixture N19-stale-metric-name-live (check_ruling_coverage) expected=FAIL [S
 PASS fixture N20-authorized-file-changed-after-freeze (check_baseline_hashes) expected=FAIL [AUTHORIZED_FILE_CHANGED_AFTER_FREEZE: README.md binary sha256 9999999999999999999999999999999999999999999999999999999999999999 != pinned 1111111111111111111111111111111111111111111111111111111111111111]
 PASS fixture N21-marker-in-ordinary-file (check_hidden_benchmark_boundary) expected=FAIL [HIDDEN_CONTENT_MARKER: docs/notes.md contains 'HIDDEN_BENCHMARK_ITEM']
 PASS fixture N22-marker-outside-allowlist (check_hidden_benchmark_boundary) expected=FAIL [HIDDEN_CONTENT_MARKER: governance/reports/some_other_report.md contains 'HIDDEN_BENCHMARK_ITEM']
+PASS fixture N23-manifest-derived-hash-unreproducible (check_docx_canonical_hashes) expected=FAIL [CLASSIFICATION_MISMATCH: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx computed MANIFEST_DERIVED_HASH_UNREPRODUCIBLE, expected BINARY_EQUAL]
+PASS fixture N24-semantic-layer-unreproducible (check_docx_canonical_hashes) expected=FAIL [CLASSIFICATION_MISMATCH: PRD_v1.1_核验回执.docx computed MANIFEST_DERIVED_HASH_UNREPRODUCIBLE, expected BINARY_EQUAL]
+PASS fixture N25-gate-line-filter-drift (check_m0_fourteen_items) expected=FAIL [GATE_LINE_FILTER_DRIFT: PRD 14 / M0 总清单 removed 2 gate line(s), expected exactly 3]
+PASS fixture N26-effort-baseline-drift (check_effort_baseline_consistency) expected=FAIL [EFFORT_BASELINE_DRIFT: person_months differs across sources -> {'role_operating_model': '125—185', 'prd': '150—200', 'change_map': '125—185'}]
+PASS fixture N27-staffing-commitment-claimed (check_effort_baseline_consistency) expected=FAIL [STAFFING_COMMITMENT_CLAIMED: role_operating_model states staffing_commitment=True]
 PASS fixture P01-baseline-local-equals-remote (check_baseline_hashes) expected=PASS
 PASS fixture P02-packaging-only-difference (check_docx_canonical_hashes) expected=PASS
 PASS fixture P03-planner-guardian-separate-workspaces (check_workspace_attestation) expected=PASS
@@ -199,9 +214,12 @@ PASS fixture P05-l1-task-correctly-simplified (check_task_classification) expect
 PASS fixture P06-prohibition-sentences-are-compliant (check_external_review_claims) expected=PASS
 PASS fixture P07-renamed-metric-note-allowed (check_ruling_coverage) expected=PASS
 PASS fixture P08-own-fixture-is-not-a-leak (check_hidden_benchmark_boundary) expected=PASS
+PASS fixture P09-all-three-layers-reproduce (check_docx_canonical_hashes) expected=PASS
+PASS fixture P10-gate-line-filter-exact (check_m0_fourteen_items) expected=PASS
+PASS fixture P11-effort-baseline-consistent (check_effort_baseline_consistency) expected=PASS
 ```
 
-### 4.3 PRD 合同 Checker（`工具/check_prd_v1_2.py`：64 PASS / 0 FAIL）
+### 4.3 PRD 合同 Checker（`工具/check_prd_v1_2.py`：57 PASS / 0 FAIL）
 
 ```
 PASS file exists: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
@@ -249,14 +267,7 @@ PASS M12 readiness and governance
 PASS risk additions R-15..R-21
 PASS new stop conditions
 PASS all new terms are in glossary
-PASS PRD M0 list 1 has 14 items
-PASS PRD M0 list 1 matches canonical list
-PASS PRD M0 list 2 has 14 items
-PASS PRD M0 list 2 matches canonical list
-PASS PRD M0 list 3 has 14 items
-PASS PRD M0 list 3 matches canonical list
-PASS M0 application has 14 items
-PASS M0 application matches canonical list
+PASS M0 fourteen items (delegated to ci/checkers)
 PASS M0 v1.2 control and Guardian additions
 PASS verification receipt identifiers and final state
 PASS README current-baseline index
@@ -268,7 +279,6 @@ PASS v1.1 not archived before PRD v1.2 is effective
 PASS active baseline stays at root: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
 PASS active baseline stays at root: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
 PASS active baseline stays at root: PRD_v1.1_核验回执.docx
-
 ```
 
 ### 4.4 DOCX 包完整性与投影漂移
@@ -299,19 +309,46 @@ PASS instruction_projection: 12 files, drift=0
 | 协议缺陷 | README 属本任务授权修改文件，但基线 Checker 会把它判成基线冲突 | Manifest 登记 `authorized_modification_in_this_task` + 钉住交付态哈希；新增 N20 fixture |
 | 协议缺陷 | 隐藏边界 Checker 把「描述违规的负向 fixture」与「引用 checker 输出的交付报告」当成泄漏（两轮假阳性） | 例外定为两条：① 本 checker 自己的 fixture；② 存储合同里**显式列出**的三条文档白名单（写进 `hidden_benchmark_storage_contract.yaml`，Founder/Guardian 可见，不在代码里隐式放行）。其余一律 FAIL。新增 P08 / N21 / N22 三份 fixture 行使该边界 |
 
+## 4.7 Guardian REJECT 修复批次（f48fed3 → 本候选）
+
+Guardian 对 `f48fed3091384cc459b258dace3c267b1d08d1b0` 判 REJECT。Founder 令一次修完、一次重审。
+
+| 编号 | 问题 | 处置 | 证据 |
+|---|---|---|---|
+| **BLOCK-01** | Manifest 的 canonical/semantic 值由 Phase 0 一套已不在本仓的实现产出，与候选内实现**并存**；`classify()` 在 `binary_equal=True` 处短路，导致后两层从未被真正比对——**此前的 PASS 是假绿** | ① 哈希实现归一到 `ci/checkers/_common.py`，checker 只消费不再自造；② `classify()` 去短路，`binary_equal=True` 仍比对后两层，不符报 `MANIFEST_DERIVED_HASH_UNREPRODUCIBLE`；③ 用唯一实现重算并写回 Manifest，Phase 0 原值保留在 `phase_0_recorded_*`；④ `hash_contract` 改为如实描述实现（**不再声称 C14N 2.0**） | 修复后当场实测：**8 份仓内 DOCX 的 Phase 0 派生值全部不可复现**，证实两套实现确实存在；新增 N23/N24/P09 三份 fixture 行使该分支 |
+| **NB-01** | 验收门用前缀匹配剔除，可能静默吞掉交付物；且 M0 清单提取在 ci 与 工具 各有一套实现 | 改为三行验收门**精确文本匹配**，剔除数写入 payload 由 `validate()` 断言（第13节/17.1 区 0 行、第14节恰 3 行）；`工具/check_prd_v1_2.py` 删除自有实现，委托 ci 唯一实现 | 实测剔除数 0/3/0；新增 N25/P10 fixture |
+| **NB-02** | 工作区 Schema 把审查对象写成「冻结候选 Commit」，与两段式冻结不符 | 改为「本分支冻结 HEAD」 | — |
+| **NB-03** | 交付报告未指明 Commit 哈希的权威载体 | §3 首行加指针：唯一权威载体是 `candidate_freeze_receipt.yaml` | — |
+| **NB-04** | 人月/工期基线散落三处，无机器校验 | 新增 `check_effort_baseline_consistency.py`，逐字段比对 PRD 表格单元、规范源与 change_map | 新增 P11/N26/N27 fixture |
+| **NB-05** | `effort_baseline` 未进 change_map 不变量 | `person_months` / `duration_months` / `effort_unit` 三字段落入 `invariants` | — |
+| **NB-06** | B1 新增的三处路径关系条件未入台账 | 落为 COND-008：`D:\笛语跨品牌服装搭配专家内核`（仅存档）／WSL 工作区（施工）／远程仓库（唯一正式产品真源），关系固定为「远程唯一真源 ← WSL 推送 ← D:\ 仅存档」，禁止反向 ingest | **更正记录**：执行侧曾按候选内「三处路径」误推断为隐藏标记白名单（证据等级 inferred，已在原条目标注待确认）；收到 Guardian 报告全文后按 B1 原意更正，`correction_note` 留档 |
+
+**Guardian 结论处置**：Guardian 对 `f48fed3091384cc459b258dace3c267b1d08d1b0` 判 **REJECT**（BLOCK-01），
+报告全文一字未改落盘于 `governance/reports/guardian_review_report.f48fed3.md`。Founder 选定 BLOCK-01 的
+**required_delta (a)+(c)**，已按此执行。按 §14，该 REJECT 结论对本轮新候选 Commit **自动失效**，
+必须全量重审、不得沿用（COND-009）。Founder 见证行（B4）已签署并落入
+`governance/workspaces/workspace_attestation.…yaml`，Guardian 记录与见证块的 PENDING/null 已清除；
+总顾问记录仍为 `PENDING`——那是尚未发生的事件（COND-002），不是待填字段。
+
+**工程质量标准（Founder 裁决，自本批次起长期生效）** 已写入规范源 `engineering_quality_standard`（EQ-1 单一实现原则 / EQ-2 合同与实现严格一致 / EQ-3 每 checker 必有 negative fixture / EQ-4 无死代码无魔法常量 / EQ-5 修复优先重构），并由编译器投影进 `AGENTS.md`、`CLAUDE.md` 与 Codex 角色 Prompt，对后续所有执行包生效。
+
 ## 5. 未决事项（只列真正需要 Founder 裁决的问题）
 
-1. **独立 Guardian 审查**（COND-001）——尚未实例化。Guardian 须在独立工作区/会话运行，
-   报告写明 `guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8`。
+1. **独立 Guardian 对新候选 Commit 的全量重审**（COND-001 / COND-009）——Guardian 已对 `f48fed3` 审过并判
+   REJECT；修复形成新 Commit 后该结论按 §14 失效，须在独立工作区重审新 Commit，报告写明
+   `guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8`。
 2. **ChatGPT 总顾问远程审查**（COND-002）——尚未进行。不可用时须 Founder 显式 DEFER / 指派替位 / 豁免并接受风险。
 3. **Founder 签署**（COND-003）——PRD v1.2 与 M0 执行申请 v1.2 是**两个独立决定**，可以出现
    「PRD v1.2 PASS 但 M0 仍未授权」。签署须绑定 `prd_file_hash` / `m0_request_file_hash` / `candidate_commit`。
 4. **Codex 恢复后是否复核本候选**（COND-004）——§11.3 要求 Founder 在例外裁决中明确，不得自动假定。
-5. **Founder 工作区见证行**（COND-005）——Guardian 实例化后才能填写，当前保持 `null`，未预置为 true。
+5. **Founder 工作区见证行**（COND-005）——已于 2026-08-13 由 Founder 签署，条件转
+   `EVIDENCE_SUBMITTED`；`closure_commit` 待绑定最终 Commit 后由 Founder 关闭。
 6. **`治理执行Prompt_分工审计与补强意见书.docx` 是否导入主仓**（COND-006）。
 7. **七项合规决定**（`founder_compliance_decision_ledger.yaml`）——全部 `PENDING_FOUNDER_DECISION`，
    执行侧不代填 `founder_decision`。
 8. **隐藏评测存储选址**——三类合法存储均 `provisioned: false`，须 Founder 在 M2 冻结前裁决。
+9. **B1 三处路径关系确认**（COND-008）——`D:\` 存档 / WSL 施工 / 远程唯一真源三者关系，
+   须 Founder 或 Guardian 确认与 B1 所指一致（执行侧曾误推断，已更正并留档）。
 
 以下**不是**未决事项，已由已批准 Prompt 或本轮裁决定案，不重新标为建议默认：
 D-17—D-29 全部落点、S1—S8、角色权限、任务分级、M0 十四项、125—185 人月基线、
@@ -329,7 +366,10 @@ prd_v1_2_effective: false
 role_operating_model_landed: true
 role_operating_model_effective: false
 
-guardian_review_completed: false
+guardian_review_completed: false          # 针对本轮新候选 Commit；f48fed3 的 REJECT 按 §14 已失效
+prior_guardian_decision_on_f48fed3: REJECT
+prior_guardian_decision_valid: false
+founder_workspace_attestation_witnessed: true
 chatgpt_remote_review_completed: false
 founder_prd_signed: false
 founder_m0_authorized: false

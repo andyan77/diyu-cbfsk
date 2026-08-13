@@ -41,6 +41,10 @@ m1_started: true
 m1_status: FOUNDER_ACCEPTED
 m2_started: true
 m2_ep01_status: SELF_CHECKED
+m2_ep02_status: SELF_CHECKED
+m2_ep03_status: SELF_CHECKED
+m2_evaluation_profile_status: FINAL_BOUND
+m2_hidden_assets_status: BLOCKED_HIDDEN_STORAGE_NOT_PROVISIONED
 m2_frozen: false
 knowledge_distillation_started: false
 pending_active_baseline_switch: false
@@ -122,7 +126,15 @@ M2-EP01 曾与 M1 并行执行，基线钉死在 M1-EP01 收口 Commit `6499431c
 
 隐藏边界执行全部委派既有 `check_hidden_benchmark_boundary`，未新建第二套实现。
 
-M2-EP01 交付报告与回执见 [`11_reports_and_receipts/m2_ep01/`](11_reports_and_receipts/m2_ep01/)。
+M2 三包已交付候选，等待统一收口审查。
+
+**评测体系**：D-28 三分类合同 ＋ 三张评分卡（`constraint_correctness` 0/1 硬判、`mechanism_correctness` 可接受推理区间、`open_decision` 解族判定），②③类**禁设唯一 Gold Answer**、合法分歧必须保全；25 条 M1 品类硬约束双向全覆盖，绑定 ID 一律解析到 M1 真源，禁悬空表述。基线锦标赛四维度（质量／成本／延迟／人工干预）并列记录、**不合成单一总分**——权重就是取舍本身，须待 Founder 冻结。dry-run 骨架零真实模型调用、连跑两次字节相同。
+
+**隐藏评测资产未生成**：`STORE-A` 未 provision（`COND-011` 仍 `OPEN`），`STOP: HIDDEN_STORAGE_NOT_PROVISIONED` 已触发并上报，一件资产未产、一个字节未进主仓。这是 M2 收口的首要待裁事项。
+
+`m2_frozen` 仍为 `false`——冻结自 Founder 收口签署起生效，本包只形成候选。
+
+M2 各包交付报告与回执见 [`11_reports_and_receipts/m2_ep01/`](11_reports_and_receipts/m2_ep01/)、[`m2_ep02/`](11_reports_and_receipts/m2_ep02/)、[`m2_delivery_report.md`](11_reports_and_receipts/m2_delivery_report.md)。
 
 ## 治理（governance/）
 
@@ -150,7 +162,7 @@ M2-EP01 交付报告与回执见 [`11_reports_and_receipts/m2_ep01/`](11_reports
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配、M2 治理落盘、M2 信封合同、M2 身份隔离、M2 评测治理共 25 个确定性 Checker。
+- `ci/checkers/`：共 **32 个**确定性 Checker——M0／M1 既有 21 个，M2 新增 11 个（顺序登记、门禁退役守卫、治理落盘、信封合同、身份隔离、评测治理、三层评分卡、基线锦标赛、隐藏资产、main 实际状态守卫、跨包一致性）。
 - `ci/run_fixtures.py`：判据层 fixture——用字面量 payload 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_schema_fixtures.py`：结构层 fixture——用字面量实例驱动 M1 对象 JSON Schema 本身；每份 Schema 正负各一，只证明「对的能过」不算验证过。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

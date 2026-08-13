@@ -15,7 +15,7 @@ m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
 m1_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
 branch: candidate/m2
 worktree: /home/faye/diyu-cbfsk-m2
-describes_current_state: true
+describes_current_state: false
 status: SELF_CHECKED
 self_reference_limitation: 本回执无法记录包含它自身的那个 Commit 的哈希——回执一旦写入哈希，文件内容即改变，哈希随之失效。因此本回执只钉基线 Commit 与各产物的 artifact SHA256；候选
   Commit 完整哈希在交付答复中输出，并由 Guardian 以 live git 复核。
@@ -255,3 +255,5 @@ modified_artifacts:
   sha256: 506af0b019596bafcc5ac75bbd36352b3a69fbf13853e5deef73733146fe1e7d
 - path: governance/gates/live_gate_roster.v0.1.yaml
   sha256: 32f0fefe73146b620aa0f572c152fc42b30c43560417f8cd5e846f8c0ebb9b2d
+superseded_by: M2-EP03
+supersession_note: ep02_end_state 是 EP02 自检完成那一刻的如实记录，不因后续推进而改写。当前态见 M2-EP03 回执。

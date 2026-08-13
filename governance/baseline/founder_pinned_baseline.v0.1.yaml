@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 6b24191f381f6f4a24264c69c461224ba613927e05907f7079d2bdd131e97096
+    post_change_binary_sha256: f6b44aa79a845423cf84a8d47d18af029fa3544bd0667a4b5f2fd67165d87f45
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-13
+        authorization_ref: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第四节 Phase 2/4（M2 收口候选）
+        binary_sha256: f6b44aa79a845423cf84a8d47d18af029fa3544bd0667a4b5f2fd67165d87f45
+        landed_in_commit: M2_EP03_CLOSEOUT_COMMIT
+        content: 状态块补 EP02/EP03 与 Profile/隐藏资产状态、Checker 计数 25→32、M2 段改写为三包已交付候选并写明隐藏资产阻塞与 m2_frozen 仍为 false
       - change_id: README-MOD-12
         authorization_ref: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第三节 Phase 0（受控合并）/ DIYU-CBFSK-FOUNDER-M2-CHARTER-001
         binary_sha256: 6b24191f381f6f4a24264c69c461224ba613927e05907f7079d2bdd131e97096

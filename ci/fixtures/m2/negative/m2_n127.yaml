@@ -1,0 +1,17 @@
+fixture_id: M2-N127
+description: 评分卡引用了已被删除的 PROVISIONAL Profile——跨包改名后引用没跟上。
+checker: check_m2_cross_package_consistency
+expected: FAIL
+payload:
+  unresolved_paths: []
+  unresolved_profiles:
+  - file: 03_m2_evaluation_foundation/scoring/scorecard_open_decision.v0.1.yaml
+    value: m2_evaluation_provisional_profile
+    available:
+    - m2_evaluation_profile
+  unresolved_adrs: []
+  unresolved_constraint_ids: []
+  artifact_id_mismatches: []
+  state_field_conflicts: []
+  profile_count: 1
+  scanned_file_count: 20

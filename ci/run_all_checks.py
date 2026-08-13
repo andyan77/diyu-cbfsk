@@ -46,6 +46,7 @@ CHECKERS = [
     "check_m2_tournament",
     "check_m2_hidden_assets",
     "check_m2_main_state_guard",
+    "check_m2_cross_package_consistency",
 ]
 
 

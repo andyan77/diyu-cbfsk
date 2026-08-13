@@ -1,0 +1,16 @@
+fixture_id: M2-N128
+description: 委派目标指向一个不存在的文件路径。
+checker: check_m2_cross_package_consistency
+expected: FAIL
+payload:
+  unresolved_paths:
+  - file: 03_m2_evaluation_foundation/evaluation_governance/x.yaml
+    key: enforcement_delegated_to
+    value: ci/checkers/check_m2_leak.py
+  unresolved_profiles: []
+  unresolved_adrs: []
+  unresolved_constraint_ids: []
+  artifact_id_mismatches: []
+  state_field_conflicts: []
+  profile_count: 1
+  scanned_file_count: 20

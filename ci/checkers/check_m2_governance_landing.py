@@ -243,9 +243,14 @@ def collect() -> dict:
     readme = read_text("README.md")
     registry_source = read_text(REGISTRY)
 
+    # 按内容发现，不按文件名模式：里程碑级回执与包级回执命名不同
+    #（m2_delivery_receipt.yaml vs m2_ep01/m2_ep01_delivery_receipt.yaml），
+    # 按文件名匹配会漏掉其中一类，而漏掉的那类恰恰可能是描述当前态的那一份。
     package_receipts = []
-    for path in sorted(RECEIPT_ROOT.glob("m2_ep*/m2_ep*_delivery_receipt.yaml")):
+    for path in sorted(RECEIPT_ROOT.rglob("*delivery_receipt.yaml")):
         doc = load_yaml(str(path.relative_to(ROOT)))
+        if str(doc.get("milestone", "")) != "M2" and not str(doc.get("package_id", "")).startswith("M2-"):
+            continue
         end_state = next(
             (v for k, v in doc.items() if k.endswith("_end_state") and isinstance(v, dict)), {}
         )

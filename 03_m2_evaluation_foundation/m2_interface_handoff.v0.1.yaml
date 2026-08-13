@@ -1,0 +1,156 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-M2-INTERFACE-HANDOFF
+artifact_id: m2_interface_handoff.v0.1
+artifact_kind: derived_interface_surface
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP03
+status: M2_EP03_DELIVERED
+artifact_lifecycle_state: draft
+purpose: M2→M3/M4 的可消费表面：按 Schema ID 与约束 ID 列出下游可以绑什么，并明示哪些边界本期未实现。**只交接口，不规划 M3 内容**——M3 做什么由 M3 的 Milestone Plan 在其开工时即时确定（FR-GRANULARITY-005
+  修正④）。
+scope_discipline:
+  this_document_does:
+  - 列出 M2 已冻结的可消费表面
+  - 明示未实现边界
+  - 写明下游绑定方式
+  this_document_does_not:
+  - 规划 M3 交付物
+  - 预设 M3 包边界
+  - 替 M3 选实现方案
+  why: 顾问端 35 包蓝图仅供参考、不具约束力；正式包边界由各里程碑开工时的 Milestone Plan 即时确定。在 M2 里替 M3 排活，等于用一个尚未开工的里程碑的猜测约束它自己。
+generation:
+  derived_from:
+  - 03_m2_evaluation_foundation/envelope/m1_source_binding.v0.1.yaml
+  - 03_m2_evaluation_foundation/envelope/profiles/m2_evaluation_profile.v1.0.yaml
+  - 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  - 03_m2_evaluation_foundation/tournament/baseline_tournament_contract.v0.1.yaml
+  rule: 本件是派生件，不是第二份真源；字段值一律取自上列产物（EQ-1）。
+bind_by:
+- schema_id
+- hard_constraint_id
+- conflict_priority_rule_id
+- evaluation_task_class
+- tournament_dimension_id
+consumable_surface:
+  evaluation_profile:
+    profile_id: m2_evaluation_profile
+    profile_version: '1.0'
+    binding_status: FINAL
+    member_count: 29
+    source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+    source_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+    consumption_mode: by_reference_only
+    note: 下游一律经本 Profile 引用 M1，不得自行绕过去直接读 M1 文件。
+  schema_ids:
+  - https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+  schema_id_count: 19
+  hard_constraint_ids:
+  - FT-HC-01
+  - FT-HC-02
+  - FT-HC-03
+  - FT-HC-04
+  - KW-HC-01
+  - KW-HC-02
+  - KW-HC-03
+  - KW-HC-04
+  - KW-HC-05
+  - SP-HC-01
+  - SP-HC-02
+  - SP-HC-03
+  - SP-HC-04
+  - SP-HC-05
+  - SP-HC-06
+  - TT-HC-01
+  - TT-HC-02
+  - TT-HC-03
+  - TT-HC-04
+  - TT-HC-05
+  - TT-HC-06
+  - WW-HC-01
+  - WW-HC-02
+  - WW-HC-03
+  - WW-HC-04
+  hard_constraint_id_count: 25
+  conflict_priority_rule_ids:
+  - CP-01
+  - CP-02
+  - CP-03
+  - CP-04
+  - CP-05
+  - CP-06
+  combination_rule_ids:
+  - COMBO-01
+  - COMBO-02
+  - COMBO-03
+  - COMBO-04
+  - COMBO-05
+  evaluation_task_classes:
+  - constraint_correctness
+  - mechanism_correctness
+  - open_decision
+  gold_answer_forbidden_for:
+  - mechanism_correctness
+  - open_decision
+  tournament_dimensions:
+  - quality
+  - cost
+  - latency
+  - human_intervention
+  stability_metric: 核心决策逻辑稳定率（阈值 ≥ 85%，D-28 更名，阈值未变）
+unimplemented_boundaries:
+- id: UB-01
+  boundary: 隐藏评测资产
+  state: BLOCKED_HIDDEN_STORAGE_NOT_PROVISIONED
+  downstream_impact: M4 正式批次不得在隐藏集建成前启动（SC-01：M2 隐藏评测未冻结 → 停止大规模知识蒸馏）
+  record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+- id: UB-02
+  boundary: 真实基线运行
+  state: NOT_EXECUTED（OD-M2-01）
+  downstream_impact: 四维度阈值未经实测标定；M4 若需真实横评须先由 Founder 裁决 OD-M2-01
+- id: UB-03
+  boundary: 全部评测阈值
+  state: M2_FREEZE_REQUIRED（未冻结）
+  downstream_impact: 下游不得引用任何具体阈值数字；引用即等于把未冻结值当成已冻结
+- id: UB-04
+  boundary: 评测执行框架与观测平台
+  state: NOT_BUILT（仅 dry-run 骨架）
+  downstream_impact: M4 需要真实运行时须自行接线，M2 只交合同与骨架
+- id: UB-05
+  boundary: 运行层与 API 层
+  state: NOT_BUILT（ADR-001 当前不建设）
+  downstream_impact: M3/M4 不得假定存在可调用的服务端点
+- id: UB-06
+  boundary: 多租户隔离实现
+  state: NOT_BUILT（ADR-003 单租户最小实现）
+  downstream_impact: scope 字段只记录不驱动隔离逻辑，下游不得据此假定已隔离
+downstream_must_not:
+- 绕过 Envelope/Profile 直接读 M1 冻结物
+- 原位修改 M1 或 M2 冻结物
+- 引用任何标记 M2_FREEZE_REQUIRED 的阈值数字
+- 把 dry-run 骨架的产出当成真实基线结果
+- 在隐藏集建成前启动 M4 正式批次
+- 为 mechanism_correctness 或 open_decision 设置唯一 Gold Answer
+m2_did_not_change:
+  m1_top_level_objects: false
+  m1_fact_priority: false
+  m1_category_contracts: false
+  statement: M2 全程只新增引用层与评测层，未改动任何 M1 顶层对象、核心语义、事实优先级或品类合同。

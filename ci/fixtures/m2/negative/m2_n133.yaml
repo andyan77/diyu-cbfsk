@@ -1,0 +1,13 @@
+fixture_id: M2-N133
+description: 两份 Profile 并存——「当前绑定是哪一份」变成需要推断的问题。
+checker: check_m2_cross_package_consistency
+expected: FAIL
+payload:
+  unresolved_paths: []
+  unresolved_profiles: []
+  unresolved_adrs: []
+  unresolved_constraint_ids: []
+  artifact_id_mismatches: []
+  state_field_conflicts: []
+  profile_count: 2
+  scanned_file_count: 20

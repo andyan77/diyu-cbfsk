@@ -180,6 +180,36 @@ self_reference_limitation: >-
   本回执与十四项交付物同处一个提交，因此不自指其所在 Commit 的哈希。可复算配方：
   git rev-parse HEAD 取本交付 Commit；下方 artifact_sha256 清单不含本回执自身，逐项可复算。
 
+post_m0_authorized_modifications:
+  contract: >-
+    artifact_sha256 记录的是 M0 交付当时的字节状态，**不随后续里程碑改写**——改写它等于抹掉 M0 交付记录，
+    以后再也说不清「交付的到底是哪一版」。M0 之后被授权修改的交付物在此逐条登记：谁授权、改了什么、新哈希多少。
+    check_m0_deliverable_closure 按「要么与 artifact_sha256 一致，要么在本块登记且 current_sha256 对得上」判定，
+    未登记的改动仍会被当场发现。
+  items:
+    - file: ci/checkers/check_m0_deliverable_closure.py
+      m0_delivered_sha256: d0d4ebdd03363a4a8512be7dbb9830754ee385f6d24ee68bc30c9392b06c6c4f
+      current_sha256: 21f25026e56af5af0a3d51528a798ba3d624ab56f7041e31914a970e8bb85b6b
+      authorized_by_ruling: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+      authorization_clause: excluded_from_this_batch —— checker 增强随 M1 自然提交顺手修
+      changed_in_package: M1-EP01
+      change: >-
+        新增 M0 交付物字节完整性判据本身（M0_ARTIFACT_MODIFIED_WITHOUT_RECORD /
+        M0_MODIFICATION_RECORD_STALE / M0_MODIFICATION_WITHOUT_RULING）。
+      note: >-
+        本条是该判据**第一个抓到的对象**——判据刚落地就命中了引入它的那次改动。
+        这不是巧合，是设计如此：交付物清单里包含 checker 自身，所以它必须能查自己。
+    - file: ci/checkers/check_m0_zero_contact.py
+      m0_delivered_sha256: ac26723d3fd8d41eb7441d7f8068edbc4ddd415476e770c03c0f65e103d479cb
+      current_sha256: db85001568268d735550d13c04e97dbba2d2435f265336b7a8062ea01cf6358b
+      authorized_by_ruling: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+      authorization_clause: excluded_from_this_batch —— NB-M0-01 / NB-M0-02 由 Founder 裁定随 M1 自然提交顺手修
+      changed_in_package: M1-EP01
+      change: >-
+        NB-M0-01 / NB-M0-05 加 scanned_file_count 覆盖面下限（扫 0 份不再显绿）；
+        NB-M0-02 把 PREMATURE_EXTERNAL_CONNECTION 由硬编「M0 期间禁止连接」改为 Founder 授权白名单。
+      behaviour_change: 判据只增不减——原有的遗留路径、写入动作、凭证接触判据一字未动。
+
 artifact_sha256:
   00_charter/project_charter.v1.0.yaml: fb89aa8f9440819cb8937cf8aeec704532f94845a0df97d7e4f285233f3723e5
   01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml: df039ca4025ae8f019794a80c8b90c111a8117d0be7891a2cfe7dd8e06344608

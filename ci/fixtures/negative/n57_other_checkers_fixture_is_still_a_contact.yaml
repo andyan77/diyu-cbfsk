@@ -1,6 +1,5 @@
 fixture_id: N57-other-checkers-fixture-is-still-a-contact
-description: >-
-  遗留仓路径出现在别的 checker 的 fixture 里——自有 fixture 的例外不外扩，仍判越界。
+description: 遗留仓路径出现在别的 checker 的 fixture 里——自有 fixture 的例外不外扩，仍判越界。
 checker: check_m0_zero_contact
 expected: FAIL
 payload:
@@ -21,3 +20,5 @@ payload:
   - name: ERP/PIM/POS/进销存
     m0_connected: false
   credentials_touched: 0
+  scanned_file_count: 120
+  integration_authorizations: {}

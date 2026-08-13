@@ -1,6 +1,5 @@
 fixture_id: N56-allowlist-hidden-in-code
-description: >-
-  边界文档白名单没写在合同里，只藏在 checker 代码常量中——放行范围就不再受 Founder 与 Guardian 审阅。
+description: 边界文档白名单没写在合同里，只藏在 checker 代码常量中——放行范围就不再受 Founder 与 Guardian 审阅。
 checker: check_m0_zero_contact
 expected: FAIL
 payload:
@@ -19,3 +18,5 @@ payload:
   - name: ERP/PIM/POS/进销存
     m0_connected: false
   credentials_touched: 0
+  scanned_file_count: 120
+  integration_authorizations: {}

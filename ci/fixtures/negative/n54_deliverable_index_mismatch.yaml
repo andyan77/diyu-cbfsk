@@ -1,6 +1,5 @@
 fixture_id: N54-deliverable-index-mismatch
-description: >-
-  合同自称的 deliverable_index 与章程清单里的位次对不上。
+description: 合同自称的 deliverable_index 与章程清单里的位次对不上。
 checker: check_m0_deliverable_closure
 expected: FAIL
 payload:
@@ -67,3 +66,4 @@ payload:
     expected_index: 2
   count_is_frozen: true
   no_fifteenth_item: true
+  artifacts: []

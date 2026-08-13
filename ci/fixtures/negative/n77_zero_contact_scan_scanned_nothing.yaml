@@ -1,5 +1,5 @@
-fixture_id: N51-zero-contact-target-incomplete
-description: 边界合同漏掉 CSO，四类遗留资产未覆盖全。
+fixture_id: N77-zero-contact-scan-scanned-nothing
+description: 扫描一个文件都没扫到却判绿——判据有检出力不等于它真的在扫（NB-M0-01 / NB-M0-05）。
 checker: check_m0_zero_contact
 expected: FAIL
 payload:
@@ -9,6 +9,7 @@ payload:
     - P7C
     - Content Kernel
     - DIFY
+    - CSO
     declared_contact_count: 0
     allowlist_declared_in_contract: true
   legacy_path_hits: []
@@ -17,5 +18,5 @@ payload:
   - name: ERP/PIM/POS/进销存
     m0_connected: false
   credentials_touched: 0
-  scanned_file_count: 120
+  scanned_file_count: 0
   integration_authorizations: {}

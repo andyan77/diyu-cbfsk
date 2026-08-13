@@ -1,6 +1,5 @@
 fixture_id: N55-deliverable-name-drift
-description: >-
-  第 7 项被改名，与 PRD 13/14/17.1 三处冻结的名称不一致。
+description: 第 7 项被改名，与 PRD 13/14/17.1 三处冻结的名称不一致。
 checker: check_m0_deliverable_closure
 expected: FAIL
 payload:
@@ -64,3 +63,4 @@ payload:
   contract_indices: []
   count_is_frozen: true
   no_fifteenth_item: true
+  artifacts: []

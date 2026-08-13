@@ -1,0 +1,18 @@
+fixture_id: N88-m0-modification-without-ruling
+description: 登记了改动但没具名是哪份 Founder 裁决授权的——那样任何人改完自己补一条登记就合法了。
+checker: check_m0_deliverable_closure
+expected: FAIL
+payload:
+  declared_items: []
+  contract_indices: []
+  count_is_frozen: true
+  no_fifteenth_item: true
+  artifacts:
+  - file: ci/checkers/x.py
+    delivered: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    actual: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    modification_record:
+      current_sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      m0_delivered_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      authorized_by_ruling: null
+      changed_in_package: M1-EP01

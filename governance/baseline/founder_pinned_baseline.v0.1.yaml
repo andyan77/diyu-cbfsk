@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 81eaf7a76c35b050b12ad26b53f07940d38af9ae075eff52314234b9b5abe0bc
+    post_change_binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-09
+        authorization_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 m1_pre_approval（M1-EP01 交付）
+        binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
+        landed_in_commit: M1_EP01_DELIVERY_COMMIT
+        content: 新增 M1 对象模型段、Checker 计数 19→20、区分判据层与结构层两个 fixture runner、抬头改 M1-EP01 已交付
       - change_id: README-MOD-08
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条（M1-EP01 开工，m1_started 如实置 true）
         binary_sha256: 81eaf7a76c35b050b12ad26b53f07940d38af9ae075eff52314234b9b5abe0bc

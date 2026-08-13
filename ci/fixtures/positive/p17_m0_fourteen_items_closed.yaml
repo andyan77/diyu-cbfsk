@@ -1,6 +1,5 @@
 fixture_id: P17-m0-fourteen-items-closed
-description: >-
-  十四项交付物齐全、序号无碰撞、名称与 PRD 13/14/17.1 完全一致、清单声明已冻结。
+description: 十四项交付物齐全、序号无碰撞、名称与 PRD 13/14/17.1 完全一致、清单声明已冻结。
 checker: check_m0_deliverable_closure
 expected: PASS
 payload:
@@ -64,3 +63,4 @@ payload:
   contract_indices: []
   count_is_frozen: true
   no_fifteenth_item: true
+  artifacts: []

@@ -111,6 +111,19 @@ executed_sequence:
   - 更新 README 与归档 v1.1: 本最终 Commit
   - 推送远程: NOT_PERFORMED（签署包未授权推送）
 
+red_line_manifest:
+  contract: >-
+    规范源 red_lines 那份散文清单此前无任何守卫——改它不触发任何 checker，投影 drift=0
+    只保证投影与源一致，源改了再重生成照样 0（Guardian NB-M0-04）。本块给它加指纹：
+    check_role_operating_model 重算 red_lines 的 sha256 与条数并与此处比对，对不上即判漂移。
+    改红线必须同时更新本块并具名裁决，因此清单无法被静默编辑。
+  count: 20
+  sha256: 2c498e38302903fe67a968e69d9407f8014c2b8609b8f3b03186f821fd55365d
+  digest_recipe: sha256(utf-8(newline_joined(red_lines)))
+  last_changed_by_ruling: DIYU-CBFSK-FOUNDER-M1-GATE-001
+  last_changed_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+  last_change: 「开始 M1 或 M2」→「未经授权开始 M1 或 M2」（一换一，其余 19 条逐字未动）
+
 state_flag_authorizations:
   contract: >-
     本块是状态位门禁的唯一授权源。check_project_state / check_active_product_truth 读取本块：

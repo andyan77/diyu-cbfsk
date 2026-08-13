@@ -1,6 +1,5 @@
 fixture_id: N53-m0-deliverable-file-missing
-description: >-
-  清单声明了第 14 项，但磁盘上不存在——文档数量替代不了结果。
+description: 清单声明了第 14 项，但磁盘上不存在——文档数量替代不了结果。
 checker: check_m0_deliverable_closure
 expected: FAIL
 payload:
@@ -64,3 +63,4 @@ payload:
   contract_indices: []
   count_is_frozen: true
   no_fifteenth_item: true
+  artifacts: []

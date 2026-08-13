@@ -1,0 +1,18 @@
+fixture_id: N81-uuid-reused-across-runs
+description: 两个批次共用同一个运行标识（父标识各不相同，以免误触父子相同那条）——那等于 M0 又一次冒用治理任务的标识，正是 M0-FIX-03 要修的东西。
+checker: check_execution_uuid
+expected: FAIL
+payload:
+  runs:
+  - name: governance_task_continuation
+    execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+    parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+    continuation: true
+    run_id_occurrences:
+      a.yaml: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+  - name: m0_milestone_batch
+    execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+    parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+    continuation: true
+    run_id_occurrences:
+      b.yaml: 2fcbfed0-be7e-4b6f-938e-7f84109ab162

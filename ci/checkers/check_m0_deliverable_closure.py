@@ -8,7 +8,7 @@
 
 from __future__ import annotations
 
-from _common import ROOT, cli, load_yaml
+from _common import ROOT, cli, load_yaml, sha256_file
 
 LABEL = "check_m0_deliverable_closure"
 
@@ -34,8 +34,43 @@ EXPECTED_NAMES = (
 )
 
 
+def _validate_artifact_integrity(payload: dict, errors: list[str]) -> None:
+    """交付物交付之后还是不是那份东西。
+
+    M0 之后改动交付物不是禁止的——Founder 已把 NB-M0-01/02 路由到 M1 顺手修。禁止的是**不留痕**地改：
+    要么与交付当时的哈希一致，要么在回执的 post_m0_authorized_modifications 里具名登记并绑定裁决。
+    """
+    for row in payload.get("artifacts") or []:
+        rel = row["file"]
+        if row["actual"] == row["delivered"]:
+            continue
+        record = row.get("modification_record")
+        if not record:
+            errors.append(
+                f"M0_ARTIFACT_MODIFIED_WITHOUT_RECORD: {rel} no longer matches its delivered hash "
+                "and is not registered in post_m0_authorized_modifications"
+            )
+            continue
+        if record.get("current_sha256") != row["actual"]:
+            errors.append(
+                f"M0_MODIFICATION_RECORD_STALE: {rel} registers {record.get('current_sha256')!r} "
+                f"but the file hashes to {row['actual']!r}"
+            )
+        if record.get("m0_delivered_sha256") != row["delivered"]:
+            errors.append(
+                f"M0_MODIFICATION_RECORD_STALE: {rel} misstates its delivered hash as "
+                f"{record.get('m0_delivered_sha256')!r}"
+            )
+        if not record.get("authorized_by_ruling"):
+            errors.append(f"M0_MODIFICATION_WITHOUT_RULING: {rel} names no Founder ruling")
+        if not record.get("changed_in_package"):
+            errors.append(f"M0_MODIFICATION_WITHOUT_RULING: {rel} names no execution package")
+
+
 def validate(payload: dict) -> list[str]:
     errors: list[str] = []
+
+    _validate_artifact_integrity(payload, errors)
 
     items = payload.get("declared_items") or []
     if len(items) != EXPECTED_COUNT:
@@ -95,7 +130,23 @@ def collect() -> dict:
                     {"path": rel, "declared_index": data["deliverable_index"], "expected_index": item["index"]}
                 )
 
+    receipt = load_yaml("11_reports_and_receipts/m0_delivery_receipt.yaml")
+    records = {
+        r["file"]: r
+        for r in ((receipt.get("post_m0_authorized_modifications") or {}).get("items") or [])
+    }
+    artifacts = [
+        {
+            "file": rel,
+            "delivered": delivered,
+            "actual": sha256_file(ROOT / rel) if (ROOT / rel).exists() else "<missing>",
+            "modification_record": records.get(rel),
+        }
+        for rel, delivered in sorted((receipt.get("artifact_sha256") or {}).items())
+    ]
+
     return {
+        "artifacts": artifacts,
         "declared_items": items,
         "contract_indices": contract_indices,
         "count_is_frozen": block.get("count_is_frozen"),

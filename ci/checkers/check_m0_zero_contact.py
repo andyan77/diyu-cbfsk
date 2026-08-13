@@ -14,7 +14,7 @@ import subprocess
 
 import yaml
 
-from _common import ROOT, cli, load_yaml
+from _common import ROOT, cli, is_full_commit_hash, load_yaml
 
 LABEL = "check_m0_zero_contact"
 
@@ -39,6 +39,11 @@ LEGACY_WRITE_ACTION_PATTERNS = (
 TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".jsonl", ".py", ".txt", ".toml", ".cfg", ".ini"}
 
 FIXTURE_DIR_PREFIX = "ci/fixtures/"
+
+# 覆盖面下限：M0 交付时仓内被扫的文本文件为 120 份（见 m0_delivery_receipt.zero_contact）。
+# 下限取 80——远低于实际值，不会因正常增删而误报；但扫描一旦断掉（0 份、路径写错、
+# git 命令失败返回空），就会当场判失败，而不是显示一片绿。
+MINIMUM_SCANNED_TEXT_FILES = 80
 
 
 def validate(payload: dict) -> list[str]:
@@ -65,10 +70,29 @@ def validate(payload: dict) -> list[str]:
     for hit in payload.get("legacy_write_hits") or []:
         errors.append(f"LEGACY_ASSET_WRITE_ACTION: {hit['file']} declares a write/call into legacy assets: {hit['match']!r}")
 
+    # NB-M0-01 / NB-M0-05：判据有检出力不等于扫到了东西。没有覆盖面下限，扫 0 个文件也会显绿。
+    scanned = payload.get("scanned_file_count")
+    if not isinstance(scanned, int) or scanned < MINIMUM_SCANNED_TEXT_FILES:
+        errors.append(
+            f"SCAN_COVERAGE_BELOW_FLOOR: scanned {scanned!r} text files, floor is {MINIMUM_SCANNED_TEXT_FILES}"
+        )
+    if not payload.get("external_integrations"):
+        errors.append("SCAN_COVERAGE_BELOW_FLOOR: no external integration was inventoried at all")
+
+    # NB-M0-02：原判据硬编「M0 期间一律不得连接」。M0 已 PASS、M1 已开工，硬编里程碑名会随时间失真；
+    # 改为授权白名单——任何连接都必须在签署回执里有一条绑定完整 Commit 哈希的 Founder 授权，
+    # 没有条目即不得连接。方向与 m1_started 门控一致：守的是授权缺失，而不是某个里程碑名。
+    authorizations = payload.get("integration_authorizations") or {}
     for integration in payload.get("external_integrations") or []:
-        if integration.get("m0_connected") is not False:
+        name = integration.get("name")
+        if integration.get("m0_connected") is False:
+            continue
+        auth = authorizations.get(name)
+        if not auth or auth.get("authorized") is not True:
+            errors.append(f"UNAUTHORIZED_EXTERNAL_CONNECTION: {name} is connected with no Founder authorization")
+        elif not is_full_commit_hash(auth.get("signature_base_commit")):
             errors.append(
-                f"PREMATURE_EXTERNAL_CONNECTION: {integration.get('name')} is marked connected during M0"
+                f"UNBOUND_INTEGRATION_AUTHORIZATION: {name} authorization is not bound to a full commit hash"
             )
 
     if payload.get("credentials_touched") != 0:
@@ -115,7 +139,9 @@ def collect() -> dict:
     write_res = [re.compile(p) for p in LEGACY_WRITE_ACTION_PATTERNS]
 
     path_hits, write_hits = [], []
+    scanned_count = 0
     for rel, path in _iter_text_files(allowlist):
+        scanned_count += 1
         text = path.read_text(encoding="utf-8", errors="ignore")
         for regex in path_res:
             for match in regex.findall(text):
@@ -124,7 +150,11 @@ def collect() -> dict:
             for match in regex.findall(text):
                 write_hits.append({"file": rel, "match": match})
 
+    signoff = load_yaml("governance/receipts/founder_signoff_receipt.yaml")
+
     return {
+        "scanned_file_count": scanned_count,
+        "integration_authorizations": signoff.get("external_integration_authorizations") or {},
         "boundary_contract": {
             "declared": bool(ruling),
             "allowlist_declared_in_contract": bool(allowlist),

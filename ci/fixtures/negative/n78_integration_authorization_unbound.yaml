@@ -1,5 +1,5 @@
-fixture_id: N49-external-connection-without-authorization
-description: 外部集成被标为已连接，但签署回执里没有对应的 Founder 授权条目——判据已由「M0 期间一律不得连接」改为授权白名单，守的是授权缺失而不是里程碑名。
+fixture_id: N78-integration-authorization-unbound
+description: 外部集成有授权条目，但只绑了短哈希——授权必须钉死在唯一 Commit 上，否则「授权」指不明对象。
 checker: check_m0_zero_contact
 expected: FAIL
 payload:
@@ -19,4 +19,7 @@ payload:
     m0_connected: true
   credentials_touched: 0
   scanned_file_count: 120
-  integration_authorizations: {}
+  integration_authorizations:
+    发布平台:
+      authorized: true
+      signature_base_commit: 334e69b

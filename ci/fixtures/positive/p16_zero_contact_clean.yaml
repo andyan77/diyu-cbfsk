@@ -18,3 +18,5 @@ payload:
   - name: ERP/PIM/POS/进销存
     m0_connected: false
   credentials_touched: 0
+  scanned_file_count: 120
+  integration_authorizations: {}

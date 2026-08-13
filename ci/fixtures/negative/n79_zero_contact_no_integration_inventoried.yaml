@@ -1,5 +1,5 @@
-fixture_id: N51-zero-contact-target-incomplete
-description: 边界合同漏掉 CSO，四类遗留资产未覆盖全。
+fixture_id: N79-zero-contact-no-integration-inventoried
+description: 外部集成清单为空——没有清点对象，「均未连接」这个结论就没有落点。
 checker: check_m0_zero_contact
 expected: FAIL
 payload:
@@ -9,13 +9,12 @@ payload:
     - P7C
     - Content Kernel
     - DIFY
+    - CSO
     declared_contact_count: 0
     allowlist_declared_in_contract: true
   legacy_path_hits: []
   legacy_write_hits: []
-  external_integrations:
-  - name: ERP/PIM/POS/进销存
-    m0_connected: false
+  external_integrations: []
   credentials_touched: 0
   scanned_file_count: 120
   integration_authorizations: {}

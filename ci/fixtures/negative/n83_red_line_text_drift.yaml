@@ -1,5 +1,5 @@
-fixture_id: N05-commit-changed-without-rereview
-description: Guardian 审查后候选 Commit 变了却未重审。
+fixture_id: N83-red-line-text-drift
+description: 红线条数没变但措辞被悄悄改写——改一条红线的字面就能改变它守什么，因此比对的是全文指纹而不只是条数。
 checker: check_role_operating_model
 expected: FAIL
 payload:
@@ -50,18 +50,15 @@ payload:
     external_legal_opinion: false
     risk_tiered_review:
       high_risk:
-        founder_review_coverage: 100%
-        sampling_allowed: false
+        founder_review_coverage: 20%
+        sampling_allowed: true
     reviewer_calibration_contract:
       canonical_name: reviewer_calibration_contract
   guardian_role_id: CLAUDE_INDEPENDENT_GUARDIAN
   founder_authorized_temporary_writers:
   - TEMPORARY_EXECUTION_WRITER
   temporary_writers: []
-  commit_events:
-  - guardian_reviewed_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    current_commit: cccccccccccccccccccccccccccccccccccccccc
-    re_review_requested: false
+  commit_events: []
   red_line_manifest:
     count: 20
     sha256: 2c498e38302903fe67a968e69d9407f8014c2b8609b8f3b03186f821fd55365d
@@ -69,4 +66,4 @@ payload:
     last_changed_by_ruling: DIYU-CBFSK-FOUNDER-M1-GATE-001
     last_changed_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
   red_line_count: 20
-  red_line_digest: 2c498e38302903fe67a968e69d9407f8014c2b8609b8f3b03186f821fd55365d
+  red_line_digest: '0000000000000000000000000000000000000000000000000000000000000000'

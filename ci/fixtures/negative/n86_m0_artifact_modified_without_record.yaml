@@ -1,0 +1,14 @@
+fixture_id: N86-m0-artifact-modified-without-record
+description: M0 交付物在交付后被改动，却没在回执的 post_m0_authorized_modifications 里登记——改不是禁止的，不留痕才是。
+checker: check_m0_deliverable_closure
+expected: FAIL
+payload:
+  declared_items: []
+  contract_indices: []
+  count_is_frozen: true
+  no_fifteenth_item: true
+  artifacts:
+  - file: ci/checkers/x.py
+    delivered: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    actual: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    modification_record: null

@@ -1,0 +1,18 @@
+fixture_id: P21-execution-uuid-two-runs-guarded
+description: 治理任务批次与 M0 里程碑批次各有合法且互不相同的运行标识，各自有出现点可交叉核对。
+checker: check_execution_uuid
+expected: PASS
+payload:
+  runs:
+  - name: governance_task_continuation
+    execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+    parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+    continuation: true
+    run_id_occurrences:
+      a.yaml: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+  - name: m0_milestone_batch
+    execution_run_id: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+    parent_execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+    continuation: true
+    run_id_occurrences:
+      b.yaml: ec8d723a-4515-45ef-8889-71f6ddafbd0e

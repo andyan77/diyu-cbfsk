@@ -1,0 +1,18 @@
+fixture_id: N87-m0-modification-record-stale
+description: 登记条目里的 current_sha256 与文件实际哈希对不上——登记完又改了一次，等于登记形同虚设。
+checker: check_m0_deliverable_closure
+expected: FAIL
+payload:
+  declared_items: []
+  contract_indices: []
+  count_is_frozen: true
+  no_fifteenth_item: true
+  artifacts:
+  - file: ci/checkers/x.py
+    delivered: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    actual: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    modification_record:
+      current_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      m0_delivered_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      authorized_by_ruling: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+      changed_in_package: M1-EP01

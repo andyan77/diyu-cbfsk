@@ -1,6 +1,5 @@
 fixture_id: N52-m0-fifteenth-item-appeared
-description: >-
-  清单里多出第 15 项——M0 顶层交付清单恒为 14 项，第 15 项即红线。
+description: 清单里多出第 15 项——M0 顶层交付清单恒为 14 项，第 15 项即红线。
 checker: check_m0_deliverable_closure
 expected: FAIL
 payload:
@@ -68,3 +67,4 @@ payload:
   contract_indices: []
   count_is_frozen: true
   no_fifteenth_item: true
+  artifacts: []

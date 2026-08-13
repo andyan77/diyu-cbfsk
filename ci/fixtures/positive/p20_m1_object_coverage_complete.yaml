@@ -3,6 +3,65 @@ description: 12 输入与 15 输出全部可寻址、注册表与 Schema 文件�
 checker: check_m1_object_coverage
 expected: PASS
 payload:
+  interface_handoff:
+  - surface: schema_ids
+    handoff:
+    - https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+    upstream:
+    - https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+  - surface: CAT-KIDSWEAR.hard_constraint_ids
+    handoff:
+    - KW-HC-01
+    - KW-HC-02
+    upstream:
+    - KW-HC-01
+    - KW-HC-02
+  brief_deliverables:
+    source_row_count: 21
+    declared_count: 21
+    items:
+    - index: 1
+      landing: 01_contracts_and_schemas/m1_object_model/brand_style_space.v0.1.yaml
+      landing_exists: true
+      delivered_in: M1-EP01
+    - index: 3
+      landing: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+      landing_exists: true
+      delivered_in: M1-EP03
+  capability_objects:
+  - object_id: C-04
+    landing: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+    landing_exists: true
+    addressable: true
+  cross_package_references:
+  - source: 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+    target: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+    exists: true
+  extension_ports:
+    contract_ports:
+    - VisualMerchandisingExtensionPort
+    - RealtimeSalesAssistExtensionPort
+    bundle_enum:
+    - VisualMerchandisingExtensionPort
+    - RealtimeSalesAssistExtensionPort
+    unversioned: []
+  acceptance_judgements:
+  - code: OBJECT_NOT_ADDRESSABLE
+    implemented_in: check_m1_object_coverage
+    checker_registered: true
+    exercised_by_fixture: true
+  - code: BRAND_CATEGORY_MIXUP
+    implemented_in: check_m1_object_coverage
+    checker_registered: true
+    exercised_by_fixture: true
+  - code: RUNTIME_FACT_IN_LONG_TERM_TRUTH
+    implemented_in: check_m1_object_coverage
+    checker_registered: true
+    exercised_by_fixture: true
+  - code: WOMENSWEAR_RULE_OVERREACH
+    implemented_in: check_m1_category_adapters
+    checker_registered: true
+    exercised_by_fixture: true
   frozen_counts:
     inputs: 12
     outputs: 15

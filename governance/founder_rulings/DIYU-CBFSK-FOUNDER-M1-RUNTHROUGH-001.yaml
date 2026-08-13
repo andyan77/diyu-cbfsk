@@ -1,0 +1,64 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001
+project_id: DIYU-CBFSK-001
+title: M1 连跑授权 + M1-EP03 执行包（一站至候选冻结）
+ruling_date: "2026-08-13"
+issued_by: Founder
+milestone: M1
+transcription_note: >-
+  本文件是 Founder 原话的如实转录归档，不是执行侧的再解释。转录人为 M1 执行侧；
+  若与 Founder 原话有出入，以原话为准。归档目的：EP03 需要改动 M0 冻结交付物
+  m2_evaluation_freeze_brief.md，按回执 post_m0_authorized_modifications 合同必须绑定具名授权。
+
+run_through_authorization:
+  scope: EP02 → EP03 连跑
+  rule_verbatim: EP02 自检＋CI 全绿后直接进入 EP03，无需中途上报。
+  interrupt_conditions:
+    - 踩七类硬门
+    - 出现改变封套范围的 open_item（登记后停）
+  interrupts_triggered_in_practice: []
+  note: 两类中断条件在 EP02、EP03 均未触发；EP01 遗漏项属封套内既有交付清单项，不改变封套范围，故登记后继续。
+
+execution_package:
+  package_id: M1-EP03
+  task_class: L2
+  baseline: EP02 完成后的 main HEAD
+  baseline_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+  envelope: MILESTONE_PLAN_M1
+  envelope_status: 已批准，范围未变
+  objective_verbatim: 把 EP01 对象层与 EP02 品类合同层验成一个整体，冻结 M1 候选。
+  deliverables_verbatim:
+    - 跨包一致性检查：EP02 五份适配器对 EP01 registry 的引用完整性——无孤儿引用、无重复定义（EQ-1 全仓扫）、冲突优先级表全仓唯一且被五份合同引用
+    - semantic coverage checker 全量扩展：对象层＋品类合同层全覆盖断言（12 输入＋15 输出可寻址、五类合同齐全、女装默认覆盖检测在位、运行时事实与长期真源分离可判定）
+    - M2 评测冻结 Brief 与 M3 问题系统 Brief 按 M1 真实产出更新（接口交接：引用实际 schema ID 与品类约束 ID，替换占位表述）
+    - M1 交付报告 + Receipt（含包完成矩阵、EP02 若有 open_items 的清单与路由建议——只登记不自行裁决）
+    - 候选冻结：断言门控提交 → 推送候选分支 + PR 追评 → 生成 Guardian 交接包
+  acceptance_verbatim:
+    - 不存在未定义对象
+    - 品牌与品类不混用
+    - 15 输出对象 Schema 层全部可寻址
+    - 每份新增判据有正/负 fixture
+    - 全部 checker 实跑 PASS
+  red_lines_verbatim:
+    - M1 五条 const false
+    - 不生成知识内容/语料/夹具
+    - 不碰隐藏评测
+  closeout_verbatim: 冻结后输出 ≤15 行 M1 收口简报（候选 Commit、完成矩阵、open_items、下一步），停。
+
+authorizes_m0_artifact_modification:
+  file: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md
+  clause: deliverables_verbatim 第 3 条「M2 评测冻结 Brief …按 M1 真实产出更新」
+  constraint: >-
+    只新增 M1 接口交接一节，不改动既有 M2 交付清单、阈值、D-28 口径与通过标准；
+    artifact_sha256 保持 M0 交付当时的值不动，改动在回执 post_m0_authorized_modifications 逐条登记。
+
+execution_side_note_m3:
+  observation: 仓内不存在 M3 问题系统 Brief 文件（M0 十四项交付物不含它）。
+  action_taken: >-
+    「更新」无对象，故不新建 M3 Brief（新建等于在未授权的情况下先行规划 M3）。
+    改为把 M1→M2 与 M1→M3 的接口面统一落在 m1_interface_handoff.v0.1.yaml，
+    M3 侧只交接 M1 已产出的真实 schema ID 与品类约束 ID，不写 M3 的题型、范围与批次设计。
+  routed_as: open_item（登记不裁决，见 M1 Receipt）
+
+signed_by: Founder
+signed_at: "2026-08-13"

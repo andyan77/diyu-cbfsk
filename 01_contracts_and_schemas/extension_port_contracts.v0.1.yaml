@@ -1,0 +1,82 @@
+schema_version: "0.1"
+contract_id: extension_port_contracts.v0.1
+artifact_kind: contract_file
+milestone: M1
+execution_package: M1-EP03
+status: M1_EP03_DELIVERED
+brief_deliverable_index: 21
+prd_anchors: [PRD-5.7, PRD-15.6, PRD-3.2-NG-09, PRD-11.1-CMP-19, FR-27, NFR-11, D-22, D-24]
+
+frozen_source:
+  file: 01_contracts_and_schemas/capability_contract.v1.0.yaml
+  status: M0_FROZEN
+  pointer: extension_ports
+  rule_verbatim: 两类扩展当前均不是 V1.0 强制实现或 M12 硬门；不得写成永久退出。
+
+reading_guard:
+  prd_anchor: PRD-3.2 misreading_guard.NG-09
+  not_permanently_withdrawn: true
+  not_mandatory_in_v1_0: true
+  statement: >-
+    NG-09 既不得读成「完整陈列与实时导购永久退出项目」，也不得读成「V1.0 强制实现」。
+    本合同只维护端口、版本与兼容性，不实现任何一侧的业务能力。
+
+ports:
+  - id: VisualMerchandisingExtensionPort
+    zh: 门店空间陈列扩展端口
+    ruling: D-22
+    port_version: "0.1"
+    status: RESERVED_NOT_IMPLEMENTED
+    reserved_objects: [StoreSpaceContext, FixtureAndCapacityContext, MannequinStylingContext, PlanogramContext, DisplayExecutionResult]
+    reserved_objects_have_m1_schema: false
+    reserved_objects_note: >-
+      五个预留对象在 M1 只登记名称与归属端口，不建 JSON Schema——它们不在 PRD 6.1/6.2 的
+      12+15 冻结对象内，建 Schema 等于在未立 Brief 前先定型扩展的数据结构。
+    decision_node: Founder 提出空间陈列产品化需求时另立 Brief
+    m1_action: 只维护端口、Schema 版本与向后兼容
+    bundle_slot: StylingResultBundle.backward_compatible_extension_ports
+  - id: RealtimeSalesAssistExtensionPort
+    zh: 实时成交辅助扩展端口
+    ruling: D-24
+    port_version: "0.1"
+    status: RESERVED_NOT_IMPLEMENTED
+    reserved_objects: [SalesAssociateSessionContext, CustomerInteractionState, RealtimeRecommendationResult]
+    reserved_objects_have_m1_schema: false
+    reserved_objects_note: 同上；另需 Founder 先确认终端形态、数据权限、延迟与安全合同。
+    decision_node: Founder 确认实时终端形态、数据权限、延迟与安全合同后另立 Brief
+    m1_action: 只维护端口、Schema 版本与安全路由
+    bundle_slot: StylingResultBundle.backward_compatible_extension_ports
+
+bundle_compatibility:
+  prd_anchor: PRD-5.7 / NFR-11
+  bundle_schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
+  slot_property: backward_compatible_extension_ports
+  slot_kind: 可选数组，取值限定为已登记端口 id
+  rules:
+    - 扩展只能以**新增**方式开启：新增可选属性、新增 $defs、新增端口枚举成员。
+    - 端口未开启时，Bundle 的既有必填字段集与既有消费者行为不得改变（NFR-11）。
+    - 旧版消费者读到未知端口 id 时按忽略处理，不得因此判整包非法。
+    - 端口不得绕过安全、授权与库存门；扩展路径与主路径共用同一套门。
+  forbidden_changes:
+    - 删除或改名 Bundle 既有属性
+    - 把既有可选属性改为必填
+    - 收窄既有枚举或数值域
+    - 让端口开启后跳过品类安全硬约束、发布授权或库存真实性检查
+  failure_state: EXTENSION_PORT_COMPATIBILITY_BROKEN
+  stop_condition_ref: SC-15
+
+versioning:
+  registry_component: CMP-19 ExtensionPortRegistry
+  rule: 端口独立版本化；端口版本变化不强制 Bundle 主版本变化，但破坏兼容的变更一律不允许（只能新开端口版本）。
+  current_versions:
+    VisualMerchandisingExtensionPort: "0.1"
+    RealtimeSalesAssistExtensionPort: "0.1"
+
+obligation_ref:
+  id: OB-ARCH-05
+  file: 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml
+  statement_verbatim: 扩展端口必须版本化且向后兼容，未开启时不破坏现有输出，也不得绕过安全、授权与库存门。
+
+m1_scope_note: >-
+  M1 只交付端口合同本身。不实现任一端口的业务能力，不为预留对象建 Schema，
+  不创建 Serving，不接入真实库存或真实顾客。

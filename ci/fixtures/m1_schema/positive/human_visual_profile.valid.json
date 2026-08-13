@@ -1,0 +1,47 @@
+{
+  "fixture_id": "M1-P-human_visual_profile",
+  "description": "中性描述比例/量感/线条/视觉重心/肤色/气质，机制逐条带副作用与失效条件，无粗糙身材标签、无外貌排名。",
+  "schema_id": "https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "profile_id": "HVP-01",
+    "version": { "schema_version": "0.1", "object_version": "1", "valid_from": "2026-08-13T00:00:00Z" },
+    "persistence_class": "runtime_fact",
+    "subject_ref": "AUD-01",
+    "proportion": {
+      "horizontal_vertical_split": "上短下长，分割点偏高",
+      "waistline": "自然腰位偏高",
+      "upper_lower_relation": "上身量感小于下身"
+    },
+    "volume": { "shoulder_volume": "肩部体量偏窄", "material_bulk_sensitivity": "厚重面料容易压住上身" },
+    "line": "整体偏直，转折少",
+    "visual_center": { "current": "重心偏低", "adjustment_target": "上移至胸线附近" },
+    "skin_tone": { "description": "中性偏冷", "near_face_color_note": "高饱和暖色会与肤色相争" },
+    "temperament": "安静、克制",
+    "mechanism_effects": [
+      {
+        "variable": "腰线",
+        "effect": "提高分割点使视觉重心上移",
+        "side_effects": ["上身可见长度被压缩"],
+        "failure_conditions": ["本身腰位已高时继续提会失衡"]
+      },
+      {
+        "variable": "肩部体量",
+        "effect": "加结构使上身量感立住",
+        "side_effects": ["肩宽者会更显宽"],
+        "failure_conditions": ["面料过软时结构不成立"]
+      }
+    ],
+    "internal_neutral_fields": ["比例调整目标"],
+    "ranks_body_by_value": false,
+    "appearance_ranking_performed": false,
+    "coarse_body_label": null,
+    "external_language_check": { "forbidden_terms_present": false, "absolute_effect_promise_present": false },
+    "fail_closed_state": "INDIVIDUAL_PROFILE_INSUFFICIENT",
+    "provenance": {
+      "level": "human_verified_visual_attribute",
+      "rank": 3,
+      "source_ref": "导购当面确认"
+    }
+  }
+}

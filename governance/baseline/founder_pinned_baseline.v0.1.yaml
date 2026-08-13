@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
+    post_change_binary_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-10
+        authorization_ref: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001（M1 连跑授权 + M1-EP03 执行包）
+        binary_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d
+        landed_in_commit: M1_EP03_CLOSEOUT_COMMIT
+        content: 抬头改 M1 三包已交付候选待审、新增 M1-EP02 与 M1-EP03 两段、Schema 计数 18→19、Checker 计数 20→21、裁决目录补 FOUNDER-M1-RUNTHROUGH-001
       - change_id: README-MOD-09
         authorization_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 m1_pre_approval（M1-EP01 交付）
         binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22

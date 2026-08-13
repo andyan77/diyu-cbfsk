@@ -1,7 +1,8 @@
-fixture_id: N69-m1-runtime-fact-in-long-term-truth
-description: 注册表说运行时事实、Schema 却声明长期真源——运行时事实混入长期真源正是 M1 通过标准点名要拦的。
+fixture_id: N109-interface-handoff-stale
+description: M1→M2/M3 接口交接面漏掉童装一条硬约束 ID——派生件与上游 M1 产出分叉，M2 会按过期的约束集冻结评分卡。
 checker: check_m1_object_coverage
 expected: FAIL
+expected_judgement: INTERFACE_HANDOFF_STALE
 payload:
   interface_handoff:
   - surface: schema_ids
@@ -12,7 +13,6 @@ payload:
   - surface: CAT-KIDSWEAR.hard_constraint_ids
     handoff:
     - KW-HC-01
-    - KW-HC-02
     upstream:
     - KW-HC-01
     - KW-HC-02
@@ -82,8 +82,8 @@ payload:
     landing_exists: true
     addressable: true
     registry_persistence_class: runtime_fact
-    schema_persistence_class: long_term_truth
-    persistence_class_conflict: true
+    schema_persistence_class: runtime_fact
+    persistence_class_conflict: false
     category_rule_properties: []
   registry:
   - file: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json

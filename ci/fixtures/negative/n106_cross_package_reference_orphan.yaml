@@ -1,7 +1,8 @@
-fixture_id: N69-m1-runtime-fact-in-long-term-truth
-description: 注册表说运行时事实、Schema 却声明长期真源——运行时事实混入长期真源正是 M1 通过标准点名要拦的。
+fixture_id: N106-cross-package-reference-orphan
+description: EP02 适配器引用的冲突优先级表不存在——跨包孤儿引用。
 checker: check_m1_object_coverage
 expected: FAIL
+expected_judgement: CROSS_PACKAGE_REFERENCE_ORPHAN
 payload:
   interface_handoff:
   - surface: schema_ids
@@ -36,7 +37,7 @@ payload:
   cross_package_references:
   - source: 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
     target: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
-    exists: true
+    exists: false
   extension_ports:
     contract_ports:
     - VisualMerchandisingExtensionPort
@@ -82,8 +83,8 @@ payload:
     landing_exists: true
     addressable: true
     registry_persistence_class: runtime_fact
-    schema_persistence_class: long_term_truth
-    persistence_class_conflict: true
+    schema_persistence_class: runtime_fact
+    persistence_class_conflict: false
     category_rule_properties: []
   registry:
   - file: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json

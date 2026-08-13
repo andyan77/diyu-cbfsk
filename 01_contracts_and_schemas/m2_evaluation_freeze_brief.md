@@ -81,3 +81,36 @@ M0 **不得代为冻结任何阈值**。以下指标在 PRD 10.2 中标记为 `M
 ## 9. M2 是不可逆包
 
 按 `DIYU-CBFSK-FR-GRANULARITY-005`，M2 冻结属五个需要 **Founder 精确 Prompt 批准**的不可逆包之一，且里程碑收口须走 Guardian →（总顾问，可豁免）→ Founder。
+
+---
+
+## 10. M1 接口交接（M1-EP03 新增，M0 之后的授权改动）
+
+> 授权：`DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001` · 执行包 `M1-EP03` · 已在
+> `11_reports_and_receipts/m0_delivery_receipt.yaml` 的 `post_m0_authorized_modifications` 登记。
+> **本节只新增接口交接，不改动上文任何 M2 交付清单、阈值、D-28 口径与通过标准。**
+
+DEP-02 要求「M1 对象稳定后才可冻结引用它们的评分卡」。M1 已交付的稳定对象面在
+[`m1_interface_handoff.v0.1.yaml`](m1_interface_handoff.v0.1.yaml) —— 那是**派生件**，
+每个 ID 都取自 M1 交付物本身，由 `check_m1_object_coverage` 的 `INTERFACE_HANDOFF_STALE` 判据防止过期。
+
+M2 冻结时必须**按 ID 绑定，不按文件名或标题绑定**：
+
+| 要引用的东西 | 绑什么 | 数量 |
+|---|---|---|
+| 对象 Schema | `schema_id`（`https://diyu-cbfsk.local/m1/…`）| 19 份（12 输入 + 15 输出全部可寻址，另含公共定义与 C-04）|
+| 风格坐标覆盖 | `brand_style_space` 的 `dimension_id` | 14 维 |
+| 品类硬门映射 | 五份适配器的 `hard_constraint_id`（如 `KW-HC-02`、`SP-HC-04`）| 25 条，其中 safety_critical 19 条 |
+| 跨品类冲突 | `cross_category_conflict_priority` 的 `CP-01`—`CP-06` 与 `COMBO-01`—`COMBO-05` | 11 条 |
+| 失败关闭 / 停止条件 | 适配器已绑定的 `FC-04/05/06`、`SC-06` | 见交接面 |
+
+**M2 不得做的三件事（M1 侧发现并在此点明，不改变既有口径）**：
+
+1. 把 `RESERVED_NOT_IMPLEMENTED` 的两个扩展端口（`VisualMerchandisingExtensionPort`、
+   `RealtimeSalesAssistExtensionPort`）写成可评测能力——它们在 M1 只有端口合同，没有实现。
+2. 在 M1 对象尚未稳定时冻结引用它们的评分卡（DEP-02 原文）。
+3. 为 `mechanism_correctness` / `open_decision` 类任务设置唯一 Gold Answer（SC-20 / D-28）——
+   M1 未改变该口径，此处仅重申。
+
+**M1 没有改变的**：M2 的 18 项交付清单、PRD 10.2 的阈值与 `M2_FREEZE_REQUIRED` 范围、
+D-28 三分类与可接受决策边界口径、高风险 Founder 全审覆盖率 100% 不可抽样。

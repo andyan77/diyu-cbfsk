@@ -31,9 +31,9 @@
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M0_COMPLETE
+execution_status: M1_IN_PROGRESS
 m0_authorized: true
-m1_started: false
+m1_started: true
 m2_started: false
 knowledge_distillation_started: false
 production_servable: false

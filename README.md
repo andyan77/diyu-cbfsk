@@ -1,6 +1,6 @@
 # 笛语跨品牌服装搭配专家内核 · 文档索引
 
-> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`（里程碑完成）｜M1 未开工
+> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1-EP01 施工中
 
 ## 当前活基线
 
@@ -19,7 +19,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M0_COMPLETE
+execution_status: M1_IN_PROGRESS
 production_servable: false
 m0_authorized: true
 current_active_baseline: PRD_v1.2
@@ -37,7 +37,7 @@ m0_execution_started: true
 m0_founder_decision: PASS
 m0_founder_decision_original: CONDITIONAL
 m0_guardian_delta_review: APPROVE
-m1_started: false
+m1_started: true
 m2_started: false
 knowledge_distillation_started: false
 pending_active_baseline_switch: false
@@ -47,7 +47,7 @@ pending_active_baseline_switch: false
 
 M0 已按里程碑单包模式落盘十四项交付物。Founder 裁决 `CONDITIONAL`（[`DIYU-CBFSK-FOUNDER-M0-DECISION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M0-DECISION-001.yaml)）→ 四项必修落盘于 `f01e45b4ca4d7416feaec4177f4f8aad2ce35458` → Guardian delta 复核 `APPROVE`、无阻塞发现（[报告](governance/reports/guardian_review_report.f01e45b.delta.md)）→ 依裁决 `upgrade_rule` **自动升级为 M0 `PASS`**。总顾问 delta 复核由 Founder 豁免，**记录在案，不记为已完成**。
 
-`PASS` 只表示 M0 里程碑通过：**不**表示合同已生效，**不**表示可服务生产，**也不**表示 M1 已开工。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。M1-EP01 的开工冲突已由 `DIYU-CBFSK-FOUNDER-M1-GATE-001` 裁决：红线措辞改为「未经授权开始 M1 或 M2」，`m1_started` 授权条目已建立并绑定该裁决 Commit，但**状态位仍为 `false`**——授权存在不等于事件已发生，M1-EP01 在合并 main 完成后才开工。
+`PASS` 只表示 M0 里程碑通过：**不**表示合同已生效，**不**表示可服务生产，**也不**表示 M1 已开工。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。M1-EP01 已于 main 合并完成后开工（合并 Commit `8eaf5f25987d787a546096b6a60a4e6a6b5a30f4`，快进合并，main HEAD 即 Guardian 审过的哈希）。`m1_started` 依 `DIYU-CBFSK-FOUNDER-M1-GATE-001` 第 4 条如实置 `true`，授权条目绑定该裁决。M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布仍未开始。
 
 ## Founder 裁决 D-17—D-29 摘要
 

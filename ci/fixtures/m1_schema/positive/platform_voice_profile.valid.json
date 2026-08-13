@@ -1,0 +1,24 @@
+{
+  "fixture_id": "M1-P-platform_voice_profile",
+  "description": "平台语感排在人设与事实之下，反模板约束具名。",
+  "schema_id": "https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "voice_profile_id": "PV-01",
+    "platform": "小红书",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "anti_template_constraints": [
+      "no_courseware_tone",
+      "no_ai_register"
+    ],
+    "authority_rank": {
+      "may_override_persona": false,
+      "may_override_facts": false
+    }
+  }
+}

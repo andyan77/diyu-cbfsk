@@ -1,0 +1,15 @@
+{
+  "fixture_id": "M1-P-styling_task_context",
+  "description": "运行时任务上下文，显式声明不得回写长期真源。",
+  "schema_id": "https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "task_id": "TSK-01",
+    "persistence_class": "runtime_fact",
+    "objective": "出一套通勤搭配",
+    "platform": "小红书",
+    "account_role": "品牌主号",
+    "category_id": "womenswear",
+    "may_be_written_back_to_long_term_truth": false
+  }
+}

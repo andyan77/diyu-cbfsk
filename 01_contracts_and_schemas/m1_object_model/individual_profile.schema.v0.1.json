@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json",
+  "title": "IndividualProfile",
+  "object_id": "IN-06",
+  "description": "具体消费者的比例、肤色、气质、身高、舒适边界、预算、希望强化或弱化的方面。受 PRD 6.1 个体资料双模式合同约束：MODE-1 非实名搭配（默认）、MODE-2 完整顾客档案（须授权）。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.1", "PRD-16.2", "OB-IO-04"],
+  "persistence_class": "runtime_fact",
+  "type": "object",
+  "required": ["profile_id", "mode", "persistence_class", "styling_facts"],
+  "additionalProperties": false,
+  "properties": {
+    "profile_id": { "type": "string", "minLength": 1 },
+    "persistence_class": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/persistenceClass" },
+    "mode": { "type": "string", "enum": ["MODE_1_ANONYMOUS_STYLING", "MODE_2_FULL_CUSTOMER_RECORD"] },
+    "is_real_customer_connection": {
+      "description": "M1 红线：不得接入真实顾客。本位只能为 false。",
+      "const": false
+    },
+    "styling_facts": {
+      "description": "两种模式都可保留的搭配事实。系统对这些的判断能力属专家内核，不依赖个体采集即可运行（PRD 6.1 capability_data_separation）。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "body_proportion": { "type": "string" },
+        "skin_tone": { "type": "string" },
+        "temperament": { "type": "string" },
+        "height_cm": { "type": "number", "minimum": 0 },
+        "hair_style": { "type": "string" },
+        "comfort_boundaries": { "type": "array", "items": { "type": "string" } },
+        "budget_band_ref": { "type": "string" },
+        "rejections": { "type": "array", "items": { "type": "string" } },
+        "wants_emphasised": { "type": "array", "items": { "type": "string" } },
+        "wants_de_emphasised": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "identifying_information": {
+      "description": "姓名、联系方式、原始肖像等。MODE-1 一律为 null——去除姓名不自动等于匿名化，但 MODE-1 本就不得长期保留这些。",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "contact": { "type": "string" },
+            "original_portrait_ref": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "consent": {
+      "type": "object",
+      "required": ["consent_obtained", "store_desire_is_not_consent"],
+      "additionalProperties": false,
+      "properties": {
+        "consent_obtained": { "type": "boolean" },
+        "store_desire_is_not_consent": { "const": true },
+        "initiated_by_authorised_role": { "type": "boolean" },
+        "purpose_scope": { "type": "string" },
+        "retention_period": { "type": "string" },
+        "customer_rights_supported": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["query", "correct", "withdraw", "request_deletion"] }
+        },
+        "subject_is_minor_under_14": { "type": "boolean" },
+        "guardian_consent_obtained": { "type": "boolean" }
+      }
+    },
+    "fail_closed_state": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState" }
+  },
+  "allOf": [
+    {
+      "description": "MODE-1 非实名：不得长期保留姓名与原始肖像，且只能是运行时事实。",
+      "if": { "properties": { "mode": { "const": "MODE_1_ANONYMOUS_STYLING" } }, "required": ["mode"] },
+      "then": {
+        "properties": {
+          "identifying_information": { "type": "null" },
+          "persistence_class": { "const": "runtime_fact" }
+        }
+      }
+    },
+    {
+      "description": "MODE-2 完整档案：必须有经授权角色发起、顾客有效授权、用途范围与保存期限，并支持四项顾客权利。「门店想保存」不构成授权（OB-IO-04）。",
+      "if": { "properties": { "mode": { "const": "MODE_2_FULL_CUSTOMER_RECORD" } }, "required": ["mode"] },
+      "then": {
+        "required": ["consent"],
+        "properties": {
+          "consent": {
+            "required": ["consent_obtained", "initiated_by_authorised_role", "purpose_scope", "retention_period", "customer_rights_supported", "store_desire_is_not_consent"],
+            "properties": {
+              "consent_obtained": { "const": true },
+              "initiated_by_authorised_role": { "const": true },
+              "customer_rights_supported": { "minItems": 4 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "未满 14 周岁须监护人同意，并与品类安全合同联动。",
+      "if": {
+        "properties": { "consent": { "properties": { "subject_is_minor_under_14": { "const": true } }, "required": ["subject_is_minor_under_14"] } },
+        "required": ["consent"]
+      },
+      "then": {
+        "properties": { "consent": { "required": ["guardian_consent_obtained"], "properties": { "guardian_consent_obtained": { "const": true } } } }
+      }
+    }
+  ]
+}

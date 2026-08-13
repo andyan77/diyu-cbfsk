@@ -1,0 +1,30 @@
+{
+  "fixture_id": "M1-N-publication_policy",
+  "description": "违反：D-25 / FC-10：自动发布须 Founder 显式授权且前置检查通过，否则回退 human_review",
+  "schema_id": "https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "D-25 / FC-10：自动发布须 Founder 显式授权且前置检查通过，否则回退 human_review",
+  "instance": {
+    "policy_id": "PP-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "scope": {
+      "tenant_id": "T-1",
+      "brand_id": "BR-01",
+      "account_id": "AC-1",
+      "risk_level": "low"
+    },
+    "publication_mode": "auto_publish",
+    "human_review_in_the_loop": false,
+    "controls": {
+      "audit_trail": true,
+      "retraction": true,
+      "rollback": true,
+      "kill_switch": true
+    }
+  }
+}

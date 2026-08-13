@@ -1,0 +1,32 @@
+{
+  "fixture_id": "M1-N-persona_memory_snapshot",
+  "description": "违反：快照必须可重放，否则无法归因人设漂移",
+  "schema_id": "https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "快照必须可重放，否则无法归因人设漂移",
+  "instance": {
+    "snapshot_id": "PMS-01",
+    "persona_id": "PS-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "replayable": false,
+    "published_viewpoint_refs": [
+      "VP-01"
+    ],
+    "columns": [
+      "通勤日常"
+    ],
+    "language_signature": {
+      "markers": [
+        "先讲失效条件再讲做法"
+      ],
+      "distinctiveness_score": 0.7
+    },
+    "underlying_model_version": "m-2026-08",
+    "is_production_memory_store": false
+  }
+}

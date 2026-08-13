@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json",
+  "title": "DecisionTrace",
+  "object_id": "OUT-11",
+  "description": "事实、知识、模型、候选、排除、不确定性、版本和人工修改记录。含 D-28 要求的「被舍弃的合法候选族」记录位——合理多解下被舍弃的不一定是错解，把它记下来，评测才可能冻结「可接受决策边界」而不是唯一 Gold Answer。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.2", "PRD-10.1", "D-28", "D-29", "OB-IO-02"],
+  "persistence_class": "runtime_fact",
+  "type": "object",
+  "required": ["trace_id", "task_id", "persistence_class", "facts_used", "knowledge_used", "model_versions", "candidates_considered", "exclusions", "discarded_legitimate_candidate_families", "uncertainties", "priority_adjudications"],
+  "additionalProperties": false,
+  "properties": {
+    "trace_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "persistence_class": { "const": "runtime_fact" },
+    "facts_used": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fact_ref", "provenance"],
+        "additionalProperties": false,
+        "properties": {
+          "fact_ref": { "type": "string", "minLength": 1 },
+          "provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+        }
+      }
+    },
+    "knowledge_used": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["knowledge_unit_ref", "rule_attribution"],
+        "additionalProperties": false,
+        "properties": {
+          "knowledge_unit_ref": { "type": "string", "minLength": 1 },
+          "rule_attribution": {
+            "description": "D-29 反退化：必须能把结论归因到具体规则，不能是端到端直答后补理由。",
+            "type": "string",
+            "minLength": 1
+          },
+          "deterministic": { "type": "boolean" }
+        }
+      }
+    },
+    "model_versions": { "type": "array", "items": { "type": "string" } },
+    "candidates_considered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "summary", "outcome"],
+        "additionalProperties": false,
+        "properties": {
+          "candidate_id": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "outcome": { "type": "string", "enum": ["selected", "discarded_as_invalid", "discarded_though_legitimate"] }
+        }
+      }
+    },
+    "exclusions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "candidate_id": { "type": "string" },
+          "reason": { "type": "string", "minLength": 1 },
+          "violated_constraint_ref": { "type": "string" }
+        }
+      }
+    },
+    "discarded_legitimate_candidate_families": {
+      "description": "D-28 合理多解原则的记录位：这些候选**合法但未被选中**，不是错解。评测冻结的是可接受决策边界，不是唯一答案；因此每族必须说明它为何合法、又因何让位。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["family_id", "description", "why_legitimate", "why_not_selected", "decision_class"],
+        "additionalProperties": false,
+        "properties": {
+          "family_id": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "why_legitimate": { "type": "string", "minLength": 1 },
+          "why_not_selected": { "type": "string", "minLength": 1 },
+          "decision_class": {
+            "description": "D-28 强制三分类。constraint_correctness 类才可能有唯一正解；后两类禁设唯一 Gold Answer。",
+            "type": "string",
+            "enum": ["constraint_correctness", "mechanism_correctness", "open_decision"]
+          },
+          "member_candidate_ids": { "type": "array", "items": { "type": "string" } }
+        },
+        "allOf": [
+          {
+            "description": "被记为「合法但舍弃」的候选，其决策类别若是 constraint_correctness，说明它并不违反硬约束——那就必须说清让位理由，不能拿硬约束当借口。",
+            "if": { "properties": { "decision_class": { "const": "constraint_correctness" } }, "required": ["decision_class"] },
+            "then": { "properties": { "why_not_selected": { "minLength": 1 } } }
+          }
+        ]
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["statement", "impact"],
+        "additionalProperties": false,
+        "properties": {
+          "statement": { "type": "string", "minLength": 1 },
+          "impact": { "type": "string", "enum": ["low", "medium", "high"] },
+          "resolved_by_fail_closed": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState" }
+        }
+      }
+    },
+    "priority_adjudications": {
+      "description": "OB-IO-02：七级事实优先级的裁决记录。任何下层信息不得覆盖上层明确事实——覆盖发生过就要在这里看得见。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["winner", "loser", "upper_layer_overridden"],
+        "additionalProperties": false,
+        "properties": {
+          "winner": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" },
+          "loser": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" },
+          "upper_layer_overridden": { "const": false },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "human_modifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["modified_by_role", "modified_at", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "modified_by_role": { "type": "string" },
+          "modified_at": { "type": "string", "format": "date-time" },
+          "reason": { "type": "string", "minLength": 1 },
+          "field_ref": { "type": "string" }
+        }
+      }
+    },
+    "llm_off_invariants_held": {
+      "description": "D-29：硬约束确定性执行、LLM-off 不变性。关掉 LLM 后硬约束结论应不变。",
+      "type": "boolean"
+    }
+  }
+}

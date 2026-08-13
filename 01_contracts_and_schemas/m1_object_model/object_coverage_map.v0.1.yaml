@@ -1,0 +1,184 @@
+schema_version: '0.1'
+artifact_id: object_coverage_map.v0.1
+milestone: M1
+execution_package: M1-EP01
+prd_anchors:
+- PRD-6.1
+- PRD-6.2
+- PRD-13-M1
+status: M1_EP01_DELIVERED
+frozen_counts:
+  inputs: 12
+  outputs: 15
+  source: '01_contracts_and_schemas/input_output_boundary.v1.0.yaml（M0_FROZEN，count_is_frozen: true）'
+count_discrepancy_note: DIYU-CBFSK-FOUNDER-M0-DECISION-001 的 acceptance_gate 写「11 个输出对象」，与冻结合同的 15 不一致。本表按 15 执行——15 ⊃ 11，满足更严口径即同时满足两种读法。详见
+  11_reports_and_receipts/m1_ep01_kickoff.md。
+inputs:
+- object_id: IN-01
+  name: UniversalExpertKernel
+  landing_kind: contract_file
+  landing: 01_contracts_and_schemas/capability_contract.v1.0.yaml
+  note: PRD 13-M1 特例：UniversalExpertKernel 与 CategoryAdapter 是合同文件而非数据 Schema，映射表注明即可，不为其造 JSON Schema。
+  addressable: true
+- object_id: IN-02
+  name: CategoryAdapter
+  landing_kind: contract_file
+  landing: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
+  note: PRD 13-M1 特例：UniversalExpertKernel 与 CategoryAdapter 是合同文件而非数据 Schema，映射表注明即可，不为其造 JSON Schema。
+  addressable: true
+- object_id: IN-03
+  name: BrandTruthPack
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+- object_id: IN-04
+  name: InventorySnapshot
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/garment_and_inventory.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+  persistence_class: runtime_fact
+  addressable: true
+- object_id: IN-05
+  name: AudienceProfile
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/audience_profile.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+- object_id: IN-06
+  name: IndividualProfile
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/individual_profile.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json
+  persistence_class: runtime_fact
+  addressable: true
+- object_id: IN-07
+  name: StylingTaskContext
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/styling_task_context.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json
+  persistence_class: runtime_fact
+  addressable: true
+- object_id: IN-08
+  name: ProductImageAssetBundle
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/product_image_asset_bundle.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+- object_id: IN-09
+  name: StylistPersonaProfile
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+- object_id: IN-10
+  name: PersonaMemorySnapshot
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/persona_memory_snapshot.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+- object_id: IN-11
+  name: FounderProvidedRealBrandPackage
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/founder_provided_real_brand_package.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+- object_id: IN-12
+  name: PublicationPolicy
+  landing_kind: json_schema
+  landing: 01_contracts_and_schemas/m1_object_model/publication_policy.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json
+  persistence_class: long_term_truth
+  addressable: true
+outputs:
+- object_id: OUT-01
+  name: BrandAudienceInterpretation
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/BrandAudienceInterpretation
+  addressable: true
+- object_id: OUT-02
+  name: StylingDiagnosis
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/StylingDiagnosis
+  addressable: true
+- object_id: OUT-03
+  name: StylingThesis
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/StylingThesis
+  addressable: true
+- object_id: OUT-04
+  name: OutfitPlan
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/OutfitPlan
+  addressable: true
+- object_id: OUT-05
+  name: InclusionExclusionReasons
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/InclusionExclusionReasons
+  addressable: true
+- object_id: OUT-06
+  name: TransformationPlan
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/TransformationPlan
+  addressable: true
+- object_id: OUT-07
+  name: AlternativePlan
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/AlternativePlan
+  addressable: true
+- object_id: OUT-08
+  name: SuitabilityExplanation
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/SuitabilityExplanation
+  addressable: true
+- object_id: OUT-09
+  name: NarrativePackage
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/NarrativePackage
+  addressable: true
+- object_id: OUT-10
+  name: ContentProjection
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/ContentProjection
+  addressable: true
+- object_id: OUT-11
+  name: DecisionTrace
+  landing_kind: standalone_schema
+  landing: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+  referenced_by_bundle: true
+  addressable: true
+- object_id: OUT-12
+  name: VisualAttributeExtractionResult
+  landing_kind: standalone_schema
+  landing: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json
+  schema_id: https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+  referenced_by_bundle: true
+  addressable: true
+- object_id: OUT-13
+  name: PersonaContinuityUpdate
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/PersonaContinuityUpdate
+  addressable: true
+- object_id: OUT-14
+  name: SocialMediaVoicePlan
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/SocialMediaVoicePlan
+  addressable: true
+- object_id: OUT-15
+  name: PublicationDecision
+  landing_kind: bundle_def
+  landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/PublicationDecision
+  addressable: true
+not_delivered_in_ep01:
+- item: category_adapter_contracts/*.v0.1.yaml（五类）
+  routed_to: M1-EP02
+- item: extension_port_contracts（VM / 实时成交辅助 / Bundle 兼容）
+  routed_to: M1-EP03
+  note: PRD 5.7 端口是合同而非对象 Schema；Bundle 已留 backward_compatible_extension_ports 位。

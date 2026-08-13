@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json",
+  "title": "PublishedViewpointLedger",
+  "object_id": "D-20-03",
+  "description": "已公开观点台账（D-20 第三对象）。记录说过什么、在哪说的、是否已被修订，用于检测无依据冲突与无新价值重复。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-5.5", "D-20", "C-13"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["ledger_id", "persona_id", "version", "persistence_class", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "ledger_id": { "type": "string", "minLength": 1 },
+    "persona_id": { "type": "string", "minLength": 1 },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": { "const": "long_term_truth" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["viewpoint_id", "statement", "published_at", "channel", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "viewpoint_id": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 1 },
+          "published_at": { "type": "string", "format": "date-time" },
+          "channel": { "type": "string", "minLength": 1 },
+          "column": { "type": "string" },
+          "status": { "type": "string", "enum": ["active", "revised", "retracted", "superseded"] },
+          "revision_reason": { "type": "string" },
+          "superseded_by": { "type": "string" },
+          "grounded_in": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" },
+          "adds_new_value": {
+            "description": "无新价值的重复表达要能被判出来，否则人设会变成复读机。",
+            "type": "boolean"
+          }
+        },
+        "allOf": [
+          {
+            "description": "改口必须给理由——没有 revision_reason 的 revised/retracted 就是无依据漂移。",
+            "if": { "properties": { "status": { "enum": ["revised", "retracted"] } }, "required": ["status"] },
+            "then": { "required": ["revision_reason"] }
+          },
+          {
+            "if": { "properties": { "status": { "const": "superseded" } }, "required": ["status"] },
+            "then": { "required": ["superseded_by"] }
+          }
+        ]
+      }
+    }
+  }
+}

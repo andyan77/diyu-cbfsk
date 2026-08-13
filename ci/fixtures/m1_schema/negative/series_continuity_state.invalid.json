@@ -1,0 +1,31 @@
+{
+  "fixture_id": "M1-N-series_continuity_state",
+  "description": "违反：重复守卫必须要求新价值，否则人设变复读机",
+  "schema_id": "https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "重复守卫必须要求新价值，否则人设变复读机",
+  "instance": {
+    "series_id": "SER-01",
+    "persona_id": "PS-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "column": "通勤日常",
+    "installments": [
+      {
+        "installment_id": "EP-1",
+        "sequence": 1,
+        "thesis_ref": "TH-1"
+      }
+    ],
+    "repetition_guard": {
+      "recent_thesis_refs": [
+        "TH-1"
+      ],
+      "requires_new_value": false
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json",
+  "title": "M1 公共定义",
+  "description": "七级事实优先级、属性来源分层、持久化类别与版本引用的唯一定义处。其他 Schema 一律 $ref 本文件，不得各自复述——复述即两套实现（EQ-1）。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.3", "PRD-5.6", "PRD-6.4"],
+  "definitions": {
+    "factPriorityLevel": {
+      "description": "PRD 6.3 七级事实优先级。rank 越小优先级越高；任何下层信息不得覆盖上层明确事实。",
+      "type": "string",
+      "enum": [
+        "specific_runtime_facts",
+        "brand_truth_and_authoritative_product_fact",
+        "human_verified_visual_attribute",
+        "category_hard_constraints_and_accepted_expert_knowledge",
+        "multimodal_inferred_visual_attribute",
+        "retrieved_cases",
+        "general_model_inference"
+      ]
+    },
+    "factProvenance": {
+      "description": "任一事实必须能说清它处在七级中的哪一级、来源是什么。第 5 级与第 7 级属推断，必须显式标记，不得伪装为品牌、商品、库存、顾客或真实经历（PRD 6.3 labeling_rule）。",
+      "type": "object",
+      "required": ["level", "rank", "source_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "level": { "$ref": "#/definitions/factPriorityLevel" },
+        "rank": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "source_ref": { "type": "string", "minLength": 1 },
+        "is_model_inference": { "type": "boolean" },
+        "explicitly_labeled_as_inference": { "type": "boolean" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "observed_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "level": { "const": "specific_runtime_facts" } }, "required": ["level"] },
+          "then": { "properties": { "rank": { "const": 1 } } }
+        },
+        {
+          "if": { "properties": { "level": { "const": "brand_truth_and_authoritative_product_fact" } }, "required": ["level"] },
+          "then": { "properties": { "rank": { "const": 2 } } }
+        },
+        {
+          "if": { "properties": { "level": { "const": "human_verified_visual_attribute" } }, "required": ["level"] },
+          "then": { "properties": { "rank": { "const": 3 } } }
+        },
+        {
+          "if": { "properties": { "level": { "const": "category_hard_constraints_and_accepted_expert_knowledge" } }, "required": ["level"] },
+          "then": { "properties": { "rank": { "const": 4 } } }
+        },
+        {
+          "if": { "properties": { "level": { "const": "multimodal_inferred_visual_attribute" } }, "required": ["level"] },
+          "then": {
+            "properties": { "rank": { "const": 5 }, "is_model_inference": { "const": true }, "explicitly_labeled_as_inference": { "const": true } },
+            "required": ["is_model_inference", "explicitly_labeled_as_inference"]
+          }
+        },
+        {
+          "if": { "properties": { "level": { "const": "retrieved_cases" } }, "required": ["level"] },
+          "then": { "properties": { "rank": { "const": 6 } } }
+        },
+        {
+          "if": { "properties": { "level": { "const": "general_model_inference" } }, "required": ["level"] },
+          "then": {
+            "properties": { "rank": { "const": 7 }, "is_model_inference": { "const": true }, "explicitly_labeled_as_inference": { "const": true } },
+            "required": ["is_model_inference", "explicitly_labeled_as_inference"]
+          }
+        }
+      ]
+    },
+    "attributeProvenance": {
+      "description": "PRD 5.6 固定三层，并兼容三个别名。别名只是同一分层的另一种写法，不构成第四层。",
+      "type": "string",
+      "enum": [
+        "authoritative",
+        "human_confirmed",
+        "model_inferred",
+        "authoritative_structured_fact",
+        "human_verified_visual_attribute",
+        "multimodal_inferred_visual_attribute"
+      ]
+    },
+    "persistenceClass": {
+      "description": "运行时事实与长期真源必须分离（PRD 13 节 M1 通过标准）。runtime_fact 只在单次任务内有效，long_term_truth 才可跨任务沉淀。",
+      "type": "string",
+      "enum": ["runtime_fact", "long_term_truth"]
+    },
+    "categoryId": {
+      "description": "五类首发品类，M0 冻结，M1 不得增删。",
+      "type": "string",
+      "enum": ["womenswear", "childrenswear", "teens", "parent_child", "sportswear"]
+    },
+    "failClosedState": {
+      "description": "PRD 6.4 十条缺失输入的失败关闭状态；缺输入必须落到其中之一，不得以流畅表达填补。",
+      "type": "string",
+      "enum": [
+        "NO_REAL_PRODUCT_LIST",
+        "STORE_INVENTORY_UNKNOWN",
+        "BRAND_TRUTH_INSUFFICIENT",
+        "INDIVIDUAL_PROFILE_INSUFFICIENT",
+        "AGE_CONTEXT_INSUFFICIENT",
+        "SPORT_FUNCTION_INSUFFICIENT",
+        "NARRATIVE_REAL_EVENT_ABSENT",
+        "MULTIMODAL_ATTRIBUTE_UNSAFE",
+        "PERSONA_STATE_INVALID",
+        "UNAUTHORIZED_AUTO_PUBLISH"
+      ]
+    },
+    "objectVersion": {
+      "description": "可版本化：任何对象实例都要能说清自己是哪一版、从何时生效、由谁改的。",
+      "type": "object",
+      "required": ["schema_version", "object_version", "valid_from"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+        "object_version": { "type": "string", "minLength": 1 },
+        "valid_from": { "type": "string", "format": "date-time" },
+        "supersedes": { "type": "string" },
+        "changed_by_role": { "type": "string" },
+        "change_reason": { "type": "string" }
+      }
+    },
+    "styleCoordinate": {
+      "description": "连续风格坐标的单维取值：0—1 连续值 + 置信度 + 来源。禁止只给单标签（PRD 5.3）。",
+      "type": "object",
+      "required": ["dimension_id", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "dimension_id": { "type": "string", "minLength": 1 },
+        "value": { "type": "number", "minimum": 0, "maximum": 1 },
+        "tolerance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "provenance": { "$ref": "#/definitions/factProvenance" }
+      }
+    }
+  }
+}

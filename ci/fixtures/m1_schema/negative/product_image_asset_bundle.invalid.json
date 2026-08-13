@@ -1,0 +1,42 @@
+{
+  "fixture_id": "M1-N-product_image_asset_bundle",
+  "description": "违反：M1 红线：不得运行多模态商品识别",
+  "schema_id": "https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "M1 红线：不得运行多模态商品识别",
+  "instance": {
+    "bundle_id": "IMG-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "sku_id": "SKU-1",
+    "assets": [
+      {
+        "asset_id": "A-1",
+        "source": "brand_official",
+        "angle": "front",
+        "quality": {
+          "resolution_sufficient": true,
+          "lighting_sufficient": true
+        },
+        "rights": {
+          "confidential": false,
+          "redistributable": true
+        }
+      }
+    ],
+    "usage_scope": [
+      "internal_analysis"
+    ],
+    "cannot_evidence": [
+      "composition",
+      "performance",
+      "inventory",
+      "safety_certification"
+    ],
+    "multimodal_recognition_executed": true
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json",
+  "title": "SeriesContinuityState",
+  "object_id": "D-20-04",
+  "description": "栏目/系列连续性状态（D-20 第四对象）：某个栏目讲到哪、下一期不能与哪些已发布内容冲突或重复。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-5.5", "D-20"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["series_id", "persona_id", "version", "persistence_class", "column", "installments"],
+  "additionalProperties": false,
+  "properties": {
+    "series_id": { "type": "string", "minLength": 1 },
+    "persona_id": { "type": "string", "minLength": 1 },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": { "const": "long_term_truth" },
+    "column": { "type": "string", "minLength": 1 },
+    "installments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["installment_id", "sequence", "thesis_ref"],
+        "additionalProperties": false,
+        "properties": {
+          "installment_id": { "type": "string" },
+          "sequence": { "type": "integer", "minimum": 1 },
+          "thesis_ref": { "type": "string" },
+          "published_viewpoint_refs": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "open_threads": { "type": "array", "items": { "type": "string" } },
+    "must_not_contradict_refs": { "type": "array", "items": { "type": "string" } },
+    "repetition_guard": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recent_thesis_refs": { "type": "array", "items": { "type": "string" } },
+        "requires_new_value": { "const": true }
+      }
+    }
+  }
+}

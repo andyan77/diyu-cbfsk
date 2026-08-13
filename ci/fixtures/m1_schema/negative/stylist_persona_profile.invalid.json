@@ -1,0 +1,78 @@
+{
+  "fixture_id": "M1-N-stylist_persona_profile",
+  "description": "违反：PRD 5.5 四项不得虚构（履历/资历/顾客经历/职业事件）不得删减",
+  "schema_id": "https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "PRD 5.5 四项不得虚构（履历/资历/顾客经历/职业事件）不得删减",
+  "instance": {
+    "persona_id": "PS-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "professional_identity": "通勤方向服装搭配师",
+    "capability_boundaries": [
+      "不做医美建议",
+      "不做身材评判"
+    ],
+    "target_audience_refs": [
+      "AUD-01"
+    ],
+    "core_values": [
+      "先讲失效条件"
+    ],
+    "stable_aesthetic_stance": "结构优先于装饰",
+    "baseline_judgements": {
+      "brand": "品牌事实优先",
+      "body": "不作价值排序",
+      "scenario": "场景决定正式度",
+      "consumption": "耐穿优先",
+      "trend": "趋势服务于人"
+    },
+    "observation_perspectives": [
+      "从肩线看整体"
+    ],
+    "held_viewpoints": [
+      {
+        "viewpoint_id": "VP-01",
+        "statement": "通勤不必靠正式度堆叠",
+        "grounded_in": {
+          "level": "brand_truth_and_authoritative_product_fact",
+          "rank": 2,
+          "source_ref": "brand-doc-1"
+        }
+      }
+    ],
+    "evolvable_viewpoints": [
+      {
+        "viewpoint_id": "VP-02",
+        "statement": "阔腿裤适配面更广",
+        "evolution_requires_evidence": true
+      }
+    ],
+    "forbidden_expressions": [
+      "不得贬低身材"
+    ],
+    "must_not_fabricate": [
+      "resume",
+      "credentials",
+      "customer_experience"
+    ],
+    "account_role_differentiation": "与门店导购号分工不同",
+    "authority_rank": {
+      "ranks_below": [
+        "brand_truth",
+        "accepted_professional_judgement",
+        "category_safety",
+        "product_and_inventory_fact"
+      ],
+      "ranks_above": [
+        "platform_expression_preference"
+      ],
+      "may_override_upper_layers": false
+    },
+    "is_production_memory_store": false
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "fixture_id": "M1-P-StylingResultBundle",
+  "description": "十五个输出对象齐备的完整整包。",
+  "schema_id": "https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "bundle_id": "BND-01",
+    "task_id": "TSK-01",
+    "persistence_class": "runtime_fact",
+    "backward_compatible_extension_ports": [
+      "VisualMerchandisingExtensionPort"
+    ],
+    "brand_audience_interpretation": {
+      "interpretation_id": "BAI-1",
+      "brand_ref": "BR-01",
+      "category_id": "womenswear",
+      "audience_ref": "AUD-01",
+      "brand_style_coordinates": [
+        {
+          "dimension_id": "formality",
+          "value": 0.7
+        }
+      ],
+      "provenance": {
+        "level": "brand_truth_and_authoritative_product_fact",
+        "rank": 2,
+        "source_ref": "brand-doc-1"
+      }
+    },
+    "styling_diagnosis": {
+      "diagnosis_id": "DG-1",
+      "problems": [
+        {
+          "statement": "整体重心偏低",
+          "candidate_causes": [
+            "下装体量过大"
+          ],
+          "ruled_out": [
+            "色彩问题"
+          ]
+        }
+      ],
+      "required_additional_facts": [
+        "门店现货"
+      ]
+    },
+    "styling_thesis": {
+      "thesis_id": "TH-1",
+      "statement": "用结构而非正式度解决通勤",
+      "professional_viewpoint": "肩线先立住，其余可放松",
+      "grounded_in": [
+        {
+          "level": "brand_truth_and_authoritative_product_fact",
+          "rank": 2,
+          "source_ref": "brand-doc-1"
+        }
+      ]
+    },
+    "outfit_plan": {
+      "plan_id": "OP-1",
+      "real_product_list_available": true,
+      "selected_items": [
+        {
+          "sku_id": "SKU-1",
+          "style_code": "ST-1",
+          "color_code": "C1",
+          "size_code": "M",
+          "role_in_outfit": "anchor"
+        }
+      ],
+      "combination_relations": [
+        "外套压住上身体量"
+      ],
+      "wearing_methods": [
+        "敞开穿"
+      ],
+      "scenarios": [
+        "通勤"
+      ],
+      "suitable_audience_refs": [
+        "AUD-01"
+      ],
+      "resulting_style_coordinates": [
+        {
+          "dimension_id": "structure",
+          "value": 0.75
+        }
+      ]
+    },
+    "inclusion_exclusion_reasons": {
+      "reasons_id": "IER-1",
+      "inclusions": [
+        {
+          "ref": "SKU-1",
+          "reason": "肩线结构达标"
+        }
+      ],
+      "exclusions": [
+        {
+          "ref": "SKU-9",
+          "reason": "违反 FB-01"
+        }
+      ],
+      "common_practices_that_fail_here": [
+        {
+          "practice": "靠腰带提腰线",
+          "why_it_fails_here": "本款腰位已高，再提会压缩上身"
+        }
+      ]
+    },
+    "transformation_plan": {
+      "transformation_id": "TP-1",
+      "actions": [
+        {
+          "action_kind": "rebalance",
+          "target_ref": "OP-1",
+          "rationale": "把重心上移"
+        }
+      ]
+    },
+    "alternative_plan": {
+      "alternative_id": "AP-1",
+      "triggers": [
+        "out_of_stock"
+      ],
+      "alternatives": [
+        {
+          "for_trigger": "out_of_stock",
+          "replacement_ref": "SKU-2",
+          "degradation_note": "结构感略降"
+        }
+      ]
+    },
+    "suitability_explanation": {
+      "explanation_id": "SE-1",
+      "effects": [
+        {
+          "aspect": "proportion",
+          "effect": "视觉重心上移",
+          "side_effects": [
+            "肩宽者会更显宽"
+          ],
+          "failure_conditions": [
+            "身高低于 155cm 时失效"
+          ]
+        }
+      ],
+      "ranks_body_by_value": false
+    },
+    "narrative_package": {
+      "narrative_id": "NP-1",
+      "narration_kind": "group_situation",
+      "real_customer_fabricated": false,
+      "beats": {
+        "situation": "早高峰赶会",
+        "common_misconception": "通勤必须穿正装",
+        "conflict": "舒适与正式冲突",
+        "decision": "用结构替代正式度",
+        "change": "换掉硬挺西裤",
+        "conclusion": "结构立住就够"
+      },
+      "shootable_actions": [
+        "镜头从肩线摇到鞋口"
+      ]
+    },
+    "content_projection": {
+      "projection_id": "CP-1",
+      "platform": "小红书",
+      "account_role": "品牌主号",
+      "format": "spoken_script",
+      "column": "通勤日常",
+      "body": "先说失效条件，再说做法。",
+      "voice_profile_ref": "PV-01"
+    },
+    "decision_trace": {
+      "trace_id": "DT-01",
+      "task_id": "TSK-01",
+      "persistence_class": "runtime_fact",
+      "facts_used": [
+        {
+          "fact_ref": "BR-01",
+          "provenance": {
+            "level": "brand_truth_and_authoritative_product_fact",
+            "rank": 2,
+            "source_ref": "brand-doc-1"
+          }
+        }
+      ],
+      "knowledge_used": [
+        {
+          "knowledge_unit_ref": "KU-1",
+          "rule_attribution": "规则 R-12：肩线决定外套体量",
+          "deterministic": true
+        }
+      ],
+      "model_versions": [
+        "m-2026-08"
+      ],
+      "candidates_considered": [
+        {
+          "candidate_id": "CA-1",
+          "summary": "西装+直筒裤",
+          "outcome": "selected"
+        },
+        {
+          "candidate_id": "CA-2",
+          "summary": "针织+半裙",
+          "outcome": "discarded_though_legitimate"
+        }
+      ],
+      "exclusions": [
+        {
+          "candidate_id": "CA-3",
+          "reason": "违反品牌禁用规则 FB-01",
+          "violated_constraint_ref": "FB-01"
+        }
+      ],
+      "discarded_legitimate_candidate_families": [
+        {
+          "family_id": "FAM-1",
+          "description": "针织柔性方向",
+          "why_legitimate": "不违反任何硬约束且符合场景",
+          "why_not_selected": "本次命题强调结构感，柔性方向表达力更弱",
+          "decision_class": "open_decision",
+          "member_candidate_ids": [
+            "CA-2"
+          ]
+        }
+      ],
+      "uncertainties": [
+        {
+          "statement": "门店实际库存未确认",
+          "impact": "medium",
+          "resolved_by_fail_closed": "STORE_INVENTORY_UNKNOWN"
+        }
+      ],
+      "priority_adjudications": [
+        {
+          "winner": {
+            "level": "brand_truth_and_authoritative_product_fact",
+            "rank": 2,
+            "source_ref": "brand-doc-1"
+          },
+          "loser": {
+            "level": "multimodal_inferred_visual_attribute",
+            "rank": 5,
+            "source_ref": "img-1",
+            "is_model_inference": true,
+            "explicitly_labeled_as_inference": true
+          },
+          "upper_layer_overridden": false
+        }
+      ],
+      "llm_off_invariants_held": true
+    },
+    "visual_attribute_extraction_result": {
+      "result_id": "VAE-01",
+      "sku_id": "SKU-1",
+      "persistence_class": "runtime_fact",
+      "image_bundle_ref": "IMG-01",
+      "model_version": "v-0",
+      "extracted_at": "2026-08-13T03:00:00Z",
+      "is_formal_result": false,
+      "attributes": [
+        {
+          "attribute_id": "sheen",
+          "value": "哑光",
+          "attribute_provenance": "model_inferred",
+          "confidence": 0.6,
+          "usable_for_formal_decision": false
+        }
+      ],
+      "forbidden_inference_targets": [
+        "composition",
+        "performance",
+        "inventory",
+        "safety_certification"
+      ]
+    },
+    "persona_continuity_update": {
+      "update_id": "PCU-1",
+      "persona_id": "PS-01",
+      "version": {
+        "schema_version": "0.1",
+        "object_version": "1",
+        "valid_from": "2026-08-13T00:00:00Z"
+      },
+      "new_viewpoints": [
+        "结构优先"
+      ],
+      "conflict_refs": [],
+      "acceptable": true,
+      "unfounded_drift_detected": false
+    },
+    "social_media_voice_plan": {
+      "voice_plan_id": "SVP-1",
+      "platform": "小红书",
+      "anti_template_constraints": [
+        "no_ai_register"
+      ],
+      "overrides_facts_or_persona": false
+    },
+    "publication_decision": {
+      "decision_id": "PD-1",
+      "publication_mode": "human_review",
+      "policy_ref": "PP-01",
+      "preflight_checks": [
+        {
+          "check_id": "PF-1",
+          "passed": true
+        }
+      ],
+      "human_review_status": "pending",
+      "auto_publish_permitted": false,
+      "refusal_reason": "未获 Founder 自动发布授权，按默认回退 human_review"
+    }
+  }
+}

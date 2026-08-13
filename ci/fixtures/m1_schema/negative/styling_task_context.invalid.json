@@ -1,0 +1,16 @@
+{
+  "fixture_id": "M1-N-styling_task_context",
+  "description": "违反：M1 通过标准：运行时事实不得混入长期真源",
+  "schema_id": "https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "M1 通过标准：运行时事实不得混入长期真源",
+  "instance": {
+    "task_id": "TSK-01",
+    "persistence_class": "runtime_fact",
+    "objective": "出一套通勤搭配",
+    "platform": "小红书",
+    "account_role": "品牌主号",
+    "category_id": "womenswear",
+    "may_be_written_back_to_long_term_truth": true
+  }
+}

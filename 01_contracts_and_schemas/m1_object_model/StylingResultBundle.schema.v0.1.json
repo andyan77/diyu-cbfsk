@@ -1,0 +1,1126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json",
+  "title": "StylingResultBundle",
+  "description": "PRD 6.2 十五个输出与内部审计对象的整包形式（M1 Brief 第 11 项二选一中的「整包」）。每个对象都在 properties 与 $defs 里各有一个具名落点，因此 15 个对象逐个可寻址——OUT-11 与 OUT-12 另有独立 Schema 文件，此处 $ref 引用，不复制第二份定义（EQ-1）。",
+  "schema_version": "0.1",
+  "prd_anchors": [
+    "PRD-6.2",
+    "PRD-5.7",
+    "PRD-13-M1"
+  ],
+  "output_object_count": 15,
+  "output_object_count_is_frozen": true,
+  "persistence_class": "runtime_fact",
+  "type": "object",
+  "required": [
+    "bundle_id",
+    "task_id",
+    "persistence_class",
+    "brand_audience_interpretation",
+    "styling_diagnosis",
+    "styling_thesis",
+    "outfit_plan",
+    "inclusion_exclusion_reasons",
+    "transformation_plan",
+    "alternative_plan",
+    "suitability_explanation",
+    "narrative_package",
+    "content_projection",
+    "decision_trace",
+    "visual_attribute_extraction_result",
+    "persona_continuity_update",
+    "social_media_voice_plan",
+    "publication_decision"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "BrandAudienceInterpretation": {
+      "object_id": "OUT-01",
+      "title": "BrandAudienceInterpretation",
+      "description": "本次任务下对品牌、品类、目标人群和个体需求的结构化理解。",
+      "type": "object",
+      "required": [
+        "interpretation_id",
+        "brand_ref",
+        "category_id",
+        "audience_ref"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "interpretation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "brand_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category_id": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/categoryId"
+        },
+        "audience_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "individual_ref": {
+          "type": "string"
+        },
+        "brand_style_coordinates": {
+          "type": "array",
+          "items": {
+            "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/styleCoordinate"
+          }
+        },
+        "provenance": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance"
+        }
+      }
+    },
+    "StylingDiagnosis": {
+      "object_id": "OUT-02",
+      "title": "StylingDiagnosis",
+      "description": "当前造型或货盘的问题、候选原因、排除项与所需补充事实。",
+      "type": "object",
+      "required": [
+        "diagnosis_id",
+        "problems"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "diagnosis_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "problems": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "object_id": "",
+            "title": "Problem",
+            "description": "",
+            "type": "object",
+            "required": [
+              "statement"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "statement": {
+                "type": "string",
+                "minLength": 1
+              },
+              "candidate_causes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "ruled_out": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "required_additional_facts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "fail_closed_state": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState"
+        }
+      }
+    },
+    "StylingThesis": {
+      "object_id": "OUT-03",
+      "title": "StylingThesis",
+      "description": "本次搭配必须表达的核心命题和专业观点。",
+      "type": "object",
+      "required": [
+        "thesis_id",
+        "statement",
+        "professional_viewpoint"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "thesis_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "professional_viewpoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grounded_in": {
+          "type": "array",
+          "items": {
+            "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance"
+          }
+        }
+      }
+    },
+    "OutfitPlan": {
+      "object_id": "OUT-04",
+      "title": "OutfitPlan",
+      "description": "选中商品、款色码、组合关系、穿法、场景与适用人群。缺真实商品清单时不得输出具体可购买组合（FC-01）。",
+      "type": "object",
+      "required": [
+        "plan_id",
+        "selected_items",
+        "real_product_list_available"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "plan_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "real_product_list_available": {
+          "type": "boolean"
+        },
+        "selected_items": {
+          "type": "array",
+          "items": {
+            "object_id": "",
+            "title": "SelectedItem",
+            "description": "",
+            "type": "object",
+            "required": [
+              "sku_id",
+              "style_code",
+              "color_code",
+              "size_code",
+              "role_in_outfit"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "sku_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "style_code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "color_code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "size_code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role_in_outfit": {
+                "type": "string",
+                "enum": [
+                  "anchor",
+                  "layer",
+                  "bottom",
+                  "footwear",
+                  "bag",
+                  "accessory"
+                ]
+              }
+            }
+          }
+        },
+        "combination_relations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "wearing_methods": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "suitable_audience_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "resulting_style_coordinates": {
+          "type": "array",
+          "items": {
+            "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/styleCoordinate"
+          }
+        },
+        "fail_closed_state": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState"
+        }
+      },
+      "allOf": [
+        {
+          "description": "没有真实商品清单就不得给出具体可购买组合，只能给需要补充的数据与通用诊断框架（FC-01）。",
+          "if": {
+            "properties": {
+              "real_product_list_available": {
+                "const": false
+              }
+            },
+            "required": [
+              "real_product_list_available"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_items": {
+                "maxItems": 0
+              }
+            },
+            "required": [
+              "fail_closed_state"
+            ]
+          }
+        }
+      ]
+    },
+    "InclusionExclusionReasons": {
+      "object_id": "OUT-05",
+      "title": "InclusionExclusionReasons",
+      "description": "为什么选、为什么不选、哪些常见做法在当前条件下失效。",
+      "type": "object",
+      "required": [
+        "reasons_id",
+        "inclusions",
+        "exclusions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reasons_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inclusions": {
+          "type": "array",
+          "items": {
+            "object_id": "",
+            "title": "Inclusion",
+            "description": "",
+            "type": "object",
+            "required": [
+              "ref",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "object_id": "",
+            "title": "Exclusion",
+            "description": "",
+            "type": "object",
+            "required": [
+              "ref",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "common_practices_that_fail_here": {
+          "type": "array",
+          "items": {
+            "object_id": "",
+            "title": "FailingPractice",
+            "description": "",
+            "type": "object",
+            "required": [
+              "practice",
+              "why_it_fails_here"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "practice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "why_it_fails_here": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "TransformationPlan": {
+      "object_id": "OUT-06",
+      "title": "TransformationPlan",
+      "description": "增加、删除、替换、再平衡、重设焦点等具体动作。",
+      "type": "object",
+      "required": [
+        "transformation_id",
+        "actions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "transformation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "object_id": "",
+            "title": "Action",
+            "description": "",
+            "type": "object",
+            "required": [
+              "action_kind",
+              "target_ref",
+              "rationale"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "action_kind": {
+                "type": "string",
+                "enum": [
+                  "add",
+                  "remove",
+                  "replace",
+                  "rebalance",
+                  "refocus"
+                ]
+              },
+              "target_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "AlternativePlan": {
+      "object_id": "OUT-07",
+      "title": "AlternativePlan",
+      "description": "缺货、顾客不接受、场景变化或预算变化时的替代与降级方案。",
+      "type": "object",
+      "required": [
+        "alternative_id",
+        "triggers",
+        "alternatives"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "alternative_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "triggers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "out_of_stock",
+              "customer_rejection",
+              "scenario_change",
+              "budget_change"
+            ]
+          }
+        },
+        "alternatives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "object_id": "",
+            "title": "Alternative",
+            "description": "",
+            "type": "object",
+            "required": [
+              "for_trigger",
+              "replacement_ref",
+              "degradation_note"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "for_trigger": {
+                "type": "string",
+                "enum": [
+                  "out_of_stock",
+                  "customer_rejection",
+                  "scenario_change",
+                  "budget_change"
+                ]
+              },
+              "replacement_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "degradation_note": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "SuitabilityExplanation": {
+      "object_id": "OUT-08",
+      "title": "SuitabilityExplanation",
+      "description": "对比例、肤色、气质、年龄、功能与身份表达的作用和副作用。副作用必须写，只讲好处等于隐瞒失效条件。",
+      "type": "object",
+      "required": [
+        "explanation_id",
+        "effects"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "explanation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effects": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "object_id": "",
+            "title": "Effect",
+            "description": "",
+            "type": "object",
+            "required": [
+              "aspect",
+              "effect",
+              "side_effects"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "aspect": {
+                "type": "string",
+                "enum": [
+                  "proportion",
+                  "skin_tone",
+                  "temperament",
+                  "age",
+                  "function",
+                  "identity_expression"
+                ]
+              },
+              "effect": {
+                "type": "string",
+                "minLength": 1
+              },
+              "side_effects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "failure_conditions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "ranks_body_by_value": {
+          "description": "PRD 5.4：不得对身体作价值排序。",
+          "const": false
+        }
+      }
+    },
+    "NarrativePackage": {
+      "object_id": "OUT-09",
+      "title": "NarrativePackage",
+      "description": "人物处境、常见误解、冲突、决策、变化、结论和可拍摄动作。缺真实事件时只能用群体处境、假设情境或明确标注的演绎，不得虚构真实顾客（FC-07）。",
+      "type": "object",
+      "required": [
+        "narrative_id",
+        "narration_kind",
+        "real_customer_fabricated",
+        "beats"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "narrative_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "narration_kind": {
+          "type": "string",
+          "enum": [
+            "group_situation",
+            "hypothetical",
+            "labeled_dramatisation",
+            "real_event_with_evidence"
+          ]
+        },
+        "real_customer_fabricated": {
+          "const": false
+        },
+        "evidence_ref": {
+          "type": "string"
+        },
+        "beats": {
+          "object_id": "",
+          "title": "Beats",
+          "description": "",
+          "type": "object",
+          "required": [
+            "situation",
+            "common_misconception",
+            "conflict",
+            "decision",
+            "change",
+            "conclusion"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "situation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "common_misconception": {
+              "type": "string",
+              "minLength": 1
+            },
+            "conflict": {
+              "type": "string",
+              "minLength": 1
+            },
+            "decision": {
+              "type": "string",
+              "minLength": 1
+            },
+            "change": {
+              "type": "string",
+              "minLength": 1
+            },
+            "conclusion": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "shootable_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "fail_closed_state": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState"
+        }
+      },
+      "allOf": [
+        {
+          "description": "声称基于真实事件就必须给得出证据引用，否则只能降级为假设或标注演绎（FC-07）。",
+          "if": {
+            "properties": {
+              "narration_kind": {
+                "const": "real_event_with_evidence"
+              }
+            },
+            "required": [
+              "narration_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "evidence_ref"
+            ]
+          }
+        }
+      ]
+    },
+    "ContentProjection": {
+      "object_id": "OUT-10",
+      "title": "ContentProjection",
+      "description": "面向不同账号、平台与栏目生成的图文、口播、分镜或直播要点。",
+      "type": "object",
+      "required": [
+        "projection_id",
+        "platform",
+        "account_role",
+        "format",
+        "body"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "projection_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "account_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "image_text",
+            "spoken_script",
+            "storyboard",
+            "livestream_points"
+          ]
+        },
+        "column": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1
+        },
+        "voice_profile_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "PersonaContinuityUpdate": {
+      "object_id": "OUT-13",
+      "title": "PersonaContinuityUpdate",
+      "description": "当次内容对观点、栏目和人设状态的版本化增量，包含冲突、修订原因与是否可接受。",
+      "type": "object",
+      "required": [
+        "update_id",
+        "persona_id",
+        "version",
+        "acceptable"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "update_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "persona_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion"
+        },
+        "new_viewpoints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "revised_viewpoints": {
+          "type": "array",
+          "items": {
+            "object_id": "",
+            "title": "Revised",
+            "description": "",
+            "type": "object",
+            "required": [
+              "viewpoint_id",
+              "revision_reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "viewpoint_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision_reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "series_state_ref": {
+          "type": "string"
+        },
+        "conflict_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "acceptable": {
+          "type": "boolean"
+        },
+        "unfounded_drift_detected": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "description": "检测到无依据漂移就不能判为可接受——那正是 C-13 要拦的东西。",
+          "if": {
+            "properties": {
+              "unfounded_drift_detected": {
+                "const": true
+              }
+            },
+            "required": [
+              "unfounded_drift_detected"
+            ]
+          },
+          "then": {
+            "properties": {
+              "acceptable": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SocialMediaVoicePlan": {
+      "object_id": "OUT-14",
+      "title": "SocialMediaVoicePlan",
+      "description": "平台、口播节奏、停顿转折、观点时机、场景与人物处境、镜头动作、专业密度与反模板约束（D-21）。",
+      "type": "object",
+      "required": [
+        "voice_plan_id",
+        "platform",
+        "anti_template_constraints",
+        "overrides_facts_or_persona"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "voice_plan_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spoken_rhythm": {
+          "type": "string"
+        },
+        "pause_and_turn_points": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "viewpoint_timing": {
+          "type": "string"
+        },
+        "scene_and_situation": {
+          "type": "string"
+        },
+        "shot_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "professional_density": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "anti_template_constraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "no_courseware_tone",
+              "no_template_scaffolding",
+              "no_ai_register",
+              "no_generic_opener",
+              "no_listicle_padding"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "overrides_facts_or_persona": {
+          "description": "平台表达偏好排在人设与事实之下（PRD 5.5）。",
+          "const": false
+        }
+      }
+    },
+    "PublicationDecision": {
+      "object_id": "OUT-15",
+      "title": "PublicationDecision",
+      "description": "发布模式、授权范围、全部前置检查、人工审核状态、自动发布许可或拒绝原因、撤回回滚与 Kill Switch 记录（D-25）。",
+      "type": "object",
+      "required": [
+        "decision_id",
+        "publication_mode",
+        "policy_ref",
+        "preflight_checks",
+        "human_review_status",
+        "auto_publish_permitted"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publication_mode": {
+          "type": "string",
+          "enum": [
+            "human_review",
+            "auto_publish"
+          ]
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorization_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tenant_id": {
+              "type": "string"
+            },
+            "brand_id": {
+              "type": "string"
+            },
+            "account_id": {
+              "type": "string"
+            },
+            "risk_level": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          }
+        },
+        "preflight_checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "object_id": "",
+            "title": "Check",
+            "description": "",
+            "type": "object",
+            "required": [
+              "check_id",
+              "passed"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "check_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "passed": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "human_review_status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected",
+            "not_required"
+          ]
+        },
+        "auto_publish_permitted": {
+          "type": "boolean"
+        },
+        "refusal_reason": {
+          "type": "string"
+        },
+        "retraction_record": {
+          "type": "string"
+        },
+        "rollback_record": {
+          "type": "string"
+        },
+        "kill_switch_engaged": {
+          "type": "boolean"
+        },
+        "fail_closed_state": {
+          "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState"
+        }
+      },
+      "allOf": [
+        {
+          "description": "允许自动发布时必须模式一致、全部前置检查通过（FC-10）。",
+          "if": {
+            "properties": {
+              "auto_publish_permitted": {
+                "const": true
+              }
+            },
+            "required": [
+              "auto_publish_permitted"
+            ]
+          },
+          "then": {
+            "properties": {
+              "publication_mode": {
+                "const": "auto_publish"
+              },
+              "preflight_checks": {
+                "items": {
+                  "properties": {
+                    "passed": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "description": "不允许自动发布就必须给拒绝原因，并落在 human_review（FC-10：回退 human_review 或停止发布）。",
+          "if": {
+            "properties": {
+              "auto_publish_permitted": {
+                "const": false
+              }
+            },
+            "required": [
+              "auto_publish_permitted"
+            ]
+          },
+          "then": {
+            "required": [
+              "refusal_reason"
+            ],
+            "properties": {
+              "publication_mode": {
+                "const": "human_review"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "bundle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "persistence_class": {
+      "const": "runtime_fact"
+    },
+    "backward_compatible_extension_ports": {
+      "description": "PRD 5.7：扩展模块以新增方式开启，现有输出保持向后兼容。端口合同本身在 M1-EP03 交付。",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "VisualMerchandisingExtensionPort",
+          "RealtimeSalesAssistExtensionPort"
+        ]
+      }
+    },
+    "brand_audience_interpretation": {
+      "$ref": "#/definitions/BrandAudienceInterpretation"
+    },
+    "styling_diagnosis": {
+      "$ref": "#/definitions/StylingDiagnosis"
+    },
+    "styling_thesis": {
+      "$ref": "#/definitions/StylingThesis"
+    },
+    "outfit_plan": {
+      "$ref": "#/definitions/OutfitPlan"
+    },
+    "inclusion_exclusion_reasons": {
+      "$ref": "#/definitions/InclusionExclusionReasons"
+    },
+    "transformation_plan": {
+      "$ref": "#/definitions/TransformationPlan"
+    },
+    "alternative_plan": {
+      "$ref": "#/definitions/AlternativePlan"
+    },
+    "suitability_explanation": {
+      "$ref": "#/definitions/SuitabilityExplanation"
+    },
+    "narrative_package": {
+      "$ref": "#/definitions/NarrativePackage"
+    },
+    "content_projection": {
+      "$ref": "#/definitions/ContentProjection"
+    },
+    "decision_trace": {
+      "$ref": "https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json"
+    },
+    "visual_attribute_extraction_result": {
+      "$ref": "https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json"
+    },
+    "persona_continuity_update": {
+      "$ref": "#/definitions/PersonaContinuityUpdate"
+    },
+    "social_media_voice_plan": {
+      "$ref": "#/definitions/SocialMediaVoicePlan"
+    },
+    "publication_decision": {
+      "$ref": "#/definitions/PublicationDecision"
+    }
+  }
+}

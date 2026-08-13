@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json",
+  "title": "PersonaConflictRecord",
+  "object_id": "D-20-05",
+  "description": "人设冲突记录（D-20 第五对象）。M1 Brief 要求它在收口时逐一可寻址——本包给它独立 Schema，而不是塞进人设快照里当附属字段。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-5.5", "D-20"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["conflict_id", "persona_id", "persistence_class", "conflict_kind", "detected_at", "parties", "resolution"],
+  "additionalProperties": false,
+  "properties": {
+    "conflict_id": { "type": "string", "minLength": 1 },
+    "persona_id": { "type": "string", "minLength": 1 },
+    "persistence_class": { "const": "long_term_truth" },
+    "conflict_kind": {
+      "type": "string",
+      "enum": [
+        "viewpoint_contradiction",
+        "unfounded_drift",
+        "model_switch_drift",
+        "brand_truth_conflict",
+        "category_safety_conflict",
+        "no_new_value_repetition"
+      ]
+    },
+    "detected_at": { "type": "string", "format": "date-time" },
+    "detected_by": { "type": "string", "enum": ["automatic_checker", "human_review"] },
+    "underlying_model_version_before": { "type": "string" },
+    "underlying_model_version_after": { "type": "string" },
+    "parties": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["ref", "statement"],
+        "additionalProperties": false,
+        "properties": {
+          "ref": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 1 },
+          "provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+        }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "type": "string", "enum": ["pending", "resolved_by_evidence", "resolved_by_human", "persona_yielded_to_upper_layer", "unresolvable"] },
+        "reason": { "type": "string" },
+        "resolved_at": { "type": "string", "format": "date-time" },
+        "resolved_by_role": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "description": "人设让位于上层事实是 PRD 5.5 的强制方向；任何「人设赢了品牌真源/品类安全」的结论都不是合法解。",
+          "if": { "properties": { "state": { "enum": ["resolved_by_evidence", "resolved_by_human", "persona_yielded_to_upper_layer"] } }, "required": ["state"] },
+          "then": { "required": ["reason"] }
+        }
+      ]
+    },
+    "persona_overrode_upper_layer": { "const": false }
+  }
+}

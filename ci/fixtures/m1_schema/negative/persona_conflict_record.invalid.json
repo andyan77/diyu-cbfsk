@@ -1,0 +1,35 @@
+{
+  "fixture_id": "M1-N-persona_conflict_record",
+  "description": "违反：PRD 5.5：人设不得覆盖品牌真源、品类安全与专业结论",
+  "schema_id": "https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "PRD 5.5：人设不得覆盖品牌真源、品类安全与专业结论",
+  "instance": {
+    "conflict_id": "PC-01",
+    "persona_id": "PS-01",
+    "persistence_class": "long_term_truth",
+    "conflict_kind": "brand_truth_conflict",
+    "detected_at": "2026-08-13T02:00:00Z",
+    "detected_by": "automatic_checker",
+    "parties": [
+      {
+        "ref": "VP-01",
+        "statement": "该品牌应主推亮色"
+      },
+      {
+        "ref": "BR-01",
+        "statement": "品牌真源规定本季主推低饱和",
+        "provenance": {
+          "level": "brand_truth_and_authoritative_product_fact",
+          "rank": 2,
+          "source_ref": "brand-doc-1"
+        }
+      }
+    ],
+    "resolution": {
+      "state": "persona_yielded_to_upper_layer",
+      "reason": "人设不得覆盖品牌真源"
+    },
+    "persona_overrode_upper_layer": true
+  }
+}

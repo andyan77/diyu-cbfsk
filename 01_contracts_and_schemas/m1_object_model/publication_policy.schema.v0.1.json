@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json",
+  "title": "PublicationPolicy",
+  "object_id": "IN-12",
+  "description": "品牌、租户、账号、内容类型与风险等级下的发布模式、Founder 授权、审核、撤回、回滚与 Kill Switch 配置（D-25）。默认 human_review；自动发布只能由 Founder 按四个维度显式授权开启。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.1", "PRD-6.4", "D-25", "FR-17"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["policy_id", "version", "persistence_class", "scope", "publication_mode", "human_review_in_the_loop", "controls"],
+  "additionalProperties": false,
+  "properties": {
+    "policy_id": { "type": "string", "minLength": 1 },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": { "const": "long_term_truth" },
+    "scope": {
+      "description": "D-25：授权必须落到租户／品牌／账号／风险等级四个维度，缺一即授权范围不明。",
+      "type": "object",
+      "required": ["tenant_id", "brand_id", "account_id", "risk_level"],
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": { "type": "string", "minLength": 1 },
+        "brand_id": { "type": "string", "minLength": 1 },
+        "account_id": { "type": "string", "minLength": 1 },
+        "content_type": { "type": "string" },
+        "risk_level": { "type": "string", "enum": ["low", "medium", "high"] }
+      }
+    },
+    "publication_mode": { "type": "string", "enum": ["human_review", "auto_publish"] },
+    "human_review_in_the_loop": { "type": "boolean" },
+    "founder_authorization": {
+      "type": "object",
+      "required": ["authorized", "authorized_by_role"],
+      "additionalProperties": false,
+      "properties": {
+        "authorized": { "type": "boolean" },
+        "authorized_by_role": { "type": "string" },
+        "authorization_ref": { "type": "string" },
+        "valid_until": { "type": "string", "format": "date-time" }
+      }
+    },
+    "controls": {
+      "description": "D-25 要求自动发布必须具备审计、撤回与 Kill Switch；这里作为常备能力声明，不随模式变化。",
+      "type": "object",
+      "required": ["audit_trail", "retraction", "rollback", "kill_switch"],
+      "additionalProperties": false,
+      "properties": {
+        "audit_trail": { "type": "boolean" },
+        "retraction": { "type": "boolean" },
+        "rollback": { "type": "boolean" },
+        "kill_switch": { "type": "boolean" }
+      }
+    },
+    "preflight_checks_passed": { "type": "boolean" },
+    "fail_closed_state": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState" }
+  },
+  "allOf": [
+    {
+      "description": "默认即 human_review：非自动发布模式下，人工审核必须在环。",
+      "if": { "properties": { "publication_mode": { "const": "human_review" } }, "required": ["publication_mode"] },
+      "then": { "properties": { "human_review_in_the_loop": { "const": true } } }
+    },
+    {
+      "description": "自动发布的四项前置（D-25 / FC-10）：Founder 显式授权、四项控制齐全、前置检查通过。缺任一必须回退 human_review 或停止发布。",
+      "if": { "properties": { "publication_mode": { "const": "auto_publish" } }, "required": ["publication_mode"] },
+      "then": {
+        "required": ["founder_authorization", "preflight_checks_passed"],
+        "properties": {
+          "founder_authorization": { "required": ["authorized", "authorization_ref", "valid_until"], "properties": { "authorized": { "const": true } } },
+          "preflight_checks_passed": { "const": true },
+          "controls": {
+            "properties": {
+              "audit_trail": { "const": true },
+              "retraction": { "const": true },
+              "rollback": { "const": true },
+              "kill_switch": { "const": true }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

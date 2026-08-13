@@ -1,0 +1,30 @@
+{
+  "fixture_id": "M1-P-visual_attribute_extraction_result",
+  "description": "模型推断属性不得进入正式决策；M1 期内非正式结果。",
+  "schema_id": "https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "result_id": "VAE-01",
+    "sku_id": "SKU-1",
+    "persistence_class": "runtime_fact",
+    "image_bundle_ref": "IMG-01",
+    "model_version": "v-0",
+    "extracted_at": "2026-08-13T03:00:00Z",
+    "is_formal_result": false,
+    "attributes": [
+      {
+        "attribute_id": "sheen",
+        "value": "哑光",
+        "attribute_provenance": "model_inferred",
+        "confidence": 0.6,
+        "usable_for_formal_decision": false
+      }
+    ],
+    "forbidden_inference_targets": [
+      "composition",
+      "performance",
+      "inventory",
+      "safety_certification"
+    ]
+  }
+}

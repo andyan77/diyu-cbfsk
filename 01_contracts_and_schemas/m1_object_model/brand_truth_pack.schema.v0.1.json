@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json",
+  "title": "BrandTruthPack",
+  "object_id": "IN-03",
+  "description": "品牌定位、目标人群、风格坐标、禁用规则、价格带、场景、本季策略与已接受案例。品牌事实的权威落点（七级优先级第 2 级）。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.1", "PRD-5.3", "PRD-6.3"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["brand_id", "version", "positioning", "style_coordinates", "forbidden_rules", "price_bands", "persistence_class"],
+  "additionalProperties": false,
+  "properties": {
+    "brand_id": { "type": "string", "minLength": 1 },
+    "is_fixture_brand": { "type": "boolean", "description": "夹具品牌标记。M1 不得生成夹具品牌资产，本字段只是 Schema 位。" },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": { "const": "long_term_truth" },
+    "positioning": {
+      "type": "object",
+      "required": ["statement"],
+      "additionalProperties": false,
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "market_tier": { "type": "string" },
+        "provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+      }
+    },
+    "target_audience_refs": { "type": "array", "items": { "type": "string" } },
+    "style_coordinates": {
+      "description": "品牌在 brand_style_space.v0.1 中的坐标。禁止单标签（PRD 5.3），因此至少要有一个坐标轴取值。",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/styleCoordinate" }
+    },
+    "single_label_shortcut": {
+      "description": "显式禁位：不得用「法式/通勤/轻奢」等单标签代替坐标。保留本字段是为了让违规可被判定，而不是允许它。",
+      "type": "null"
+    },
+    "forbidden_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "statement"],
+        "additionalProperties": false,
+        "properties": {
+          "rule_id": { "type": "string" },
+          "statement": { "type": "string", "minLength": 1 },
+          "applies_to_categories": { "type": "array", "items": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/categoryId" } },
+          "provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+        }
+      }
+    },
+    "price_bands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["band_id", "currency", "low", "high"],
+        "additionalProperties": false,
+        "properties": {
+          "band_id": { "type": "string" },
+          "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "low": { "type": "number", "minimum": 0 },
+          "high": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "scenarios": { "type": "array", "items": { "type": "string" } },
+    "seasonal_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "season_id": { "type": "string" },
+        "statement": { "type": "string" },
+        "valid_until": { "type": "string", "format": "date" }
+      }
+    },
+    "accepted_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "accepted_by_role"],
+        "additionalProperties": false,
+        "properties": {
+          "case_id": { "type": "string" },
+          "accepted_by_role": { "type": "string" },
+          "accepted_at": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "category_rules_are_not_stored_here": {
+      "description": "品类硬约束属 CategoryAdapter（EP02），不得混写进品牌真源——混写即 BRAND_CATEGORY_MIXUP。",
+      "type": "null"
+    }
+  }
+}

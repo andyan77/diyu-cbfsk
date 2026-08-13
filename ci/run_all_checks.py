@@ -34,6 +34,7 @@ CHECKERS = [
     "check_m0_contract_completeness",
     "check_m0_zero_contact",
     "check_m0_deliverable_closure",
+    "check_m1_object_coverage",
 ]
 
 
@@ -65,15 +66,17 @@ def main() -> int:
             print(f"PASS {name}")
 
     print()
-    fixtures_module = load_fixture_runner()
-    fixture_failures = fixtures_module.run(verbose=True)
-    return 1 if (failures or fixture_failures) else 0
+    fixture_failures = load_runner("run_fixtures").run(verbose=True)
+    print()
+    schema_fixture_failures = load_runner("run_schema_fixtures").run(verbose=True)
+    return 1 if (failures or fixture_failures or schema_fixture_failures) else 0
 
 
-def load_fixture_runner():
-    spec = importlib.util.spec_from_file_location("run_fixtures", ROOT / "ci" / "run_fixtures.py")
+def load_runner(name: str):
+    """两个 fixture runner 同一种加载方式：判据层 run_fixtures、结构层 run_schema_fixtures。"""
+    spec = importlib.util.spec_from_file_location(name, ROOT / "ci" / f"{name}.py")
     module = importlib.util.module_from_spec(spec)
-    sys.modules["run_fixtures"] = module
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 

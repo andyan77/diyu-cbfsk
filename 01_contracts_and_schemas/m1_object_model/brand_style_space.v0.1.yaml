@@ -1,0 +1,59 @@
+schema_version: "0.1"
+artifact_id: brand_style_space.v0.1
+milestone: M1
+execution_package: M1-EP01
+prd_anchors: [PRD-5.3, PRD-13-M1]
+status: M1_EP01_DELIVERED
+
+principle:
+  prd_verbatim: >-
+    系统不得把品牌只归入"法式、通勤、轻奢"等单标签。M1需建立连续风格坐标，至少覆盖结构感、装饰度、
+    趋势度、女性/中性表达、身体曲线关系、正式度、色彩强度、材质质朴/光泽、视觉密度、年龄表达、
+    城市/自然、文化倾向、搭配门槛与个性强度等维度。
+  reading: >-
+    PRD 原文点名了 14 个维度，「至少覆盖」＝下限。本文件把这 14 个逐字落成机器可寻址的坐标轴，
+    **不自行增补 PRD 未点名的维度**——凭空加轴无法从真源核验，属发明产品事实。
+    确需扩轴时走 dimension_extension_rule。
+  single_label_is_forbidden: true
+  representation: 每维取 [0,1] 连续值，非枚举标签；两端语义由 anchor_low / anchor_high 钉死。
+
+dimension_count: 14
+dimension_count_minimum: 14
+dimension_count_source: PRD-5.3 原文点名维度数
+
+dimensions:
+  - {id: structure,                   zh: 结构感,        anchor_low: 松垮无廓形,       anchor_high: 强结构强廓形}
+  - {id: ornamentation,               zh: 装饰度,        anchor_low: 极简无装饰,       anchor_high: 高度装饰}
+  - {id: trend_adherence,             zh: 趋势度,        anchor_low: 长青经典,         anchor_high: 强当季趋势}
+  - {id: feminine_neutral_expression, zh: 女性/中性表达, anchor_low: 强中性表达,       anchor_high: 强女性化表达}
+  - {id: body_curve_relation,         zh: 身体曲线关系,  anchor_low: 完全脱离身体曲线, anchor_high: 紧贴并强调身体曲线}
+  - {id: formality,                   zh: 正式度,        anchor_low: 极休闲,           anchor_high: 极正式}
+  - {id: color_intensity,             zh: 色彩强度,      anchor_low: 低饱和低对比,     anchor_high: 高饱和高对比}
+  - {id: material_rusticity_luster,   zh: 材质质朴/光泽, anchor_low: 质朴粗粝哑光,     anchor_high: 精致高光泽}
+  - {id: visual_density,              zh: 视觉密度,      anchor_low: 空旷留白,         anchor_high: 密集堆叠}
+  - {id: age_expression,              zh: 年龄表达,      anchor_low: 年轻化表达,       anchor_high: 成熟化表达}
+  - {id: urban_natural,               zh: 城市/自然,     anchor_low: 自然野外取向,     anchor_high: 都市取向}
+  - {id: cultural_orientation,        zh: 文化倾向,      anchor_low: 本土文化取向,     anchor_high: 国际化取向}
+  - {id: styling_difficulty,          zh: 搭配门槛,      anchor_low: 零门槛易穿,       anchor_high: 高门槛需技巧}
+  - {id: individuality_intensity,     zh: 个性强度,      anchor_low: 大众普适,         anchor_high: 强个人标识}
+
+axis_semantics_are_not_value_judgements: >-
+  两端只是坐标方向，不含好坏评价。与 PRD 5.4 同一口径：系统目标是强化优势、弱化非优势区域，
+  不对身体或风格作价值排序。
+
+dimension_extension_rule:
+  who_may_extend: FOUNDER_PRODUCT_AUTHORITY
+  how: 新增维度须给出 PRD 锚点或 Founder 裁决编号，并升 artifact 版本号（v0.1 → v0.2）
+  what_execution_side_may_not_do: 执行侧不得自行增删维度或改写 anchor 语义
+  failure_state: STYLE_SPACE_DIMENSION_DRIFT
+
+consumed_by:
+  - {object: BrandTruthPack, field: style_coordinates, note: 品牌在本空间中的坐标与容差}
+  - {object: AudienceProfile, field: preferred_style_range}
+  - {object: StylistPersonaProfile, field: aesthetic_stance_coordinates}
+  - {object: OutfitPlan, field: resulting_style_coordinates}
+
+persistence_class: long_term_truth
+persistence_note: >-
+  风格空间本身是长期真源（坐标轴定义）。某次任务算出的坐标值属 runtime_fact，
+  写在 StylingResultBundle 里，不得回写本文件。

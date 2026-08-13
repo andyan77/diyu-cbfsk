@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json",
+  "title": "InventorySnapshot / GarmentAndInventory",
+  "object_id": "IN-04",
+  "description": "总部或门店在特定时间的可售款色码、库存状态、商品角色、图片与必要属性。PRD 5.6：每个属性必须保存 attribute_provenance、证据、置信度、图片/模型版本、推断时间、冲突、人工修订与是否允许进入正式决策。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.1", "PRD-5.6", "PRD-6.4"],
+  "persistence_class": "runtime_fact",
+  "type": "object",
+  "required": ["snapshot_id", "scope", "captured_at", "persistence_class", "items"],
+  "additionalProperties": false,
+  "definitions": {
+    "attributeRecord": {
+      "description": "PRD 5.6 逐字要求的属性记录。图片不能作为成分、性能、库存或安全认证的证据——由 evidence_kind 与 attribute_kind 的组合判定。",
+      "type": "object",
+      "required": ["attribute_id", "value", "attribute_provenance", "evidence", "confidence", "usable_for_formal_decision"],
+      "additionalProperties": false,
+      "properties": {
+        "attribute_id": { "type": "string", "minLength": 1 },
+        "attribute_kind": {
+          "type": "string",
+          "enum": ["visual", "composition", "performance", "inventory", "safety_certification", "commercial"]
+        },
+        "value": {},
+        "attribute_provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/attributeProvenance" },
+        "evidence": {
+          "type": "object",
+          "required": ["evidence_kind", "ref"],
+          "additionalProperties": false,
+          "properties": {
+            "evidence_kind": { "type": "string", "enum": ["product_image", "authoritative_record", "human_inspection", "lab_report", "supplier_document"] },
+            "ref": { "type": "string", "minLength": 1 }
+          }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "image_version": { "type": "string" },
+        "model_version": { "type": "string" },
+        "inferred_at": { "type": "string", "format": "date-time" },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["conflicting_attribute_id", "resolution"],
+            "additionalProperties": false,
+            "properties": {
+              "conflicting_attribute_id": { "type": "string" },
+              "resolution": { "type": "string", "enum": ["higher_priority_wins", "human_override", "unresolved"] },
+              "winning_provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+            }
+          }
+        },
+        "human_override": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "overridden_by_role": { "type": "string" },
+            "overridden_at": { "type": "string", "format": "date-time" },
+            "reason": { "type": "string" }
+          }
+        },
+        "usable_for_formal_decision": { "type": "boolean" }
+      },
+      "allOf": [
+        {
+          "description": "PRD 5.6：图片不能作为成分、性能、库存或安全认证的证据。以图片为证据的此类属性一律不得进入正式决策。",
+          "if": {
+            "properties": {
+              "attribute_kind": { "enum": ["composition", "performance", "inventory", "safety_certification"] },
+              "evidence": { "properties": { "evidence_kind": { "const": "product_image" } }, "required": ["evidence_kind"] }
+            },
+            "required": ["attribute_kind", "evidence"]
+          },
+          "then": { "properties": { "usable_for_formal_decision": { "const": false } } }
+        },
+        {
+          "description": "模型推断出来的属性未经人工确认，不得直接进入正式决策（七级优先级第 5 级）。",
+          "if": {
+            "properties": { "attribute_provenance": { "enum": ["model_inferred", "multimodal_inferred_visual_attribute"] } },
+            "required": ["attribute_provenance"]
+          },
+          "then": { "properties": { "usable_for_formal_decision": { "const": false } } }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "snapshot_id": { "type": "string", "minLength": 1 },
+    "persistence_class": { "const": "runtime_fact" },
+    "persistence_note": { "type": "string" },
+    "scope": { "type": "string", "enum": ["headquarters", "store"] },
+    "store_id": { "type": "string" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "is_real_inventory_connection": {
+      "description": "M1 红线：不得接入真实库存。本位只能为 false。",
+      "const": false
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sku_id", "style_code", "color_code", "size_code", "availability", "attributes"],
+        "additionalProperties": false,
+        "properties": {
+          "sku_id": { "type": "string", "minLength": 1 },
+          "style_code": { "type": "string", "minLength": 1 },
+          "color_code": { "type": "string", "minLength": 1 },
+          "size_code": { "type": "string", "minLength": 1 },
+          "availability": { "type": "string", "enum": ["in_stock", "low_stock", "out_of_stock", "unknown"] },
+          "commercial_role": { "type": "string", "enum": ["hero", "volume_driver", "margin_driver", "traffic_driver", "long_tail"] },
+          "image_bundle_ref": { "type": "string" },
+          "category_id": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/categoryId" },
+          "attributes": { "type": "array", "items": { "$ref": "#/definitions/attributeRecord" } }
+        }
+      }
+    },
+    "fail_closed_state": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState" }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "fixture_id": "M1-N-styling_decision_trace",
+  "description": "违反：OB-IO-02：任何下层信息不得覆盖上层明确事实",
+  "schema_id": "https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "OB-IO-02：任何下层信息不得覆盖上层明确事实",
+  "instance": {
+    "trace_id": "DT-01",
+    "task_id": "TSK-01",
+    "persistence_class": "runtime_fact",
+    "facts_used": [
+      {
+        "fact_ref": "BR-01",
+        "provenance": {
+          "level": "brand_truth_and_authoritative_product_fact",
+          "rank": 2,
+          "source_ref": "brand-doc-1"
+        }
+      }
+    ],
+    "knowledge_used": [
+      {
+        "knowledge_unit_ref": "KU-1",
+        "rule_attribution": "规则 R-12：肩线决定外套体量",
+        "deterministic": true
+      }
+    ],
+    "model_versions": [
+      "m-2026-08"
+    ],
+    "candidates_considered": [
+      {
+        "candidate_id": "CA-1",
+        "summary": "西装+直筒裤",
+        "outcome": "selected"
+      },
+      {
+        "candidate_id": "CA-2",
+        "summary": "针织+半裙",
+        "outcome": "discarded_though_legitimate"
+      }
+    ],
+    "exclusions": [
+      {
+        "candidate_id": "CA-3",
+        "reason": "违反品牌禁用规则 FB-01",
+        "violated_constraint_ref": "FB-01"
+      }
+    ],
+    "discarded_legitimate_candidate_families": [
+      {
+        "family_id": "FAM-1",
+        "description": "针织柔性方向",
+        "why_legitimate": "不违反任何硬约束且符合场景",
+        "why_not_selected": "本次命题强调结构感，柔性方向表达力更弱",
+        "decision_class": "open_decision",
+        "member_candidate_ids": [
+          "CA-2"
+        ]
+      }
+    ],
+    "uncertainties": [
+      {
+        "statement": "门店实际库存未确认",
+        "impact": "medium",
+        "resolved_by_fail_closed": "STORE_INVENTORY_UNKNOWN"
+      }
+    ],
+    "priority_adjudications": [
+      {
+        "winner": {
+          "level": "brand_truth_and_authoritative_product_fact",
+          "rank": 2,
+          "source_ref": "brand-doc-1"
+        },
+        "loser": {
+          "level": "multimodal_inferred_visual_attribute",
+          "rank": 5,
+          "source_ref": "img-1",
+          "is_model_inference": true,
+          "explicitly_labeled_as_inference": true
+        },
+        "upper_layer_overridden": true
+      }
+    ],
+    "llm_off_invariants_held": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "fixture_id": "M1-P-publication_policy",
+  "description": "默认 human_review，四项控制齐备。",
+  "schema_id": "https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "policy_id": "PP-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "scope": {
+      "tenant_id": "T-1",
+      "brand_id": "BR-01",
+      "account_id": "AC-1",
+      "risk_level": "low"
+    },
+    "publication_mode": "human_review",
+    "human_review_in_the_loop": true,
+    "controls": {
+      "audit_trail": true,
+      "retraction": true,
+      "rollback": true,
+      "kill_switch": true
+    }
+  }
+}

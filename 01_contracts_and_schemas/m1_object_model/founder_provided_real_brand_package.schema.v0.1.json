@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json",
+  "title": "FounderProvidedRealBrandPackage",
+  "object_id": "IN-11",
+  "description": "Founder 可选提供的真实品牌与测试生产包（M11 双路径的优先路径）。M0/M1 只定义合同与隔离——不接收、不处理、不保存、不测试任何该类资料。本 Schema 是隔离合同的机器形式，不是收料通道。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.1", "PRD-6.3", "PRD-8.7", "D-17", "D-18", "FR-26", "OB-IO-05"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["package_id", "source_type", "usage_scope", "live_market_evidence", "hidden_benchmark_eligible", "knowledge_training_eligible", "received_by_execution_side"],
+  "additionalProperties": false,
+  "properties": {
+    "package_id": { "type": "string", "minLength": 1 },
+    "source_type": { "const": "founder_provided_real_brand" },
+    "usage_scope": { "const": "test_production_only" },
+    "live_market_evidence": { "const": false },
+    "hidden_benchmark_eligible": { "const": false },
+    "knowledge_training_eligible": { "const": false },
+    "received_by_execution_side": {
+      "description": "M0/M1 阶段恒为 false。真正接收要等到 M11 且须 Founder 另行授权；本位为 true 即越 OB-IO-05。",
+      "const": false
+    },
+    "isolation": {
+      "type": "object",
+      "required": ["physically_separated_from_fixture_pool", "programmatically_separated"],
+      "additionalProperties": false,
+      "properties": {
+        "physically_separated_from_fixture_pool": { "const": true },
+        "programmatically_separated": { "const": true },
+        "storage_ref": { "type": "string" }
+      }
+    },
+    "receipt_ref": { "type": "string" },
+    "content": {
+      "description": "M0/M1 恒为 null——定义合同不等于持有内容。",
+      "type": "null"
+    }
+  }
+}

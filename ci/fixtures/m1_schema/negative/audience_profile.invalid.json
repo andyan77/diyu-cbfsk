@@ -1,0 +1,38 @@
+{
+  "fixture_id": "M1-N-audience_profile",
+  "description": "违反：群体画像不得出现具名个人——那属于 IndividualProfile 且受双模式合同约束",
+  "schema_id": "https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "群体画像不得出现具名个人——那属于 IndividualProfile 且受双模式合同约束",
+  "instance": {
+    "audience_id": "AUD-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "identity": "都市通勤女性",
+    "life_stage": "职业上升期",
+    "dressing_tasks": [
+      "通勤",
+      "商务会面"
+    ],
+    "aesthetic_maturity": 0.6,
+    "risk_tolerance": 0.3,
+    "preferred_style_range": [
+      {
+        "dimension_id": "formality",
+        "low": 0.5,
+        "high": 0.8
+      }
+    ],
+    "is_group_level_not_individual": true,
+    "named_individuals": "张三",
+    "provenance": {
+      "level": "brand_truth_and_authoritative_product_fact",
+      "rank": 2,
+      "source_ref": "brand-doc-1"
+    }
+  }
+}

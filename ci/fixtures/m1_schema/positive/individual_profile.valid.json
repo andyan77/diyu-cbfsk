@@ -1,0 +1,20 @@
+{
+  "fixture_id": "M1-P-individual_profile",
+  "description": "MODE-1 非实名：不保留姓名与原始肖像，只留搭配事实。",
+  "schema_id": "https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "profile_id": "IND-01",
+    "mode": "MODE_1_ANONYMOUS_STYLING",
+    "persistence_class": "runtime_fact",
+    "is_real_customer_connection": false,
+    "identifying_information": null,
+    "styling_facts": {
+      "body_proportion": "上短下长",
+      "skin_tone": "冷调中性",
+      "comfort_boundaries": [
+        "不穿高跟"
+      ]
+    }
+  }
+}

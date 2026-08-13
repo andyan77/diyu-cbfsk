@@ -1,0 +1,53 @@
+{
+  "fixture_id": "M1-P-brand_truth_pack",
+  "description": "品牌真源给出连续风格坐标而非单标签，禁用规则与价格带齐备。",
+  "schema_id": "https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "brand_id": "BR-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "positioning": {
+      "statement": "轻商务、可通勤可会面",
+      "market_tier": "mid",
+      "provenance": {
+        "level": "brand_truth_and_authoritative_product_fact",
+        "rank": 2,
+        "source_ref": "brand-doc-1"
+      }
+    },
+    "style_coordinates": [
+      {
+        "dimension_id": "formality",
+        "value": 0.7
+      },
+      {
+        "dimension_id": "ornamentation",
+        "value": 0.2
+      }
+    ],
+    "single_label_shortcut": null,
+    "forbidden_rules": [
+      {
+        "rule_id": "FB-01",
+        "statement": "不使用夸张亮片",
+        "applies_to_categories": [
+          "womenswear"
+        ]
+      }
+    ],
+    "price_bands": [
+      {
+        "band_id": "PB-1",
+        "currency": "CNY",
+        "low": 300,
+        "high": 1200
+      }
+    ],
+    "category_rules_are_not_stored_here": null
+  }
+}

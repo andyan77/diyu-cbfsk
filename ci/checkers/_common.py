@@ -11,6 +11,7 @@ reuses the code under test to build its own ground truth.
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import sys
 import unicodedata
@@ -36,6 +37,11 @@ UUID_V4_RE = re.compile(
 
 def load_yaml(rel: str) -> dict:
     return yaml.safe_load((ROOT / rel).read_text(encoding="utf-8"))
+
+
+def load_json(rel: str) -> dict:
+    """JSON 与 YAML 走同一条读法：路径相对仓根，读失败就让它抛，不吞异常。"""
+    return json.loads((ROOT / rel).read_text(encoding="utf-8"))
 
 
 def read_text(rel: str) -> str:

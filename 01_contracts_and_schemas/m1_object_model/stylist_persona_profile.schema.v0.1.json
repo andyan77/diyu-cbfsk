@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json",
+  "title": "StylistPersonaProfile",
+  "object_id": "IN-09",
+  "description": "PRD 5.5：不是几个形容词、一段语气说明、固定 Prompt 或每次临时生成的人格。字段按 PRD 5.5 逐项落位（D-20 第一对象）。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-5.5", "PRD-6.1", "D-20", "C-13"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": [
+    "persona_id", "version", "persistence_class", "professional_identity", "capability_boundaries",
+    "target_audience_refs", "core_values", "stable_aesthetic_stance", "baseline_judgements",
+    "observation_perspectives", "held_viewpoints", "evolvable_viewpoints", "forbidden_expressions",
+    "must_not_fabricate", "account_role_differentiation", "authority_rank"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "persona_id": { "type": "string", "minLength": 1 },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": { "const": "long_term_truth" },
+    "professional_identity": { "type": "string", "minLength": 1 },
+    "capability_boundaries": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "target_audience_refs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "core_values": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "stable_aesthetic_stance": { "type": "string", "minLength": 1 },
+    "aesthetic_stance_coordinates": { "type": "array", "items": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/styleCoordinate" } },
+    "baseline_judgements": {
+      "description": "PRD 5.5：对品牌、身体、场景、消费、潮流的基本判断。五项俱全，缺一即人设不完整。",
+      "type": "object",
+      "required": ["brand", "body", "scenario", "consumption", "trend"],
+      "additionalProperties": false,
+      "properties": {
+        "brand": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 },
+        "scenario": { "type": "string", "minLength": 1 },
+        "consumption": { "type": "string", "minLength": 1 },
+        "trend": { "type": "string", "minLength": 1 }
+      }
+    },
+    "observation_perspectives": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "held_viewpoints": {
+      "description": "可坚持观点。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["viewpoint_id", "statement"],
+        "additionalProperties": false,
+        "properties": {
+          "viewpoint_id": { "type": "string" },
+          "statement": { "type": "string", "minLength": 1 },
+          "grounded_in": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+        }
+      }
+    },
+    "evolvable_viewpoints": {
+      "description": "可演进观点。演进必须有依据，无依据的改动属人设漂移。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["viewpoint_id", "statement", "evolution_requires_evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "viewpoint_id": { "type": "string" },
+          "statement": { "type": "string", "minLength": 1 },
+          "evolution_requires_evidence": { "const": true }
+        }
+      }
+    },
+    "forbidden_expressions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "must_not_fabricate": {
+      "description": "PRD 5.5 逐字：不得虚构履历、资历、顾客经历、职业事件。四项固定，不得删减。",
+      "type": "array",
+      "items": { "type": "string", "enum": ["resume", "credentials", "customer_experience", "professional_events"] },
+      "minItems": 4,
+      "uniqueItems": true
+    },
+    "account_role_differentiation": { "type": "string", "minLength": 1 },
+    "authority_rank": {
+      "description": "PRD 5.5 优先级：品牌真源＋已接受专业判断＋品类安全＋商品与库存事实 > 搭配师人设 > 平台表达偏好。人设不得覆盖上层事实、安全与专业结论。",
+      "type": "object",
+      "required": ["ranks_below", "ranks_above", "may_override_upper_layers"],
+      "additionalProperties": false,
+      "properties": {
+        "ranks_below": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["brand_truth", "accepted_professional_judgement", "category_safety", "product_and_inventory_fact"] },
+          "minItems": 4,
+          "uniqueItems": true
+        },
+        "ranks_above": { "type": "array", "items": { "type": "string", "enum": ["platform_expression_preference"] }, "minItems": 1 },
+        "may_override_upper_layers": { "const": false }
+      }
+    },
+    "is_production_memory_store": {
+      "description": "M1 红线：只交付 Schema，不建人设记忆生产库。本位只能为 false。",
+      "const": false
+    }
+  }
+}

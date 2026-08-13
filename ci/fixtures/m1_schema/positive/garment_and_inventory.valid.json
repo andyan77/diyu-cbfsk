@@ -1,0 +1,51 @@
+{
+  "fixture_id": "M1-P-garment_and_inventory",
+  "description": "属性来源分层齐备；成分属性以供应商文件为证据，可进入正式决策。",
+  "schema_id": "https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "snapshot_id": "SNAP-01",
+    "persistence_class": "runtime_fact",
+    "scope": "store",
+    "store_id": "S-1",
+    "captured_at": "2026-08-13T01:00:00Z",
+    "is_real_inventory_connection": false,
+    "items": [
+      {
+        "sku_id": "SKU-1",
+        "style_code": "ST-1",
+        "color_code": "C1",
+        "size_code": "M",
+        "availability": "in_stock",
+        "commercial_role": "hero",
+        "category_id": "womenswear",
+        "attributes": [
+          {
+            "attribute_id": "silhouette",
+            "attribute_kind": "visual",
+            "value": "A字",
+            "attribute_provenance": "human_confirmed",
+            "evidence": {
+              "evidence_kind": "human_inspection",
+              "ref": "insp-1"
+            },
+            "confidence": 0.9,
+            "usable_for_formal_decision": true
+          },
+          {
+            "attribute_id": "fabric_composition",
+            "attribute_kind": "composition",
+            "value": "棉 100%",
+            "attribute_provenance": "authoritative",
+            "evidence": {
+              "evidence_kind": "supplier_document",
+              "ref": "doc-1"
+            },
+            "confidence": 1.0,
+            "usable_for_formal_decision": true
+          }
+        ]
+      }
+    ]
+  }
+}

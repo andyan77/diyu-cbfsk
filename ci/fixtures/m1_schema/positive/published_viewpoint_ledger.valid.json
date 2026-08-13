@@ -1,0 +1,27 @@
+{
+  "fixture_id": "M1-P-published_viewpoint_ledger",
+  "description": "改口的条目给出了修订理由。",
+  "schema_id": "https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "ledger_id": "PVL-01",
+    "persona_id": "PS-01",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "entries": [
+      {
+        "viewpoint_id": "VP-01",
+        "statement": "通勤不必靠正式度堆叠",
+        "published_at": "2026-08-01T00:00:00Z",
+        "channel": "小红书",
+        "status": "revised",
+        "revision_reason": "品牌本季策略调整",
+        "adds_new_value": true
+      }
+    ]
+  }
+}

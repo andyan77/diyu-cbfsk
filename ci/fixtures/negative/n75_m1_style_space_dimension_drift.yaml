@@ -1,0 +1,55 @@
+fixture_id: N75-m1-style-space-dimension-drift
+description: 风格空间只剩 13 维——低于 PRD 5.3 点名的 14 维，等于把连续坐标退回粗标签。
+checker: check_m1_object_coverage
+expected: FAIL
+payload:
+  frozen_counts:
+    inputs: 12
+    outputs: 15
+  declared_counts:
+    inputs: 12
+    outputs: 15
+  objects:
+  - object_id: IN-03
+    landing: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+    landing_exists: true
+    addressable: true
+    registry_persistence_class: long_term_truth
+    schema_persistence_class: long_term_truth
+    persistence_class_conflict: false
+    category_rule_properties: []
+  - object_id: OUT-11
+    landing: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+    landing_exists: true
+    addressable: true
+    registry_persistence_class: runtime_fact
+    schema_persistence_class: runtime_fact
+    persistence_class_conflict: false
+    category_rule_properties: []
+  registry:
+  - file: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+    file_exists: true
+    declared_schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+    actual_schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+    schema_version: '0.1'
+    instance_bearing: true
+    has_positive_fixture: true
+    has_negative_fixture: true
+  unregistered_schema_files: []
+  style_space:
+    declared_count: 13
+    dimension_ids:
+    - d1
+    - d2
+    - d3
+    - d4
+    - d5
+    - d6
+    - d7
+    - d8
+    - d9
+    - d10
+    - d11
+    - d12
+    - d13
+  womenswear_is_default_for_other_categories: false

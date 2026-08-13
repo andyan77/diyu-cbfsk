@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json",
+  "title": "VisualAttributeExtractionResult",
+  "object_id": "OUT-12",
+  "description": "来自商品图片的分级视觉属性、证据、置信度、冲突、人工覆盖与决策可用性（D-23）。M1 只交付 Schema，不运行识别。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.2", "PRD-5.6", "D-23", "FR-22"],
+  "persistence_class": "runtime_fact",
+  "type": "object",
+  "required": ["result_id", "sku_id", "persistence_class", "image_bundle_ref", "model_version", "extracted_at", "attributes", "is_formal_result"],
+  "additionalProperties": false,
+  "properties": {
+    "result_id": { "type": "string", "minLength": 1 },
+    "sku_id": { "type": "string", "minLength": 1 },
+    "persistence_class": { "const": "runtime_fact" },
+    "image_bundle_ref": { "type": "string", "minLength": 1 },
+    "model_version": { "type": "string", "minLength": 1 },
+    "extracted_at": { "type": "string", "format": "date-time" },
+    "is_formal_result": {
+      "description": "M1 红线：不得运行多模态识别并产生正式 VisualAttributeExtractionResult。M1 期内只能为 false。",
+      "const": false
+    },
+    "attributes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["attribute_id", "value", "attribute_provenance", "confidence", "usable_for_formal_decision"],
+        "additionalProperties": false,
+        "properties": {
+          "attribute_id": { "type": "string", "minLength": 1 },
+          "value": {},
+          "attribute_provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/attributeProvenance" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "evidence_ref": { "type": "string" },
+          "conflicts_with": { "type": "array", "items": { "type": "string" } },
+          "human_override": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "overridden_by_role": { "type": "string" },
+              "overridden_at": { "type": "string", "format": "date-time" },
+              "reason": { "type": "string" }
+            }
+          },
+          "usable_for_formal_decision": { "type": "boolean" }
+        },
+        "allOf": [
+          {
+            "description": "D-23：视觉推断不得覆盖权威事实，也不得推断成分、性能、库存与安全认证。纯模型推断未经人工确认不得进入正式决策。",
+            "if": {
+              "properties": { "attribute_provenance": { "enum": ["model_inferred", "multimodal_inferred_visual_attribute"] } },
+              "required": ["attribute_provenance"]
+            },
+            "then": { "properties": { "usable_for_formal_decision": { "const": false } } }
+          }
+        ]
+      }
+    },
+    "forbidden_inference_targets": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["composition", "performance", "inventory", "safety_certification"] }
+    },
+    "fail_closed_state": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState" }
+  }
+}

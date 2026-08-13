@@ -1,0 +1,21 @@
+{
+  "fixture_id": "M1-N-founder_provided_real_brand_package",
+  "description": "违反：OB-IO-05 / M1 红线：M0/M1 不得接收 Founder 真实品牌资料",
+  "schema_id": "https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "OB-IO-05 / M1 红线：M0/M1 不得接收 Founder 真实品牌资料",
+  "instance": {
+    "package_id": "FPB-01",
+    "source_type": "founder_provided_real_brand",
+    "usage_scope": "test_production_only",
+    "live_market_evidence": false,
+    "hidden_benchmark_eligible": false,
+    "knowledge_training_eligible": false,
+    "received_by_execution_side": true,
+    "isolation": {
+      "physically_separated_from_fixture_pool": true,
+      "programmatically_separated": true
+    },
+    "content": null
+  }
+}

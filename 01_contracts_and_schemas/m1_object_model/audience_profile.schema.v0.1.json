@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json",
+  "title": "AudienceProfile",
+  "object_id": "IN-05",
+  "description": "目标群体的身份、生活阶段、穿衣任务、审美成熟度、风险接受度与场景。描述的是群体，不是某个具体消费者。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-6.1"],
+  "persistence_class": "long_term_truth",
+  "type": "object",
+  "required": ["audience_id", "version", "identity", "life_stage", "dressing_tasks", "aesthetic_maturity", "risk_tolerance", "persistence_class"],
+  "additionalProperties": false,
+  "properties": {
+    "audience_id": { "type": "string", "minLength": 1 },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": { "const": "long_term_truth" },
+    "identity": { "type": "string", "minLength": 1 },
+    "life_stage": { "type": "string", "minLength": 1 },
+    "dressing_tasks": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "aesthetic_maturity": { "type": "number", "minimum": 0, "maximum": 1 },
+    "risk_tolerance": { "type": "number", "minimum": 0, "maximum": 1 },
+    "scenarios": { "type": "array", "items": { "type": "string" } },
+    "preferred_style_range": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dimension_id", "low", "high"],
+        "additionalProperties": false,
+        "properties": {
+          "dimension_id": { "type": "string" },
+          "low": { "type": "number", "minimum": 0, "maximum": 1 },
+          "high": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "is_group_level_not_individual": { "const": true },
+    "named_individuals": {
+      "description": "群体画像里不得出现具名个人——那属于 IndividualProfile 且受双模式合同约束。",
+      "type": "null"
+    },
+    "provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+  }
+}

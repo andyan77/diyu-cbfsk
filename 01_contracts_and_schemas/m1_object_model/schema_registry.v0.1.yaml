@@ -1,0 +1,219 @@
+schema_version: '0.1'
+artifact_id: schema_registry.v0.1
+milestone: M1
+execution_package: M1-EP01
+prd_anchors:
+- PRD-13-M1
+status: M1_EP01_DELIVERED
+generation:
+  derived_from: 01_contracts_and_schemas/m1_object_model/*.schema.v0.1.json 的 $id / object_id / persistence_class
+  rule: 注册表是派生件，不是第二份真源；字段值一律取自 Schema 文件本身（EQ-1）。改 Schema 后重跑 check_m1_object_coverage 即可发现漂移。
+json_schema_draft: draft-07
+json_schema_draft_reason: 本机 jsonschema 3.2.0 只实现到 draft-07；用 2020-12 会写出无法被实测行使的 Schema（EQ-3：判据必须真的被 fixture 行使）。
+schema_count: 18
+entries:
+- schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
+  title: StylingResultBundle
+  object_id: null
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-6.2
+  - PRD-5.7
+  - PRD-13-M1
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/audience_profile.schema.v0.1.json
+  title: AudienceProfile
+  object_id: IN-05
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-6.1
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+  title: BrandTruthPack
+  object_id: IN-03
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-6.1
+  - PRD-5.3
+  - PRD-6.3
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
+  title: M1 公共定义
+  object_id: SHARED_DEFS
+  schema_version: '0.1'
+  persistence_class: n/a
+  prd_anchors:
+  - PRD-6.3
+  - PRD-5.6
+  - PRD-6.4
+  instance_bearing: false
+- schema_id: https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/founder_provided_real_brand_package.schema.v0.1.json
+  title: FounderProvidedRealBrandPackage
+  object_id: IN-11
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-6.1
+  - PRD-6.3
+  - PRD-8.7
+  - D-17
+  - D-18
+  - FR-26
+  - OB-IO-05
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/garment_and_inventory.schema.v0.1.json
+  title: InventorySnapshot / GarmentAndInventory
+  object_id: IN-04
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-6.1
+  - PRD-5.6
+  - PRD-6.4
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/individual_profile.schema.v0.1.json
+  title: IndividualProfile
+  object_id: IN-06
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-6.1
+  - PRD-16.2
+  - OB-IO-04
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/persona_conflict_record.schema.v0.1.json
+  title: PersonaConflictRecord
+  object_id: D-20-05
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-5.5
+  - D-20
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/persona_memory_snapshot.schema.v0.1.json
+  title: PersonaMemorySnapshot
+  object_id: IN-10
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-5.5
+  - PRD-6.1
+  - D-20
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/platform_voice_profile.schema.v0.1.json
+  title: PlatformVoiceProfile
+  object_id: D-21-01
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-5.5
+  - PRD-5.7
+  - D-21
+  - C-14
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/product_image_asset_bundle.schema.v0.1.json
+  title: ProductImageAssetBundle
+  object_id: IN-08
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-6.1
+  - PRD-5.6
+  - D-23
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/publication_policy.schema.v0.1.json
+  title: PublicationPolicy
+  object_id: IN-12
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-6.1
+  - PRD-6.4
+  - D-25
+  - FR-17
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/published_viewpoint_ledger.schema.v0.1.json
+  title: PublishedViewpointLedger
+  object_id: D-20-03
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-5.5
+  - D-20
+  - C-13
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/series_continuity_state.schema.v0.1.json
+  title: SeriesContinuityState
+  object_id: D-20-04
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-5.5
+  - D-20
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+  title: DecisionTrace
+  object_id: OUT-11
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-6.2
+  - PRD-10.1
+  - D-28
+  - D-29
+  - OB-IO-02
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/styling_task_context.schema.v0.1.json
+  title: StylingTaskContext
+  object_id: IN-07
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-6.1
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json
+  title: StylistPersonaProfile
+  object_id: IN-09
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+  prd_anchors:
+  - PRD-5.5
+  - PRD-6.1
+  - D-20
+  - C-13
+  instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json
+  title: VisualAttributeExtractionResult
+  object_id: OUT-12
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-6.2
+  - PRD-5.6
+  - D-23
+  - FR-22
+  instance_bearing: true
+instance_bearing_rule: instance_bearing=false 的条目只提供 $defs，本身没有实例，因此不要求实例级正负 fixture；其判据由引用它的 Schema 的 fixture 间接行使。目前仅 common_defs
+  属此类。
+fixture_requirement: 每个 instance_bearing 的 Schema 必须至少各有一份 VALID 与一份 INVALID 实例 fixture（EQ-3）。

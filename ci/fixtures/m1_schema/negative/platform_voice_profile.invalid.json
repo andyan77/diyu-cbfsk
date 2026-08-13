@@ -1,0 +1,25 @@
+{
+  "fixture_id": "M1-N-platform_voice_profile",
+  "description": "违反：PRD 5.5：平台表达偏好不得覆盖事实",
+  "schema_id": "https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "PRD 5.5：平台表达偏好不得覆盖事实",
+  "instance": {
+    "voice_profile_id": "PV-01",
+    "platform": "小红书",
+    "version": {
+      "schema_version": "0.1",
+      "object_version": "1",
+      "valid_from": "2026-08-13T00:00:00Z"
+    },
+    "persistence_class": "long_term_truth",
+    "anti_template_constraints": [
+      "no_courseware_tone",
+      "no_ai_register"
+    ],
+    "authority_rank": {
+      "may_override_persona": false,
+      "may_override_facts": true
+    }
+  }
+}

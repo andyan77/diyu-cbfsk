@@ -1,0 +1,75 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-CANDIDATE-FREEZE-RECEIPT-002
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+generated_at: "2026-08-13"
+executed_by: TEMPORARY_EXECUTION_WRITER
+executed_by_basis: 执行 Prompt v2.0 §11.3（Codex 执行面不可用，Founder 指派）
+
+candidate_commit: a235b558095b8f85ebc921aab853434dc406761d
+candidate_tree: 6e5963cacaa77f8a3cacf669e969991e7781dc09
+candidate_branch: codex/baseline-reconciliation-v2
+baseline_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
+remote_main_pinned_commit: ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+tracked_file_count_at_candidate: 102
+
+freeze_receipt_commit_note: >-
+  本回执自身构成候选链的第二个 Commit，相对 a235b55 只新增本文件，
+  不含任何产品语义改动。Guardian 的审查对象是本分支 HEAD；引用 Commit 一律使用完整哈希，
+  禁止以「最新版」代指。
+
+key_artifact_sha256:
+  笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx: ba34ab9eb02256d4fa638e3851c81fa0256be6562c5e802b6473d64b7123c143
+  笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx: 6b492c42b0e0bfc6a1b1710949eea4682c69ce62e98a9ca6bcf35ad9937e0fea
+  PRD_v1.2_核验回执.docx: e2c29224c7e671531e0d966ff4a6ce2d58109b5255ca82b801074594b78da687
+  PRD_v1.2_change_map.yaml: 0f57dffe1da0fedfea09bcb67ca9748476976133f0c5767907a1073243e582b8
+  README.md: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
+  笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx: 1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97
+  笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx: bc89e25b437f2cd88e55632451be40213ea6b7733ecfb19b91e5cc7e6463c997
+  PRD_v1.1_核验回执.docx: 080008393c077b2a92d5c79036cfc25f5b1c8027a5630ae42222eb926316b3c9
+  governance/baseline/founder_pinned_baseline.v0.1.yaml: de8ae154cce44b088e5961733f23898a5b9aa10016c5c62e390c4be6be50d64e
+  governance/bootstrap/role_operating_model.v0.2.yaml: effecb2b1340cbf1e9263fa32399c445ffe6487ca6ecc62636989df4e5a534f8
+  governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml: 83638751e9a4f0e95ec74403cd821073dcbe434049ddae1dd3939206d644cf25
+  governance/founder_rulings/DIYU-CBFSK-FR-EVAL-003.yaml: c4bf1a4052123a84915b7614a9f5a487f6ee1f599a2d037aeed62e52bbb10de2
+  governance/conditions/conditional_decision_ledger.yaml: 47430036acc55ca59cd173afe6e13c4a42d77aa6793e38ebde36f9d210e5e8a7
+  governance/compliance/founder_compliance_decision_ledger.yaml: 709e2135f22d495ceb0585e65b1c15bdbdffe2ea35269ac069138b7894d6c2c6
+  governance/storage/hidden_benchmark_storage_contract.yaml: 79ce874ba8b6ae681d1bca360b5e7fb1f11b5dc7a3e46aa3ff2318da589bab1c
+  governance/receipts/guardian_handoff_package.yaml: 01285657f1c64c1f583526c5861e3b57af058dbb5afd749ce6a841de11b194fc
+  governance/reports/final_delivery_report.md: ba8ff1ed47ae5358436f0775e14c50e522df046bbbad20435b19bc9823e3ca20
+
+verification_at_freeze:
+  governance_checkers: 15 PASS / 0 FAIL
+  fixtures: 30 behaved as declared (8 positive PASS / 22 negative FAIL)
+  prd_contract_checker: 64 PASS / 0 FAIL
+  docx_package_audit: 3 PASS / 0 FAIL
+  instruction_projection_drift: 0
+  itemised_results: governance/reports/final_delivery_report.md §4
+
+state_at_freeze:
+  baseline_reconciled: true
+  founder_baseline_confirmed: true
+  prd_v1_2_candidate_created: true
+  prd_v1_2_effective: false
+  role_operating_model_landed: true
+  role_operating_model_effective: false
+  guardian_review_completed: false
+  chatgpt_remote_review_completed: false
+  founder_prd_signed: false
+  founder_m0_authorized: false
+  founder_merge_approved: false
+  main_merged: false
+  pushed_to_remote: false
+  m0_execution_started: false
+  m1_started: false
+  m2_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+
+next_required_action: INDEPENDENT_GUARDIAN_REVIEW
+next_actions_in_order:
+  - 独立 Guardian 在隔离工作区审查本分支 HEAD，报告写明 guardian_bootstrap_source
+  - ChatGPT 总顾问对同一 Commit 完成远程对齐审查（不可用则 Founder 显式 DEFER / 替位 / 豁免）
+  - Founder 分别对 PRD v1.2 与 M0 执行申请 v1.2 作签署裁决，绑定文件哈希与 Commit
+  - 签署回执落盘后重跑全部 Checker，Guardian 确认新 Commit 只含签署与状态变化
+  - Founder 批准具体最终 Commit 后方可合并 main

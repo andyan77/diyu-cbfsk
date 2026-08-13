@@ -244,6 +244,8 @@ state_flag_authorizations:
       - M0_COMPLETE
       - M1_IN_PROGRESS
       - M1_M2_PARALLEL_IN_PROGRESS
+      - M1_COMPLETE
+      - M2_IN_PROGRESS
     basis: m0_request_signature.founder_m0_request_decision=PASS
     signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
     value_basis:
@@ -280,6 +282,41 @@ state_flag_authorizations:
         scope_limit: >-
           全项目并行执行包上限 2（DIYU-CBFSK-FR-GRANULARITY-005 limits）已由 M1 链 + M2-EP01 占满；
           本取值不授权启动第三个并行包，不授权 M2-EP02 在 M1 收口合入 main 前启动。
+        superseded_by_value: M2_IN_PROGRESS
+        superseded_note: >-
+          并行窗口已随 M1 收口合入 main 关闭，本取值不再描述当前态，保留为历史。
+      M1_COMPLETE:
+        ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+        ruling_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+        basis: >-
+          Founder M1 收口裁决 decision=PASS，三项前置齐备（Guardian APPROVE 阻断 0 /
+          总顾问 Delta 复核 PASS / Founder 本裁决）；m1_status 置 FOUNDER_ACCEPTED，
+          execution_status 随之转 M1_COMPLETE。
+        scope_limit: >-
+          仅表示 M1 里程碑完成。不授权 M2 任何取值、不授权知识蒸馏、不授权 production_servable；
+          m2_started 仍无授权条目，置 true 判 UNAUTHORIZED_TRUE_FLAG。
+        m1_status: FOUNDER_ACCEPTED
+        landed_by: 裁决落盘提交（DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条一次性预授权）
+        scope_limit_superseded_clause:
+          text: m2_started 仍无授权条目，置 true 判 UNAUTHORIZED_TRUE_FLAG。
+          why_superseded: >-
+            该分句写于 M1 收口链上，当时该分支未见 M2 侧的签署。m2_started 的授权条目实际早在
+            DIYU-CBFSK-FOUNDER-M2-CHARTER-001（绑定 6499431c66f7bf4a234bd830ee4c810e1ac78694）
+            即已由 Founder 具名补上，见 flags.m2_started。原文保留不改写，仅标注该分句已不成立，
+            不追述为两边当时就一致。
+          superseded_at: M2-EP02 受控合并
+      M2_IN_PROGRESS:
+        ruling: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001
+        ruling_base_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+        basis: >-
+          Founder 恢复执行授权第一节第 3 条「授权 execution_status 新增合法值 M2_IN_PROGRESS，
+          并授权本轮由 M1_M2_PARALLEL_IN_PROGRESS 迁移至该值（M1 已收口，并行状态不再成立）」。
+        meaning: >-
+          M1 里程碑已 FOUNDER_ACCEPTED 并合入 main；当前只有 M2 在执行。
+          本取值不表示 M2 已冻结——m2_frozen 仍为 false，冻结自 Founder 收口签署起生效。
+        scope_limit: >-
+          不授权 m2_frozen、knowledge_distillation_started 或 production_servable 置 true；
+          后两者仍在 never_authorizable。
   active_baseline_signature:
     authorized: true
     signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx

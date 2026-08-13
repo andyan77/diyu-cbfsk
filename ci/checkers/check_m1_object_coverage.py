@@ -7,11 +7,19 @@ PRD 13 节 M1 的通过标准是一句自然语言——「不存在未定义对
 
 注册表与覆盖映射表都是**派生件**：它们的字段必须与 Schema 文件本身对得上，对不上就是漂移，
 而不是「以注册表为准」——那样等于让派生件反过来定义真源（EQ-1）。
+
+M1 通过标准的第四条「女装规则不得默认覆盖其他品类」不在本文件，在 check_m1_category_adapters：
+品类规则的真源是五份适配器合同，判据必须读那里。EP01 期间它写在这里，读的是 object_coverage_map
+里一个全仓不存在的键，恒为假、永不触发——判据有检出力但 collect 喂它恒假值，属假绿，EP02 迁走并改读真源。
 """
 
 from __future__ import annotations
 
-from _common import ROOT, cli, load_json, load_yaml
+import importlib.util
+import re
+import sys
+
+from _common import ROOT, cli, load_json, load_yaml, read_text
 
 LABEL = "check_m1_object_coverage"
 
@@ -29,6 +37,28 @@ STYLE_DIMENSION_MINIMUM = 14
 CATEGORY_RULE_PROPERTY_HINTS = ("category_rule", "category_hard_constraint", "category_adapter")
 
 BRAND_SCOPED_OBJECTS = ("IN-03",)
+
+BRIEF = "01_contracts_and_schemas/m1_object_model_brief.md"
+ADAPTER_DIR = "01_contracts_and_schemas/category_adapter_contracts"
+PORT_CONTRACT = "01_contracts_and_schemas/extension_port_contracts.v0.1.yaml"
+BUNDLE = f"{MODEL_DIR}/StylingResultBundle.schema.v0.1.json"
+BUNDLE_PORT_POINTER = "#/properties/backward_compatible_extension_ports/items/enum"
+HANDOFF = "01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml"
+
+# Brief 编号表的行数即 M1 交付清单长度。EP01 漏掉第 3 项（human_visual_profile / C-04）没被任何判据
+# 抓到，因为覆盖判据只盯 12 输入 + 15 输出，而它不在这 27 个之内——判据覆盖面缺口，EP03 补上。
+BRIEF_DELIVERABLE_COUNT = 21
+
+# PRD 13-M1 通过标准的四条。每一条都必须在某个已注册 checker 里有实现，并且有一份 expected=FAIL
+# 的 fixture 真的行使它。守的是「判据被悄悄删掉或从没人跑过」，
+# **守不住**「判据还在、但 collect 喂给它的值恒假」——那一类只能靠让 collect 读真源来防
+# （EP01 的 WOMENSWEAR_RULE_OVERREACH 正是后者，EP02 已改读五份适配器真实声明）。
+M1_ACCEPTANCE_JUDGEMENTS = (
+    "OBJECT_NOT_ADDRESSABLE",
+    "BRAND_CATEGORY_MIXUP",
+    "RUNTIME_FACT_IN_LONG_TERM_TRUTH",
+    "WOMENSWEAR_RULE_OVERREACH",
+)
 
 
 def validate(payload: dict) -> list[str]:
@@ -83,6 +113,70 @@ def validate(payload: dict) -> list[str]:
             if not entry.get("has_negative_fixture"):
                 errors.append(f"SCHEMA_WITHOUT_FIXTURE: {name} has no INVALID instance fixture")
 
+    brief = payload.get("brief_deliverables") or {}
+    if brief.get("source_row_count") != BRIEF_DELIVERABLE_COUNT:
+        errors.append(
+            f"BRIEF_DELIVERABLE_COUNT_DRIFT: the Brief table has {brief.get('source_row_count')} rows, "
+            f"expected {BRIEF_DELIVERABLE_COUNT}"
+        )
+    if brief.get("declared_count") != brief.get("source_row_count"):
+        errors.append(
+            f"BRIEF_DELIVERABLE_COUNT_DRIFT: coverage map declares {brief.get('declared_count')} items, "
+            f"the Brief table has {brief.get('source_row_count')}"
+        )
+    for row in brief.get("items") or []:
+        if not row.get("landing_exists"):
+            errors.append(
+                f"BRIEF_DELIVERABLE_NOT_LANDED: Brief item #{row.get('index')} points at "
+                f"{row.get('landing')!r} which does not resolve"
+            )
+
+    for row in payload.get("capability_objects") or []:
+        if not row.get("addressable") or not row.get("landing_exists"):
+            errors.append(
+                f"CAPABILITY_OBJECT_NOT_ADDRESSABLE: {row.get('object_id')} lands at "
+                f"{row.get('landing')!r} which does not resolve"
+            )
+
+    for ref in payload.get("cross_package_references") or []:
+        if not ref.get("exists"):
+            errors.append(
+                f"CROSS_PACKAGE_REFERENCE_ORPHAN: {ref.get('source')} references "
+                f"{ref.get('target')!r} which does not exist"
+            )
+
+    ports = payload.get("extension_ports") or {}
+    contract_ports = sorted(ports.get("contract_ports") or [])
+    bundle_ports = sorted(ports.get("bundle_enum") or [])
+    if contract_ports != bundle_ports:
+        errors.append(
+            f"EXTENSION_PORT_REGISTRY_DRIFT: port contract lists {contract_ports}, "
+            f"the Bundle enum lists {bundle_ports}"
+        )
+    for port in ports.get("unversioned") or []:
+        errors.append(f"EXTENSION_PORT_REGISTRY_DRIFT: {port} has no port_version")
+
+    wiring = {row.get("code"): row for row in payload.get("acceptance_judgements") or []}
+    for code in M1_ACCEPTANCE_JUDGEMENTS:
+        row = wiring.get(code)
+        if row is None or not row.get("implemented_in"):
+            errors.append(f"M1_ACCEPTANCE_JUDGEMENT_NOT_WIRED: {code} is implemented by no checker")
+            continue
+        if not row.get("checker_registered"):
+            errors.append(
+                f"M1_ACCEPTANCE_JUDGEMENT_NOT_WIRED: {code} lives in {row.get('implemented_in')}, "
+                "which is not in the run_all_checks list"
+            )
+        if not row.get("exercised_by_fixture"):
+            errors.append(f"M1_ACCEPTANCE_JUDGEMENT_NOT_WIRED: {code} has no expected=FAIL fixture exercising it")
+
+    for row in payload.get("interface_handoff") or []:
+        if row.get("handoff") != row.get("upstream"):
+            errors.append(
+                f"INTERFACE_HANDOFF_STALE: {row.get('surface')} in the handoff is {row.get('handoff')!r}, "
+                f"upstream M1 output says {row.get('upstream')!r}"
+            )
+
     for orphan in payload.get("unregistered_schema_files") or []:
         errors.append(f"SCHEMA_NOT_REGISTERED: {orphan} exists but is absent from the registry")
 
@@ -97,12 +191,26 @@ def validate(payload: dict) -> list[str]:
             f"STYLE_SPACE_DIMENSION_DRIFT: declares {style.get('declared_count')} but lists {len(dims)}"
         )
 
-    if payload.get("womenswear_is_default_for_other_categories"):
-        errors.append(
-            "WOMENSWEAR_RULE_OVERREACH: womenswear rules are declared to apply to other categories by default"
-        )
-
     return errors
+
+
+_CHECKER_CACHE: dict = {}
+
+
+def _load_checker(name: str):
+    """按名加载同目录的 checker 模块；加载不了就返回 None，不吞成静默通过。"""
+    if name in _CHECKER_CACHE:
+        return _CHECKER_CACHE[name]
+    path = ROOT / "ci" / "checkers" / f"{name}.py"
+    if not path.exists():
+        _CHECKER_CACHE[name] = None
+        return None
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault(name, module)
+    spec.loader.exec_module(module)
+    _CHECKER_CACHE[name] = module
+    return module
 
 
 def _pointer(doc: dict, pointer: str):
@@ -189,7 +297,131 @@ def collect() -> dict:
                 }
             )
 
+    brief_rows = re.findall(r"^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*$", read_text(BRIEF), re.M)
+    brief_cov = coverage["brief_deliverable_coverage"]
+    brief_items = [
+        {
+            "index": row["index"],
+            "landing": row["landing"],
+            "landing_exists": (ROOT / row["landing"]).exists(),
+            "delivered_in": row.get("delivered_in"),
+        }
+        for row in brief_cov["items"]
+    ]
+
+    capability_objects = [
+        {
+            "object_id": row["object_id"],
+            "landing": row["landing"],
+            "landing_exists": (ROOT / row["landing"]).exists(),
+            "addressable": bool(row.get("addressable")),
+        }
+        for row in (coverage.get("capability_level_objects") or {}).get("items") or []
+    ]
+
+    # 跨包引用完整性：EP02 适配器与 EP03 端口合同指向的每一个仓内路径都必须真实存在。
+    cross_refs = []
+    for path in sorted((ROOT / ADAPTER_DIR).glob("*.yaml")):
+        rel = str(path.relative_to(ROOT))
+        doc = load_yaml(rel)
+        targets = [doc.get("conflict_priority_ref"), (doc.get("frozen_source") or {}).get("file")]
+        for target in targets:
+            if isinstance(target, str) and target:
+                cross_refs.append({"source": rel, "target": target, "exists": (ROOT / target).exists()})
+    port_doc = load_yaml(PORT_CONTRACT)
+    for target in [(port_doc.get("frozen_source") or {}).get("file"), (port_doc.get("obligation_ref") or {}).get("file")]:
+        if isinstance(target, str) and target:
+            cross_refs.append({"source": PORT_CONTRACT, "target": target, "exists": (ROOT / target).exists()})
+
+    adapter_constraints = {}
+    for path in sorted((ROOT / ADAPTER_DIR).glob("*.adapter.v0.1.yaml")):
+        doc = load_yaml(str(path.relative_to(ROOT)))
+        adapter_constraints[doc["category_id"]] = [c["id"] for c in doc["hard_constraints"]]
+
+    bundle_enum = _pointer(load_json(BUNDLE), BUNDLE_PORT_POINTER) or []
+    versions = port_doc.get("versioning", {}).get("current_versions") or {}
+    extension_ports = {
+        "contract_ports": [p["id"] for p in port_doc["ports"]],
+        "bundle_enum": list(bundle_enum),
+        "unversioned": [p["id"] for p in port_doc["ports"] if not p.get("port_version") or not versions.get(p["id"])],
+    }
+
+    # 判据接线：源码里是否实现、checker 是否进全量清单、有没有一份 expected=FAIL 的 fixture 行使它。
+    registered = set(re.findall(r'"(check_[a-z0-9_]+)"', read_text("ci/run_all_checks.py")))
+    checker_src = {
+        path.stem: path.read_text(encoding="utf-8")
+        for path in sorted((ROOT / "ci" / "checkers").glob("check_*.py"))
+    }
+    # 「被 fixture 行使」的定义就是字面意思：真的把 fixture 喂进那个 checker 的 validate()，
+    # 看这条判据码有没有出现在返回的错误里。靠文件名或 expected_judgement 字段猜，
+    # 猜错了判据照样显绿——那正是本 checker 要防的东西。
+    triggered: set[str] = set()
+    for path in sorted((ROOT / "ci" / "fixtures").rglob("*.yaml")):
+        doc = load_yaml(str(path.relative_to(ROOT)))
+        if doc.get("expected") != "FAIL":
+            continue
+        module = _load_checker(doc["checker"])
+        if module is None:
+            continue
+        triggered.update(err.split(":")[0] for err in module.validate(doc["payload"]))
+
+    acceptance = [
+        {
+            "code": code,
+            "implemented_in": next((name for name, src in checker_src.items() if code in src), None),
+            "checker_registered": next(
+                (name in registered for name, src in checker_src.items() if code in src), False
+            ),
+            "exercised_by_fixture": code in triggered,
+        }
+        for code in M1_ACCEPTANCE_JUDGEMENTS
+    ]
+
+    # 交接面是派生件——每一项都必须与上游 M1 产出逐一对得上，对不上就是它过期了（EQ-2）。
+    handoff = load_yaml(HANDOFF)
+    handoff_rows = [
+        {
+            "surface": "schema_ids",
+            "handoff": sorted(e["schema_id"] for e in handoff["stable_object_surface"]["schemas"]),
+            "upstream": sorted(e["schema_id"] for e in registry["entries"]),
+        },
+        {
+            "surface": "style_dimension_ids",
+            "handoff": handoff["style_space_surface"]["dimension_ids"],
+            "upstream": [d["id"] for d in style["dimensions"]],
+        },
+        {
+            "surface": "category_ids",
+            "handoff": sorted(c["category_id"] for c in handoff["category_constraint_surface"]["categories"]),
+            "upstream": sorted(adapter_constraints),
+        },
+        {
+            "surface": "extension_port_ids",
+            "handoff": [p["id"] for p in handoff["extension_port_surface"]["ports"]],
+            "upstream": extension_ports["contract_ports"],
+        },
+    ]
+    for row in handoff["category_constraint_surface"]["categories"]:
+        cid = row["category_id"]
+        handoff_rows.append(
+            {
+                "surface": f"{cid}.hard_constraint_ids",
+                "handoff": row["hard_constraint_ids"],
+                "upstream": adapter_constraints.get(cid, []),
+            }
+        )
+
     return {
+        "interface_handoff": handoff_rows,
+        "brief_deliverables": {
+            "source_row_count": len(brief_rows),
+            "declared_count": brief_cov["count"],
+            "items": brief_items,
+        },
+        "capability_objects": capability_objects,
+        "cross_package_references": cross_refs,
+        "extension_ports": extension_ports,
+        "acceptance_judgements": acceptance,
         "frozen_counts": {
             "inputs": contract["input_and_configuration_objects"]["count"],
             "outputs": contract["output_and_internal_audit_objects"]["count"],
@@ -205,9 +437,6 @@ def collect() -> dict:
             "declared_count": style["dimension_count"],
             "dimension_ids": [d["id"] for d in style["dimensions"]],
         },
-        "womenswear_is_default_for_other_categories": bool(
-            (coverage.get("category_defaults") or {}).get("womenswear_rules_apply_to_other_categories_by_default")
-        ),
     }
 
 

@@ -1,0 +1,16 @@
+# CI 依赖单一真源。三个 workflow 一律从本文件安装，不再各自手写 pip 包名——
+# role-governance-integrity 在 6499431c66f7bf4a234bd830ee4c810e1ac78694 起持续失败，
+# 根因就是 run_all_checks → run_schema_fixtures 需要 jsonschema，而 workflow 只装了
+# pyyaml 与 python-docx（三处手写清单，漏一处即失败）。
+#
+# jsonschema 必须钉版本：本地 M1 验证环境是 3.2.0，它只实现到 draft-07，
+# 而 M1 的 19 份 Schema 正是按 draft-07 写的。装更高版本会让 CI 与本地验的不是同一件事。
+jsonschema==3.2.0
+
+# PyYAML 与 python-docx **不钉版本**，与本次修复前 CI 一直在用的写法一致。
+# 首次修复曾钉 PyYAML==5.4.1（想「与本地一致」），结果 CI 全红：5.4.1 在 Python 3.11 +
+# 新 setuptools 下构建失败（'build_ext' object has no attribute 'cython_sources'），
+# 把原本通过的两个 workflow 也带崩了。已在干净 venv 实测：不钉版本时装到 PyYAML 6.0.3，
+# 全量核验 21 checkers / 131 判据 fixture / 36 实例 fixture 全绿，仓内无裸 yaml.load 调用。
+PyYAML
+python-docx

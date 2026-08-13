@@ -1,0 +1,25 @@
+{
+  "fixture_id": "M1-N-human_visual_profile",
+  "description": "违反：C-04 定义「不依赖粗糙身材标签」——写入梨形标签；同时缺失机制的失效条件。",
+  "schema_id": "https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json",
+  "expected": "INVALID",
+  "violates": "C-04 不依赖粗糙身材标签 / PRD-5.4 必须记录失效条件",
+  "instance": {
+    "profile_id": "HVP-02",
+    "version": { "schema_version": "0.1", "object_version": "1", "valid_from": "2026-08-13T00:00:00Z" },
+    "persistence_class": "runtime_fact",
+    "proportion": { "horizontal_vertical_split": "上长下短", "waistline": "腰位偏低" },
+    "volume": { "shoulder_volume": "肩部体量适中" },
+    "line": "偏曲",
+    "visual_center": { "current": "重心居中" },
+    "skin_tone": { "description": "暖调" },
+    "temperament": "外放",
+    "mechanism_effects": [
+      { "variable": "腰线", "effect": "提腰显高", "side_effects": ["上身被压缩"], "failure_conditions": [] }
+    ],
+    "ranks_body_by_value": false,
+    "appearance_ranking_performed": false,
+    "coarse_body_label": "梨形身材",
+    "external_language_check": { "forbidden_terms_present": false, "absolute_effect_promise_present": false }
+  }
+}

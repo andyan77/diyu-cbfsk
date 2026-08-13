@@ -25,6 +25,15 @@ inputs:
   landing_kind: contract_file
   landing: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
   note: PRD 13-M1 特例：UniversalExpertKernel 与 CategoryAdapter 是合同文件而非数据 Schema，映射表注明即可，不为其造 JSON Schema。
+  m1_adapter_contracts:
+  - 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
+  m1_adapter_contracts_note: >-
+    landing 仍指向 M0 冻结的 category_scope_contract（五类的数量与硬约束家族由它定义，适配器不得改写）；
+    M1-EP02 交付的五份适配器是它的落地实现，由 check_m1_category_adapters 逐字段比对冻结源。
   addressable: true
 - object_id: IN-03
   name: BrandTruthPack
@@ -176,9 +185,77 @@ outputs:
   landing_kind: bundle_def
   landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/PublicationDecision
   addressable: true
+capability_level_objects:
+  note: >-
+    Brief 交付清单里有不属于 PRD 6.1/6.2 冻结 12+15 对象的能力级对象。它们不进 inputs/outputs 计数
+    （那两个数字是 M0 冻结的，M1 不得增删），但必须同样可寻址——EP01 漏掉第 3 项正是因为覆盖判据
+    只盯 12+15，不盯 Brief 的 21 项清单。
+  items:
+  - object_id: C-04
+    name: HumanVisualProfile
+    capability_ref: capability_contract.v1.0.yaml#capabilities.C-04
+    landing_kind: json_schema
+    landing: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+    persistence_class: runtime_fact
+    delivered_in: M1-EP03
+    delivery_note: M1-EP01 遗漏，EP03 补齐；同批为覆盖 checker 加 Brief 交付清单判据，杜绝同类遗漏。
+    addressable: true
+
+brief_deliverable_coverage:
+  source: 01_contracts_and_schemas/m1_object_model_brief.md
+  source_status: M0_FROZEN
+  rule: >-
+    条数与名称的唯一真源是 Brief 的编号表（M0 冻结，不得改写）；本表只声明每一项落在哪里。
+    两边对不上即 BRIEF_DELIVERABLE_COUNT_DRIFT / BRIEF_DELIVERABLE_NOT_LANDED。
+  count: 21
+  items:
+  - {index: 1, landing: 01_contracts_and_schemas/m1_object_model/brand_style_space.v0.1.yaml, delivered_in: M1-EP01}
+  - {index: 2, landing: 01_contracts_and_schemas/m1_object_model/audience_profile.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 3, landing: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json, delivered_in: M1-EP03}
+  - {index: 4, landing: 01_contracts_and_schemas/m1_object_model/garment_and_inventory.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 5, landing: 01_contracts_and_schemas/m1_object_model/styling_task_context.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 6, landing: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 7, landing: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml, delivered_in: M1-EP02}
+  - {index: 8, landing: ci/checkers/check_m1_object_coverage.py, delivered_in: M1-EP01}
+  - {index: 9, landing: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 10, landing: 01_contracts_and_schemas/m1_object_model/individual_profile.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 11, landing: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 12, landing: 01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.1.yaml, delivered_in: M1-EP01}
+  - {index: 13, landing: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 14, landing: 01_contracts_and_schemas/m1_object_model/persona_memory_snapshot.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 15, landing: 01_contracts_and_schemas/m1_object_model/published_viewpoint_ledger.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 16, landing: 01_contracts_and_schemas/m1_object_model/series_continuity_state.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 17, landing: 01_contracts_and_schemas/m1_object_model/platform_voice_profile.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 18, landing: 01_contracts_and_schemas/m1_object_model/product_image_asset_bundle.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 19, landing: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 20, landing: 01_contracts_and_schemas/m1_object_model/publication_policy.schema.v0.1.json, delivered_in: M1-EP01}
+  - {index: 21, landing: 01_contracts_and_schemas/extension_port_contracts.v0.1.yaml, delivered_in: M1-EP03}
+  index_7_note: 第 7 项是五份适配器＋冲突优先级表，landing 取该目录下的唯一冲突优先级表作代表；五份适配器齐备由 check_m1_category_adapters 逐类判定。
+
 not_delivered_in_ep01:
 - item: category_adapter_contracts/*.v0.1.yaml（五类）
   routed_to: M1-EP02
+  delivered_in: M1-EP02
+  delivered_files:
+  - 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
 - item: extension_port_contracts（VM / 实时成交辅助 / Bundle 兼容）
   routed_to: M1-EP03
   note: PRD 5.7 端口是合同而非对象 Schema；Bundle 已留 backward_compatible_extension_ports 位。
+  delivered_in: M1-EP03
+  delivered_files:
+  - 01_contracts_and_schemas/extension_port_contracts.v0.1.yaml
+- item: human_visual_profile.schema.v0.1.json（Brief 第 3 项 / C-04）
+  discovered_in: M1-EP02
+  routed_to: M1-EP03
+  gap_kind: EP01 交付遗漏且未登记
+  why_not_caught: 它不属 12 输入对象，覆盖判据只盯 12+15 对象、不盯 Brief 的 21 项交付清单。
+  delivered_in: M1-EP03
+  delivered_files:
+  - 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+  tooling_fix: check_m1_object_coverage 新增 BRIEF_DELIVERABLE_* 判据（协议缺陷改工具，杜绝同类复发）。

@@ -346,3 +346,7 @@ not_authorized_by_this_package:
 - 合并 main
 - 知识蒸馏
 - 任何隐藏或夹具资产生成
+describes_current_state: false
+superseded_by: M2-EP02
+supersession_note: ep01_end_state 是 M2-EP01 收尾那一刻的如实记录，不因后续推进而改写。M1 已于 c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  收口合入 main，execution_status 随之迁移至 M2_IN_PROGRESS，因此本块不再描述当前态——当前态见标记 describes_current_state 的那份回执。

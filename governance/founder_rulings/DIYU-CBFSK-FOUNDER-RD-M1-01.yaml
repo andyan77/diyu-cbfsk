@@ -1,0 +1,136 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-RD-M1-01
+project_id: DIYU-CBFSK-001
+title: M1 收口裁决（第一步）——「提交推进」与 main 门禁冲突的裁定、六项 Open Item 处置、转录确认
+ruling_date: "2026-08-13"
+issued_by: Founder
+milestone: M1
+transcription_note: >-
+  执行侧如实转录归档。Founder 已在 C 节确认 M1-RUNTHROUGH-001 的转录忠实性；本文件同为转录，
+  若与 Founder 原话有出入，以原话为准修订。执行侧不得借转录扩权或增删条款。
+
+article_a_process_conflict:
+  ruling_id: FOUNDER-RULING-RD-M1-01
+  title: 「提交推进」与 main 门禁冲突的裁定
+  a1_interpretation:
+    verbatim: >-
+      FR-PROCESS-006 优先，永久有效。M0-DECISION-001 的「包内自检+CI绿即提交推进」自始仅指候选分支内推进，
+      不覆盖 main；合并 main 三项前置（Guardian PASS ＋ 顾问意见或豁免 ＋ Founder 合并裁决）缺一不可。
+    permanence: PERMANENT
+    prevailing_ruling: DIYU-CBFSK-FR-PROCESS-006
+    subordinate_ruling_clause: DIYU-CBFSK-FOUNDER-M0-DECISION-001 m1_pre_approval.package_level_guardian_note
+  a2_ratification:
+    verbatim: >-
+      EP01 的三个提交作一次性追认，依据＝Guardian 里程碑审查已覆盖 M1-EP01 内容且无阻塞发现。
+      不改写 main 历史。本追认不构成先例。
+    ratified_commits:
+      - 38d13b7dc451ee2372aee8ca3ca2d49c23866c33
+      - c714732ff9a303719dde7a5a70bfa9c2fc36d042
+      - 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    ratified_commits_note: 三个提交均为 40 位完整哈希，逐个可 git cat-file -t 验证存在。
+    basis_review_commit: 97b73f63fff65d9eb259b2f23dd51b0498ffbed6
+    rewrites_main_history: false
+    sets_precedent: false
+    scope: ONE_TIME_ONLY
+  a3_clarification_landing:
+    verbatim: 在 FR-PROCESS-006（或其 R1）增加一行：「提交推进」目标限定候选分支——消除两种读法。
+    landed_in: governance/founder_rulings/DIYU-CBFSK-FR-PROCESS-006.yaml#rules.FR-PROCESS-006-R1.commit_advance_target_clarification
+  a4_rd_m1_02_routing:
+    verbatim: >-
+      RD-M1-02（守 main 实际状态的判据，替代声明式 merge_state）归入 M2-EP02 范围
+      （M2-EP01 执行中、范围已冻结，不追加），不入本次修复。
+    routed_to: M2-EP02
+    not_in_this_repair: true
+    reason: M2-EP01 执行中且范围已冻结，不追加。
+
+article_b_open_item_disposition:
+  adjudication: Founder 逐项裁定；执行侧在登记表落状态，不解释、不改判。
+  registry: 11_reports_and_receipts/m1_delivery_receipt.yaml#open_items
+  items:
+    - id: OI-M1-01
+      verbatim: 以 M0 冻结合同 15 项输出为准
+      status: CLOSED_BY_HIGHER_AUTHORITY
+    - id: OI-M1-02
+      verbatim: 以冻结合同七级事实优先级为准
+      status: CLOSED_BY_HIGHER_AUTHORITY
+    - id: OI-M1-03
+      verbatim: 路由至 M3 Milestone Plan（M1 只交接口面，处置正确）
+      status: ROUTED_TO_M3
+    - id: OI-M1-04
+      verbatim: 接受：8 个扩展对象只保持端口登记，不提前定型 Schema
+      status: ACCEPTED_AS_IS
+    - id: OI-M1-05
+      verbatim: 运行时分离的行为级验证路由 M6/M8/M9
+      status: ROUTED_TO_M6_M8_M9
+    - id: OI-M1-06
+      verbatim: 接受当前分类：女装非 100% 全审高风险类，不补标 safety-critical
+      status: ACCEPTED_AS_IS
+
+article_c_transcription_confirmation:
+  verbatim: >-
+    本人确认 M1-RUNTHROUGH-001 为本人裁决之转录，语义与本人原意一致；
+    如后续发现出入，以本人原话为准修订。
+  confirms: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001
+  confirmed_by: Founder
+
+article_d_repair_scope:
+  title: M1 收口修复任务——唯一一个最小修复 Commit，范围锁死，全部在 m1/candidate-freeze 分支
+  permitted_items:
+    - id: D1
+      item: CI 依赖修复
+      requirement: 新增 requirements-ci.txt（含 jsonschema，版本与 M1 本地验证环境一致），三个 workflow 统一从该文件安装
+      conditional_clause: 若实测根因与「缺 jsonschema」不符，按实测做最小修复并在报告说明，不得扩大范围
+    - id: D2
+      item: 审查对象口径修正
+      requirement: >-
+        分离两个概念——semantic_candidate_commit ＝ 37f636c73dac1be7457dfc951984b43532056804（33 份交付物字节快照）；
+        review_package_head ＝ 本次修复后的最终 PR Head。supersession 措辞改为「最终 Guardian review target
+        之后的任何新 Commit 使 Guardian 与总顾问结论失效」。PR 正文、Receipt、Guardian 交接包同步该口径。
+    - id: D3
+      item: 本裁决落盘
+      requirement: A／B／C 三节作为 Founder 裁决记录（A.2 追认条目须含三个提交的完整 40 位哈希）＋ FR-PROCESS-006 澄清行 ＋ Open Item 逐项状态
+    - id: D4
+      item: 禁止事项（顾问清单原文执行）
+      forbidden:
+        - 不改 M1 对象语义
+        - 不改五品类合同
+        - 不改事实优先级
+        - 不新增 M2 资产
+        - 不开始桥接 Schema
+        - 不在本分支触碰 m2 状态位
+        - 不改知识状态
+        - 不生成隐藏题或夹具品牌
+    - id: D5
+      item: 完成后 CI
+      requirement: >-
+        远程三个 Actions 全量重跑，必须全部成功（不得只重跑失败步骤后口头推断其余仍成立）。
+        交付报告只报结论：修复内容清单、三个工作流全绿证据、最终 PR Head 完整 40 位哈希。
+
+article_e_v1_1_and_sequence:
+  e1_m2_startup_package_v1_1:
+    verbatim: >-
+      M2 启动包 v1.1 继续有效执行：已依 Founder 签署先行启动，跑至 EP01 内置停点
+      （完成后停在 candidate/m2 等待指令，不得自行开始 EP02）。此前任何「v1.1 作废」表述撤销。
+    status: EFFECTIVE
+    prior_invalidation_statements: RETRACTED
+  e2_parallelism:
+    verbatim: >-
+      当前并行状态如实：M1 收口包 ＋ M2-EP01 ＝ 并行 2，未超上限；candidate/m2 分支上的 m2_started
+      授权条目有效，其签署基线 6499431 的 main 合法性由本块 A.2 追认补齐。
+    concurrent_packages: 2
+    max_concurrent_packages: 2
+    m2_started_authorization_branch: candidate/m2
+    m2_started_on_this_branch: false
+    m2_started_on_this_branch_note: >-
+      本分支（m1/candidate-freeze）不触碰 m2 状态位（D.4 禁止项）；本分支上 m2_started 仍为 false 且无授权条目。
+  e3_sequence:
+    verbatim: >-
+      后续：CI 全绿 → Guardian 对最终 Head 做 Delta 复审 → 总顾问 Delta 复核 →
+      Founder 单次 PASS ＋ FF-ONLY 合并授权 → main＝最终 M1 SHA → 派发 M2-EP02
+      （内含 v1.1 既定通道：candidate/m2 受控合并至最终 M1 SHA ＋ Profile 最终绑定 ＋ 全量重测 ＋
+      execution_status 切换 M2_IN_PROGRESS ＋ RD-M1-02 判据落地）。
+      不再需要 v1.2 启动包——M2 已合法启动，无需二次启动。
+    v1_2_startup_package_needed: false
+
+signed_by: Founder
+signed_at: "2026-08-13"

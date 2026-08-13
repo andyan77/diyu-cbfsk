@@ -1,5 +1,5 @@
 fixture_id: M2-N47
-description: 回执未披露自指限制——不说明「无法记录含自身的 Commit 哈希」会让读者以为哈希已被钉住。
+description: EP02 回执未披露自指限制。
 checker: check_m2_governance_landing
 expected: FAIL
 payload:
@@ -149,22 +149,41 @@ payload:
   layer_refs_unknown: []
   layer_count: 6
   fact_priority_changed_by_package: false
-  end_state:
-    execution_status: M1_M2_PARALLEL_IN_PROGRESS
-    m2_started: true
-    m2_ep01_status: SELF_CHECKED
-    m2_evaluation_profile_status: PROVISIONAL_READY
-    m2_benchmark_assets_status: NOT_CREATED
-    m2_hidden_assets_status: NOT_CREATED
-    m2_frozen: false
-    m1_final_binding: PENDING_M1_CLOSEOUT
-    knowledge_distillation_started: false
-    production_servable: false
-    next_authorized_action: WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT
+  package_receipts:
+  - package_id: M2-EP01
+    path: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_receipt.yaml
+    end_state:
+      execution_status: M1_M2_PARALLEL_IN_PROGRESS
+      m2_started: true
+      m2_ep01_status: SELF_CHECKED
+      m2_evaluation_profile_status: PROVISIONAL_READY
+      m2_benchmark_assets_status: NOT_CREATED
+      m2_hidden_assets_status: NOT_CREATED
+      m2_frozen: false
+      m1_final_binding: PENDING_M1_CLOSEOUT
+      knowledge_distillation_started: false
+      production_servable: false
+      next_authorized_action: WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT
+    describes_current_state: false
+    superseded_by: M2-EP02
+    self_reference_limitation_recorded: true
+  - package_id: M2-EP02
+    path: 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_receipt.yaml
+    end_state:
+      execution_status: M2_IN_PROGRESS
+      m2_started: true
+      m1_status: FOUNDER_ACCEPTED
+      m2_ep01_status: SELF_CHECKED
+      m2_ep02_status: IN_PROGRESS
+      m2_frozen: false
+      knowledge_distillation_started: false
+      production_servable: false
+    describes_current_state: true
+    superseded_by: null
+    self_reference_limitation_recorded: false
   canonical_state:
-    execution_status: M1_M2_PARALLEL_IN_PROGRESS
+    execution_status: M2_IN_PROGRESS
     m2_started: true
     knowledge_distillation_started: false
     production_servable: false
   unregistered_m2_checkers: []
-  self_reference_limitation_recorded: false

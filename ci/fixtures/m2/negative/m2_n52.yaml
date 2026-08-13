@@ -1,0 +1,35 @@
+fixture_id: M2-N52
+description: 两条分支并行各自分配 README-MOD-10 导致撞号——正是 EP02 受控合并当场发现的那个缺口。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries:
+  - registry: governance/baseline/founder_pinned_baseline.v0.1.yaml:README.md.authorized_modification_history
+    numbers:
+    - 12
+    - 11
+    - 10
+    - 10
+    - 9
+    - 8
+    - 7
+    - 6
+    - 5
+    - 1
+    - 4
+    - 3
+    - 2
+    prefixes:
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    malformed_ids: []

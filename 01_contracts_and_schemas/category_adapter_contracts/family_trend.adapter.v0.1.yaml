@@ -1,0 +1,73 @@
+schema_version: "0.1"
+contract_id: family_trend.adapter.v0.1
+artifact_kind: contract_file
+milestone: M1
+execution_package: M1-EP02
+status: M1_EP02_DELIVERED
+object_ref: IN-02
+prd_anchors: [PRD-4.1, PRD-3.3-P-07, PRD-9.4, PRD-6.4, FR-02, FR-11]
+
+frozen_source:
+  file: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
+  status: M0_FROZEN
+  pointer: launch_categories.items[CAT-FAMILY-TREND]
+
+category_id: CAT-FAMILY-TREND
+category_name: 亲子潮流时装
+core_audience: 家庭组合与亲子关系表达
+unique_professional_contract: [关联而不雷同, 年龄差异, 色彩图案呼应, 舒适, 安全, 拍摄与出行场景]
+key_outputs: [亲子成套逻辑, 家庭场景叙事, 单店组合]
+hard_constraint_family: mixed_age_safety
+founder_full_review_required: true
+
+scope:
+  applies_to_categories: [CAT-FAMILY-TREND]
+  is_default_for_other_categories: false
+  inherits_category_rules_from: null
+  composes_with: [CAT-KIDSWEAR, CAT-TEEN-TREND, CAT-WOMENSWEAR]
+  composition_resolution: stricter_of
+  composition_basis: >-
+    冻结合同原文「亲子任务同时触发童装或青少年一侧的品类硬约束，取更严者」。组合关系由
+    cross_category_conflict_priority 的 COMBO-01/02/03 承载，本文件只引用不复制（EQ-1）。
+
+hard_constraints:
+  - id: FT-HC-01
+    statement: 亲子造型中任一未成年成员一侧的硬约束全量生效，不得因成人成员在场而放宽。
+    prd_anchor: PRD-4.1 CAT-FAMILY-TREND.note
+    severity: safety_critical
+    resolution: stricter_of
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: FT-HC-02
+    statement: 关联而不雷同——不得把成人款式直接缩小套用到儿童身上作为「亲子款」。
+    prd_anchor: PRD-4.1 CAT-FAMILY-TREND.unique_professional_contract
+    severity: safety_critical
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: FT-HC-03
+    statement: 拍摄与出行场景不得以画面效果为由降低儿童安全或舒适要求。
+    prd_anchor: PRD-4.1 CAT-FAMILY-TREND.unique_professional_contract
+    severity: safety_critical
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: FT-HC-04
+    statement: 家庭成员年龄构成不明时不得输出成套建议，须失败关闭并要求补充。
+    prd_anchor: PRD-6.4
+    severity: safety_critical
+    fail_closed_ref: FC-05
+    failure_state: AGE_CONTEXT_INSUFFICIENT
+
+safety_boundary:
+  age_appropriateness: 混龄；每位成员按其自身年龄段的品类约束判定，整体取更严。
+  body_expression: 不得在家庭成员之间作身体比较或外貌排序。
+  performance_claims: 不适用；出行含运动诉求时按 CP-03 由运动适配器功能合同接管。
+  serving_stop: 组合中任一未成年一侧安全硬门失败 → 亲子任务同步停止。
+
+fail_closed_bindings: [FC-05]
+stop_condition_bindings: [SC-06]
+founder_review:
+  coverage: "100%"
+  sampling_allowed: false
+  basis: >-
+    冻结合同对亲子标注 founder_full_review_required: true；且亲子必然触发童装或青少年一侧的高风险知识，
+    按 CP-02 取更严，等同继承 100% 不抽样。
+
+conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+m1_scope_note: 本文件是品类合同，不是品类知识。M1 不生成任何品类知识内容、语料或夹具品牌资产。

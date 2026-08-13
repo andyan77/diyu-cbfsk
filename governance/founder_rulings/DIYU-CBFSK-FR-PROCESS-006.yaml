@@ -22,6 +22,13 @@ rules:
     purpose: [异地备份, 顾问并行审查]
     permitted_targets: [候选分支]
     forbidden_targets: [main]
+    commit_advance_target_clarification: >-
+      「提交推进」的目标限定候选分支。DIYU-CBFSK-FOUNDER-M0-DECISION-001 的
+      「包内自检 + CI 绿即提交推进」自始仅指候选分支内推进，不覆盖 main——两种读法在此消除。
+    commit_advance_target: 候选分支
+    commit_advance_does_not_cover: main
+    clarification_added_by: DIYU-CBFSK-FOUNDER-RD-M1-01 A.1 / A.3
+    clarification_permanence: PERMANENT
   - id: FR-PROCESS-006-R2
     statement: 合并 main 的三项前置不变，缺一不可。
     preconditions:
@@ -43,6 +50,7 @@ what_this_ruling_does_not_change:
 applied_in:
   - {action: 推送候选分支 m0/contract-and-benchmark-foundation-001, commit: 2780e65dc32b20576635b887bd7634663afe531b, pr: 1}
   - {action: 推送修复候选, commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458, pr: 1}
+  - {action: 推送 M1 候选分支 m1/candidate-freeze, commit: 97b73f63fff65d9eb259b2f23dd51b0498ffbed6, pr: 2}
 
 signed_by: Founder
 signed_at: "2026-08-13"

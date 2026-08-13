@@ -1,0 +1,299 @@
+schema_version: '0.1'
+contract_id: m1_interface_handoff.v0.1
+artifact_kind: derived_interface_surface
+milestone: M1
+execution_package: M1-EP03
+status: M1_EP03_DELIVERED
+prd_anchors:
+- PRD-13-M1
+- PRD-13-M2
+- PRD-13-M3
+- DEP-02
+- DEP-03
+- D-28
+purpose: M2 与 M3 只能引用 M1 真实产出的稳定对象（DEP-02：M1 对象稳定后才可冻结引用它们的评分卡）。本文件是**派生件**——每个 schema ID、品类约束 ID、维度 ID 都取自 M1 交付物本身，不手抄、不另立一份定义（EQ-1）。改了
+  M1 产出重跑 check_m1_object_coverage 即可发现漂移。
+generation:
+  derived_from:
+  - 01_contracts_and_schemas/m1_object_model/schema_registry.v0.1.yaml
+  - 01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.1.yaml
+  - 01_contracts_and_schemas/m1_object_model/brand_style_space.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+  - 01_contracts_and_schemas/extension_port_contracts.v0.1.yaml
+  rule: 本表不是第二份真源；M2/M3 消费它，但争议时以上游 M1 交付物为准。
+stable_object_surface:
+  json_schema_draft: draft-07
+  schema_count: 19
+  frozen_object_counts:
+    inputs: 12
+    outputs: 15
+    source: '01_contracts_and_schemas/input_output_boundary.v1.0.yaml（M0_FROZEN，count_is_frozen: true）'
+  schemas:
+  - object_id: null
+    title: StylingResultBundle
+    schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+  - object_id: IN-05
+    title: AudienceProfile
+    schema_id: https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: IN-03
+    title: BrandTruthPack
+    schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: SHARED_DEFS
+    title: M1 公共定义
+    schema_id: https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json
+    persistence_class: n/a
+    instance_bearing: false
+  - object_id: IN-11
+    title: FounderProvidedRealBrandPackage
+    schema_id: https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: IN-04
+    title: InventorySnapshot / GarmentAndInventory
+    schema_id: https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+  - object_id: C-04
+    title: HumanVisualProfile
+    schema_id: https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+  - object_id: IN-06
+    title: IndividualProfile
+    schema_id: https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+  - object_id: D-20-05
+    title: PersonaConflictRecord
+    schema_id: https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: IN-10
+    title: PersonaMemorySnapshot
+    schema_id: https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: D-21-01
+    title: PlatformVoiceProfile
+    schema_id: https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: IN-08
+    title: ProductImageAssetBundle
+    schema_id: https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: IN-12
+    title: PublicationPolicy
+    schema_id: https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: D-20-03
+    title: PublishedViewpointLedger
+    schema_id: https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: D-20-04
+    title: SeriesContinuityState
+    schema_id: https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: OUT-11
+    title: DecisionTrace
+    schema_id: https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+  - object_id: IN-07
+    title: StylingTaskContext
+    schema_id: https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+  - object_id: IN-09
+    title: StylistPersonaProfile
+    schema_id: https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+    persistence_class: long_term_truth
+    instance_bearing: true
+  - object_id: OUT-12
+    title: VisualAttributeExtractionResult
+    schema_id: https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+    persistence_class: runtime_fact
+    instance_bearing: true
+style_space_surface:
+  dimension_count: 14
+  dimension_ids:
+  - structure
+  - ornamentation
+  - trend_adherence
+  - feminine_neutral_expression
+  - body_curve_relation
+  - formality
+  - color_intensity
+  - material_rusticity_luster
+  - visual_density
+  - age_expression
+  - urban_natural
+  - cultural_orientation
+  - styling_difficulty
+  - individuality_intensity
+  note: M2 的未见品牌切分与隐藏池专属风格坐标覆盖须落在这组维度上，维度扩展须给 PRD 锚点或裁决编号并升版本。
+category_constraint_surface:
+  note: M2 硬门与 M3 题面若引用品类约束，必须引用这里的 constraint id，不得自造描述性说法。
+  conflict_priority_contract: cross_category_conflict_priority.v0.1
+  conflict_priority_rule_ids:
+  - CP-01
+  - CP-02
+  - CP-03
+  - CP-04
+  - CP-05
+  - CP-06
+  combination_rule_ids:
+  - COMBO-01
+  - COMBO-02
+  - COMBO-03
+  - COMBO-04
+  - COMBO-05
+  categories:
+  - category_id: CAT-FAMILY-TREND
+    adapter_contract_id: family_trend.adapter.v0.1
+    hard_constraint_family: mixed_age_safety
+    hard_constraint_ids:
+    - FT-HC-01
+    - FT-HC-02
+    - FT-HC-03
+    - FT-HC-04
+    safety_critical_constraint_ids:
+    - FT-HC-01
+    - FT-HC-02
+    - FT-HC-03
+    - FT-HC-04
+    fail_closed_bindings:
+    - FC-05
+    stop_condition_bindings:
+    - SC-06
+    founder_review_coverage: 100%
+    founder_review_sampling_allowed: false
+  - category_id: CAT-KIDSWEAR
+    adapter_contract_id: kidswear.adapter.v0.1
+    hard_constraint_family: child_safety_and_age_appropriateness
+    hard_constraint_ids:
+    - KW-HC-01
+    - KW-HC-02
+    - KW-HC-03
+    - KW-HC-04
+    - KW-HC-05
+    safety_critical_constraint_ids:
+    - KW-HC-01
+    - KW-HC-02
+    - KW-HC-03
+    - KW-HC-04
+    fail_closed_bindings:
+    - FC-05
+    stop_condition_bindings:
+    - SC-06
+    founder_review_coverage: 100%
+    founder_review_sampling_allowed: false
+  - category_id: CAT-SPORT-TREND
+    adapter_contract_id: sport_trend.adapter.v0.1
+    hard_constraint_family: sport_function_and_safety
+    hard_constraint_ids:
+    - SP-HC-01
+    - SP-HC-02
+    - SP-HC-03
+    - SP-HC-04
+    - SP-HC-05
+    - SP-HC-06
+    safety_critical_constraint_ids:
+    - SP-HC-01
+    - SP-HC-02
+    - SP-HC-03
+    - SP-HC-04
+    - SP-HC-05
+    - SP-HC-06
+    fail_closed_bindings:
+    - FC-06
+    stop_condition_bindings:
+    - SC-06
+    founder_review_coverage: 100%
+    founder_review_sampling_allowed: false
+  - category_id: CAT-TEEN-TREND
+    adapter_contract_id: teen_trend.adapter.v0.1
+    hard_constraint_family: adolescent_body_and_age_appropriateness
+    hard_constraint_ids:
+    - TT-HC-01
+    - TT-HC-02
+    - TT-HC-03
+    - TT-HC-04
+    - TT-HC-05
+    - TT-HC-06
+    safety_critical_constraint_ids:
+    - TT-HC-01
+    - TT-HC-02
+    - TT-HC-03
+    - TT-HC-04
+    - TT-HC-05
+    fail_closed_bindings:
+    - FC-05
+    stop_condition_bindings:
+    - SC-06
+    founder_review_coverage: 100%
+    founder_review_sampling_allowed: false
+  - category_id: CAT-WOMENSWEAR
+    adapter_contract_id: womenswear.adapter.v0.1
+    hard_constraint_family: adult_expression_boundary
+    hard_constraint_ids:
+    - WW-HC-01
+    - WW-HC-02
+    - WW-HC-03
+    - WW-HC-04
+    safety_critical_constraint_ids: []
+    fail_closed_bindings:
+    - FC-04
+    stop_condition_bindings: []
+    founder_review_coverage: 抽样
+    founder_review_sampling_allowed: true
+extension_port_surface:
+  ports:
+  - id: VisualMerchandisingExtensionPort
+    port_version: '0.1'
+    status: RESERVED_NOT_IMPLEMENTED
+  - id: RealtimeSalesAssistExtensionPort
+    port_version: '0.1'
+    status: RESERVED_NOT_IMPLEMENTED
+  bundle_slot: backward_compatible_extension_ports
+  note: 端口当前均为 RESERVED_NOT_IMPLEMENTED；M2 不得把端口能力写进评分卡，M3 不得就未实现端口出题。
+handoff_to_m2:
+  dependency: DEP-02：M1 对象稳定后才可冻结引用它们的评分卡。
+  bind_by: schema_id（不是文件名，不是标题）
+  what_m2_may_now_freeze:
+  - 引用上述 schema_id 的评分卡字段
+  - 引用上述 hard_constraint_ids 的硬门映射
+  - 引用上述 dimension_ids 的风格坐标覆盖设计
+  what_m2_must_not_do:
+  - 为 ②③ 类任务设置唯一 Gold Answer（SC-20 / D-28；M1 未改变该口径）
+  - 把 RESERVED_NOT_IMPLEMENTED 端口写成可评测能力
+  - 在 M1 对象未稳定时冻结引用它们的评分卡
+  - 把内部评审面板结论写成外部专家结论
+  m1_did_not_change:
+  - M2 的 18 项交付清单
+  - PRD 10.2 的阈值与 M2_FREEZE_REQUIRED 范围
+  - D-28 三分类与可接受决策边界口径
+  - 高风险 Founder 全审覆盖率 100% 不可抽样
+handoff_to_m3:
+  dependency: DEP-03：M3 → M4，Claude Code 只执行经预审的问题包，不自由扩写范围。
+  status: INTERFACE_ONLY
+  why_interface_only: 仓内不存在 M3 问题系统 Brief（M0 十四项交付物不含它）。本文件只交接 M1 已产出的对象与约束 ID；M3 的题型、范围、批次与开放题模板属 M3 规划，未获授权，M1 不代为设计。
+  what_m3_may_reference:
+  - 上述 schema_id 作为题面输入/输出对象
+  - 上述 safety_critical_constraint_ids 作为硬约束题（constraint_correctness）的判定依据
+  - 上述 conflict_priority_rule_ids 作为跨品类冲突题的正确性依据
+  what_m3_must_not_do:
+  - 为 mechanism_correctness 或 open_decision 类题设置唯一 Gold Answer（SC-20）
+  - 就 RESERVED_NOT_IMPLEMENTED 端口出题
+  - 引用 M1 未产出的对象或自造品类约束描述

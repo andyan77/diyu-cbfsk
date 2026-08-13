@@ -1,5 +1,5 @@
-fixture_id: P21-execution-uuid-two-runs-guarded
-description: 治理任务批次与 M0 里程碑批次各有合法且互不相同的运行标识，各自有出现点可交叉核对。
+fixture_id: P21-execution-uuid-three-runs-guarded
+description: 治理任务、M0、M1 三个批次各有合法 v4 标识、各自不与父标识相同、各处出现值一致，达到覆盖面下限。
 checker: check_execution_uuid
 expected: PASS
 payload:
@@ -16,3 +16,9 @@ payload:
     continuation: true
     run_id_occurrences:
       b.yaml: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+  - name: m1_milestone_batch
+    execution_run_id: 0540b6d4-7930-43cc-9a92-cb45285d34fa
+    parent_execution_run_id: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+    continuation: true
+    run_id_occurrences:
+      m1_receipt.yaml: 0540b6d4-7930-43cc-9a92-cb45285d34fa

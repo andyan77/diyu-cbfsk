@@ -1,0 +1,67 @@
+schema_version: "0.1"
+contract_id: womenswear.adapter.v0.1
+artifact_kind: contract_file
+milestone: M1
+execution_package: M1-EP02
+status: M1_EP02_DELIVERED
+object_ref: IN-02
+prd_anchors: [PRD-4.1, PRD-9.4, PRD-5.4, FR-02, FR-10]
+
+frozen_source:
+  file: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
+  status: M0_FROZEN
+  pointer: launch_categories.items[CAT-WOMENSWEAR]
+
+category_id: CAT-WOMENSWEAR
+category_name: 女装
+core_audience: 成人女性；职业、生活方式与个体审美差异显著
+unique_professional_contract: [身体比例, 肤色, 气质, 年龄表达, 正式度, 场景转换, 衣橱重构]
+key_outputs: [总部全货盘搭配, 门店现货搭配, 个体适配, IP内容]
+hard_constraint_family: adult_expression_boundary
+founder_full_review_required: false
+
+scope:
+  applies_to_categories: [CAT-WOMENSWEAR]
+  is_default_for_other_categories: false
+  is_default_for_other_categories_note: >-
+    女装是首发品类中体量最大的一类，但**不是**其他四类的默认。任务未指明品类时按 CP-06 失败关闭，
+    不得回落到女装规则。PRD 13-M1 通过标准把「女装规则默认覆盖其他品类」列为不通过条件。
+  inherits_category_rules_from: null
+  shares_with_other_categories: 通用专家机制（capability_contract.v1.0 的 15 项能力），不含任何品类硬约束。
+
+hard_constraints:
+  - id: WW-HC-01
+    statement: 对外语言不得进行身体羞辱，不得作绝对效果承诺。
+    forbidden_external_language: [遮丑, 身材缺陷, 灾难身材, 绝对显瘦/显高/变美承诺]
+    internal_neutral_fields: [需要强化的优势, 需要弱化关注的区域, 比例调整目标]
+    prd_anchor: PRD-9.4
+    failure_state: BODY_EXPRESSION_VIOLATION
+  - id: WW-HC-02
+    statement: 不得以自动图像识别评价消费者「缺陷」或进行外貌排名。
+    prd_anchor: PRD-3.2 NG-02
+    permanence: PERMANENTLY_FORBIDDEN
+    failure_state: BODY_EXPRESSION_VIOLATION
+  - id: WW-HC-03
+    statement: 缺少具体消费者资料时不得编造身材、肤色、气质或生活场景。
+    prd_anchor: PRD-6.4
+    fail_closed_ref: FC-04
+    failure_state: INDIVIDUAL_PROFILE_INSUFFICIENT
+  - id: WW-HC-04
+    statement: 必须记录副作用与失效条件，不得只给正向效果。
+    prd_anchor: PRD-5.4
+    failure_state: BODY_EXPRESSION_VIOLATION
+
+safety_boundary:
+  age_appropriateness: 成人表达边界；本品类不承载未成年人规则，出现未成年成员时按 CP-02 转由童装或青少年一侧的更严约束接管。
+  body_expression: 只做视觉重心与身份表达调整，不对身体作价值排序。
+  performance_claims: 不适用（非功能品类）；如任务含运动功能诉求，按 CP-03 由运动适配器的功能合同接管。
+
+fail_closed_bindings: [FC-04]
+stop_condition_bindings: []
+founder_review:
+  coverage: 抽样
+  sampling_allowed: true
+  basis: category_scope_contract.v1.0 的 founder_review_coverage 只对童装安全、青少年身体与年龄适当性、运动功能安全要求 100% 不抽样；女装不在该高风险清单内。
+
+conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+m1_scope_note: 本文件是品类合同，不是品类知识。M1 不生成任何品类知识内容、语料或夹具品牌资产。

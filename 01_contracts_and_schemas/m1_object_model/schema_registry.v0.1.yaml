@@ -10,7 +10,7 @@ generation:
   rule: 注册表是派生件，不是第二份真源；字段值一律取自 Schema 文件本身（EQ-1）。改 Schema 后重跑 check_m1_object_coverage 即可发现漂移。
 json_schema_draft: draft-07
 json_schema_draft_reason: 本机 jsonschema 3.2.0 只实现到 draft-07；用 2020-12 会写出无法被实测行使的 Schema（EQ-3：判据必须真的被 fixture 行使）。
-schema_count: 18
+schema_count: 19
 entries:
 - schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
   file: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
@@ -80,6 +80,21 @@ entries:
   - PRD-5.6
   - PRD-6.4
   instance_bearing: true
+- schema_id: https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+  file: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+  title: HumanVisualProfile
+  object_id: C-04
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+  prd_anchors:
+  - PRD-5.2-C-04
+  - PRD-5.4
+  - PRD-9.4
+  - PRD-3.2-NG-02
+  - FR-04
+  - FR-10
+  instance_bearing: true
+  delivered_in: M1-EP03
 - schema_id: https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json
   file: 01_contracts_and_schemas/m1_object_model/individual_profile.schema.v0.1.json
   title: IndividualProfile

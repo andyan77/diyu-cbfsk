@@ -1,0 +1,33 @@
+fixture_id: M2-N53
+description: 编号跳过 07——读者会以为有条目被删掉。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries:
+  - registry: governance/baseline/founder_pinned_baseline.v0.1.yaml:README.md.authorized_modification_history
+    numbers:
+    - 12
+    - 11
+    - 10
+    - 9
+    - 8
+    - 6
+    - 5
+    - 1
+    - 4
+    - 3
+    - 2
+    prefixes:
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    malformed_ids: []

@@ -16,3 +16,9 @@ payload:
     continuation: true
     run_id_occurrences:
       ruling.yaml: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+  - name: m1_milestone_batch
+    execution_run_id: 0540b6d4-7930-43cc-9a92-cb45285d34fa
+    parent_execution_run_id: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+    continuation: true
+    run_id_occurrences:
+      m1_receipt.yaml: 0540b6d4-7930-43cc-9a92-cb45285d34fa

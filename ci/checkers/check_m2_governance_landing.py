@@ -32,7 +32,7 @@ COVERAGE_MAP = "01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.
 LAYER_MAP = "03_m2_evaluation_foundation/architecture/m1_object_layer_map.v0.1.yaml"
 COMMERCIAL = "03_m2_evaluation_foundation/commercial_decision_record.v0.1.yaml"
 COMPETITIVE = "03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml"
-DELIVERY_RECEIPT = "11_reports_and_receipts/m2_ep01/m2_ep01_delivery_receipt.yaml"
+RECEIPT_ROOT = ROOT / "11_reports_and_receipts"
 MANIFEST = "11_reports_and_receipts/m2_ep01/m2_ep01_task_manifest.yaml"
 ADR_DIR = ROOT / "03_m2_evaluation_foundation" / "adr"
 CHECKER_DIR = ROOT / "ci" / "checkers"
@@ -52,19 +52,28 @@ ADR_REQUIRED_DECLARATIONS = (
 
 # 启动包 v1.1 §2 EP01 结束状态块。写死在这里是判据的一部分，不是魔法常量：
 # 它就是 Founder 签署时约定的收尾状态，改它必须改本文件并具名裁决。
-REQUIRED_END_STATE = {
-    "execution_status": "M1_M2_PARALLEL_IN_PROGRESS",
-    "m2_started": True,
-    "m2_ep01_status": "SELF_CHECKED",
-    "m2_evaluation_profile_status": "PROVISIONAL_READY",
-    "m2_benchmark_assets_status": "NOT_CREATED",
-    "m2_hidden_assets_status": "NOT_CREATED",
-    "m2_frozen": False,
-    "m1_final_binding": "PENDING_M1_CLOSEOUT",
-    "knowledge_distillation_started": False,
-    "production_servable": False,
-    "next_authorized_action": "WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT",
+# 每个执行包收尾时约定的状态块。**只有标记 describes_current_state 的那一份**要与规范源比对；
+# 已被后续包取代的历史块保持原样不改写——改写它等于篡改当时的如实记录，
+# 只要求它显式标出 superseded_by。这是 EP02 受控合并时的结构性修复：
+# 原实现把「EP01 的收尾态」当成「永远的当前态」，M1 收口后必然自相矛盾（EQ-5：先消除结构缺陷再往下走）。
+REQUIRED_END_STATE_BY_PACKAGE = {
+    "M2-EP01": {
+        "execution_status": "M1_M2_PARALLEL_IN_PROGRESS",
+        "m2_started": True,
+        "m2_ep01_status": "SELF_CHECKED",
+        "m2_evaluation_profile_status": "PROVISIONAL_READY",
+        "m2_benchmark_assets_status": "NOT_CREATED",
+        "m2_hidden_assets_status": "NOT_CREATED",
+        "m2_frozen": False,
+        "m1_final_binding": "PENDING_M1_CLOSEOUT",
+        "knowledge_distillation_started": False,
+        "production_servable": False,
+        "next_authorized_action": "WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT",
+    },
 }
+
+# 无论哪个包、无论当前还是历史，这几位都不许为真——它们是红线，不随包的推进而松动。
+ALWAYS_FALSE_IN_END_STATE = ("m2_frozen", "knowledge_distillation_started", "production_servable")
 
 # 商业形态裁决前不得建设的三项。
 COMMERCIAL_MUST_NOT_BUILD = ("Billing", "开发者门户", "Marketplace")
@@ -157,30 +166,60 @@ def validate(payload: dict) -> list[str]:
         errors.append("FACT_PRIORITY_CHANGE_REQUIRED: the layer map claims to change the fact priority order")
 
     # --- 结束状态块 ---
-    end_state = payload.get("end_state") or {}
-    if not end_state:
-        errors.append("EP01_END_STATE_MISSING: the delivery receipt records no ep01_end_state block")
-    for key, expected in sorted(REQUIRED_END_STATE.items()):
-        if key not in end_state:
-            errors.append(f"EP01_END_STATE_MISSING: {key}")
-        elif end_state[key] != expected:
-            errors.append(f"EP01_END_STATE_DRIFT: {key}={end_state[key]!r}, expected {expected!r}")
-    for key, actual in sorted((payload.get("canonical_state") or {}).items()):
-        if end_state.get(key) != actual:
+    receipts = payload.get("package_receipts") or []
+    if not receipts:
+        errors.append("PACKAGE_END_STATE_MISSING: no M2 package receipt records an end-state block")
+
+    current = [r for r in receipts if r.get("describes_current_state")]
+    if len(current) != 1:
+        errors.append(
+            f"CURRENT_STATE_RECEIPT_AMBIGUOUS: {len(current)} receipt(s) claim to describe the current state, "
+            f"expected exactly 1 (found {[r.get('package_id') for r in current]})"
+        )
+
+    for row in receipts:
+        pid = row.get("package_id", "<no package>")
+        end_state = row.get("end_state") or {}
+        if not end_state:
+            errors.append(f"PACKAGE_END_STATE_MISSING: {pid} records no end-state block")
+            continue
+
+        expected_block = REQUIRED_END_STATE_BY_PACKAGE.get(pid)
+        if expected_block:
+            for key, expected in sorted(expected_block.items()):
+                if key not in end_state:
+                    errors.append(f"PACKAGE_END_STATE_MISSING: {pid}.{key}")
+                elif end_state[key] != expected:
+                    errors.append(
+                        f"PACKAGE_END_STATE_DRIFT: {pid}.{key}={end_state[key]!r}, expected {expected!r}"
+                    )
+
+        for key in ALWAYS_FALSE_IN_END_STATE:
+            if end_state.get(key) not in (False, None):
+                errors.append(f"RED_LINE_FLAG_SET: {pid}.{key}={end_state.get(key)!r} must stay false")
+
+        if row.get("describes_current_state"):
+            for key, actual in sorted((payload.get("canonical_state") or {}).items()):
+                if end_state.get(key) != actual:
+                    errors.append(
+                        f"CURRENT_END_STATE_CONTRADICTS_CANONICAL_SOURCE: {pid}.{key}="
+                        f"{end_state.get(key)!r} in the receipt but {actual!r} in {ROLE_MODEL}"
+                    )
+        elif not row.get("superseded_by"):
             errors.append(
-                f"EP01_END_STATE_CONTRADICTS_CANONICAL_SOURCE: {key}={end_state.get(key)!r} in the receipt "
-                f"but {actual!r} in {ROLE_MODEL}"
+                f"SUPERSEDED_RECEIPT_UNMARKED: {pid} no longer describes the current state but names no "
+                "superseded_by — 历史块必须自报已被取代，否则读者会把旧收尾态当成现状"
+            )
+
+        if not row.get("self_reference_limitation_recorded"):
+            errors.append(
+                f"RECEIPT_SELF_REFERENCE_UNDISCLOSED: {pid} must state that it cannot record the commit hash "
+                "of the commit containing itself"
             )
 
     # --- 注册 ---
     for name in payload.get("unregistered_m2_checkers") or []:
         errors.append(f"CHECKER_NOT_REGISTERED_IN_FULL_SUITE: {name}")
-    if payload.get("self_reference_limitation_recorded") is not True:
-        errors.append(
-            "RECEIPT_SELF_REFERENCE_UNDISCLOSED: the receipt must state that it cannot record the commit hash "
-            "of the commit containing itself"
-        )
-
     return errors
 
 
@@ -204,8 +243,22 @@ def collect() -> dict:
     readme = read_text("README.md")
     registry_source = read_text(REGISTRY)
 
-    receipt_path = ROOT / DELIVERY_RECEIPT
-    receipt = load_yaml(DELIVERY_RECEIPT) if receipt_path.exists() else {}
+    package_receipts = []
+    for path in sorted(RECEIPT_ROOT.glob("m2_ep*/m2_ep*_delivery_receipt.yaml")):
+        doc = load_yaml(str(path.relative_to(ROOT)))
+        end_state = next(
+            (v for k, v in doc.items() if k.endswith("_end_state") and isinstance(v, dict)), {}
+        )
+        package_receipts.append(
+            {
+                "package_id": doc.get("package_id"),
+                "path": str(path.relative_to(ROOT)),
+                "end_state": end_state,
+                "describes_current_state": bool(doc.get("describes_current_state")),
+                "superseded_by": doc.get("superseded_by"),
+                "self_reference_limitation_recorded": bool(doc.get("self_reference_limitation")),
+            }
+        )
 
     adrs = []
     for path in sorted(ADR_DIR.glob("ADR-*.md")):
@@ -271,7 +324,7 @@ def collect() -> dict:
         "layer_refs_unknown": [row["object_id"] for row in layer_rows if row["layer_id"] not in layers],
         "layer_count": len(layer_map["layers"]),
         "fact_priority_changed_by_package": layer_map["fact_priority_unchanged"]["changed_by_this_package"],
-        "end_state": receipt.get("ep01_end_state") or {},
+        "package_receipts": package_receipts,
         "canonical_state": {
             "execution_status": model["project_state"]["execution_status"],
             "m2_started": model["project_state"]["m2_started"],
@@ -279,7 +332,6 @@ def collect() -> dict:
             "production_servable": model["project_state"]["production_servable"],
         },
         "unregistered_m2_checkers": sorted(m2_checkers - registered),
-        "self_reference_limitation_recorded": bool(receipt.get("self_reference_limitation")),
     }
 
 

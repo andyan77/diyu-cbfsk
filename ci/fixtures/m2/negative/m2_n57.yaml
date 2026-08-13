@@ -1,0 +1,6 @@
+fixture_id: M2-N57
+description: 一个登记序列都没读到——判据没读到东西不等于没问题。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries: []

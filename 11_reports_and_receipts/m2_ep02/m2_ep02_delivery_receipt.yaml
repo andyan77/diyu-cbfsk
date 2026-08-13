@@ -1,0 +1,66 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-EP02-RECEIPT-001
+task_id: DIYU-CBFSK-M2-EP02-001
+package_id: M2-EP02
+plan_id: MILESTONE_PLAN_M2
+plan_version: 1.1.0
+project_id: DIYU-CBFSK-001
+task_class: L2
+recorded_by: CODEX_EXECUTION_ENGINEER
+recorded_at: '2026-08-13'
+authorization: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001
+baseline_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+baseline_commit_role: Founder 恢复执行授权第一节第 2 条指定的新基线 main
+m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+m1_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+branch: candidate/m2
+worktree: /home/faye/diyu-cbfsk-m2
+describes_current_state: true
+status: IN_PROGRESS
+self_reference_limitation: 本回执无法记录包含它自身的那个 Commit 的哈希——回执一旦写入哈希，文件内容即改变，哈希随之失效。因此本回执只钉基线 Commit 与各产物的 artifact SHA256；候选
+  Commit 完整哈希在交付答复中输出，并由 Guardian 以 live git 复核。
+merge:
+  method: merge
+  rebase_used: false
+  rebase_forbidden_reason: 必须保留 main 为祖先，最终 main 才能快进到 candidate/m2 顶端
+  merged_ref: origin/main
+  merged_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  merge_base: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  conflicted_files: 14
+  frozen_path_conflict: false
+  frozen_path_conflict_note: 01_contracts_and_schemas/ 与 00_charter/ 均未出现冲突，FROZEN_PATH_MERGE_CONFLICT 未触发。
+  resolution_rules_applied:
+  - rule: M1 相关状态位以 main 为准
+    applied_to:
+    - project_state.m1_status=FOUNDER_ACCEPTED
+    - value_basis.M1_COMPLETE
+    - README M1 PASS 段
+    - README-MOD-10 / README-MOD-11
+  - rule: M2 相关状态位以 candidate/m2 为准
+    applied_to:
+    - project_state.m2_started=true
+    - flags.m2_started 授权条目
+    - README M2 段
+  - rule: execution_status 一律取 M2_IN_PROGRESS
+    applied_to:
+    - role_operating_model.project_state
+    - PRD_v1.2_change_map.resulting_state
+    - README 状态块
+    - founder_signoff_receipt authorized_values（新增该值）
+  - rule: 顺序登记类撞号则将 M2-EP01 条目重编为下一个空号
+    applied_to:
+    - README-MOD-10 → README-MOD-12（11 已被 main 的 M1 PASS 条目占用）
+  both_sides_kept:
+  - ci/run_all_checks.py：check_m1_category_adapters（main）与四个 check_m2_*（candidate）全部保留
+  - founder_signoff_receipt：M1_M2_PARALLEL_IN_PROGRESS / M1_COMPLETE / M2_IN_PROGRESS 三个取值并存，各带 value_basis
+  projections_regenerated: 12 份投影冲突不逐行手工解决——投影是派生件，解决规范源后由 ci/compile_role_instructions.py --write 重生成，drift=0（EQ-1）。
+ep02_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_ep01_status: SELF_CHECKED
+  m2_ep02_status: IN_PROGRESS
+  m2_frozen: false
+  knowledge_distillation_started: false
+  production_servable: false
+ep02_end_state_note: Phase 0 受控合并落盘时的状态；EP02 各 Phase 完成后逐步更新，Phase 8 定稿。

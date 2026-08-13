@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json",
+  "title": "HumanVisualProfile",
+  "object_id": "C-04",
+  "description": "人体视觉档案（能力 C-04）：用比例、量感、线条、视觉重心、肤色与气质描述需求，不依赖粗糙身材标签。不是 PRD 6.1 的 12 个输入对象之一，而是 AudienceResolver 支撑 IN-05/IN-06 的能力级对象；M1 对象模型 Brief 交付清单第 3 项。",
+  "schema_version": "0.1",
+  "prd_anchors": ["PRD-5.2-C-04", "PRD-5.4", "PRD-9.4", "PRD-3.2-NG-02", "FR-04", "FR-10"],
+  "persistence_class": "runtime_fact",
+  "type": "object",
+  "required": [
+    "profile_id",
+    "version",
+    "persistence_class",
+    "proportion",
+    "volume",
+    "line",
+    "visual_center",
+    "skin_tone",
+    "temperament",
+    "mechanism_effects",
+    "ranks_body_by_value",
+    "appearance_ranking_performed",
+    "coarse_body_label",
+    "external_language_check"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "profile_id": { "type": "string", "minLength": 1 },
+    "version": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/objectVersion" },
+    "persistence_class": {
+      "description": "个体的视觉档案随任务产生，属运行事实；把它写进长期真源等于绕过 IndividualProfile 的双模式授权合同。",
+      "const": "runtime_fact"
+    },
+    "subject_ref": {
+      "description": "指向 AudienceProfile（群体）或 IndividualProfile（个体）的引用；个体侧的保存与授权由双模式合同约束，本对象不重复承载授权字段。",
+      "type": "string"
+    },
+    "proportion": {
+      "description": "比例：横纵分割、腰线位置、上下身关系。中性描述，不作价值判断。",
+      "type": "object",
+      "required": ["horizontal_vertical_split", "waistline"],
+      "additionalProperties": false,
+      "properties": {
+        "horizontal_vertical_split": { "type": "string", "minLength": 1 },
+        "waistline": { "type": "string", "minLength": 1 },
+        "upper_lower_relation": { "type": "string" }
+      }
+    },
+    "volume": {
+      "description": "量感：肩部体量、材质体积感。",
+      "type": "object",
+      "required": ["shoulder_volume"],
+      "additionalProperties": false,
+      "properties": {
+        "shoulder_volume": { "type": "string", "minLength": 1 },
+        "material_bulk_sensitivity": { "type": "string" }
+      }
+    },
+    "line": {
+      "description": "线条：轮廓走向与曲直倾向。",
+      "type": "string",
+      "minLength": 1
+    },
+    "visual_center": {
+      "description": "视觉重心：上下重心位置与可调整方向。",
+      "type": "object",
+      "required": ["current"],
+      "additionalProperties": false,
+      "properties": {
+        "current": { "type": "string", "minLength": 1 },
+        "adjustment_target": { "type": "string" }
+      }
+    },
+    "skin_tone": {
+      "type": "object",
+      "required": ["description"],
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "near_face_color_note": { "type": "string" }
+      }
+    },
+    "temperament": { "type": "string", "minLength": 1 },
+    "mechanism_effects": {
+      "description": "PRD 5.4：每一条视觉机制都必须记录副作用与失效条件，不得只给正向效果。",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["variable", "effect", "side_effects", "failure_conditions"],
+        "additionalProperties": false,
+        "properties": {
+          "variable": {
+            "description": "PRD 5.4 列举的视觉变量。",
+            "type": "string",
+            "enum": [
+              "横纵分割", "腰线", "肩部体量", "上下重心", "面部附近色彩", "材质体积感",
+              "图案位置", "露肤", "鞋口裤脚", "包袋位置", "领口", "配饰"
+            ]
+          },
+          "effect": { "type": "string", "minLength": 1 },
+          "side_effects": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "failure_conditions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    },
+    "internal_neutral_fields": {
+      "description": "PRD 9.4 允许的内部中性字段；对外表达不得直接引用其原文。",
+      "type": "array",
+      "items": { "type": "string", "enum": ["需要强化的优势", "需要弱化关注的区域", "比例调整目标"] }
+    },
+    "ranks_body_by_value": {
+      "description": "PRD 5.4：不对身体作价值排序。",
+      "const": false
+    },
+    "appearance_ranking_performed": {
+      "description": "NG-02 永久禁止：不得以自动图像识别评价「缺陷」或进行外貌排名。",
+      "const": false
+    },
+    "coarse_body_label": {
+      "description": "C-04 的定义就是「不依赖粗糙身材标签」——梨形、苹果形一类标签在本对象里没有合法位置，写任何值都非法。",
+      "type": "null"
+    },
+    "external_language_check": {
+      "type": "object",
+      "required": ["forbidden_terms_present", "absolute_effect_promise_present"],
+      "additionalProperties": false,
+      "properties": {
+        "forbidden_terms_present": {
+          "description": "遮丑 / 身材缺陷 / 灾难身材 一类对外语言（PRD 9.4）。",
+          "const": false
+        },
+        "absolute_effect_promise_present": {
+          "description": "绝对显瘦 / 显高 / 变美承诺（PRD 9.4）。",
+          "const": false
+        }
+      }
+    },
+    "fail_closed_state": {
+      "description": "缺少具体消费者资料时不得编造身材、肤色、气质或生活场景（FC-04）。",
+      "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/failClosedState"
+    },
+    "provenance": { "$ref": "https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json#/definitions/factProvenance" }
+  }
+}

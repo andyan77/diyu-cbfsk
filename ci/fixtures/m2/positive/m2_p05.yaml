@@ -1,0 +1,34 @@
+fixture_id: M2-P05
+description: README-MOD 编号 1—12 齐全、无重复、最新一条排在最前（01 的排版错位不属编号缺陷，不判失败）。
+checker: check_sequential_registration
+expected: PASS
+payload:
+  registries:
+  - registry: governance/baseline/founder_pinned_baseline.v0.1.yaml:README.md.authorized_modification_history
+    numbers:
+    - 12
+    - 11
+    - 10
+    - 9
+    - 8
+    - 7
+    - 6
+    - 5
+    - 1
+    - 4
+    - 3
+    - 2
+    prefixes:
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    malformed_ids: []

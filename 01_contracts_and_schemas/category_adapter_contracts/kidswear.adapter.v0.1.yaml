@@ -1,0 +1,72 @@
+schema_version: "0.1"
+contract_id: kidswear.adapter.v0.1
+artifact_kind: contract_file
+milestone: M1
+execution_package: M1-EP02
+status: M1_EP02_DELIVERED
+object_ref: IN-02
+prd_anchors: [PRD-4.1, PRD-3.3-P-07, PRD-9.4, PRD-6.4, PRD-16.2, FR-02, FR-11]
+
+frozen_source:
+  file: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
+  status: M0_FROZEN
+  pointer: launch_categories.items[CAT-KIDSWEAR]
+
+category_id: CAT-KIDSWEAR
+category_name: 童装
+core_audience: 儿童与家长双重决策者
+unique_professional_contract: [年龄与发育, 活动自由, 穿脱便利, 面料触感, 安全, 耐洗, 成长余量]
+forbidden: [成人化身体评价]
+key_outputs: [家长决策内容, 儿童自主选择, 场景与功能搭配]
+hard_constraint_family: child_safety_and_age_appropriateness
+founder_full_review_required: true
+
+scope:
+  applies_to_categories: [CAT-KIDSWEAR]
+  is_default_for_other_categories: false
+  inherits_category_rules_from: null
+  inherits_note: 童装硬约束自成一套，不由女装规则派生；共享的只有通用专家机制。
+
+hard_constraints:
+  - id: KW-HC-01
+    statement: 不得使用成人化身体评价。
+    prd_anchor: PRD-4.1 CAT-KIDSWEAR.forbidden / PRD-9.4
+    severity: safety_critical
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: KW-HC-02
+    statement: 年龄与场景不明时不得输出可能不适龄、成人化或安全风险较高的建议。
+    prd_anchor: PRD-6.4
+    severity: safety_critical
+    fail_closed_ref: FC-05
+    failure_state: AGE_CONTEXT_INSUFFICIENT
+  - id: KW-HC-03
+    statement: 安全相关属性（绳带、小部件、明火阻燃、成分与安全认证）不得由视觉推断得出，只能取权威结构化商品事实。
+    prd_anchor: PRD-5.6 / D-23 / NG-08
+    severity: safety_critical
+    failure_state: MULTIMODAL_ATTRIBUTE_UNSAFE
+  - id: KW-HC-04
+    statement: 活动自由、穿脱便利、面料触感、耐洗与成长余量属本品类必判维度，缺失即失败关闭，不得以外观替代。
+    prd_anchor: PRD-4.1 CAT-KIDSWEAR.unique_professional_contract
+    severity: safety_critical
+    fail_closed_ref: FC-05
+    failure_state: AGE_CONTEXT_INSUFFICIENT
+  - id: KW-HC-05
+    statement: 面向家长与面向儿童的表达都不得制造消费焦虑或以同伴比较施压。
+    prd_anchor: PRD-9.4
+    failure_state: BODY_EXPRESSION_VIOLATION
+
+safety_boundary:
+  age_appropriateness: 按年龄段与发育阶段判断；未满 14 周岁涉及个体档案时须监护人同意（与 individual_profile 双模式合同联动）。
+  body_expression: 禁止任何成人化身体评价、身体羞耻与外貌排名。
+  performance_claims: 不得承诺安全性能；安全认证只能引用权威事实。
+  serving_stop: 安全硬门失败 → 本品类立即关闭 Serving。
+
+fail_closed_bindings: [FC-05]
+stop_condition_bindings: [SC-06]
+founder_review:
+  coverage: "100%"
+  sampling_allowed: false
+  basis: category_scope_contract.v1.0 category_safety_by_design.founder_review_coverage —— 童装安全属高风险知识，Founder 审查覆盖率 100%，不得抽样。
+
+conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+m1_scope_note: 本文件是品类合同，不是品类知识。M1 不生成任何品类知识内容、语料或夹具品牌资产。

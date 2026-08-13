@@ -14,7 +14,7 @@ change_set:
 
 resulting_state:
   project_status: PROJECT_INITIATED
-  execution_status: M1_M2_PARALLEL_IN_PROGRESS
+  execution_status: M2_IN_PROGRESS
   production_servable: false
   m0_authorized: true
   prd_v1_2_effective: true
@@ -33,6 +33,8 @@ resulting_state:
   m2_started: true
   m2_started_authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
   m2_started_signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  m1_status: FOUNDER_ACCEPTED
+  m1_pass_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
 
 invariants:
   m0_top_level_deliverable_count: 14

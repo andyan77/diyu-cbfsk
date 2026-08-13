@@ -1,0 +1,94 @@
+schema_version: "0.1"
+contract_id: cross_category_conflict_priority.v0.1
+artifact_kind: contract_file
+milestone: M1
+execution_package: M1-EP02
+status: M1_EP02_DELIVERED
+prd_anchors: [PRD-4.1, PRD-3.3-P-07, PRD-5.5, PRD-9.4, PRD-16.2, FR-02, FR-11]
+
+uniqueness:
+  rule: 全仓唯一。跨品类冲突优先级只有这一份实现，五份适配器一律 conflict_priority_ref 引用，不得各自复制一份（EQ-1）。
+  enforced_by: check_m1_category_adapters → CONFLICT_PRIORITY_TABLE_NOT_UNIQUE / CONFLICT_PRIORITY_NOT_REFERENCED
+  why: 冲突优先级一旦有两份，两份就会分叉；分叉之后「以哪份为准」这个问题本身就没有答案了。
+
+frozen_source:
+  file: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
+  status: M0_FROZEN
+  derived_statements:
+    - 亲子任务同时触发童装或青少年一侧的品类硬约束，取更严者。（launch_categories.CAT-FAMILY-TREND.note）
+    - 童装、青少年和运动品类必须具有独立的安全、功能、年龄适当性和表达边界。（category_safety_by_design）
+    - 严重安全违规率 = 0。（category_safety_by_design.hard_gate）
+    - 运动品类功能合同优先。（launch_categories.CAT-SPORT-TREND.priority_rule）
+  note: 本表不新增产品裁决，只把 M0 已冻结的裁决整理成可判定的顺序；如需改变顺序属产品裁决变更，停下报 Founder。
+
+ordered_rules:
+  - rank: 1
+    id: CP-01
+    name: 品类安全硬约束优先
+    statement: 童装、青少年、运动的安全、功能与年龄适当性硬约束高于任何品牌偏好、人设立场、平台语感与经营目标。
+    prd_anchor: PRD-3.3-P-07 / FR-11
+    on_violation: CATEGORY_SAFETY_VIOLATION
+    stop_condition_ref: SC-06
+  - rank: 2
+    id: CP-02
+    name: 多品类命中取更严
+    statement: 一个任务同时命中多个品类时，逐条约束取并集，同一条约束存在宽严差异时取更严的一侧，不得取平均、不得取发起品类的一侧。
+    prd_anchor: PRD-4.1 CAT-FAMILY-TREND note
+    resolution: stricter_of
+  - rank: 3
+    id: CP-03
+    name: 功能合同优先于视觉表达
+    statement: 运动品类中功能与安全判断优先于视觉搭配；功能信息不足时失败关闭，不得用视觉建议替代性能判断。
+    prd_anchor: PRD-4.1 CAT-SPORT-TREND.priority_rule / PRD-9.4
+    fail_closed_ref: FC-06
+  - rank: 4
+    id: CP-04
+    name: 事实优先级不因品类改变
+    statement: 七级事实优先级在所有品类中一致生效；品类适配器不得下调任何一级事实的权重。
+    prd_anchor: PRD-6.3
+    fact_priority_source: 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#fact_and_rule_priority
+  - rank: 5
+    id: CP-05
+    name: 人设与平台语感居末
+    statement: 品牌真源、已接受专业判断、品类安全、商品与库存事实 > 搭配师人设 > 平台表达偏好。
+    prd_anchor: PRD-5.5 priority_rule
+  - rank: 6
+    id: CP-06
+    name: 无默认品类
+    statement: 不存在「默认品类」。任务未指明品类时失败关闭并要求补充，不得回落到女装或任何其他单一品类的规则。
+    prd_anchor: PRD-13-M1 通过标准
+    on_violation: CATEGORY_ROUTING_ERROR
+
+combination_rules:
+  - id: COMBO-01
+    combination: [CAT-FAMILY-TREND, CAT-KIDSWEAR]
+    resolution: stricter_of
+    binding_rank: 2
+    note: 亲子含儿童成员时，童装安全与年龄适当性硬约束全量生效。
+  - id: COMBO-02
+    combination: [CAT-FAMILY-TREND, CAT-TEEN-TREND]
+    resolution: stricter_of
+    binding_rank: 2
+    note: 亲子含青少年成员时，青少年身体与年龄适当性硬约束全量生效。
+  - id: COMBO-03
+    combination: [CAT-FAMILY-TREND, CAT-WOMENSWEAR]
+    resolution: stricter_of
+    binding_rank: 2
+    note: 成人成员适用女装表达边界，但不得因此放宽同一造型中未成年成员一侧的任何约束。
+  - id: COMBO-04
+    combination: [CAT-SPORT-TREND, CAT-KIDSWEAR]
+    resolution: stricter_of
+    binding_rank: 2
+    note: 儿童运动同时受功能安全与童装安全约束，两侧取更严。
+  - id: COMBO-05
+    combination: [CAT-SPORT-TREND, CAT-TEEN-TREND]
+    resolution: stricter_of
+    binding_rank: 2
+    note: 青少年运动同时受功能安全与年龄适当性约束，两侧取更严。
+
+unresolvable_conflict:
+  rule: 两条同 rank 的硬约束直接冲突且无更严一侧时，不得自行择一，必须失败关闭并记入 DecisionTrace 的 uncertainties，路由 Founder。
+  failure_state: CATEGORY_CONFLICT_UNRESOLVED
+  never_resolved_by: [模型择优, 平均折中, 发起品类优先, 随机选择]
+
+m1_scope_note: 本表是合同，不是知识。M1 不生成任何品类知识内容、语料或夹具品牌资产。

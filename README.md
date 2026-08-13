@@ -1,6 +1,6 @@
 # 笛语跨品牌服装搭配专家内核 · 文档索引
 
-> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1-EP01 已交付｜M2-EP01 已自检
+> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1 `PASS`（`FOUNDER_ACCEPTED`）｜M2 执行中
 
 ## 当前活基线
 
@@ -19,7 +19,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M1_M2_PARALLEL_IN_PROGRESS
+execution_status: M2_IN_PROGRESS
 production_servable: false
 m0_authorized: true
 current_active_baseline: PRD_v1.2
@@ -38,13 +38,10 @@ m0_founder_decision: PASS
 m0_founder_decision_original: CONDITIONAL
 m0_guardian_delta_review: APPROVE
 m1_started: true
+m1_status: FOUNDER_ACCEPTED
 m2_started: true
 m2_ep01_status: SELF_CHECKED
-m2_evaluation_profile_status: PROVISIONAL_READY
-m2_benchmark_assets_status: NOT_CREATED
-m2_hidden_assets_status: NOT_CREATED
 m2_frozen: false
-m1_final_binding: PENDING_M1_CLOSEOUT
 knowledge_distillation_started: false
 pending_active_baseline_switch: false
 ```
@@ -89,13 +86,25 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 
 ## M1 对象模型（M1-EP01 已交付）
 
-`01_contracts_and_schemas/m1_object_model/` 下 18 份 Schema ＋ 风格空间 ＋ 注册表 ＋ 覆盖映射表：**12 个输入与 15 个输出对象在 Schema 层全部可寻址**，对象数量与命名逐一对齐 M0 冻结合同（M1 只做 Schema 化，不增删对象）。风格空间落 PRD 5.3 原文点名的 14 维连续坐标，不自行增补未点名维度。输出走「整包」选项，`DecisionTrace` 含 D-28 要求的「被舍弃的合法候选族」必填记录位。交付报告见 [`11_reports_and_receipts/m1_ep01_delivery_report.md`](11_reports_and_receipts/m1_ep01_delivery_report.md)。
+`01_contracts_and_schemas/m1_object_model/` 下 19 份 Schema ＋ 风格空间 ＋ 注册表 ＋ 覆盖映射表：**12 个输入与 15 个输出对象在 Schema 层全部可寻址**，对象数量与命名逐一对齐 M0 冻结合同（M1 只做 Schema 化，不增删对象）。风格空间落 PRD 5.3 原文点名的 14 维连续坐标，不自行增补未点名维度。输出走「整包」选项，`DecisionTrace` 含 D-28 要求的「被舍弃的合法候选族」必填记录位。交付报告见 [`11_reports_and_receipts/m1_ep01_delivery_report.md`](11_reports_and_receipts/m1_ep01_delivery_report.md)。
 
-M1-EP02（五类品类适配合同）与 M1-EP03（集成与收口）尚未开工。
+## M1 品类适配合同（M1-EP02 已交付）
+
+`01_contracts_and_schemas/category_adapter_contracts/` 下五份品类适配器 ＋ 一份跨品类冲突优先级表：女装／童装／青少年／亲子／运动各自的硬约束与安全边界，逐字段镜像 M0 冻结的 `category_scope_contract.v1.0.yaml`（品类、硬约束家族、核心受众、专业合同、禁止项、审查要求），适配器改写品类定义会被 `HARD_CONSTRAINT_FAMILY_DRIFT` 当场判失败。冲突优先级 6 条有序规则 ＋ 5 条组合规则**全仓唯一**，五份适配器一律引用不复制，唯一性靠全仓扫 `contract_id` 判定。交付报告见 [`11_reports_and_receipts/m1_ep02_delivery_report.md`](11_reports_and_receipts/m1_ep02_delivery_report.md)。
+
+## M1 集成与收口（M1-EP03 已交付）
+
+补齐 Brief 交付清单第 3 项 `human_visual_profile.schema.v0.1.json`（C-04，EP01 遗漏）与第 21 项 `extension_port_contracts.v0.1.yaml`（D-22 / D-24 / FR-27，两个端口均 `RESERVED_NOT_IMPLEMENTED`）；新增派生件 [`m1_interface_handoff.v0.1.yaml`](01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml) 作为 M1→M2/M3 的接口面，M2 冻结须按 `schema_id` / `hard_constraint_id` / `dimension_id` 绑定；覆盖 checker 扩展出 Brief 21 项交付清单、跨包引用完整性、端口注册表一致、接口面漂移与判据接线五类判据。
+
+M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_and_receipts/m1_delivery_report.md)，回执见 [`11_reports_and_receipts/m1_delivery_receipt.yaml`](11_reports_and_receipts/m1_delivery_receipt.yaml)。
+
+**M1 已通过**：Founder 裁决 [`DIYU-CBFSK-FOUNDER-M1-PASS-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml) `decision: PASS`，批准哈希 `2df11012da46ace0de7b7bce6d199a578d32d341`，三项前置齐备（Guardian `APPROVE` 阻断 0 / 总顾问 Delta 复核 `PASS` / Founder 裁决）。已按 FF-ONLY 合并 main，`origin/main` 实测等于该批准哈希，未产生任何合并提交。
+
+`PASS` 只表示 M1 里程碑通过：**不**表示可服务生产，**也不**表示知识蒸馏可开始。M1 收口后 Founder 已下达恢复执行授权（`DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001`）：M2 解除暂停，`execution_status` 迁移至 `M2_IN_PROGRESS`，EP02 与 EP03 连续执行。M3、知识蒸馏、隐藏资产进入主仓仍须 Founder 另行裁决。
 
 ## M2 评测治理基础（M2-EP01 已自检）
 
-M2 与 M1 并行执行，基线钉死在 M1-EP01 收口 Commit `6499431c66f7bf4a234bd830ee4c810e1ac78694`——签署只授权这一个 Commit，`main` 此后前进不改变本包基线。全项目并行执行包上限 2（`DIYU-CBFSK-FR-GRANULARITY-005`）已由 M1 链 + M2-EP01 占满，**M2-EP02 在 M1 收口合入 `main` 前不得启动**。
+M2-EP01 曾与 M1 并行执行，基线钉死在 M1-EP01 收口 Commit `6499431c66f7bf4a234bd830ee4c810e1ac78694`。M1 已于 `c3f6ad372306cc12f139cf38624e9a5cea2cf329` 收口合入 `main`，并行窗口关闭；EP02 已按受控合并（`merge`，非 `rebase`，保留 `main` 为祖先）承接 M1 全部产物。
 
 `03_m2_evaluation_foundation/` 下四组产物：
 
@@ -107,11 +116,11 @@ M2 与 M1 并行执行，基线钉死在 M1-EP01 收口 Commit `6499431c66f7bf4a
 | `evaluation_governance/` | 评分者校准、抽样设计、基线修订三件套合同 ＋ 评测资产分类 Profile |
 | `identity_isolation/` | 禁止／允许能力两份精确清单（`check_m2_identity_isolation` 的唯一取数处） |
 
-**只包装、不复制、不修改**：M2 一律经 Envelope/Profile 引用 M1 冻结物，`in_place_modification_allowed` 常量 `false`。当前 Profile 全部 `binding_status: PROVISIONAL`——M1 尚未整体收口，最终绑定与重测属 M2-EP02。既有 M1 冻结物字节变了判 `M1_FROZEN_ARTIFACT_DRIFT`（熔断）；只是新增 EP02/EP03 产物则属 `REBIND_AND_RETEST`（正常前进），两者不可混为一谈。
+**只包装、不复制、不修改**：M2 一律经 Envelope/Profile 引用 M1 冻结物，`in_place_modification_allowed` 常量 `false`。既有 M1 冻结物字节变了判 `M1_FROZEN_ARTIFACT_DRIFT`（熔断）；只是新增产物则属 `REBIND_AND_RETEST`（正常前进），两者不可混为一谈。
 
 **造型理解与身份识别永久解耦**（ADR-004，红线）：五项禁止能力的激活条件是**永不**，不是「暂缓」。检测走结构化能力面（Schema property 与枚举、能力/组件/服务登记、依赖清单），**不扫散文**——裁决原文里必然写着「不建设人脸身份识别」，全文关键词扫描会把这句话本身判成违规。
 
-本包**一件评测资产都没产**：评分卡、基线锦标赛与隐藏评测资产属 M2-EP02，冻结属 M2-EP03（不可逆包，需 Founder 精确 Prompt 批准）。隐藏边界执行全部委派既有 `check_hidden_benchmark_boundary`，未新建第二套实现。
+隐藏边界执行全部委派既有 `check_hidden_benchmark_boundary`，未新建第二套实现。
 
 M2-EP01 交付报告与回执见 [`11_reports_and_receipts/m2_ep01/`](11_reports_and_receipts/m2_ep01/)。
 
@@ -120,7 +129,7 @@ M2-EP01 交付报告与回执见 [`11_reports_and_receipts/m2_ep01/`](11_reports
 | 目录 | 内容 |
 |---|---|
 | `governance/baseline/` | Founder 钉死的基线 Manifest、迁移记录 |
-| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-CALIBRATION-004、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001、FOUNDER-M2-CHARTER-001） |
+| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-CALIBRATION-004、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001、FOUNDER-M1-RUNTHROUGH-001、FOUNDER-M1-PASS-001、FOUNDER-RD-M1-01、FOUNDER-M2-CHARTER-001） |
 | `governance/bootstrap/` | `role_operating_model.v0.2.yaml`：角色与执行治理的**唯一规范源** |
 | `governance/roles/` `governance/prompts/` | 角色合同与角色 Prompt（由规范源生成） |
 | `governance/conditions/` | `CONDITIONAL` 条件关闭台账 |
@@ -141,7 +150,7 @@ M2-EP01 交付报告与回执见 [`11_reports_and_receipts/m2_ep01/`](11_reports
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M2 治理落盘、M2 信封合同、M2 身份隔离、M2 评测治理共 24 个确定性 Checker。
+- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配、M2 治理落盘、M2 信封合同、M2 身份隔离、M2 评测治理共 25 个确定性 Checker。
 - `ci/run_fixtures.py`：判据层 fixture——用字面量 payload 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_schema_fixtures.py`：结构层 fixture——用字面量实例驱动 M1 对象 JSON Schema 本身；每份 Schema 正负各一，只证明「对的能过」不算验证过。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

@@ -209,6 +209,18 @@ post_m0_authorized_modifications:
         NB-M0-01 / NB-M0-05 加 scanned_file_count 覆盖面下限（扫 0 份不再显绿）；
         NB-M0-02 把 PREMATURE_EXTERNAL_CONNECTION 由硬编「M0 期间禁止连接」改为 Founder 授权白名单。
       behaviour_change: 判据只增不减——原有的遗留路径、写入动作、凭证接触判据一字未动。
+    - file: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md
+      m0_delivered_sha256: 897b2efa2e2f1cc2c8774d984666f9179fa3f1a464831acd0a1df2807e614c6f
+      current_sha256: 3285c9b38efa261f8953b5a41a5228d0d478875fc50213ef40a450d85e90281d
+      authorized_by_ruling: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001
+      authorization_clause: M1-EP03 执行包交付物第 3 条「M2 评测冻结 Brief …按 M1 真实产出更新」
+      changed_in_package: M1-EP03
+      change: >-
+        追加第 10 节「M1 接口交接」：M2 冻结须按 schema_id / hard_constraint_id / dimension_id 绑定，
+        指向派生件 m1_interface_handoff.v0.1.yaml，并点明两个 RESERVED_NOT_IMPLEMENTED 端口不得写成可评测能力。
+      behaviour_change: >-
+        只新增一节。M2 的 18 项交付清单、PRD 10.2 阈值与 M2_FREEZE_REQUIRED 范围、D-28 三分类口径、
+        高风险全审 100% 不可抽样——上文一字未动，新节亦未放宽其中任何一条。
 
 artifact_sha256:
   00_charter/project_charter.v1.0.yaml: fb89aa8f9440819cb8937cf8aeec704532f94845a0df97d7e4f285233f3723e5

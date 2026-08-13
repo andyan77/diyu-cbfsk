@@ -47,14 +47,21 @@ def validate(payload: dict) -> list[str]:
                 errors.append(f"UNRESOLVED_BASELINE_DIFFERENCE: {name}.{flag} is not true")
 
     for entry in payload.get("reference_hashes") or []:
-        if entry["actual"] != entry["founder_reference"]:
+        if not entry.get("located"):
             errors.append(
-                f"FOUNDER_REFERENCE_HASH_MISMATCH: {entry['file']} actual {entry['actual']} != founder {entry['founder_reference']}"
+                f"FOUNDER_REFERENCE_FILE_UNLOCATABLE: {entry['file']} is not recorded at any manifest path"
+            )
+        elif entry["actual"] != entry["founder_reference"]:
+            errors.append(
+                f"FOUNDER_REFERENCE_HASH_MISMATCH: {entry['file']} at {entry.get('resolved_path')} "
+                f"actual {entry['actual']} != founder {entry['founder_reference']}"
             )
     return errors
 
 
-# Founder 在本轮 dispatch 中直接给出的 binary 参考哈希（独立于 Manifest 记录，用于交叉核对）。
+# Founder 在本轮 dispatch 中直接给出的 binary 参考哈希。**值**必须独立于 Manifest——交叉核对
+# 的意义就在于两个来源互不派生；但**路径**只能有一处记录，由 Manifest 的 repository_path 提供，
+# 否则文件一归档就要改两个地方（EQ-1）。
 FOUNDER_REFERENCE_BINARY_HASHES = {
     "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx":
         "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97",
@@ -85,14 +92,22 @@ def collect() -> dict:
             entry["actual_binary_sha256"] = sha256_file(path)
         entries.append(entry)
 
+    by_original_name = {}
+    for candidate in manifest["active_baseline_candidates"]:
+        rel = candidate["repository_path"]
+        by_original_name[candidate.get("repository_path_before_archive") or rel] = rel
+
     references = []
     for name, expected in sorted(FOUNDER_REFERENCE_BINARY_HASHES.items()):
-        path = ROOT / name
+        rel = by_original_name.get(name)
+        path = (ROOT / rel) if rel else None
         references.append(
             {
                 "file": name,
+                "resolved_path": rel,
+                "located": bool(rel and path.exists()),
                 "founder_reference": expected,
-                "actual": sha256_file(path) if path.exists() else "<missing>",
+                "actual": sha256_file(path) if (path and path.exists()) else "<missing>",
             }
         )
 

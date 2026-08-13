@@ -19,12 +19,12 @@ m1_started: false
 m2_started: false
 knowledge_distillation_started: false
 production_servable: false
-main_merged: false
+main_merged: true
 ```
 
 ## 产品真源
 
-- 当前活基线：`笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx`（`PENDING_FOUNDER_SIGNATURE`）
+- 当前活基线：`笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx`（`SIGNED`）
 - 候选：`笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx`，`candidate_effective: true`
 - v1.2 生效前归档 v1.1：`false`
 - 任何时刻只允许一个活产品真源；角色 Prompt 与投影文件都不是产品真源。

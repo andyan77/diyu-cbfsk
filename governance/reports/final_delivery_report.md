@@ -472,11 +472,13 @@ m0_authorized: true
 founder_m0_authorized: true
 founder_merge_approved: true
 guardian_review_completed: true
+main_merged: true
+current_active_baseline: PRD_v1.2
+current_active_baseline_status: SIGNED
 execution_status: M0_AUTHORIZED_NOT_STARTED
-pending_active_baseline_switch: true
+pending_active_baseline_switch: false
 
 chatgpt_remote_review_completed: false
-main_merged: false
 m0_execution_started: false
 m1_started: false
 m2_started: false
@@ -485,3 +487,15 @@ production_servable: false
 ```
 
 M0 已授权但尚未开工——`m0_execution_started` 与 `execution_status` 都如实记录这一点，本报告不把授权表述为已开工。
+
+### 8.6 执行序列实际落点
+
+| 步骤 | 结果 |
+|---|---|
+| 签署子 Commit | `dcd64842fb9c69d3ee5eb3042e0fda924f5605eb`（父＝`9335180f…`） |
+| 重跑全部 checker | 全绿后才 `git add` / `git commit`（断言门控，断言不过则物理上不执行提交） |
+| 合并 `main` | fast-forward，`ce13cf3d…` → `dcd64842…`，**无合并提交** |
+| 更新 README + 归档 v1.1 | 本最终 Commit；三份 v1.1 为 **R100 纯重命名**，字节未变 |
+| 推送远程 | **未执行**——签署包授权「合并 main」，未授权推送 |
+
+归档顺序上没有踩红线：`prd_v1_2_effective` 先在签署子 Commit 置真，`归档_v1.1/` 才在其后的提交中出现；`check_active_product_truth` 的 `PREMATURE_ARCHIVE` 判据全程在线（fixture `N15`）。

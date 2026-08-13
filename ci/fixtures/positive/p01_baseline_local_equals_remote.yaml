@@ -15,5 +15,7 @@ payload:
       local_remote_semantic_equal: true
   reference_hashes:
     - file: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      resolved_path: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+      located: true
       founder_reference: "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97"
       actual: "1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97"

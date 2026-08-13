@@ -73,7 +73,9 @@ hash_contract:
 active_baseline_candidates:
   - file_name: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
     source_path: 'D:\笛语跨品牌服装搭配专家内核\笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx'
-    repository_path: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+    repository_path: 归档_v1.1/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+    repository_path_before_archive: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+    archived_by: DIYU-CBFSK-FOUNDER-SIGNOFF-001（v1.2 生效后归档，R100 纯重命名，字节未变）
     binary_sha256: 1532f59eb004bf6a7e47f8429af43969905ba49a51c850b21c728a8711b78f97
     canonical_docx_xml_sha256: 1188f9f17ad24ae363490421580f240a15ec49667e1f34f56b506396431da2e2
     semantic_text_sha256: eded25fff6123f67f64d7c220afeaddafb61e9a11dc755f7015f16fb789e0838
@@ -88,7 +90,9 @@ active_baseline_candidates:
 
   - file_name: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
     source_path: 'D:\笛语跨品牌服装搭配专家内核\笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx'
-    repository_path: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+    repository_path: 归档_v1.1/笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+    repository_path_before_archive: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
+    archived_by: DIYU-CBFSK-FOUNDER-SIGNOFF-001（v1.2 生效后归档，R100 纯重命名，字节未变）
     binary_sha256: bc89e25b437f2cd88e55632451be40213ea6b7733ecfb19b91e5cc7e6463c997
     canonical_docx_xml_sha256: e9a4b8d151733320a8990ca7af61921ccaf99c06a505fa3a85dfd86d3e62ea46
     semantic_text_sha256: b3bbc0a8fd0c6fb55ffda4e8741c011a4aaea75465182dd501011ae51f109515
@@ -103,7 +107,9 @@ active_baseline_candidates:
 
   - file_name: PRD_v1.1_核验回执.docx
     source_path: 'D:\笛语跨品牌服装搭配专家内核\PRD_v1.1_核验回执.docx'
-    repository_path: PRD_v1.1_核验回执.docx
+    repository_path: 归档_v1.1/PRD_v1.1_核验回执.docx
+    repository_path_before_archive: PRD_v1.1_核验回执.docx
+    archived_by: DIYU-CBFSK-FOUNDER-SIGNOFF-001（v1.2 生效后归档，R100 纯重命名，字节未变）
     binary_sha256: 080008393c077b2a92d5c79036cfc25f5b1c8027a5630ae42222eb926316b3c9
     canonical_docx_xml_sha256: 5c0400dc603f848390e024987990f45b2f63293297590898fc0dc930ba4be815
     semantic_text_sha256: be1558eafe865a3fd280f2d5f54b839d1008e1daabf9663f174a6f616aa4b990
@@ -129,7 +135,7 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503
+    post_change_binary_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
@@ -140,6 +146,11 @@ active_baseline_candidates:
         binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
         landed_in_commit: a235b558095b8f85ebc921aab853434dc406761d
         content: 基线迁移与 PRD v1.2 候选索引改写
+      - change_id: README-MOD-03
+        authorization_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列
+        binary_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8
+        landed_in_commit: FINAL_COMMIT_ON_MAIN_AFTER_MERGE
+        content: 活基线段切换为 v1.2、归档段登记 归档_v1.1/、main_merged 与切换位置真
       - change_id: README-MOD-02
         authorization_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条
         binary_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503

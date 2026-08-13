@@ -23,7 +23,7 @@
 
 ## 产品真源
 
-- 活基线 `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx` — `PENDING_FOUNDER_SIGNATURE`
+- 活基线 `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` — `SIGNED`
 - 候选 `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` — Founder 已签署生效
 - v1.2 已生效，v1.1 按执行序列归档；不得同时存在两个活产品真源。
 
@@ -37,7 +37,7 @@ m1_started: false
 m2_started: false
 knowledge_distillation_started: false
 production_servable: false
-main_merged: false
+main_merged: true
 ```
 
 ## 任务分级

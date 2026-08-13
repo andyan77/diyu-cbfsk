@@ -27,7 +27,7 @@ project_state:
   m2_started: false
   knowledge_distillation_started: false
   production_servable: false
-  main_merged: false
+  main_merged: true
 
 authority_hierarchy:
   - 平台与系统安全规则
@@ -471,17 +471,18 @@ execution_loop:
 
 product_truth:
   single_active_product_truth: true
-  current_active: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
-  current_active_status: PENDING_FOUNDER_SIGNATURE
+  current_active: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  current_active_status: SIGNED
+  superseded_baseline: 归档_v1.1/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   candidate: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
   candidate_effective: true
   candidate_signed_by_founder: true
   candidate_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
-  pending_active_baseline_switch: true
-  pending_switch_note: >-
-    Founder 已签署 v1.2（PASS），故 candidate_effective=true；活基线指针与 v1.1 归档
-    按签署包执行序列在合并 main 之后的最终 Commit 完成。该过渡窗口由
-    check_active_product_truth 的 SIGNED_BUT_NOT_SWITCHED 判据强制声明，不得静默存在。
+  pending_active_baseline_switch: false
+  switch_completed_in: 合并 main 之后的最终 Commit（父提交 dcd64842fb9c69d3ee5eb3042e0fda924f5605eb）
+  switch_note: >-
+    v1.2 已成为唯一活产品真源，v1.1 三份文档以 R100 纯重命名归入 归档_v1.1/，字节未变。
+    归档发生在 v1.2 生效之后，未触碰「在 v1.2 生效前归档 v1.1」这条红线。
   archive_v1_1_before_v1_2_effective: false
   role_prompt_is_product_truth: false
   projection_files_are_product_truth: false

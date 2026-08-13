@@ -1,31 +1,19 @@
 # 笛语跨品牌服装搭配专家内核 · 文档索引
 
-> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜任务 DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 已授权未开工
 
-## 当前活基线（尚未签署）
-
-| 文档 | 用途 | 状态 |
-|---|---|---|
-| `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx` | 已核验、未签署的产品真源基线 | **当前活基线 · `PENDING_FOUNDER_SIGNATURE`** |
-| `笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx` | M0 执行授权（v1.1 版） | 未签署，未授权 |
-| `PRD_v1.1_核验回执.docx` | v1.1 核验记录 | 历史核验证据 |
-
-按 Founder 裁决，**v1.1 不单独签署**；它保持活基线身份直到 PRD v1.2 正式生效。**v1.2 生效前不得归档 v1.1。**
-
-## PRD v1.2（Founder 已签署生效 · 活基线切换待执行）
+## 当前活基线
 
 | 文档 | 用途 | 状态 |
 |---|---|---|
-| `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` | 合并 D-17—D-29、S1—S8 与治理操作模型的全文版 | `FOUNDER_SIGNED` · 已生效 |
-| `笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx` | M0 执行申请 `DIYU-CBFSK-EXEC-REQ-M0-003` | 已签署，`m0_authorized=true`，即时生效 |
-| `PRD_v1.2_核验回执.docx` | 候选施工侧自检回执 | 自检 PASS，**不代替** Guardian／总顾问／Founder |
+| `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` | 产品合同、范围、里程碑与验收门 | **当前活基线 · `SIGNED`** |
+| `笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx` | M0 执行申请 `DIYU-CBFSK-EXEC-REQ-M0-003` | 已签署，`m0_authorized=true` |
+| `PRD_v1.2_核验回执.docx` | 施工侧自检回执 | 自检 PASS，**不代替** Guardian／总顾问／Founder |
 | `PRD_v1.2_change_map.yaml` | 机器可读裁决—章节—里程碑—验收映射 | 当前变更映射 |
 
-签署回执：`governance/receipts/founder_signoff_receipt.yaml`（`DIYU-CBFSK-FOUNDER-SIGNOFF-001`，签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`）。
+PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效（签署回执 `governance/receipts/founder_signoff_receipt.yaml`，`DIYU-CBFSK-FOUNDER-SIGNOFF-001`，签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`）。v1.1 三份文档已归入 `归档_v1.1/`，仅作历史证据。
 
-审查链如实记录：独立 Guardian 两轮（`f48fed3` REJECT → `9335180f` APPROVE_WITH_CONDITIONS）；ChatGPT 总顾问远程审查**未进行**，由 Founder 依 §11.2 显式记录性豁免并接受风险，**不是**静默跳过，也**不得**记为已完成。
-
-活基线指针切换（v1.2 成为 `current_active`）、README 基线段改写与 v1.1 归档，按签署包执行序列放在合并 `main` 之后的最终 Commit；在此之前 `pending_active_baseline_switch: true`。
+审查链如实记录：独立 Guardian 两轮（`f48fed3` REJECT → `9335180f` APPROVE_WITH_CONDITIONS）；ChatGPT 总顾问远程审查**未进行**，由 Founder 依 §11.2 显式记录性豁免并接受风险，**不是**静默跳过，也**不得**记为已完成。签署子 Commit 自身的 Guardian 确认按 Founder 显式例外延至 M0 收口（`COND-010`），**不视为已确认**。
 
 ## 当前项目状态
 
@@ -34,8 +22,8 @@ project_status: PROJECT_INITIATED
 execution_status: M0_AUTHORIZED_NOT_STARTED
 production_servable: false
 m0_authorized: true
-current_active_baseline: PRD_v1.1
-current_active_baseline_status: PENDING_FOUNDER_SIGNATURE
+current_active_baseline: PRD_v1.2
+current_active_baseline_status: SIGNED
 prd_v1_2_documentation_status: FOUNDER_SIGNED
 prd_v1_2_effective: true
 guardian_review_completed: true
@@ -44,8 +32,8 @@ chatgpt_remote_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
 founder_prd_signed: true
 founder_m0_authorized: true
 founder_merge_approved: true
-main_merged: false
-pending_active_baseline_switch: true
+main_merged: true
+pending_active_baseline_switch: false
 ```
 
 状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权；`production_servable`、`m1_started`、`m2_started`、`knowledge_distillation_started` 属红线位，任何签署都不得授权。
@@ -90,7 +78,7 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 
 ## 归档
 
-`归档_v1.0/` 保存 PRD v1.0、v1.1 Delta、v1.0 审查报告与已作废的 M0 申请，仅作历史证据，不再是执行依据。**目前没有 `归档_v1.1/`**：v1.1 仍是活基线，只有在 PRD v1.2 正式生效后才归档。
+`归档_v1.0/` 保存 PRD v1.0、v1.1 Delta、v1.0 审查报告与已作废的 M0 申请。`归档_v1.1/` 保存 PRD v1.1、M0 执行申请 v1.1 与 v1.1 核验回执——归档发生在 v1.2 签署生效**之后**，三份均为 R100 纯重命名、字节未变。两个归档目录都只作历史证据，不再是执行依据。
 
 ## 工具与 CI
 

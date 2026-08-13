@@ -1,0 +1,22 @@
+fixture_id: N41-founder-reference-file-unlocatable
+description: >-
+  Founder 参考清单里的文件在 Manifest 任何路径上都找不到——被静默删除或移出登记。
+checker: check_baseline_hashes
+expected: FAIL
+payload:
+  founder_confirmation_status: CONFIRMED
+  baseline_effective: true
+  document_editing_authorized: true
+  entries:
+  - repository_path: 归档_v1.1/x.docx
+    present: true
+    recorded_binary_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    actual_binary_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    local_remote_binary_equal: true
+    local_remote_semantic_equal: true
+  reference_hashes:
+  - file: PRD_v1.1_核验回执.docx
+    resolved_path: null
+    located: false
+    founder_reference: 0800083930000000000000000000000000000000000000000000000000000000
+    actual: <missing>

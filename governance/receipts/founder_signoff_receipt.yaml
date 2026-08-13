@@ -99,11 +99,17 @@ merge_authorization:
     签署包授权「合并 main」，未授权推送远程。执行侧不自行推送；
     远程推送需 Founder 单独明示。
 
-pending_active_baseline_switch: true
+pending_active_baseline_switch: false
 pending_active_baseline_switch_note: >-
-  签署子 Commit 只落签署事实与状态位；活基线指针切换（v1.2 成为 current_active）、README 改写
-  与 v1.1 归档按签署包第六条的执行序列放在合并 main 之后的最终 Commit。切换完成后本字段必须置 false，
-  否则 check_active_product_truth 判 STALE_PENDING_SWITCH。
+  切换已于合并 main 之后的最终 Commit 完成（父提交 dcd64842fb9c69d3ee5eb3042e0fda924f5605eb）：v1.2 成为 current_active，
+  README 基线段改写，v1.1 三份以 R100 纯重命名归入 归档_v1.1/。本字段因此置 false；
+  若切换已完成却仍留 true，check_active_product_truth 会判 STALE_PENDING_SWITCH。
+executed_sequence:
+  - 落盘签署子 Commit: dcd64842fb9c69d3ee5eb3042e0fda924f5605eb
+  - 重跑全部 checker: 全绿
+  - 合并 main: fast-forward，无合并提交
+  - 更新 README 与归档 v1.1: 本最终 Commit
+  - 推送远程: NOT_PERFORMED（签署包未授权推送）
 
 state_flag_authorizations:
   contract: >-

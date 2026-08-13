@@ -65,5 +65,5 @@ m1_started: false
 m2_started: false
 knowledge_distillation_started: false
 production_servable: false
-main_merged: false
+main_merged: true
 ```

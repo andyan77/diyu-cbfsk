@@ -1,0 +1,22 @@
+fixture_id: N40-founder-reference-hash-mismatch
+description: >-
+  文件仍在 Manifest 记录的位置，但字节与 Founder 独立给出的参考哈希对不上——归档搬运时被改动过。
+checker: check_baseline_hashes
+expected: FAIL
+payload:
+  founder_confirmation_status: CONFIRMED
+  baseline_effective: true
+  document_editing_authorized: true
+  entries:
+  - repository_path: 归档_v1.1/x.docx
+    present: true
+    recorded_binary_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    actual_binary_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    local_remote_binary_equal: true
+    local_remote_semantic_equal: true
+  reference_hashes:
+  - file: PRD_v1.1_核验回执.docx
+    resolved_path: 归档_v1.1/PRD_v1.1_核验回执.docx
+    located: true
+    founder_reference: 0800083930000000000000000000000000000000000000000000000000000000
+    actual: dead000000000000000000000000000000000000000000000000000000000000

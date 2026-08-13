@@ -1,0 +1,73 @@
+schema_version: '0.1'
+scorecard_id: DIYU-CBFSK-M2-SCORECARD-MECHANISM-CORRECTNESS
+artifact_id: scorecard_mechanism_correctness.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+evaluation_task_class: mechanism_correctness
+consumes_via_profile: m2_evaluation_profile
+scoring_mode: interval_membership
+gold_answer_allowed: false
+gold_answer_forbidden_reason: 机制题问的是「这个推理成不成立」，成立的推理不止一条。设唯一 Gold Answer 等于把其中一条合法推理定成标准答案，其余合法推理全被判错——那不是在测机制，是在测复读。
+frozen_object: acceptable_decision_boundary
+frozen_object_note: 冻结的是可接受推理区间，不是参考答案。
+acceptable_interval_used: true
+solution_family_used: false
+must_not_score_disagreement_as_error: true
+scoring_rule:
+  inside_interval: 计为正确，不因与示例推理不同而扣分
+  outside_interval: 计为错误，且必须指出越出的是哪条边界
+  boundary_ambiguous: 计入 model_disagreement_ledger，不强判对错（保留合法分歧）
+interval_definition:
+  id: MECH-INT-01
+  what_bounds_the_interval:
+  - bound: 事实优先级不得倒置
+    binding_kind: m1_conflict_priority_rule_id
+    rule_id: CP-04
+    detail: 七级事实优先级由 common_defs factPriorityLevel 定义，推理不得让下层覆盖上层
+  - bound: 功能合同优先于视觉表达
+    binding_kind: m1_conflict_priority_rule_id
+    rule_id: CP-03
+  - bound: 人设与平台语感不得进入专业推理
+    binding_kind: m1_conflict_priority_rule_id
+    rule_id: CP-05
+  - bound: 组合场景取更严
+    binding_kind: m1_conflict_priority_rule_id
+    rule_id: CP-02
+  outside_interval_examples_are_not_gold_answers: true
+binding_kind: m1_conflict_priority_rule_id
+bound_conflict_priority_rule_ids:
+- CP-02
+- CP-03
+- CP-04
+- CP-05
+bound_combination_rule_ids:
+- COMBO-01
+- COMBO-02
+- COMBO-03
+- COMBO-04
+- COMBO-05
+bound_hard_constraint_ids: []
+bound_hard_constraint_ids_note: 本类不直接绑硬约束 ID——硬约束的 0/1 判定属 constraint_correctness。两类各判各的，重复绑定会让同一条约束被算两次分。
+machine_checkable_fields:
+  interval_id:
+    type: string
+    must_resolve_to: interval_definition.id
+  verdict:
+    type: string
+    enum:
+    - inside_interval
+    - outside_interval
+    - boundary_ambiguous
+  violated_bound_rule_id:
+    type: string
+    nullable: true
+    must_resolve_to: m1_conflict_priority_rule_id
+  gold_answer:
+    type: 'null'
+    const: null
+    note: 字段存在且恒为 null——留成显式禁位，写入任何值都会被 Schema 当场拦下
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null

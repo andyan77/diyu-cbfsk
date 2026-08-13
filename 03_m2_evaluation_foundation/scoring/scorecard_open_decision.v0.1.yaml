@@ -1,0 +1,80 @@
+schema_version: '0.1'
+scorecard_id: DIYU-CBFSK-M2-SCORECARD-OPEN-DECISION
+artifact_id: scorecard_open_decision.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+evaluation_task_class: open_decision
+consumes_via_profile: m2_evaluation_profile
+scoring_mode: solution_family_membership_and_quality
+gold_answer_allowed: false
+gold_answer_forbidden_reason: 开放题的合法解空间本来就有多族。设唯一 Gold Answer 会把「一次裤装方案、一次裙装方案且均成立」判成不稳定——而那恰恰是专业能力的表现，不是缺陷。
+frozen_object: acceptable_decision_boundary
+acceptable_interval_used: false
+solution_family_used: true
+must_not_score_disagreement_as_error: true
+legitimate_disagreement_preserved: true
+legitimate_disagreement_rule:
+  id: OD-DISAGREE-01
+  statement: 合法分歧必须保全，不得为评分便利消灭。
+  landing: 分歧进 model_disagreement_ledger 与 disagreement_classification_and_solution_family_ledger
+  forbidden: 把落在不同合法解族的两个方案判为「其中一个错」
+  failure_state: LEGITIMATE_DISAGREEMENT_SCORED_AS_ERROR
+scoring_rule:
+  in_legitimate_family: 计为合法，按族内质量维度打分
+  outside_all_families: 计为错误，必须指出越出的边界
+  new_family_proposed: 不直接判错——进候选台账，由 Founder 裁决是否纳入合法解族
+family_quality_dimensions:
+- id: ODQ-01
+  dimension: 内部一致性
+  scores: 方案各要素是否自洽
+- id: ODQ-02
+  dimension: 约束符合
+  scores: 是否仍满足全部硬约束
+  binding_kind: m1_hard_constraint_id
+  delegates_to: scorecard_constraint_correctness.v0.1
+- id: ODQ-03
+  dimension: 解释可归因
+  scores: 能否归因到具体规则（D-29 反退化）
+- id: ODQ-04
+  dimension: 货盘可实现
+  scores: 是否落在真实可用货盘内
+binding_kind: m1_conflict_priority_rule_id
+bound_conflict_priority_rule_ids:
+- CP-01
+- CP-04
+- CP-06
+bound_combination_rule_ids:
+- COMBO-01
+- COMBO-02
+- COMBO-03
+- COMBO-04
+- COMBO-05
+bound_hard_constraint_ids: []
+bound_hard_constraint_ids_note: 族内「约束符合」维度委派 constraint_correctness 判定，不在本卡重复绑定。
+discarded_family_must_be_recorded: true
+discarded_family_binding: StylingResultBundle / DecisionTrace 的 discarded_legitimate_candidate_families 必填位（D-28）
+machine_checkable_fields:
+  solution_family_id:
+    type: string
+    minLength: 1
+  verdict:
+    type: string
+    enum:
+    - in_legitimate_family
+    - outside_all_families
+    - new_family_proposed
+  family_quality_scores:
+    type: object
+    keys_must_resolve_to: family_quality_dimensions.id
+  gold_answer:
+    type: 'null'
+    const: null
+  discarded_families:
+    type: array
+    min_items: 0
+    note: 被舍弃的合法候选族必须记录——不记就无从证明分歧被保全过
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null

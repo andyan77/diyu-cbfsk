@@ -1,0 +1,77 @@
+{
+  "arm": "baseline_arm_b",
+  "deterministic_seed": 20260813,
+  "note": "合成夹具数据，非真实模型输出。本臂命中一条品类安全硬门失败，用于验证「一条硬门失败即该臂失败」。",
+  "items": [
+    {
+      "item_id": "Q-001",
+      "evaluation_task_class": "mechanism_correctness",
+      "per_item_score": 0.97,
+      "per_item_cost": 0.0092,
+      "per_item_latency_ms": 890,
+      "intervention_required": false,
+      "intervention_severity": "none",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-002",
+      "evaluation_task_class": "open_decision",
+      "per_item_score": 0.93,
+      "per_item_cost": 0.0088,
+      "per_item_latency_ms": 940,
+      "intervention_required": false,
+      "intervention_severity": "none",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-003",
+      "evaluation_task_class": "constraint_correctness",
+      "per_item_score": 0.91,
+      "per_item_cost": 0.0095,
+      "per_item_latency_ms": 1020,
+      "intervention_required": true,
+      "intervention_severity": "minor_edit",
+      "hard_gate_results": {
+        "category_safety": "fail",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-004",
+      "evaluation_task_class": "mechanism_correctness",
+      "per_item_score": 0.96,
+      "per_item_cost": 0.009,
+      "per_item_latency_ms": 910,
+      "intervention_required": false,
+      "intervention_severity": "none",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-005",
+      "evaluation_task_class": "open_decision",
+      "per_item_score": 0.89,
+      "per_item_cost": 0.0094,
+      "per_item_latency_ms": 1180,
+      "intervention_required": false,
+      "intervention_severity": "none",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    }
+  ]
+}

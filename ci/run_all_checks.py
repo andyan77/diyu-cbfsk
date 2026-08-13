@@ -42,6 +42,8 @@ CHECKERS = [
     "check_m2_envelope_contract",
     "check_m2_identity_isolation",
     "check_m2_evaluation_governance",
+    "check_m2_scoring_cards",
+    "check_m2_tournament",
 ]
 
 

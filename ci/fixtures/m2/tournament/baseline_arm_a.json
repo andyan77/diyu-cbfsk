@@ -1,0 +1,77 @@
+{
+  "arm": "baseline_arm_a",
+  "deterministic_seed": 20260813,
+  "note": "合成夹具数据，非真实模型输出——本包禁止任何真实模型 API 调用。",
+  "items": [
+    {
+      "item_id": "Q-001",
+      "evaluation_task_class": "mechanism_correctness",
+      "per_item_score": 0.92,
+      "per_item_cost": 0.0031,
+      "per_item_latency_ms": 1450,
+      "intervention_required": false,
+      "intervention_severity": "none",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-002",
+      "evaluation_task_class": "open_decision",
+      "per_item_score": 0.81,
+      "per_item_cost": 0.0028,
+      "per_item_latency_ms": 1610,
+      "intervention_required": true,
+      "intervention_severity": "minor_edit",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-003",
+      "evaluation_task_class": "constraint_correctness",
+      "per_item_score": 0.74,
+      "per_item_cost": 0.0035,
+      "per_item_latency_ms": 2980,
+      "intervention_required": true,
+      "intervention_severity": "rework",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-004",
+      "evaluation_task_class": "mechanism_correctness",
+      "per_item_score": 0.95,
+      "per_item_cost": 0.003,
+      "per_item_latency_ms": 1380,
+      "intervention_required": false,
+      "intervention_severity": "none",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    },
+    {
+      "item_id": "Q-005",
+      "evaluation_task_class": "open_decision",
+      "per_item_score": 0.68,
+      "per_item_cost": 0.0033,
+      "per_item_latency_ms": 5120,
+      "intervention_required": true,
+      "intervention_severity": "reject",
+      "hard_gate_results": {
+        "category_safety": "pass",
+        "inventory_truth": "pass",
+        "knowledge_state_chain": "pass"
+      }
+    }
+  ]
+}

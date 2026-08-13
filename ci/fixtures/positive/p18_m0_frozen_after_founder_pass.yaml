@@ -1,0 +1,29 @@
+fixture_id: P18-m0-frozen-after-founder-pass
+description: >-
+  Founder M0 裁决 PASS 且绑定 Guardian delta 复核完整哈希后，合同标记 M0_FROZEN 是如实陈述，不再判 PREMATURE_FROZEN_CLAIM。
+checker: check_m0_contract_completeness
+expected: PASS
+payload:
+  known_roles:
+  - FOUNDER_PRODUCT_AUTHORITY
+  - CODEX_EXECUTION_ENGINEER
+  founder_m0_decision:
+    value: PASS
+    guardian_delta_review_commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458
+  contracts:
+  - path: 01_contracts_and_schemas/example.v1.0.yaml
+    present: true
+    contract_id: example.v1.0
+    prd_anchors:
+    - PRD-13-M0
+    status: M0_FROZEN
+    obligations:
+    - id: OB-X-01
+      statement: 示例支持任务。
+      required_inputs:
+      - 输入 A
+      outputs:
+      - 输出 B
+      failure_state: EXAMPLE_FAILURE
+      owner_role: CODEX_EXECUTION_ENGINEER
+  expected_contract_count: 1

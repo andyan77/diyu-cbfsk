@@ -1,0 +1,51 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FR-PROCESS-006
+id_assigned_by: EXECUTION_SIDE
+id_assignment_note: >-
+  Founder 下达本裁决时未指定编号，执行侧按现有 FR-* 序列续编为 006 以便引用。
+  编号本身不是 Founder 原文的一部分，如需改号请直接改本字段与引用处。
+project_id: DIYU-CBFSK-001
+title: 流程微调——候选分支可在 Guardian 结论前推送远程并创建 PR
+ruling_date: "2026-08-13"
+issued_by: Founder
+scope: PROCESS_ONLY
+changes_acceptance_strictness: false
+
+verbatim_ruling: >-
+  候选分支允许在 Guardian 结论前先行推送远程并创建 PR，用于异地备份与顾问并行审查；
+  合并 main 仍须 Guardian 通过＋顾问意见或豁免＋Founder 裁决三项齐全。
+  若 Guardian 打回产生新候选，已推分支随之更新，顾问对旧哈希的意见自动作废。
+
+rules:
+  - id: FR-PROCESS-006-R1
+    statement: 候选分支可在 Guardian 出结论前推送远程并创建 PR。
+    purpose: [异地备份, 顾问并行审查]
+    permitted_targets: [候选分支]
+    forbidden_targets: [main]
+  - id: FR-PROCESS-006-R2
+    statement: 合并 main 的三项前置不变，缺一不可。
+    preconditions:
+      - guardian_decision: PASS_OR_APPROVE
+      - advisor_opinion_or_recorded_waiver: true
+      - founder_merge_decision: true
+    note: 豁免须记录在案，且不得记为已完成——与 SIGNOFF-001 顾问豁免口径一致。
+  - id: FR-PROCESS-006-R3
+    statement: Guardian 打回产生新候选后，已推分支随之更新，顾问对旧哈希的意见自动作废。
+    basis: 执行 Prompt v2.0 §14 supersession
+    consequence: 引用作废意见推进合并，等同于用过期审查冒充现审查。
+
+what_this_ruling_does_not_change:
+  - 不放宽合并 main 的任何一项前置
+  - 不授权推送 main
+  - 不授权跳过 Guardian
+  - 不把 PR 的存在表述为审查已通过
+
+applied_in:
+  - {action: 推送候选分支 m0/contract-and-benchmark-foundation-001, commit: 2780e65dc32b20576635b887bd7634663afe531b, pr: 1}
+  - {action: 推送修复候选, commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458, pr: 1}
+
+signed_by: Founder
+signed_at: "2026-08-13"
+landed_note: >-
+  本裁决在 2026-08-13 于会话中下达并即刻执行（推分支＋建 PR #1），但直到本次 M0 PASS 提交才落盘。
+  执行侧在下达当时已提示「尚未落盘」，此处补记，不追述为早已落盘。

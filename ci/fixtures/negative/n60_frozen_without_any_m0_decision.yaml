@@ -1,0 +1,27 @@
+fixture_id: N60-frozen-without-any-m0-decision
+description: >-
+  没有任何 Founder M0 裁决记录，合同就自称已冻结——门控放开的唯一钥匙缺席，仍判 PREMATURE_FROZEN_CLAIM。
+checker: check_m0_contract_completeness
+expected: FAIL
+payload:
+  known_roles:
+  - FOUNDER_PRODUCT_AUTHORITY
+  - CODEX_EXECUTION_ENGINEER
+  founder_m0_decision: {}
+  contracts:
+  - path: 01_contracts_and_schemas/example.v1.0.yaml
+    present: true
+    contract_id: example.v1.0
+    prd_anchors:
+    - PRD-13-M0
+    status: M0_FROZEN
+    obligations:
+    - id: OB-X-01
+      statement: 示例支持任务。
+      required_inputs:
+      - 输入 A
+      outputs:
+      - 输出 B
+      failure_state: EXAMPLE_FAILURE
+      owner_role: CODEX_EXECUTION_ENGINEER
+  expected_contract_count: 1

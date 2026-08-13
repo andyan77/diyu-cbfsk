@@ -18,11 +18,63 @@ execution_run_id_note: >-
   尚未纳入 check_execution_uuid 守卫——按同一裁决「checker 增强不入本批」，
   与 NB-M0-01 / NB-M0-02 一并随 M1 自然提交落地。
 
-status: M0_CONDITIONAL_PENDING_GUARDIAN_DELTA_REVIEW
+status: M0_PASS
 status_meaning: >-
-  Founder 已作 M0 裁决＝CONDITIONAL（DIYU-CBFSK-FOUNDER-M0-DECISION-001），四项修复已于本修复 Commit 落盘。
-  升级为 PASS 的生效条件是 Guardian 对本修复 Commit 的 delta 复核通过；在该复核出结论之前，
-  本回执**不得**被引用为「M0 已通过」，状态位也不得翻为 PASS。
+  Founder M0 裁决为 CONDITIONAL（DIYU-CBFSK-FOUNDER-M0-DECISION-001），四项修复落盘于 f01e45b4，
+  Guardian 对该 Commit 的 delta 复核结论为 APPROVE、无阻塞发现。依该裁决 upgrade_rule，
+  M0 自动升级为 PASS 且无需 Founder 再出场。PASS 的含义仅限「M0 里程碑通过」——
+  不等于合同生效、不等于可服务生产、不等于 M1 已开工。
+
+founder_m0_decision_effective:
+  value: PASS
+  ruling: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+  original_value: CONDITIONAL
+  upgrade_rule_source: DIYU-CBFSK-FOUNDER-M0-DECISION-001 m0_decision.upgrade_rule
+  upgrade_authority: CLAUDE_INDEPENDENT_GUARDIAN（Founder 委托，仅限判定四项修复是否达成）
+  guardian_delta_review_commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458
+  guardian_delta_review_decision: APPROVE
+  effective_note: >-
+    本块是「合同可否标记为已冻结」的唯一授权源，由 check_m0_contract_completeness 读取：
+    value=PASS 且 guardian_delta_review_commit 为完整 40 位哈希时，合同方可写 M0_FROZEN；
+    否则写 M0_FROZEN 判 PREMATURE_FROZEN_CLAIM，而 PASS 之后仍挂 PENDING 判 STALE_PENDING_STATUS。
+
+guardian_delta_review:
+  round: 3
+  reviewed_commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458
+  parent_commit: 2780e65dc32b20576635b887bd7634663afe531b
+  branch: m0/contract-and-benchmark-foundation-001
+  guardian_workspace_path: /home/faye/claude-guardian-m0fix-f01e45b
+  review_scope: DELTA_ONLY（限 M0-FIX-01~04 + 越界排查）
+  decision: APPROVE
+  blocking_findings: 0
+  review_timestamp: "2026-08-13T09:28:21-07:00"
+  report: governance/reports/guardian_review_report.f01e45b.delta.md
+  scope_discipline_independently_recomputed: true
+  scope_discipline_result: ci/checkers 改动数 0；ci/fixtures 改动数 0
+  disclosures_verified_by_guardian:
+    - ec8d723a 未纳入 check_execution_uuid 守卫——属实
+    - 执行侧未自行把 M0 翻为 PASS——属实
+  not_verified_in_this_round:
+    - item: 回执 18 份 artifact_sha256 重算
+      reason: 按 FR-CALIBRATION-004 禁止字节级核对，Guardian 判为口径外，如实标注未验而非默认通过
+  non_blocking_findings:
+    - id: NB-M0-04
+      item: 规范源 20 条散文红线清单本身无漂移守卫
+      note: >-
+        RED_LINE_LIST_DRIFT 守的是签署回执的 never_authorizable 状态位清单，
+        不是规范源那份散文红线清单；20 条中仅 4 条有机器锚点。既存缺口、非本次引入。
+      routed_to: M1-EP01 顺手项
+    - id: NB-M0-05
+      item: 多个 checker 在 payload 为空时仍判绿（缺覆盖面下限断言）
+      routed_to: M1-EP01 顺手项（与 NB-M0-01 合并处理）
+  guardian_statement: 本结论是工程 Guardian 结论，不是 Founder 批准，也不是外部独立审查。
+
+advisor_delta_review:
+  status: WAIVED
+  waived_by: Founder
+  waiver_basis: DIYU-CBFSK-FOUNDER-M0-DECISION-001 repair_flow.advisor_delta_review.waivable=true
+  counted_as_completed: false
+  waiver_note: 豁免不是完成；总顾问 delta 复核从未发生，不得记为已完成。
 
 authorization_chain:
   product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
@@ -112,32 +164,38 @@ deferred_and_tracked:
   - {id: COND-011, item: 隐藏评测集 STORE-A 落地, deadline: M2 前}
   - {id: COND-010, item: 签署子 Commit 的 Guardian 确认, deadline: M0 收口时一并进行}
 
+completed_review_chain:
+  - {role: CLAUDE_INDEPENDENT_GUARDIAN, round: 3, object: f01e45b4ca4d7416feaec4177f4f8aad2ce35458, decision: APPROVE}
+  - {role: GPT_CHIEF_ADVISOR, object: 2780e65dc32b20576635b887bd7634663afe531b, decision: HIGH_QUALITY_CONDITIONAL_PASS}
+  - {role: GPT_CHIEF_ADVISOR, object: f01e45b4ca4d7416feaec4177f4f8aad2ce35458, decision: WAIVED_NOT_COMPLETED}
+  - {role: FOUNDER_PRODUCT_AUTHORITY, object: 2780e65dc32b20576635b887bd7634663afe531b, decision: CONDITIONAL_AUTO_UPGRADED_TO_PASS}
+
 next_required_actions:
-  - CLAUDE_INDEPENDENT_GUARDIAN 在隔离工作区对本交付作独立审查，逐项返回执行申请第五节 ①—⑩ 结论
-  - GPT_CHIEF_ADVISOR 远程对齐审查；不可用时 Founder 须显式 DEFER / 指定替位 / 豁免并接受风险，不得静默跳过
-  - FOUNDER_PRODUCT_AUTHORITY 作出 PASS / CONDITIONAL / BLOCK 裁决，并一并裁决 M0-OPEN-01 与 M0-OPEN-02
-  - 裁决为 PASS 或无阻塞 CONDITIONAL 后方可进入 M1
+  - M1 开工前须先解决红线冲突：规范源红线「开始 M1 或 M2」与 m1_started ∈ never_authorizable，
+    与 DIYU-CBFSK-FOUNDER-M0-DECISION-001 的 M1-EP01 开工预批准直接抵触，须 Founder 裁决，执行侧不得自行绕过
+  - NB-M0-01 / NB-M0-02 / NB-M0-04 / NB-M0-05 四项 checker 增强随 M1-EP01 顺手落地
+  - ec8d723a-4515-45ef-8889-71f6ddafbd0e 纳入 check_execution_uuid 守卫（随同上批）
 
 self_reference_limitation: >-
   本回执与十四项交付物同处一个提交，因此不自指其所在 Commit 的哈希。可复算配方：
   git rev-parse HEAD 取本交付 Commit；下方 artifact_sha256 清单不含本回执自身，逐项可复算。
 
 artifact_sha256:
-  00_charter/project_charter.v1.0.yaml: 3b92accc2fea3c7cca9f92e7fcbd4cd94bb37e4c4836634b7bd197128df447f4
-  01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml: 85e48201654c8aa5655f4896fa2844474fb04ab5effcd80eca83213a9d7ce37b
-  01_contracts_and_schemas/capability_contract.v1.0.yaml: 3ba1487f618a1ed4b76dda7de585399320935f2c2c62c7a865653d5372ba7674
-  01_contracts_and_schemas/category_scope_contract.v1.0.yaml: f0e3a53f44f90f52d082a3f80b5b8e75e1d85949ac7e4b520ec0067043768988
-  01_contracts_and_schemas/compliance_review_contract.v1.0.yaml: bcbae0fa2aa0d65c19fcee70cd8f407367d72eb2210790a9b305e983259362de
-  01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml: a5a0255e94ebe70446d08665360323c1945299bf0e096bbc4eb424bb5d639e43
-  01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml: 555244e5c03a35329627996521291fffd1e5d853a057babece66f7806ce84d2f
-  01_contracts_and_schemas/input_output_boundary.v1.0.yaml: 859f93d8b1d414e6f082da3d7f09a575fdd09124ec7f31eeeb2fb0d9028184ba
-  01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml: 845f15333d2cbfc087a46c9f66585de977e08021c0d3f8d2ab87a7253754591a
-  01_contracts_and_schemas/m1_object_model_brief.md: 91dd38337d92a09846e514af4f94ee55e4f033d49eb86ce0354e578dc6056089
-  01_contracts_and_schemas/m2_evaluation_freeze_brief.md: 2021e88dfe70132fc3f4e70b6e2f319c7461bcddbbc7d87a7ace72fa25ad7b5c
-  01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml: bedf1f894545a2e1953615bd6fe8b4ac1ec124316bf0dcfea1aed97767a179fe
-  01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml: 10a550bc2ec1e89d258887f946dc0a812a957e870dd8e036d1062f57883145fb
+  00_charter/project_charter.v1.0.yaml: fb89aa8f9440819cb8937cf8aeec704532f94845a0df97d7e4f285233f3723e5
+  01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml: df039ca4025ae8f019794a80c8b90c111a8117d0be7891a2cfe7dd8e06344608
+  01_contracts_and_schemas/capability_contract.v1.0.yaml: 33bdcea262fe08edd33bd8444b25acd9fbb3fe42d7a775d8b18f1a3e64f89b2e
+  01_contracts_and_schemas/category_scope_contract.v1.0.yaml: 5c870675df9b652352d0611de81db15e9b939d519614ea22ba1b984afe26d811
+  01_contracts_and_schemas/compliance_review_contract.v1.0.yaml: 29bc72ad29a90822cd53192513ac6a9e7573b3969736cf72e36aa796867fd8a5
+  01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml: 8097574c15c0573876306dab8cb7105a0edcf44218f8fcf785cd042fcf9a178b
+  01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml: cf2979f5348bad1499130f7129836c24275da9541fcc7a3116aa38b33f9a2382
+  01_contracts_and_schemas/input_output_boundary.v1.0.yaml: 56e5475feddc8edf04e07e453df99784354f6429869f96c0fde67f167090a0b7
+  01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml: dc2ffe33928b6f0d5c2afd75861b252ab2c27e2dff75c96951fd4bf217137485
+  01_contracts_and_schemas/m1_object_model_brief.md: f22ed31b3ca65e9ce72f7f9b2dd36b1bc89d11ab10a2da90f8b2b17945734bb4
+  01_contracts_and_schemas/m2_evaluation_freeze_brief.md: 897b2efa2e2f1cc2c8774d984666f9179fa3f1a464831acd0a1df2807e614c6f
+  01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml: 1d9c22b1f438914f57bff40d431ba7b25d69303ad6652cac3b9f4235ae5ef510
+  01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml: 4dce984092ab46525998907a750e22f20b1217b07f7106f59dfb8c206dabe0f0
   02_benchmark_manifests/README.md: e0ce50c88681c6ddca167f237fa8dcf2d28c04cd243f5fd1c176a1b2553ac701
-  11_reports_and_receipts/m0_delivery_report.md: ee174917fcbd99dbd808577376a11820a10d67476643527545e515d086a13a11
-  ci/checkers/check_m0_contract_completeness.py: 4493723273ab65611a7a4dacda3e6e2172c16a7d23f4d45cb433fb5c61da6341
+  11_reports_and_receipts/m0_delivery_report.md: cdec6fe1d832961140cea95bc70bfa7789caca670c0a5494bf70d20ef28726f1
+  ci/checkers/check_m0_contract_completeness.py: 4e6e8b3c27230088eff29a102f644631ddf856efa9c13a6b1d1e058e76024dda
   ci/checkers/check_m0_deliverable_closure.py: d0d4ebdd03363a4a8512be7dbb9830754ee385f6d24ee68bc30c9392b06c6c4f
   ci/checkers/check_m0_zero_contact.py: ac26723d3fd8d41eb7441d7f8068edbc4ddd415476e770c03c0f65e103d479cb

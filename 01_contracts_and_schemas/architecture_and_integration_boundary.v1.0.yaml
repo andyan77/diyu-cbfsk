@@ -5,7 +5,7 @@ project_id: DIYU-CBFSK-001
 milestone: M0
 approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
 product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
-status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+status: M0_FROZEN
 prd_anchors: [PRD-2.3, PRD-11.1, PRD-11.2, PRD-11.3, PRD-5.7, D-01, D-29, FR-27, FR-30]
 
 decoupling_ruling:

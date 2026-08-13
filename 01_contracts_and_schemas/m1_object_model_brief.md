@@ -1,6 +1,6 @@
 # M1 对象模型 Brief
 
-> M0 交付物 #12 · `DIYU-CBFSK-EXEC-REQ-M0-003` · 状态 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`
+> M0 交付物 #12 · `DIYU-CBFSK-EXEC-REQ-M0-003` · 状态 `M0_FROZEN`（Founder M0 裁决 CONDITIONAL → Guardian delta 复核 APPROVE 后升 PASS，冻结时点即此裁决）
 > 产品真源：PRD v1.2（签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`）
 > PRD 锚点：13 节 M1、6.1、6.2、5.3、5.5、5.6、5.7
 

@@ -8,10 +8,11 @@ task_id: GKB-CROSS-BRAND-STYLING-EXPERT-KERNEL-M0-CONTRACT-AND-BENCHMARK-FOUNDAT
 product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
 product_truth_status: SIGNED
 product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
-status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+status: M0_FROZEN
 status_note: >-
-  本文件是 M0 交付候选。Founder 尚未对 M0 作 PASS / CONDITIONAL / BLOCK 裁决，
-  因此不得表述为「已冻结」或「已接受」。冻结时点＝Founder M0 裁决。
+  冻结时点＝Founder M0 裁决。Founder 已裁决 CONDITIONAL（DIYU-CBFSK-FOUNDER-M0-DECISION-001），
+  四项修复落盘于 f01e45b4，Guardian delta 复核 APPROVE 后自动升级为 PASS，本文件随之冻结。
+  「冻结」仅指 M0 里程碑范围内不再变更，**不**表示合同已生效，也**不**表示可服务生产。
 prd_anchors: [PRD-1.1, PRD-1.2, PRD-1.3, PRD-1.4, PRD-2.3, PRD-13-M0, PRD-15.1, PRD-17.1, PRD-附录A]
 
 identity:

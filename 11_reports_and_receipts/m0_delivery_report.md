@@ -103,7 +103,7 @@ PRD 附录 A 给的是**推荐**目录树，并明确"具体目录应在 M0 根�
 - **没有冻结任何 M2 阈值**。PRD 10.2 里标 `M2_FREEZE_REQUIRED` 的 20 项指标全部留白，由 Founder 在 M2 冻结时裁决（`COND-007`）。执行侧 AI 代冻阈值本身就是越权。
 - **限额 POC 证据批次额度**：执行侧未代填，登记为待 Founder 裁决。**已由 `DIYU-CBFSK-FOUNDER-M0-DECISION-001` 第二条裁定**——场景实例 ≤500、候选回答 ≤2,000、专家抽评 ≥100 件、限额 6 人月，四项均为上限或下限约束而非目标值，落在 `compliance_review_contract.v1.0.yaml`。
 - **品牌档案单价校准**：PRD 8.7 要求"M0 以 3—5 个档案的实测工时校准单价后再入预算"，但同一份执行申请禁止 M0 生成任何档案——两条放在一起，M0 无法产生实测工时。我按"不生成"优先，把校准状态如实记为 `NOT_PERFORMED`。**Founder 已确认该红线优先读法正确**，校准延至 M1 执行。
-- **没有自称已冻结**。全部 11 份合同状态都是 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`；checker 有一条 `PREMATURE_FROZEN_CLAIM` 专门抓自称 FROZEN/ACCEPTED 的合同。
+- **交付时没有自称已冻结**。交付当时全部 11 份合同状态都是 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`；checker 有一条 `PREMATURE_FROZEN_CLAIM` 专门抓裁决前自称 FROZEN/ACCEPTED 的合同。Founder 裁决 PASS 生效后，同一 checker 反向判 `STALE_PENDING_STATUS`——继续挂 PENDING 同样算假话（现状态 `M0_FROZEN`）。
 
 ## 7. 全量核验结果（本次落盘后重跑，不沿用）
 

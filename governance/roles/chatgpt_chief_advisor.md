@@ -62,7 +62,7 @@ ChatGPT Web 与 Work 合计一票。
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M0_IN_PROGRESS
+execution_status: M0_COMPLETE
 m0_authorized: true
 m1_started: false
 m2_started: false

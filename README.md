@@ -1,6 +1,6 @@
 # 笛语跨品牌服装搭配专家内核 · 文档索引
 
-> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 已授权未开工
+> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`（里程碑完成）｜M1 未开工
 
 ## 当前活基线
 
@@ -19,7 +19,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M0_IN_PROGRESS
+execution_status: M0_COMPLETE
 production_servable: false
 m0_authorized: true
 current_active_baseline: PRD_v1.2
@@ -34,13 +34,20 @@ founder_m0_authorized: true
 founder_merge_approved: true
 main_merged: true
 m0_execution_started: true
-m0_founder_decision: PENDING
+m0_founder_decision: PASS
+m0_founder_decision_original: CONDITIONAL
+m0_guardian_delta_review: APPROVE
+m1_started: false
+m2_started: false
+knowledge_distillation_started: false
 pending_active_baseline_switch: false
 ```
 
 状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权；`production_servable`、`m1_started`、`m2_started`、`knowledge_distillation_started` 属红线位，任何签署都不得授权。
 
-M0 已按里程碑单包模式落盘十四项交付物，**等待 Founder 作 PASS / CONDITIONAL / BLOCK 裁决**（交付报告 [`11_reports_and_receipts/m0_delivery_report.md`](11_reports_and_receipts/m0_delivery_report.md)，回执 `m0_delivery_receipt.yaml`）。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。
+M0 已按里程碑单包模式落盘十四项交付物。Founder 裁决 `CONDITIONAL`（[`DIYU-CBFSK-FOUNDER-M0-DECISION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M0-DECISION-001.yaml)）→ 四项必修落盘于 `f01e45b4ca4d7416feaec4177f4f8aad2ce35458` → Guardian delta 复核 `APPROVE`、无阻塞发现（[报告](governance/reports/guardian_review_report.f01e45b.delta.md)）→ 依裁决 `upgrade_rule` **自动升级为 M0 `PASS`**。总顾问 delta 复核由 Founder 豁免，**记录在案，不记为已完成**。
+
+`PASS` 只表示 M0 里程碑通过：**不**表示合同已生效，**不**表示可服务生产，**也不**表示 M1 已开工。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。M1-EP01 虽有 Founder 预批准，但与红线「开始 M1 或 M2」及 `m1_started ∈ never_authorizable` 直接抵触，**已停下待 Founder 裁决，未自行绕过**（详见 `11_reports_and_receipts/m0_delivery_receipt.yaml` 的 `next_required_actions`）。
 
 ## Founder 裁决 D-17—D-29 摘要
 
@@ -72,14 +79,14 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 | `11_reports_and_receipts/` | 交付物 14 之报告与回执 |
 | `ci/checkers/check_m0_*.py` | 交付物 14 之 Checker：支持任务四字段完备、与笛语现有资产零接触、十四项清单闭环 |
 
-十四项合计 **57 条支持任务**，每条都带必需输入、输出、失败状态与负责角色——这正是 PRD 13 节 M0 通过标准第一条的机器化形式。全部合同状态为 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`，Founder 裁决前不得表述为已冻结。
+十四项合计 **57 条支持任务**，每条都带必需输入、输出、失败状态与负责角色——这正是 PRD 13 节 M0 通过标准第一条的机器化形式。Founder M0 裁决 PASS 生效后，十四项状态由 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION` 转为 `M0_FROZEN`；该转换由 `check_m0_contract_completeness` 双向把关——裁决前写 FROZEN 判 `PREMATURE_FROZEN_CLAIM`，裁决后仍挂 PENDING 判 `STALE_PENDING_STATUS`，两个方向都不许说假话。
 
 ## 治理（governance/）
 
 | 目录 | 内容 |
 |---|---|
 | `governance/baseline/` | Founder 钉死的基线 Manifest、迁移记录 |
-| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005） |
+| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001） |
 | `governance/bootstrap/` | `role_operating_model.v0.2.yaml`：角色与执行治理的**唯一规范源** |
 | `governance/roles/` `governance/prompts/` | 角色合同与角色 Prompt（由规范源生成） |
 | `governance/conditions/` | `CONDITIONAL` 条件关闭台账 |

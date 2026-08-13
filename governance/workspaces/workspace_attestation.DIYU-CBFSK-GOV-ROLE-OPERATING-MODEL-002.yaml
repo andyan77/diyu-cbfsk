@@ -100,6 +100,35 @@ records:
       在其实际发生前不得填入任何值，也不得写成 advisor_review_completed: true。
     founder_manual_attestation_required: true
 
+  - workspace_id: claude-guardian-m0fix-f01e45b
+    workspace_path: /home/faye/claude-guardian-m0fix-f01e45b
+    conversation_or_session_id: NOT_DISCLOSED_IN_GUARDIAN_REPORT
+    session_id_available: true
+    session_id_value_disclosed_to_executor: false
+    session_id_note: >-
+      本轮 Guardian 报告披露了工作区路径与 review_timestamp，未披露会话标识具体值；
+      执行侧不得代为填写或构造一个标识。
+    session_started_at: NOT_DISCLOSED_IN_GUARDIAN_REPORT
+    review_timestamp: "2026-08-13T09:28:21-07:00"
+    base_commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458
+    role: CLAUDE_INDEPENDENT_GUARDIAN
+    scope: M0_CONDITIONAL_FIX_DELTA_REVIEW
+    status: COMPLETED
+    guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8
+    decision: APPROVE
+    review_round: 3
+    review_scope_limit: DELTA_ONLY（限 M0-FIX-01~04 + 越界排查，依 FOUNDER-M0-DECISION-001 repair_flow）
+    report: governance/reports/guardian_review_report.f01e45b.delta.md
+    blocking_findings: 0
+    non_blocking_findings: [NB-M0-04, NB-M0-05]
+    not_verified_in_this_round:
+      - 回执 18 份 artifact_sha256 重算（按 FR-CALIBRATION-004 禁止字节级核对，判为口径外，未验）
+    founder_manual_attestation_required: true
+    founder_attestation_status: NOT_YET_ATTESTED
+    founder_attestation_note: >-
+      Founder 已转达本轮 Guardian 结论并据此授权 PASS 落盘，但尚未就本轮工作区隔离出具见证行；
+      执行侧不得代 Founder 填写 round_3 见证，因此本记录只声明「待见证」。
+
 founder_workspace_attestation:
   planner_and_guardian_are_different_sessions: true
   planner_and_guardian_are_different_workspaces: true

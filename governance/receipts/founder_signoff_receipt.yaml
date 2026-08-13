@@ -168,8 +168,19 @@ state_flag_authorizations:
       - EXECUTION_NOT_STARTED
       - M0_AUTHORIZED_NOT_STARTED
       - M0_IN_PROGRESS
+      - M0_COMPLETE
     basis: m0_request_signature.founder_m0_request_decision=PASS
     signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    value_basis:
+      M0_COMPLETE:
+        ruling: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+        ruling_reviewed_commit: 2780e65dc32b20576635b887bd7634663afe531b
+        basis: >-
+          m0_decision=CONDITIONAL 且 repair_flow.on_pass 明令「M0 PASS 生效 / README 与状态位随之更新」；
+          Guardian delta 复核 APPROVE（f01e45b4ca4d7416feaec4177f4f8aad2ce35458）触发自动升级。
+        scope_limit: >-
+          仅表示 M0 里程碑完成。**不**授权 M1_IN_PROGRESS 或任何 M1/M2 取值——
+          m1_started 属 never_authorizable 红线位，本条不得被读作 M1 开工授权。
   active_baseline_signature:
     authorized: true
     signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx

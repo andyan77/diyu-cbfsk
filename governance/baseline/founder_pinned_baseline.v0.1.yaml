@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: bb99823b6ac6f17c7c88784a98ed3ef34acd7afb99f8af795d5c6382dd6ede65
+    post_change_binary_sha256: 3d3c4cc82ed64ea7e5bd5dded5920a3a3e8deca6419276b0bcbd61f6f5e98f5a
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-05
+        authorization_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 repair_flow.on_pass（M0 PASS 生效后更新 README 与状态位）
+        binary_sha256: 3d3c4cc82ed64ea7e5bd5dded5920a3a3e8deca6419276b0bcbd61f6f5e98f5a
+        landed_in_commit: M0_PASS_EFFECTIVE_COMMIT
+        content: M0 裁决链改写为 CONDITIONAL→Guardian delta APPROVE→PASS、execution_status 改 M0_COMPLETE、合同状态段改 M0_FROZEN、裁决目录补 FR-PROCESS-006、显式声明 M1 未开工且红线冲突待裁
       - change_id: README-MOD-01
         authorization_ref: 执行 Prompt v2.0 §15.1
         binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31

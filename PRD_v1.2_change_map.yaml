@@ -14,7 +14,7 @@ change_set:
 
 resulting_state:
   project_status: PROJECT_INITIATED
-  execution_status: M0_IN_PROGRESS
+  execution_status: M0_COMPLETE
   production_servable: false
   m0_authorized: true
   prd_v1_2_effective: true

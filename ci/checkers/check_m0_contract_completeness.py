@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import re
 
-from _common import ROOT, cli, load_yaml
+from _common import ROOT, cli, is_full_commit_hash, load_yaml
 
 LABEL = "check_m0_contract_completeness"
 
@@ -33,8 +33,16 @@ M0_CONTRACT_PATHS = (
     "01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml",
 )
 
-# M0 收口前，任何合同都不得自称已冻结/已接受，也不得宣称 production_servable。
-FORBIDDEN_STATUS_VALUES = ("FROZEN", "ACCEPTED", "FOUNDER_ACCEPTED", "PRODUCTION_SERVABLE", "EFFECTIVE")
+# 章程原文：「冻结时点＝Founder M0 裁决」。所以「已冻结/已接受」不是永远禁止，而是**裁决前**禁止；
+# 裁决为 PASS 之后，继续挂 PENDING 反而是过期的假话。两个方向都要判，判据才不是单向的。
+PENDING_DECISION_STATUS = "M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION"
+FORBIDDEN_BEFORE_M0_DECISION = ("FROZEN", "ACCEPTED", "FOUNDER_ACCEPTED")
+# 这两条与 M0 裁决无关：M0 通过不等于合同生效，更不等于可服务生产。任何时候都不得自称。
+FORBIDDEN_ALWAYS = ("PRODUCTION_SERVABLE", "EFFECTIVE")
+
+
+def _declares(status: str, word: str) -> bool:
+    return status == word or status.endswith(f"_{word}")
 
 
 def validate(payload: dict) -> list[str]:
@@ -43,6 +51,17 @@ def validate(payload: dict) -> list[str]:
     known_roles = set(payload.get("known_roles") or [])
     if not known_roles:
         errors.append("NO_KNOWN_ROLES: the canonical role source produced no role list")
+
+    # 冻结授权只认一个来源：Founder M0 裁决，且该裁决升级为 PASS 的依据必须绑定 Guardian
+    # delta 复核的完整 Commit 哈希。没绑哈希的 PASS 一律当作「尚未裁决」处理。
+    decision = payload.get("founder_m0_decision") or {}
+    m0_passed = decision.get("value") == "PASS"
+    if m0_passed and not is_full_commit_hash(decision.get("guardian_delta_review_commit")):
+        errors.append(
+            "UNBOUND_M0_DECISION: founder_m0_decision=PASS but guardian_delta_review_commit="
+            f"{decision.get('guardian_delta_review_commit')!r} is not a full commit hash"
+        )
+        m0_passed = False
 
     contracts = payload.get("contracts") or []
     expected = payload.get("expected_contract_count")
@@ -68,11 +87,21 @@ def validate(payload: dict) -> list[str]:
             errors.append(f"CONTRACT_WITHOUT_PRD_ANCHOR: {path}")
 
         status = contract.get("status") or ""
-        for forbidden in FORBIDDEN_STATUS_VALUES:
-            if status == forbidden or status.endswith(f"_{forbidden}"):
+        for forbidden in FORBIDDEN_ALWAYS:
+            if _declares(status, forbidden):
+                errors.append(f"OVERREACHING_STATUS_CLAIM: {path} declares status={status!r}")
+        if m0_passed:
+            if status == PENDING_DECISION_STATUS:
                 errors.append(
-                    f"PREMATURE_FROZEN_CLAIM: {path} declares status={status!r} before the Founder M0 decision"
+                    f"STALE_PENDING_STATUS: {path} still declares status={status!r} after the Founder "
+                    "M0 decision took effect as PASS"
                 )
+        else:
+            for forbidden in FORBIDDEN_BEFORE_M0_DECISION:
+                if _declares(status, forbidden):
+                    errors.append(
+                        f"PREMATURE_FROZEN_CLAIM: {path} declares status={status!r} before the Founder M0 decision"
+                    )
 
         obligations = contract.get("obligations") or []
         if not obligations:
@@ -130,10 +159,13 @@ def collect() -> dict:
             )
         contracts.append(entry)
 
+    receipt = load_yaml("11_reports_and_receipts/m0_delivery_receipt.yaml")
+
     return {
         "known_roles": sorted(known_roles),
         "contracts": contracts,
         "expected_contract_count": len(M0_CONTRACT_PATHS),
+        "founder_m0_decision": receipt.get("founder_m0_decision_effective") or {},
     }
 
 

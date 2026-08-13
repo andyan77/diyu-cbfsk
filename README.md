@@ -43,7 +43,7 @@ knowledge_distillation_started: false
 pending_active_baseline_switch: false
 ```
 
-状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权。`production_servable` 与 `knowledge_distillation_started` 属红线位，**任何签署都不得授权**（分别至 M12 发布、M2 冻结后另行裁决）。`m1_started` 与 `m2_started` 依 [`DIYU-CBFSK-FOUNDER-M1-GATE-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml) 转入授权门控——**这不是放松**：当前只有 `m1_started` 有授权条目，`m2_started` 无条目，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`，与先前的绝对禁止等效。
+状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权。`production_servable` 与 `knowledge_distillation_started` 属红线位，**任何签署都不得授权**（分别至 M12 发布、M2 冻结后另行裁决）。`m1_started` 与 `m2_started` 依 [`DIYU-CBFSK-FOUNDER-M1-GATE-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml) 转入授权门控。门控要求授权条目绑定完整 Commit 哈希且具名 `basis`，缺一即拦；`m2_started` 当前**无授权条目**，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`。但要说清楚：这**是**一次屏障降级——改造前即使补上一条完美授权，`m2_started` 也点不亮（须改 checker 源码）；改造后往签署回执加一条合规条目即可放行。m2 当前的锁靠的是「没有条目」，不是「不可授权」，两者不是一回事。这是 Founder 知情裁决，屏障层数对照见回执 `barrier_layer_delta`。
 
 M0 已按里程碑单包模式落盘十四项交付物。Founder 裁决 `CONDITIONAL`（[`DIYU-CBFSK-FOUNDER-M0-DECISION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M0-DECISION-001.yaml)）→ 四项必修落盘于 `f01e45b4ca4d7416feaec4177f4f8aad2ce35458` → Guardian delta 复核 `APPROVE`、无阻塞发现（[报告](governance/reports/guardian_review_report.f01e45b.delta.md)）→ 依裁决 `upgrade_rule` **自动升级为 M0 `PASS`**。总顾问 delta 复核由 Founder 豁免，**记录在案，不记为已完成**。
 

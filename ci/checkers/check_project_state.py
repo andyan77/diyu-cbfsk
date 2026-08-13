@@ -35,9 +35,14 @@ GATED_FLAGS = [
 # list must agree with this set, so a receipt edit cannot widen it.
 #
 # m1_started / m2_started 曾在此列。DIYU-CBFSK-FOUNDER-M1-GATE-001 把红线措辞改为「未经授权
-# 开始 M1 或 M2」，二者随之转入签署授权门控：守的是**授权缺失**而不是**开工本身**。这不是放松——
-# 授权条目必须绑定完整 Commit 哈希且具名 basis，缺一即拦；没有条目的状态位（当前的 m2_started）
-# 判 UNAUTHORIZED_TRUE_FLAG，与先前的绝对禁止等效。
+# 开始 M1 或 M2」，二者随之转入签署授权门控：守的是**授权缺失**而不是**开工本身**。授权条目必须
+# 绑定完整 Commit 哈希且具名 basis，缺一即拦；没有条目的状态位（当前的 m2_started）判
+# UNAUTHORIZED_TRUE_FLAG。
+#
+# 但这**是**一次屏障降级，不要写成「与绝对禁止等效」：在此列时，补一条完美授权也点不亮，
+# 除非改本文件；移出后，往签署回执加一条合规条目即可放行，且不触发 RED_LINE_LIST_DRIFT
+# （该判据只比对本集合）。m2 当前的锁靠的是「没有条目」，不是「不可授权」。这是 Founder
+# 知情裁决，记录见 founder_signoff_receipt.yaml barrier_layer_delta。
 RED_LINE_FLAGS = frozenset({"production_servable", "knowledge_distillation_started"})
 
 CLAIM_TO_FLAG = {

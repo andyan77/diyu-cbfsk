@@ -1,6 +1,8 @@
 fixture_id: N62-m2-started-without-authorization-entry
 description: >-
-  m2_started 已移出 never_authorizable，但 Founder 未建授权条目——置 true 仍判 UNAUTHORIZED_TRUE_FLAG，与先前的绝对禁止等效。
+  m2_started 已移出 never_authorizable，但 Founder 未建授权条目——置 true 判 UNAUTHORIZED_TRUE_FLAG。
+  本 fixture 行使的是「无条目」这一条路；补上合规条目后该位即可放行（那是 P19 对 m1 行使的路），
+  两者合起来才说明 m2 现在的锁是「没有条目」而不是「不可授权」。
 checker: check_project_state
 expected: FAIL
 payload:

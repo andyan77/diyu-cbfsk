@@ -129,10 +129,29 @@ state_flag_authorizations:
       still_never_authorizable:
         knowledge_distillation_started: 至 M2 冻结后另行裁决
         production_servable: 至 M12 发布时另行裁决
-      why_this_is_not_a_relaxation: >-
-        门控要求授权条目 authorized=true、绑定完整 Commit 哈希、且具名 basis，缺一即拦；
-        没有条目的状态位判 UNAUTHORIZED_TRUE_FLAG，与先前的绝对禁止等效。
-        当前仅 m1_started 有条目，m2_started 无条目、照样锁死。
+      barrier_layer_delta:
+        gate_requirements_unchanged: 授权条目须 authorized=true、绑定完整 Commit 哈希、具名 basis，缺一即拦。
+        m2_started_before:
+          no_authorization_entry: RED_LINE_FLAG_SET（拦）
+          compliant_authorization_entry_added: RED_LINE_FLAG_SET（仍拦——须改 checker 源码才能放行）
+          barrier_layers: 2
+        m2_started_after:
+          no_authorization_entry: UNAUTHORIZED_TRUE_FLAG（拦）
+          compliant_authorization_entry_added: 放行
+          barrier_layers: 1
+        honest_conclusion: >-
+          本次收缩**确实降低了** m2_started 的屏障层数：由「改本文件无用、须改 checker 源码」
+          降为「往本文件加一条合规授权条目即可放行」，且该新增不触发 RED_LINE_LIST_DRIFT
+          （该判据只比对收缩后的两条红线位）。这是 Founder 知情裁决
+          （DIYU-CBFSK-FOUNDER-M1-GATE-001 第 1 条），不是执行侧自行放宽。
+          m2 当前的锁靠的是「没有条目」，不是「不可授权」——两者不是一回事。
+      superseded_claim:
+        text: 没有条目的状态位判 UNAUTHORIZED_TRUE_FLAG，与先前的绝对禁止等效。
+        why_wrong: >-
+          「等效」只在「无授权条目」这一前提下成立，执行侧把有条件说成了无条件。
+          Founder 裁决原文「m2_started：无授权条目，照样锁死」本就带前提，是转写进本文件时丢了前提。
+          本字段原名 why_this_is_not_a_relaxation 预设了结论，一并改为中性的 barrier_layer_delta。
+        found_by: CLAUDE_INDEPENDENT_GUARDIAN delta 复核 76a1394ee0ba1fae45fac6225167e431c2cd34d7（RD-01）
   flags:
     prd_v1_2_effective:
       authorized: true
@@ -172,8 +191,9 @@ state_flag_authorizations:
       basis: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条（合并完成后 M1-EP01 立即开工）／已批准 MILESTONE_PLAN_M1
       signature_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
       note: >-
-        授权存在；本位只在 M1-EP01 实际开工后才置 true。M2 无授权条目，
-        任何时候置 m2_started=true 都判 UNAUTHORIZED_TRUE_FLAG。
+        授权存在；本位只在 M1-EP01 实际开工后才置 true。
+        **在 m2_started 无授权条目的前提下**，置 m2_started=true 判 UNAUTHORIZED_TRUE_FLAG；
+        一旦为其补上一条合规授权条目即可放行。详见 barrier_layer_delta。
     chatgpt_remote_review_completed:
       authorized: false
       basis: advisor_review.advisor_review_status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE

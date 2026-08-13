@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 752aa5f8fe54eb11a3673059b0964c108b81db823b64020761b7cd6cd336bdb9
+    post_change_binary_sha256: 2ab1981c69e90041e199dc545697ab5ca521e639d8ee1b35bdc43d735dc3fc3a
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-07
+        authorization_ref: Guardian delta 复核 76a1394e RD-01（合并前必关条件）
+        binary_sha256: 2ab1981c69e90041e199dc545697ab5ca521e639d8ee1b35bdc43d735dc3fc3a
+        landed_in_commit: RD01_CORRECTION_COMMIT
+        content: 更正状态位说明中「与先前的绝对禁止等效」这一不成立的表述，改为如实的屏障层数对照
       - change_id: README-MOD-06
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 1 条（M1 红线改造）
         binary_sha256: 752aa5f8fe54eb11a3673059b0964c108b81db823b64020761b7cd6cd336bdb9

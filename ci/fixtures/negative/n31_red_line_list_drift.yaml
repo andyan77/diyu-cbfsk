@@ -1,6 +1,6 @@
 fixture_id: N31-red-line-list-drift
 description: >-
-  签署回执把 m2_started 从 never_authorizable 清单里删掉，试图为后续翻转开路。
+  签署回执把 knowledge_distillation_started 从 never_authorizable 清单里删掉，试图为后续翻转开路。
 checker: check_project_state
 expected: FAIL
 payload:
@@ -21,8 +21,6 @@ payload:
   authorizations: {}
   never_authorizable_declared:
   - production_servable
-  - m1_started
-  - knowledge_distillation_started
   execution_status: EXECUTION_NOT_STARTED
   execution_status_authorization: {}
   candidate_marked_as_effective_truth: false

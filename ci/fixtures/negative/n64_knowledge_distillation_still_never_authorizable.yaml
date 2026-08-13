@@ -1,6 +1,6 @@
-fixture_id: N33-execution-status-out-of-scope
+fixture_id: N64-knowledge-distillation-still-never-authorizable
 description: >-
-  execution_status 直接跳到 M1_IN_PROGRESS，而签署只授权到 M0 相关取值。
+  知识蒸馏位带着一份完整授权记录被置 true——M1-GATE-001 只放开 M1/M2，该位与 production_servable 仍是任何签署都不得授权的红线。
 checker: check_project_state
 expected: FAIL
 payload:
@@ -17,19 +17,16 @@ payload:
     m0_execution_started: false
     m1_started: false
     m2_started: false
-    knowledge_distillation_started: false
-  authorizations: {}
+    knowledge_distillation_started: true
+  authorizations:
+    knowledge_distillation_started:
+      authorized: true
+      basis: 一份看似完整的签署
+      signature_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
   never_authorizable_declared:
   - production_servable
   - knowledge_distillation_started
-  execution_status: M1_IN_PROGRESS
-  execution_status_authorization:
-    authorized: true
-    authorized_values:
-    - EXECUTION_NOT_STARTED
-    - M0_AUTHORIZED_NOT_STARTED
-    - M0_IN_PROGRESS
-    basis: M0 签署
-    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  execution_status: EXECUTION_NOT_STARTED
+  execution_status_authorization: {}
   candidate_marked_as_effective_truth: false
   forbidden_claim_hits: []

@@ -1,0 +1,64 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M1-GATE-001
+project_id: DIYU-CBFSK-001
+title: M1 红线改造 + PREMATURE_FROZEN_CLAIM 门控追认 + 合并预授权
+ruling_date: "2026-08-13"
+issued_by: Founder
+ruling_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+trigger: >-
+  执行侧在 M0 PASS 落盘后上报：M1-EP01 预批准与规范源红线「开始 M1 或 M2」及
+  m1_started ∈ never_authorizable 直接抵触，已停下未自行绕过，请求裁决。
+
+article_1_red_line_reconstruction:
+  decision: 选项 A 并扩展
+  red_line_wording:
+    before: 开始 M1 或 M2
+    after: 未经授权开始 M1 或 M2
+    landed_in: governance/bootstrap/role_operating_model.v0.2.yaml red_lines
+  moved_to_signature_gate: [m1_started, m2_started]
+  gate_requirement: 授权条目须绑定具体裁决 Commit 哈希
+  currently_authorized: [m1_started]
+  currently_unauthorized:
+    m2_started: 无授权条目，照样锁死（置 true 判 UNAUTHORIZED_TRUE_FLAG）
+  remain_never_authorizable:
+    knowledge_distillation_started: 至 M2 冻结后另行裁决
+    production_servable: 至 M12 发布时另行裁决
+  landed_in:
+    - ci/checkers/check_project_state.py RED_LINE_FLAGS
+    - governance/receipts/founder_signoff_receipt.yaml state_flag_authorizations
+  negative_fixtures: [N62, N63, N64]
+  positive_fixture: P19
+
+article_2_premature_frozen_claim_ratification:
+  decision: 追认，不回退
+  object: check_m0_contract_completeness 裁决门控改造（落于 334e69bf）
+  founder_reasoning: 同义词绕过是真洞，修法正确，披露合规。
+  also_ratified: STALE_PENDING_STATUS 反向判据
+  ratification_note: >-
+    该改造在 334e69bf 中作为「超出仅 README 与状态位」一项由执行侧主动披露；
+    本条是事后追认，不改写当时的越界事实，也不构成「先斩后奏可行」的先例。
+
+article_3_merge_pre_authorization:
+  approved_for_merge: true
+  merge_target: main
+  scope_limit: 本裁决第 1、2 条范围 ＋ 既有 334e69bf 内容；不得夹带其他改动
+  precondition: Guardian 对本裁决实施后的分支最终 Commit 作 delta 复核并通过
+  advisor:
+    status: WAIVED
+    counted_as_completed: false
+    note: 豁免记录在案，不计为完成。
+  excluded_from_this_batch:
+    - {id: NB-M0-04, routed_to: M1-EP01}
+    - {id: NB-M0-05, routed_to: M1-EP01}
+
+article_4_m1_start:
+  start_condition: 合并 main 完成后 M1-EP01 立即开工
+  plan: MILESTONE_PLAN_M1（已批准，见 DIYU-CBFSK-FOUNDER-M0-DECISION-001 m1_pre_approval）
+  m1_started_flag: 如实置 true
+  m1_started_authorization_binding: 本裁决（signature_base_commit 334e69bfdeaabd731a5184fa3958e479d029f69f）
+  timing_discipline: >-
+    授权条目在本批即建立，但状态位只在 M1-EP01 实际开工后才置 true——
+    与 main_merged / m0_execution_started 同一口径：授权存在 ≠ 事件已发生。
+
+signed_by: Founder
+signed_at: "2026-08-13"

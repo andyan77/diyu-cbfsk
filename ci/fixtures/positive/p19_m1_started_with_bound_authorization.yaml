@@ -1,8 +1,8 @@
-fixture_id: N33-execution-status-out-of-scope
+fixture_id: P19-m1-started-with-bound-authorization
 description: >-
-  execution_status 直接跳到 M1_IN_PROGRESS，而签署只授权到 M0 相关取值。
+  M1-GATE-001 后 m1_started 转入授权门控：有 authorized=true、具名 basis、绑定完整 Commit 哈希的条目时置 true 合法。门控必须能在「真」方向放行，否则它只是换了措辞的绝对禁止。
 checker: check_project_state
-expected: FAIL
+expected: PASS
 payload:
   flags:
     prd_v1_2_effective: false
@@ -15,21 +15,18 @@ payload:
     main_merged: false
     production_servable: false
     m0_execution_started: false
-    m1_started: false
+    m1_started: true
     m2_started: false
     knowledge_distillation_started: false
-  authorizations: {}
+  authorizations:
+    m1_started:
+      authorized: true
+      basis: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条
+      signature_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
   never_authorizable_declared:
   - production_servable
   - knowledge_distillation_started
-  execution_status: M1_IN_PROGRESS
-  execution_status_authorization:
-    authorized: true
-    authorized_values:
-    - EXECUTION_NOT_STARTED
-    - M0_AUTHORIZED_NOT_STARTED
-    - M0_IN_PROGRESS
-    basis: M0 签署
-    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  execution_status: EXECUTION_NOT_STARTED
+  execution_status_authorization: {}
   candidate_marked_as_effective_truth: false
   forbidden_claim_hits: []

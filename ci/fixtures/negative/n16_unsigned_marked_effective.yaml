@@ -21,8 +21,6 @@ payload:
   authorizations: {}
   never_authorizable_declared:
   - production_servable
-  - m1_started
-  - m2_started
   - knowledge_distillation_started
   execution_status: EXECUTION_NOT_STARTED
   execution_status_authorization: {}

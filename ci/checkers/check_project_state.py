@@ -31,11 +31,14 @@ GATED_FLAGS = [
 ]
 
 # Source: governance/bootstrap/role_operating_model.v0.2.yaml red_lines —— 创建 Serving /
-# 开始 M1 或 M2 / 开始知识蒸馏. No signature record may authorize these; the receipt's own
-# never_authorizable list must agree with this set, so a receipt edit cannot widen it.
-RED_LINE_FLAGS = frozenset(
-    {"production_servable", "m1_started", "m2_started", "knowledge_distillation_started"}
-)
+# 开始知识蒸馏. No signature record may authorize these; the receipt's own never_authorizable
+# list must agree with this set, so a receipt edit cannot widen it.
+#
+# m1_started / m2_started 曾在此列。DIYU-CBFSK-FOUNDER-M1-GATE-001 把红线措辞改为「未经授权
+# 开始 M1 或 M2」，二者随之转入签署授权门控：守的是**授权缺失**而不是**开工本身**。这不是放松——
+# 授权条目必须绑定完整 Commit 哈希且具名 basis，缺一即拦；没有条目的状态位（当前的 m2_started）
+# 判 UNAUTHORIZED_TRUE_FLAG，与先前的绝对禁止等效。
+RED_LINE_FLAGS = frozenset({"production_servable", "knowledge_distillation_started"})
 
 CLAIM_TO_FLAG = {
     "PRD v1.2已生效": "prd_v1_2_effective",

@@ -119,9 +119,20 @@ state_flag_authorizations:
     never_authorizable 内的状态位即使写了授权条目也一律判失败（红线）。
   never_authorizable:
     - production_servable
-    - m1_started
-    - m2_started
     - knowledge_distillation_started
+  never_authorizable_change_log:
+    - ruling: DIYU-CBFSK-FOUNDER-M1-GATE-001
+      ruling_date: "2026-08-13"
+      moved_out: [m1_started, m2_started]
+      moved_to: 签署授权门控
+      red_line_wording_now: 未经授权开始 M1 或 M2
+      still_never_authorizable:
+        knowledge_distillation_started: 至 M2 冻结后另行裁决
+        production_servable: 至 M12 发布时另行裁决
+      why_this_is_not_a_relaxation: >-
+        门控要求授权条目 authorized=true、绑定完整 Commit 哈希、且具名 basis，缺一即拦；
+        没有条目的状态位判 UNAUTHORIZED_TRUE_FLAG，与先前的绝对禁止等效。
+        当前仅 m1_started 有条目，m2_started 无条目、照样锁死。
   flags:
     prd_v1_2_effective:
       authorized: true
@@ -156,6 +167,13 @@ state_flag_authorizations:
       authorized: true
       basis: m0_request_signature.effective=IMMEDIATE（授权存在；本位只在 M0 实际开工后才置 true）
       signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    m1_started:
+      authorized: true
+      basis: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条（合并完成后 M1-EP01 立即开工）／已批准 MILESTONE_PLAN_M1
+      signature_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+      note: >-
+        授权存在；本位只在 M1-EP01 实际开工后才置 true。M2 无授权条目，
+        任何时候置 m2_started=true 都判 UNAUTHORIZED_TRUE_FLAG。
     chatgpt_remote_review_completed:
       authorized: false
       basis: advisor_review.advisor_review_status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE

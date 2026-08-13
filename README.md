@@ -43,11 +43,11 @@ knowledge_distillation_started: false
 pending_active_baseline_switch: false
 ```
 
-状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权；`production_servable`、`m1_started`、`m2_started`、`knowledge_distillation_started` 属红线位，任何签署都不得授权。
+状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权。`production_servable` 与 `knowledge_distillation_started` 属红线位，**任何签署都不得授权**（分别至 M12 发布、M2 冻结后另行裁决）。`m1_started` 与 `m2_started` 依 [`DIYU-CBFSK-FOUNDER-M1-GATE-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml) 转入授权门控——**这不是放松**：当前只有 `m1_started` 有授权条目，`m2_started` 无条目，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`，与先前的绝对禁止等效。
 
 M0 已按里程碑单包模式落盘十四项交付物。Founder 裁决 `CONDITIONAL`（[`DIYU-CBFSK-FOUNDER-M0-DECISION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M0-DECISION-001.yaml)）→ 四项必修落盘于 `f01e45b4ca4d7416feaec4177f4f8aad2ce35458` → Guardian delta 复核 `APPROVE`、无阻塞发现（[报告](governance/reports/guardian_review_report.f01e45b.delta.md)）→ 依裁决 `upgrade_rule` **自动升级为 M0 `PASS`**。总顾问 delta 复核由 Founder 豁免，**记录在案，不记为已完成**。
 
-`PASS` 只表示 M0 里程碑通过：**不**表示合同已生效，**不**表示可服务生产，**也不**表示 M1 已开工。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。M1-EP01 虽有 Founder 预批准，但与红线「开始 M1 或 M2」及 `m1_started ∈ never_authorizable` 直接抵触，**已停下待 Founder 裁决，未自行绕过**（详见 `11_reports_and_receipts/m0_delivery_receipt.yaml` 的 `next_required_actions`）。
+`PASS` 只表示 M0 里程碑通过：**不**表示合同已生效，**不**表示可服务生产，**也不**表示 M1 已开工。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。M1-EP01 的开工冲突已由 `DIYU-CBFSK-FOUNDER-M1-GATE-001` 裁决：红线措辞改为「未经授权开始 M1 或 M2」，`m1_started` 授权条目已建立并绑定该裁决 Commit，但**状态位仍为 `false`**——授权存在不等于事件已发生，M1-EP01 在合并 main 完成后才开工。
 
 ## Founder 裁决 D-17—D-29 摘要
 
@@ -86,7 +86,7 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 | 目录 | 内容 |
 |---|---|
 | `governance/baseline/` | Founder 钉死的基线 Manifest、迁移记录 |
-| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001） |
+| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001） |
 | `governance/bootstrap/` | `role_operating_model.v0.2.yaml`：角色与执行治理的**唯一规范源** |
 | `governance/roles/` `governance/prompts/` | 角色合同与角色 Prompt（由规范源生成） |
 | `governance/conditions/` | `CONDITIONAL` 条件关闭台账 |

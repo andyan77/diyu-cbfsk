@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from _common import cli, load_yaml
+from _common import cli, is_full_commit_hash, load_yaml
 
 LABEL = "check_conditional_ledger"
 
@@ -67,6 +67,13 @@ def validate(payload: dict) -> list[str]:
                 errors.append(f"CLOSURE_WITHOUT_FOUNDER_DECISION: {cid} is {status} without founder_closure_decision")
         if status == "WAIVED" and not cond.get("founder_closure_decision"):
             errors.append(f"WAIVER_WITHOUT_FOUNDER_DECISION: {cid}")
+        if "source_commit" in cond:
+            source_commit = cond.get("source_commit")
+            if not is_full_commit_hash(source_commit):
+                errors.append(
+                    f"SOURCE_COMMIT_NOT_A_COMMIT_HASH: {cid} source_commit={source_commit!r} "
+                    "is not a full 40-hex commit hash"
+                )
         if status == "OPEN" and cond.get("closure_commit"):
             errors.append(f"OPEN_WITH_CLOSURE_COMMIT: {cid} is OPEN but already carries a closure_commit")
 
@@ -76,17 +83,32 @@ def validate(payload: dict) -> list[str]:
         if not payload.get("founder_explicit_permission_to_advance"):
             errors.append("ADVANCE_WITH_OPEN_CONDITIONS: merge requested while conditions remain open")
 
+    # A bare boolean is not a permission: it has to name the ruling and bind to one commit.
+    if payload.get("founder_explicit_permission_to_advance"):
+        if not payload.get("founder_permission_ref"):
+            errors.append("PERMISSION_WITHOUT_REF: advance permission names no Founder ruling")
+        if not is_full_commit_hash(payload.get("founder_permission_commit")):
+            errors.append(
+                "UNBOUND_PERMISSION: advance permission is not bound to a full commit hash "
+                f"(got {payload.get('founder_permission_commit')!r})"
+            )
+
     return errors
 
 
 def collect() -> dict:
     ledger = load_yaml("governance/conditions/conditional_decision_ledger.yaml")
+    merge_state = ledger.get("merge_state") or {}
     return {
         "rules": ledger["rules"],
         "conditions": ledger["conditions"],
-        "verdicts": [],
-        "merge_requested": False,
-        "founder_explicit_permission_to_advance": False,
+        "verdicts": ledger.get("verdicts") or [],
+        "merge_requested": merge_state.get("merge_requested", False),
+        "founder_explicit_permission_to_advance": merge_state.get(
+            "founder_explicit_permission_to_advance", False
+        ),
+        "founder_permission_ref": merge_state.get("founder_permission_ref"),
+        "founder_permission_commit": merge_state.get("founder_permission_commit"),
     }
 
 

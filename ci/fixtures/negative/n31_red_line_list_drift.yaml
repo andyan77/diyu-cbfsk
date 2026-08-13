@@ -1,12 +1,12 @@
-fixture_id: N16-unsigned-marked-effective
+fixture_id: N31-red-line-list-drift
 description: >-
-  v1.2 未签署却被标记为有效真源、M0 被标为已授权——无任何 Founder 授权记录。
+  签署回执把 m2_started 从 never_authorizable 清单里删掉，试图为后续翻转开路。
 checker: check_project_state
 expected: FAIL
 payload:
   flags:
     prd_v1_2_effective: false
-    m0_authorized: true
+    m0_authorized: false
     guardian_review_completed: false
     chatgpt_remote_review_completed: false
     founder_prd_signed: false
@@ -22,12 +22,8 @@ payload:
   never_authorizable_declared:
   - production_servable
   - m1_started
-  - m2_started
   - knowledge_distillation_started
   execution_status: EXECUTION_NOT_STARTED
   execution_status_authorization: {}
-  candidate_marked_as_effective_truth: true
-  forbidden_claim_hits:
-  - source: README.md
-    claim: 'prd_v1_2_effective: true'
-    paragraph: 'prd_v1_2_effective: true'
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []

@@ -1,18 +1,25 @@
-fixture_id: N15-premature-archive-v1.1
+fixture_id: N37-baseline-status-out-of-scope
 description: >-
-  v1.2 未生效却已归档 v1.1——红线「在 v1.2 生效前归档 v1.1」。
+  活基线状态被写成 EFFECTIVE_AND_MERGED，不在签署授权的取值集合内。
 checker: check_active_product_truth
 expected: FAIL
 payload:
   expected_active: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   files_declaring_sole_product_truth:
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
-  active_status: PENDING_FOUNDER_SIGNATURE
+  active_status: EFFECTIVE_AND_MERGED
   candidate_effective: false
   active_baseline_is_candidate: false
   pending_active_baseline_switch: false
-  active_baseline_signature: {}
-  archive_v1_1_exists: true
+  active_baseline_signature:
+    authorized: true
+    signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    authorized_status_values:
+    - PENDING_FOUNDER_SIGNATURE
+    - SIGNED
+    basis: founder_prd_decision=PASS
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  archive_v1_1_exists: false
   root_files:
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx

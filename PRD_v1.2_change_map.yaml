@@ -14,19 +14,22 @@ change_set:
 
 resulting_state:
   project_status: PROJECT_INITIATED
-  execution_status: EXECUTION_NOT_STARTED
+  execution_status: M0_AUTHORIZED_NOT_STARTED
   production_servable: false
-  m0_authorized: false
-  prd_v1_2_effective: false
-  documentation_status: READY_FOR_GUARDIAN
+  m0_authorized: true
+  prd_v1_2_effective: true
+  documentation_status: FOUNDER_SIGNED
   current_active_baseline: PRD_v1.1
   current_active_baseline_status: PENDING_FOUNDER_SIGNATURE
-  guardian_review_completed: false
+  guardian_review_completed: true
   chatgpt_remote_review_completed: false
-  founder_prd_signed: false
-  founder_m0_authorized: false
-  founder_merge_approved: false
+  founder_prd_signed: true
+  founder_m0_authorized: true
+  founder_merge_approved: true
   main_merged: false
+  state_authorization_source: governance/receipts/founder_signoff_receipt.yaml
+  signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  chatgpt_remote_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
 
 invariants:
   m0_top_level_deliverable_count: 14

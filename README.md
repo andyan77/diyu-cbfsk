@@ -12,36 +12,45 @@
 
 按 Founder 裁决，**v1.1 不单独签署**；它保持活基线身份直到 PRD v1.2 正式生效。**v1.2 生效前不得归档 v1.1。**
 
-## PRD v1.2 候选（未生效）
+## PRD v1.2（Founder 已签署生效 · 活基线切换待执行）
 
 | 文档 | 用途 | 状态 |
 |---|---|---|
-| `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` | 合并 D-17—D-29、S1—S8 与治理操作模型的全文候选 | `READY_FOR_GUARDIAN` · 未生效 |
-| `笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx` | M0 执行申请 `DIYU-CBFSK-EXEC-REQ-M0-003` | 候选，未签署，`m0_authorized=false` |
+| `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` | 合并 D-17—D-29、S1—S8 与治理操作模型的全文版 | `FOUNDER_SIGNED` · 已生效 |
+| `笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx` | M0 执行申请 `DIYU-CBFSK-EXEC-REQ-M0-003` | 已签署，`m0_authorized=true`，即时生效 |
 | `PRD_v1.2_核验回执.docx` | 候选施工侧自检回执 | 自检 PASS，**不代替** Guardian／总顾问／Founder |
 | `PRD_v1.2_change_map.yaml` | 机器可读裁决—章节—里程碑—验收映射 | 当前变更映射 |
 
-PRD v1.2 是可独立阅读的全文版，不需要对照 v1.1 或 Delta。它必须依次通过独立 Guardian → ChatGPT 总顾问远程审查 → Founder 一次性签署，才会取代 v1.1 成为唯一产品真源。
+签署回执：`governance/receipts/founder_signoff_receipt.yaml`（`DIYU-CBFSK-FOUNDER-SIGNOFF-001`，签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`）。
+
+审查链如实记录：独立 Guardian 两轮（`f48fed3` REJECT → `9335180f` APPROVE_WITH_CONDITIONS）；ChatGPT 总顾问远程审查**未进行**，由 Founder 依 §11.2 显式记录性豁免并接受风险，**不是**静默跳过，也**不得**记为已完成。
+
+活基线指针切换（v1.2 成为 `current_active`）、README 基线段改写与 v1.1 归档，按签署包执行序列放在合并 `main` 之后的最终 Commit；在此之前 `pending_active_baseline_switch: true`。
 
 ## 当前项目状态
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: EXECUTION_NOT_STARTED
+execution_status: M0_AUTHORIZED_NOT_STARTED
 production_servable: false
-m0_authorized: false
+m0_authorized: true
 current_active_baseline: PRD_v1.1
 current_active_baseline_status: PENDING_FOUNDER_SIGNATURE
-prd_v1_2_documentation_status: READY_FOR_GUARDIAN
-prd_v1_2_effective: false
-guardian_review_completed: false
+prd_v1_2_documentation_status: FOUNDER_SIGNED
+prd_v1_2_effective: true
+guardian_review_completed: true
 chatgpt_remote_review_completed: false
-founder_prd_signed: false
-founder_merge_approved: false
+chatgpt_remote_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
+founder_prd_signed: true
+founder_m0_authorized: true
+founder_merge_approved: true
 main_merged: false
+pending_active_baseline_switch: true
 ```
 
-本轮没有开始 M0 施工、M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入或自动发布。
+状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权；`production_servable`、`m1_started`、`m2_started`、`knowledge_distillation_started` 属红线位，任何签署都不得授权。
+
+M0 已授权但**尚未开工**；M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。
 
 ## Founder 裁决 D-17—D-29 摘要
 
@@ -68,7 +77,7 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 | 目录 | 内容 |
 |---|---|
 | `governance/baseline/` | Founder 钉死的基线 Manifest、迁移记录 |
-| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003） |
+| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005） |
 | `governance/bootstrap/` | `role_operating_model.v0.2.yaml`：角色与执行治理的**唯一规范源** |
 | `governance/roles/` `governance/prompts/` | 角色合同与角色 Prompt（由规范源生成） |
 | `governance/conditions/` | `CONDITIONAL` 条件关闭台账 |
@@ -89,5 +98,6 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型、工作区佐证、任务分级、条件台账、隐藏边界、外部评审声明、M0 十四项、项目状态、投影一致性共 13 个确定性 Checker。
+- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖共 16 个确定性 Checker。
+- `ci/run_fixtures.py`：用字面量 fixture 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

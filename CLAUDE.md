@@ -24,15 +24,15 @@
 ## 产品真源
 
 - 活基线 `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx` — `PENDING_FOUNDER_SIGNATURE`
-- 候选 `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` — 未生效
-- v1.2 生效前不得归档 v1.1；不得同时存在两个活产品真源。
+- 候选 `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` — Founder 已签署生效
+- v1.2 已生效，v1.1 按执行序列归档；不得同时存在两个活产品真源。
 
 ## 当前项目状态
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: EXECUTION_NOT_STARTED
-m0_authorized: false
+execution_status: M0_AUTHORIZED_NOT_STARTED
+m0_authorized: true
 m1_started: false
 m2_started: false
 knowledge_distillation_started: false

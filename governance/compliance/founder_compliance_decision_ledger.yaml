@@ -15,96 +15,128 @@ note: >-
   founder_decision，也不得把 DEFER 写成 ACCEPT。
 
 allowed_decisions: [ACCEPT, MITIGATE, DEFER, BLOCK]
+decision_source: DIYU-CBFSK-FOUNDER-SIGNOFF-001（Founder 签署包第四条，执行侧逐条转录，未代填、未把 DEFER 写成 ACCEPT）
+defer_is_not_accept: true
 
 items:
   - compliance_item_id: CMP-01
     issue: 未满 14 周岁个人信息与监护人同意机制（童装、青少年为首发品类，直接触发）——《个人信息保护法》。
     applicable_stage: M0/M1/M9/M12
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: DEFER
+    rationale: >-
+      Founder 签署包第四条：①未成年人个人信息与监护人同意机制＝DEFER，节点＝M2 冻结前完成 Founder 合规自评。
     evidence: []
     required_controls:
       - 童装与青少年内容不采集可识别个体信息
       - 个体适配输入使用中性字段
       - 高风险知识 Founder 审查覆盖率 100%
     next_review_milestone: M2
-    decision_date: null
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: M2_FREEZE
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
 
   - compliance_item_id: CMP-02
     issue: AI 生成合成内容标识义务与各平台 AIGC 标注规则（账号矩阵批量发布场景）——《人工智能生成合成内容标识办法》。
     applicable_stage: M7/M12
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: DEFER
+    rationale: >-
+      Founder 签署包第四条：②AIGC 标识义务＝DEFER，节点＝M2 冻结前完成 Founder 合规自评。
     evidence: []
     required_controls:
       - 发布前标识检查进入发布门
       - PublicationPolicyController 记录标识状态
     next_review_milestone: M2
-    decision_date: null
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: M2_FREEZE
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
 
   - compliance_item_id: CMP-03
     issue: 数据出境路径核验：若任何环节使用境外模型 API 处理个体资料——《促进和规范数据跨境流动规定》。
     applicable_stage: M3/M4/M12
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: DEFER
+    rationale: >-
+      Founder 签署包第四条：③数据出境路径核验＝DEFER，节点＝M2 冻结前完成 Founder 合规自评。
     evidence: []
     required_controls:
       - 模型调用链登记
       - 个体资料不出境或去标识化后处理的路径裁决
     next_review_milestone: M2
-    decision_date: null
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: M2_FREEZE
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
 
   - compliance_item_id: CMP-04
     issue: 面向公众提供生成式 AI 服务的备案适用性（取决于最终产品形态，形态裁决后核验）。
     applicable_stage: M12
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: DEFER
+    rationale: >-
+      Founder 签署包第四条：④生成式 AI 服务备案适用性＝DEFER，节点＝产品形态裁决后。
     evidence: []
     required_controls:
       - 产品形态裁决后重新评估适用性
     next_review_milestone: M12
-    decision_date: null
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: PRODUCT_FORM_RULING
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
 
   - compliance_item_id: CMP-05
     issue: 模型厂商服务条款对知识蒸馏用途的约束（GPT×Claude 蒸馏链，核验一次并留档）。
     applicable_stage: M3/M4/M5
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: DEFER
+    rationale: >-
+      Founder 签署包第四条：⑤模型厂商服务条款对蒸馏用途的约束＝DEFER，节点＝M4 蒸馏开跑前核验一次。
     evidence: []
     required_controls:
       - 蒸馏链用途核验一次并留档
       - 黑盒行为蒸馏边界不触碰模型权重
-    next_review_milestone: M2
-    decision_date: null
+    next_review_milestone: M4
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: M4_DISTILLATION_START
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
 
   - compliance_item_id: CMP-06
     issue: 完整顾客档案模式的敏感信息处理、保存期限与删除权流程（含「去标识化≠匿名化」认定）——《网络数据安全管理条例》。
     applicable_stage: M9/M12
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: DEFER
+    rationale: >-
+      Founder 签署包第四条：⑥顾客档案保存期限与删除权流程＝DEFER，节点＝M2 冻结前完成 Founder 合规自评。
     evidence: []
     required_controls:
       - 保存期限与删除权流程
       - 去标识化与匿名化认定分离
     next_review_milestone: M2
-    decision_date: null
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: M2_FREEZE
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
 
   - compliance_item_id: CMP-07
     issue: Founder 或品牌提供的商品图片使用权、保密义务、保存期限、模型处理与输出公开范围。
     applicable_stage: M11/M12
-    founder_decision: PENDING_FOUNDER_DECISION
-    rationale: null
+    founder_decision: MITIGATE
+    rationale: >-
+      Founder 签署包第四条：⑦按台账原文处置——采用本条 required_controls 三项作为生效缓解措施，
+      不作推迟。usage_scope=test_production_only 为默认值；未另行授权前不进入训练、隐藏集或通用知识。
     evidence: []
     required_controls:
       - usage_scope=test_production_only 默认
       - 不进入训练、隐藏集或通用知识，除非另行授权
       - 权利与保密标记、访问控制、保存期限与删除
-    next_review_milestone: M2
-    decision_date: null
+    controls_in_force: true
+    next_review_milestone: M11
+    decision_date: "2026-08-13"
     external_legal_opinion_obtained: false
+    decision_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    decision_gate: CONTROLS_EFFECTIVE_IMMEDIATELY
+    decided_by: FOUNDER_PRODUCT_AUTHORITY

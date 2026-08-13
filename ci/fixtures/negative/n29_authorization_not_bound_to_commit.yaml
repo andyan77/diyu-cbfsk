@@ -1,12 +1,12 @@
-fixture_id: N16-unsigned-marked-effective
+fixture_id: N29-authorization-not-bound-to-commit
 description: >-
-  v1.2 未签署却被标记为有效真源、M0 被标为已授权——无任何 Founder 授权记录。
+  状态位有授权记录，但 signature_base_commit 是缩写哈希——授权未绑定到唯一对象。
 checker: check_project_state
 expected: FAIL
 payload:
   flags:
-    prd_v1_2_effective: false
-    m0_authorized: true
+    prd_v1_2_effective: true
+    m0_authorized: false
     guardian_review_completed: false
     chatgpt_remote_review_completed: false
     founder_prd_signed: false
@@ -18,7 +18,11 @@ payload:
     m1_started: false
     m2_started: false
     knowledge_distillation_started: false
-  authorizations: {}
+  authorizations:
+    prd_v1_2_effective:
+      authorized: true
+      basis: founder signature
+      signature_base_commit: '9335180'
   never_authorizable_declared:
   - production_servable
   - m1_started
@@ -26,8 +30,5 @@ payload:
   - knowledge_distillation_started
   execution_status: EXECUTION_NOT_STARTED
   execution_status_authorization: {}
-  candidate_marked_as_effective_truth: true
-  forbidden_claim_hits:
-  - source: README.md
-    claim: 'prd_v1_2_effective: true'
-    paragraph: 'prd_v1_2_effective: true'
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []

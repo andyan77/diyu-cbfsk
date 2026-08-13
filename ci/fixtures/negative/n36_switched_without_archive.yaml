@@ -1,18 +1,24 @@
-fixture_id: N03-two-active-product-truths
+fixture_id: N36-switched-without-archive
 description: >-
-  两个 PRD 同时声明唯一产品真源。
+  活真源已切到 v1.2，但 归档_v1.1/ 不存在且三份 v1.1 仍在根目录——两个活基线并存。
 checker: check_active_product_truth
 expected: FAIL
 payload:
-  expected_active: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+  expected_active: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
   files_declaring_sole_product_truth:
-  - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
-  active_status: PENDING_FOUNDER_SIGNATURE
-  candidate_effective: false
-  active_baseline_is_candidate: false
+  active_status: SIGNED
+  candidate_effective: true
+  active_baseline_is_candidate: true
   pending_active_baseline_switch: false
-  active_baseline_signature: {}
+  active_baseline_signature:
+    authorized: true
+    signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    authorized_status_values:
+    - PENDING_FOUNDER_SIGNATURE
+    - SIGNED
+    basis: founder_prd_decision=PASS
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
   archive_v1_1_exists: false
   root_files:
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
@@ -22,8 +28,11 @@ payload:
   - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
   - PRD_v1.2_核验回执.docx
   active_baseline_files_expected_at_root:
+  - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+  - PRD_v1.2_核验回执.docx
+  files_expected_out_of_root:
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx
   - PRD_v1.1_核验回执.docx
-  files_expected_out_of_root: []
   conditional_claims_found: []

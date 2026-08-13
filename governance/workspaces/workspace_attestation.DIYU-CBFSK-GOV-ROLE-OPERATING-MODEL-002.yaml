@@ -57,6 +57,35 @@ records:
     superseded_by_new_commit: true
     supersession_basis: 执行 Prompt v2.0 §14——修复形成新 Commit 后先前 Guardian 结论一律失效，须全量重审（COND-009）。
 
+  - workspace_id: claude-guardian-diyu-cbfsk-9335180
+    workspace_path: /home/faye/claude-guardian-diyu-cbfsk-9335180
+    conversation_or_session_id: NOT_DISCLOSED_IN_GUARDIAN_REPORT
+    session_id_available: true
+    session_id_value_disclosed_to_executor: false
+    session_id_note: >-
+      本轮 Guardian 报告披露了工作区标识与 review_timestamp，但未披露会话标识具体值；
+      执行侧不得代为填写或构造一个标识。会话隔离由本文件的 Founder 本轮见证行承担佐证。
+    session_started_at: NOT_DISCLOSED_IN_GUARDIAN_REPORT
+    review_timestamp: "2026-08-13T05:58:35-07:00"
+    base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    role: CLAUDE_INDEPENDENT_GUARDIAN
+    scope: FROZEN_CANDIDATE_FULL_RE_REVIEW
+    status: COMPLETED
+    guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8
+    decision: APPROVE_WITH_CONDITIONS
+    review_round: 2
+    report: governance/reports/guardian_review_report.9335180f.md
+    founder_manual_attestation_required: true
+    supersedes_prior_review: 本轮为对 9335180f 的全量重审，履行 COND-009；不沿用 f48fed3 的 REJECT。
+    non_blocking_findings: [NB-07, NB-08]
+    required_delta_count: 3
+    detached_head_verified: true
+    worktree_dirty: 0
+    tracked_file_count_at_review: 113
+    guardian_independent_reimplementation_of_hash_contract: true
+    hash_layers_reconfirmed: 24/24（8 份 DOCX × 3 层）
+    guardian_confirmation_of_child_commit: DEFERRED_TO_M0_CLOSEOUT_BY_FOUNDER_EXCEPTION
+
   - workspace_id: null
     workspace_path: null
     conversation_or_session_id: null
@@ -88,3 +117,16 @@ founder_workspace_attestation:
   machine_record_precedence: >-
     见证行不凌驾机器记录：Guardian 在隔离工作区实测「只改见证行仍判 FAIL」，
     该反向探针结论保留于 guardian_review_report.f48fed3.md 第 6 项。
+
+founder_workspace_attestation_round_2:
+  guardian_workspace_is_new_and_distinct: true
+  guardian_did_not_participate_in_planning_or_construction: true
+  attested_by: Founder
+  attested_at: "2026-08-13"
+  status: WITNESSED
+  witnessed_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  witnessed_workspaces:
+    execution: /home/faye/笛语跨品牌服装搭配专家内核
+    guardian: /home/faye/claude-guardian-diyu-cbfsk-9335180
+  evidence_strength: procedural_corroboration_only
+  is_cryptographic_independence_proof: false

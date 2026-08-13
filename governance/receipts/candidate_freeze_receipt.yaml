@@ -10,12 +10,13 @@ batch: GUARDIAN_REJECT_REPAIR_BATCH_2026_08_13
 
 candidate_branch: codex/baseline-reconciliation-v2
 parent_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
-candidate_commit: RESOLVED_AT_BRANCH_HEAD
-candidate_tree: RESOLVED_AT_BRANCH_HEAD
-self_reference_limitation: >-
-  Founder 令本轮只冻结**唯一**一个新候选 Commit，因此本回执与候选内容同处一个提交，
-  既不能自指其所在提交的哈希，也不能自指该提交的 tree——写入任何具体值都会在写入的瞬间失效。
-  本回执因此只钉住不自指的量：parent_commit、以及下方所有其它文件的 SHA-256。
+candidate_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+candidate_tree: 93ebff26c792fa53a1055ace24cfd707f5036ede
+self_reference_resolved_after_the_fact: >-
+  冻结当时本回执与候选内容同处一个提交，无法自指，故 candidate_commit / candidate_tree 曾写作
+  RESOLVED_AT_BRANCH_HEAD。该提交已成为过去，两个值现可回填为确定哈希——回填由 git 可复算，
+  不是新的声称。RESOLVED_AT_BRANCH_HEAD 这种「解析到分支当前位置」的写法在分支前进后即失真，
+  因此不得继续留用。
 verification_recipe:
   - git rev-parse HEAD            # 候选 Commit 完整哈希
   - git rev-parse HEAD^{tree}     # 候选 tree
@@ -24,6 +25,15 @@ verification_recipe:
   - 引用一律使用完整哈希，禁止以「最新版」代指
 single_commit_batch: true
 two_stage_freeze_used_in_prior_batch: true
+
+superseded_by:
+  commit: SIGNOFF_CHILD_COMMIT_OF_9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  reason: >-
+    Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 已对本候选签署 PASS，并授权其唯一直接子 Commit
+    承载签署回执、状态位更新与三项 required_delta 修复。本回执自此只描述签署基准 Commit 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    的冻结事实，不再描述分支 HEAD。
+  guardian_decision_on_this_candidate: APPROVE_WITH_CONDITIONS
+  guardian_report: governance/reports/guardian_review_report.9335180f.md
 
 superseded_candidates:
   - commit: a235b558095b8f85ebc921aab853434dc406761d

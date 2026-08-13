@@ -21,8 +21,8 @@ parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
 
 project_state:
   project_status: PROJECT_INITIATED
-  execution_status: EXECUTION_NOT_STARTED
-  m0_authorized: false
+  execution_status: M0_AUTHORIZED_NOT_STARTED
+  m0_authorized: true
   m1_started: false
   m2_started: false
   knowledge_distillation_started: false
@@ -474,7 +474,14 @@ product_truth:
   current_active: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   current_active_status: PENDING_FOUNDER_SIGNATURE
   candidate: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
-  candidate_effective: false
+  candidate_effective: true
+  candidate_signed_by_founder: true
+  candidate_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  pending_active_baseline_switch: true
+  pending_switch_note: >-
+    Founder 已签署 v1.2（PASS），故 candidate_effective=true；活基线指针与 v1.1 归档
+    按签署包执行序列在合并 main 之后的最终 Commit 完成。该过渡窗口由
+    check_active_product_truth 的 SIGNED_BUT_NOT_SWITCHED 判据强制声明，不得静默存在。
   archive_v1_1_before_v1_2_effective: false
   role_prompt_is_product_truth: false
   projection_files_are_product_truth: false

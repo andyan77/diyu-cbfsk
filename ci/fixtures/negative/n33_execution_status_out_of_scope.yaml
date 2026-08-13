@@ -1,12 +1,12 @@
-fixture_id: N16-unsigned-marked-effective
+fixture_id: N33-execution-status-out-of-scope
 description: >-
-  v1.2 未签署却被标记为有效真源、M0 被标为已授权——无任何 Founder 授权记录。
+  execution_status 直接跳到 M1_IN_PROGRESS，而签署只授权到 M0 相关取值。
 checker: check_project_state
 expected: FAIL
 payload:
   flags:
     prd_v1_2_effective: false
-    m0_authorized: true
+    m0_authorized: false
     guardian_review_completed: false
     chatgpt_remote_review_completed: false
     founder_prd_signed: false
@@ -24,10 +24,14 @@ payload:
   - m1_started
   - m2_started
   - knowledge_distillation_started
-  execution_status: EXECUTION_NOT_STARTED
-  execution_status_authorization: {}
-  candidate_marked_as_effective_truth: true
-  forbidden_claim_hits:
-  - source: README.md
-    claim: 'prd_v1_2_effective: true'
-    paragraph: 'prd_v1_2_effective: true'
+  execution_status: M1_IN_PROGRESS
+  execution_status_authorization:
+    authorized: true
+    authorized_values:
+    - EXECUTION_NOT_STARTED
+    - M0_AUTHORIZED_NOT_STARTED
+    - M0_IN_PROGRESS
+    basis: M0 签署
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []

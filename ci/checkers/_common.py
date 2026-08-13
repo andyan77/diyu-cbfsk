@@ -154,3 +154,16 @@ def run_checker(label: str, collect, validate) -> int:
 
 def cli(label: str, collect, validate) -> None:
     sys.exit(run_checker(label, collect, validate))
+
+
+COMMIT_HASH_RE = re.compile(r"[0-9a-f]{40}")
+
+
+def is_full_commit_hash(value) -> bool:
+    """A commit reference must resolve to exactly one object.
+
+    Abbreviations and run UUIDs are rejected for the same reason 「最新版」 is rejected:
+    a reference that cannot be resolved to one exact object is not a reference.
+    This is the single implementation — checkers import it, none re-derive it.
+    """
+    return isinstance(value, str) and COMMIT_HASH_RE.fullmatch(value) is not None

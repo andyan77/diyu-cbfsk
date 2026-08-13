@@ -1,0 +1,172 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+task_id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+project_id: DIYU-CBFSK-001
+signed_by: FOUNDER_PRODUCT_AUTHORITY
+signed_at: "2026-08-13"
+signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+signature_base_commit_basis: >-
+  Guardian 全量重审报告 guardian_review_report.9335180f.md 的 reviewed_commit_hash；
+  本回执所有裁决均绑定该完整哈希，禁止以「最新版」代指。
+recorded_by: TEMPORARY_EXECUTION_WRITER
+recorded_by_basis: 执行 Prompt v2.0 §11.3（Codex 执行面不可用，Founder 指派）
+transcription_only: >-
+  本回执逐条转录 Founder 签署包原文裁决，执行侧不得新增、扩张或解释性改写任何一条裁决。
+
+guardian_review:
+  round_1:
+    reviewed_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+    decision: REJECT
+    blocking_finding: BLOCK-01
+    report: governance/reports/guardian_review_report.f48fed3.md
+    valid_for_signature_base: false
+    supersession_basis: 执行 Prompt v2.0 §14
+  round_2:
+    reviewed_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    decision: APPROVE_WITH_CONDITIONS
+    blocking_findings: 无
+    non_blocking_findings: [NB-07, NB-08]
+    required_delta_count: 3
+    report: governance/reports/guardian_review_report.9335180f.md
+    guardian_workspace: /home/faye/claude-guardian-diyu-cbfsk-9335180
+    guardian_independent_reimplementation: true
+    hash_layers_reconfirmed: "24/24（8 份 DOCX × 3 层）"
+  conditional_is_not_pass: true
+
+advisor_review:
+  advisor_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
+  waiver_reason: >-
+    ChatGPT 执行侧持续连接故障；Guardian 两轮审查（含一次 REJECT 纠错与独立重实现验证）
+    已提供充分工程证据
+  risk_accepted_by: Founder
+  waiver_basis: 执行 Prompt v2.0 §11.2 记录性豁免
+  silently_skipped: false
+  ai_review_presented_as_external_expert: false
+
+required_delta_disposition:
+  founder_exception: true
+  sets_precedent: false
+  exception_basis: 执行 Prompt v2.0 §14 / §17.4 之 Founder 显式例外
+  items:
+    - id: NB-07
+      content: COND-006 字段类型更正 + source_commit 格式判据与 negative fixture
+    - id: NB-08
+      content: 五处 PENDING_FIRST_CANDIDATE_COMMIT 占位符解析为真实完整哈希
+    - id: ROUND_2_ATTESTATION
+      content: 本轮 Guardian 记录与 Founder 见证行落盘
+  landed_in: 本签署子 Commit（与签署回执、状态位更新合并为同一个提交）
+  verification_standard: 全部 checker 全绿
+  guardian_confirmation_of_this_child_commit: DEFERRED_TO_M0_CLOSEOUT
+  guardian_confirmation_tracked_by: COND-010
+
+prd_signature:
+  founder_prd_decision: PASS
+  object: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  object_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  object_sha256: ba34ab9eb02256d4fa638e3851c81fa0256be6562c5e802b6473d64b7123c143
+  suggested_default_marks: 全部【建议默认】标记视为 Founder 已确认
+  pending_wording_cleanup: 「待确认」字样清理并入 M0 首个提交，不占用本签署 Commit
+
+m0_request_signature:
+  founder_m0_request_decision: PASS
+  object: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+  object_sha256: 6b492c42b0e0bfc6a1b1710949eea4682c69ce62e98a9ca6bcf35ad9937e0fea
+  authorization_id: DIYU-CBFSK-EXEC-REQ-M0-003
+  effective: IMMEDIATE
+  m0_execution_mode: MILESTONE_SINGLE_PACKAGE
+  m0_execution_mode_meaning: 十四项交付物一个包一次交付
+  interrupt_condition: 仅踩红线可中断上报
+  engineering_quality_standard_in_force: [EQ-1, EQ-2, EQ-3, EQ-4, EQ-5]
+  next_founder_touchpoint: M0 收口简报 + PASS / CONDITIONAL / BLOCK
+  m0_fourteen_items_changed: false
+  effort_baseline_changed: false
+
+merge_authorization:
+  approved_for_merge: true
+  approved_commit_scope: >-
+    9335180f9e1fd3d480f9b39e0a23597ee52079c7 及其唯一直接子 Commit；
+    子 Commit 内容仅限本签署回执、状态位更新、required_delta 三项修复
+  verification_standard: 全部 checker 全绿；任一失败即停并上报
+  execution_sequence:
+    - 落盘子 Commit
+    - 重跑全部 checker（须全绿）
+    - 合并 main
+    - 更新 README（v1.2 = 唯一产品真源，v1.1 归档）
+    - 输出最终 Commit 与收口简报
+    - 按 DIYU-CBFSK-EXEC-REQ-M0-003 开始 M0 施工，不再等待新指令
+  push_to_remote_authorized: false
+  push_note: >-
+    签署包授权「合并 main」，未授权推送远程。执行侧不自行推送；
+    远程推送需 Founder 单独明示。
+
+pending_active_baseline_switch: true
+pending_active_baseline_switch_note: >-
+  签署子 Commit 只落签署事实与状态位；活基线指针切换（v1.2 成为 current_active）、README 改写
+  与 v1.1 归档按签署包第六条的执行序列放在合并 main 之后的最终 Commit。切换完成后本字段必须置 false，
+  否则 check_active_product_truth 判 STALE_PENDING_SWITCH。
+
+state_flag_authorizations:
+  contract: >-
+    本块是状态位门禁的唯一授权源。check_project_state / check_active_product_truth 读取本块：
+    任何状态位为 true，必须在此存在 authorized=true 且绑定 signature_base_commit 的条目；
+    没有条目、条目未绑定完整 Commit 哈希、或条目缺 basis，一律判失败。
+    never_authorizable 内的状态位即使写了授权条目也一律判失败（红线）。
+  never_authorizable:
+    - production_servable
+    - m1_started
+    - m2_started
+    - knowledge_distillation_started
+  flags:
+    prd_v1_2_effective:
+      authorized: true
+      basis: prd_signature.founder_prd_decision=PASS
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_prd_signed:
+      authorized: true
+      basis: prd_signature.founder_prd_decision=PASS
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    m0_authorized:
+      authorized: true
+      basis: m0_request_signature.founder_m0_request_decision=PASS / DIYU-CBFSK-EXEC-REQ-M0-003
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_m0_authorized:
+      authorized: true
+      basis: m0_request_signature.founder_m0_request_decision=PASS
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_merge_approved:
+      authorized: true
+      basis: merge_authorization.approved_for_merge=true
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    main_merged:
+      authorized: true
+      basis: merge_authorization.approved_for_merge=true（授权存在；本位只在合并实际发生后才置 true）
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    guardian_review_completed:
+      authorized: true
+      basis: guardian_review.round_2.decision=APPROVE_WITH_CONDITIONS（对象＝签署基准 Commit）
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+      caveat: 签署子 Commit 本身的 Guardian 确认按 Founder 例外延至 M0 收口（COND-010）
+    m0_execution_started:
+      authorized: true
+      basis: m0_request_signature.effective=IMMEDIATE（授权存在；本位只在 M0 实际开工后才置 true）
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    chatgpt_remote_review_completed:
+      authorized: false
+      basis: advisor_review.advisor_review_status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
+      refusal_reason: >-
+        豁免不是完成。总顾问审查从未发生，本位必须保持 false；
+        把记录性豁免写成 completed=true 属于伪造评审记录。
+  execution_status:
+    authorized: true
+    authorized_values:
+      - EXECUTION_NOT_STARTED
+      - M0_AUTHORIZED_NOT_STARTED
+      - M0_IN_PROGRESS
+    basis: m0_request_signature.founder_m0_request_decision=PASS
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  active_baseline_signature:
+    authorized: true
+    signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    authorized_status_values: [PENDING_FOUNDER_SIGNATURE, SIGNED]
+    basis: prd_signature.founder_prd_decision=PASS
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7

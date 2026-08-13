@@ -352,8 +352,10 @@ def render_claude_md(model: dict) -> str:
             "## 产品真源",
             "",
             f"- 活基线 `{model['product_truth']['current_active']}` — `{model['product_truth']['current_active_status']}`",
-            f"- 候选 `{model['product_truth']['candidate']}` — 未生效",
-            "- v1.2 生效前不得归档 v1.1；不得同时存在两个活产品真源。",
+            f"- 候选 `{model['product_truth']['candidate']}` — "
+            f"{'Founder 已签署生效' if model['product_truth']['candidate_effective'] else '未生效'}",
+            f"- {'v1.2 已生效，v1.1 按执行序列归档' if model['product_truth']['candidate_effective'] else 'v1.2 生效前不得归档 v1.1'}；"
+            "不得同时存在两个活产品真源。",
             "",
             "## 当前项目状态",
             "",

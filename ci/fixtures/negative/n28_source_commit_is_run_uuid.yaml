@@ -1,0 +1,26 @@
+fixture_id: N28-source-commit-is-run-uuid
+description: >-
+  条件条目把执行 run 标识（UUID）填进 source_commit（Guardian NB-07 的原始缺陷形态）。
+  除该字段外本条目完全合法，因此本 fixture 只行使 source_commit 的格式判据。
+checker: check_conditional_ledger
+expected: FAIL
+payload:
+  rules:
+    conditional_equals_pass: false
+    verbal_resolution_accepted: false
+  conditions:
+    - condition_id: COND-X01
+      source_decision_id: DIYU-CBFSK-FR-ORG-002
+      source_commit: 29899f92-c965-4c33-a020-8e7f781fe82d
+      description: 存档区意见书是否导入主仓尚未裁决。
+      owner: FOUNDER_PRODUCT_AUTHORITY
+      due_milestone: PRE_MERGE
+      required_evidence:
+        - Founder 导入或不导入的明确裁决
+      status: OPEN
+      verification_role: FOUNDER_PRODUCT_AUTHORITY
+      closure_commit: null
+      founder_closure_decision: null
+  verdicts: []
+  merge_requested: false
+  founder_explicit_permission_to_advance: false

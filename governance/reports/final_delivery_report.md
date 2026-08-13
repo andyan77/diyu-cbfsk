@@ -334,6 +334,9 @@ Guardian 对 `f48fed3091384cc459b258dace3c267b1d08d1b0` 判 REJECT。Founder 令
 
 ## 5. 未决事项（只列真正需要 Founder 裁决的问题）
 
+> **本节已被 §8 取代。** 下列未决事项已由 Founder 签署包 `DIYU-CBFSK-FOUNDER-SIGNOFF-001`（签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`）逐项裁决，保留原文只作为签署前状态的历史记录。
+
+
 1. **独立 Guardian 对新候选 Commit 的全量重审**（COND-001 / COND-009）——Guardian 已对 `f48fed3` 审过并判
    REJECT；修复形成新 Commit 后该结论按 §14 失效，须在独立工作区重审新 Commit，报告写明
    `guardian_bootstrap_source: THIS_APPROVED_PROMPT_SECTION_7_5_AND_8`。
@@ -355,6 +358,9 @@ D-17—D-29 全部落点、S1—S8、角色权限、任务分级、M0 十四项�
 `M2_FREEZE_REQUIRED` 阈值（按合同留待 M2 冻结，非落文缺口）。
 
 ## 6. 完成状态
+
+> **本节状态位已被 §8 取代。** 签署后的当前状态见 §8 与 `governance/receipts/founder_signoff_receipt.yaml`。
+
 
 ```yaml
 baseline_reconciled: true
@@ -385,6 +391,9 @@ production_servable: false
 
 ## 7. 红线自查
 
+> **本节的三行已被 §8 更新**：`v1.2 生效前归档 v1.1`、`Founder 批准前合并 main`、`把本任务表述为 M0 已开工` 的当前状态以 §8 为准。
+
+
 | 红线 | 本轮 |
 |---|---|
 | 开始 M0 十四项施工 / M1 / M2 / 知识蒸馏 | 未 |
@@ -400,3 +409,79 @@ production_servable: false
 | 静默绕过不可用角色 | 未（Codex 不可用已走 §11.3 显式指派并入台账） |
 | 改变 125—185 人月 / 15—24 个月 / M0 十四项 | 未 |
 | 把本任务表述为 M0 已开工 | 未 |
+
+## 8. Founder 签署与状态迁移（取代 §5—§7 的相应部分）
+
+签署包 `DIYU-CBFSK-FOUNDER-SIGNOFF-001`，签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`，落盘于该 Commit 的唯一直接子 Commit。回执：`governance/receipts/founder_signoff_receipt.yaml`。
+
+### 8.1 审查链如实记录
+
+| 环节 | 结论 | 证据 |
+|---|---|---|
+| Guardian 第一轮 | `REJECT`（BLOCK-01） | `governance/reports/guardian_review_report.f48fed3.md` |
+| Guardian 第二轮（全量重审，未沿用上轮结论） | `APPROVE_WITH_CONDITIONS`，无阻塞发现，NB-07 / NB-08 两条非阻塞 | `governance/reports/guardian_review_report.9335180f.md` |
+| ChatGPT 总顾问远程审查 | **未进行** —— Founder 依 §11.2 显式记录性豁免并接受风险 | `COND-002` 状态 `WAIVED`；`chatgpt_remote_review_completed` 保持 `false` |
+
+豁免不是完成：`chatgpt_remote_review_completed` 在签署回执里被显式标为 `authorized: false`，任何把它写成 `true` 的改动都会被 `check_project_state` 判 `UNAUTHORIZED_TRUE_FLAG`（fixture `N32`）。
+
+### 8.2 三项 required_delta 处置
+
+| 项 | 处置 |
+|---|---|
+| NB-07 | `COND-006` 的 run 标识移入 `source_execution_run_id`，`source_commit` 更正为 `a235b558095b8f85ebc921aab853434dc406761d`；`check_conditional_ledger` 新增 40 位十六进制格式判据；负向 fixture `N28` |
+| NB-08 | `COND-001/002/003/005/007` 五处 `PENDING_FIRST_CANDIDATE_COMMIT` 解析为 `a235b55…761d`，解析依据写入 `placeholder_resolution` |
+| 本轮 Guardian 见证 | 新增 Guardian 记录（`base_commit=9335180f…`、`APPROVE_WITH_CONDITIONS`、`/home/faye/claude-guardian-diyu-cbfsk-9335180`）与 Founder 本轮见证行；报告全文一字不改落盘 |
+
+Guardian 对本子 Commit 的确认按 §14 / §17.4 之 Founder 显式例外延至 M0 收口，由 `COND-010` 跟踪，**不视为已确认**。该例外不构成先例。
+
+### 8.3 门禁改造（Founder 单独授权）
+
+原门禁把「未签署」写死成唯一合法状态（`MUST_BE_FALSE` 清单、活基线状态必须是 `PENDING_FOUNDER_SIGNATURE`、`merge_requested` 硬编码 `False`），签署后无路可走。经 Founder 授权改为**签署授权门控**：
+
+- 状态位为 `true` 必须在签署回执 `state_flag_authorizations` 中存在绑定完整 Commit 哈希、且写明 basis 的授权条目；
+- `production_servable` / `m1_started` / `m2_started` / `knowledge_distillation_started` 为红线位，任何签署都不得授权，且回执自己的 `never_authorizable` 清单与红线不一致即判 `RED_LINE_LIST_DRIFT`；
+- 「签署了但活基线未切换」这一过渡窗口必须由回执显式声明，否则判 `SIGNED_BUT_NOT_SWITCHED`；切换后未归档判 `SWITCHED_WITHOUT_ARCHIVE`；
+- 带未关闭条件推进必须有具名裁决并绑定 Commit，光有布尔值判 `PERMISSION_WITHOUT_REF` / `UNBOUND_PERMISSION`。
+
+严格度不降反升：改造前「状态位翻转」这条路径**无法被测试**（只能永远为假），改造后每条判据都有负向 fixture 行使——`N28`—`N39`、`P12`—`P14` 共新增 15 份。
+
+### 8.4 台账处置
+
+| 条件 | 处置 |
+|---|---|
+| COND-001 Guardian 审查 | `CLOSED`（两轮审查 + 三项 delta 落实） |
+| COND-002 总顾问审查 | `WAIVED`（显式豁免 + 风险接受人 Founder） |
+| COND-003 Founder 签署 | `CLOSED`（PRD PASS + M0 执行申请 PASS，两个决定分别记录） |
+| COND-004 Codex 复核 | `EVIDENCE_SUBMITTED`（裁决＝复核但不重做；只读确认报告待 Codex 恢复） |
+| COND-005 见证行 | `CLOSED`（两轮见证行均已签署） |
+| COND-006 意见书导入 | `OPEN`（签署包未涉及） |
+| COND-007 M2 阈值冻结 | `OPEN`（M2） |
+| COND-008 B1 三处路径 | `OPEN` |
+| COND-009 新 Commit 全量重审 | `CLOSED`（第二轮报告） |
+| COND-010 子 Commit 确认延后 | `OPEN`（M0 收口） |
+| COND-011 隐藏评测集选址落地 | `OPEN`（STORE-A 已选定，M2 前 provision） |
+
+合规七项：CMP-01/02/03/06 `DEFER`（节点 M2 冻结前 Founder 合规自评）、CMP-04 `DEFER`（产品形态裁决后）、CMP-05 `DEFER`（M4 蒸馏开跑前）、CMP-07 `MITIGATE`（采用台账原文三条控制项，即时生效）。`external_legal_opinion_obtained` 七项全部保持 `false`。
+
+### 8.5 签署后状态位
+
+```yaml
+prd_v1_2_effective: true
+founder_prd_signed: true
+m0_authorized: true
+founder_m0_authorized: true
+founder_merge_approved: true
+guardian_review_completed: true
+execution_status: M0_AUTHORIZED_NOT_STARTED
+pending_active_baseline_switch: true
+
+chatgpt_remote_review_completed: false
+main_merged: false
+m0_execution_started: false
+m1_started: false
+m2_started: false
+knowledge_distillation_started: false
+production_servable: false
+```
+
+M0 已授权但尚未开工——`m0_execution_started` 与 `execution_status` 都如实记录这一点，本报告不把授权表述为已开工。

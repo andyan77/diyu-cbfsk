@@ -1,0 +1,25 @@
+fixture_id: N38-merge-with-open-conditions
+description: >-
+  带着未关闭条件请求合并，且没有 Founder 显式推进许可。
+checker: check_conditional_ledger
+expected: FAIL
+payload:
+  rules:
+    conditional_equals_pass: false
+    verbal_resolution_accepted: false
+  conditions:
+  - condition_id: COND-X02
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    description: 总顾问远程审查未完成。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: PRE_MERGE
+    required_evidence:
+    - 顾问审查结论绑定 candidate_commit
+    status: OPEN
+    verification_role: GPT_CHIEF_ADVISOR
+    closure_commit: null
+    founder_closure_decision: null
+  verdicts: []
+  merge_requested: true
+  founder_explicit_permission_to_advance: false

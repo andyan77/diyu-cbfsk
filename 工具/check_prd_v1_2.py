@@ -99,11 +99,28 @@ def check_m0_lists(checker: Checker) -> None:
     checker.check(not errors, "M0 fourteen items (delegated to ci/checkers)", "; ".join(errors))
 
 
+def lifecycle_state() -> tuple[bool, bool]:
+    """(v1.2 已生效, 活基线已切换到 v1.2) —— 单一真源：change map 的 resulting_state。
+
+    此前用 --require-archive 这个 CLI 开关表达同一件事，等于把生命周期状态写成两处；
+    现在只从状态派生，开关退化为「断言状态确实已到该阶段」。
+    """
+    import yaml
+
+    state = yaml.safe_load(CHANGE_MAP.read_text(encoding="utf-8"))["resulting_state"]
+    return bool(state["prd_v1_2_effective"]), state["current_active_baseline"] == "PRD_v1.2"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--require-archive", action="store_true")
+    parser.add_argument(
+        "--require-archive",
+        action="store_true",
+        help="断言当前状态确实已完成 v1.1 归档；状态未到该阶段则判失败。",
+    )
     args = parser.parse_args()
     checker = Checker()
+    effective, switched = lifecycle_state()
 
     for path in (PRD, M0, RECEIPT, README, CHANGE_MAP):
         checker.check(path.exists(), f"file exists: {path.name}")
@@ -179,7 +196,15 @@ def main() -> None:
     checker.contains_all(m0_text, ["DIYU-CBFSK-EXEC-REQ-M0-003", "PRD v1.2", "M0不得实际接收", "M0不得运行多模态", "M0不得建立搭配师人设记忆生产库", "M0不得启用自动发布", "人设与语感闭环", "多模态事实边界", "扩展兼容"], "M0 v1.2 control and Guardian additions")
     checker.contains_all(receipt_text, ["DIYU-CBFSK-PRD-V1.2-VERIFY-RECEIPT-001", "D-17", "D-26", "D-28", "D-29", "S1—S8", "READY_FOR_GUARDIAN", "m0_authorized: false", "production_servable: false", "guardian_review_completed: false", "chatgpt_remote_review_completed: false"], "verification receipt identifiers and final state")
 
-    checker.contains_all(readme_text, ["当前活基线", "PENDING_FOUNDER_SIGNATURE", "READY_FOR_GUARDIAN", "PRD v1.2", "DIYU-CBFSK-EXEC-REQ-M0-003", "prd_v1_2_effective: false", "目前没有 `归档_v1.1/`", "Founder 真实品牌注入", "Codex 夹具合成回退", "多模态商品理解", "人设连续性", "自媒体原生语感", "VisualMerchandisingExtensionPort", "RealtimeSalesAssistExtensionPort", "five_category_activation_readiness=100%", "合理多解原则", "LLM-off 不变性"], "README current-baseline index")
+    readme_state_tokens = (
+        ["SIGNED", "prd_v1_2_effective: true", "归档_v1.1/", "DIYU-CBFSK-FOUNDER-SIGNOFF-001"]
+        if switched
+        else ["PENDING_FOUNDER_SIGNATURE", "prd_v1_2_effective: true", "DIYU-CBFSK-FOUNDER-SIGNOFF-001"]
+        if effective
+        else ["PENDING_FOUNDER_SIGNATURE", "READY_FOR_GUARDIAN", "prd_v1_2_effective: false", "目前没有 `归档_v1.1/`"]
+    )
+    checker.contains_all(readme_text, readme_state_tokens, "README lifecycle state block")
+    checker.contains_all(readme_text, ["当前活基线", "PRD v1.2", "DIYU-CBFSK-EXEC-REQ-M0-003", "Founder 真实品牌注入", "Codex 夹具合成回退", "多模态商品理解", "人设连续性", "自媒体原生语感", "VisualMerchandisingExtensionPort", "RealtimeSalesAssistExtensionPort", "five_category_activation_readiness=100%", "合理多解原则", "LLM-off 不变性"], "README current-baseline index")
     checker.contains_all(
         prd_text,
         [
@@ -214,7 +239,9 @@ def main() -> None:
         f"count={prd_text.count('reviewer_calibration_contract.v0.1.yaml')}",
     )
 
-    checker.contains_all(map_text, ["D-17:", "D-26:", "D-27:", "D-28:", "D-29:", "governance_ruling_map:", "m0_top_level_deliverable_count: 14", "input_and_configuration_objects: 12", "output_and_internal_audit_objects: 15", "functional_requirements: 30", "risks: 22", "documentation_status: READY_FOR_GUARDIAN"], "machine-readable change map")
+    checker.contains_all(map_text, ["D-17:", "D-26:", "D-27:", "D-28:", "D-29:", "governance_ruling_map:", "m0_top_level_deliverable_count: 14", "input_and_configuration_objects: 12", "output_and_internal_audit_objects: 15", "functional_requirements: 30", "risks: 22",
+                          f"documentation_status: {'FOUNDER_SIGNED' if effective else 'READY_FOR_GUARDIAN'}"],
+                         "machine-readable change map")
 
     archive = ROOT / "归档_v1.1"
     v1_1_files = [
@@ -222,15 +249,17 @@ def main() -> None:
         "笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx",
         "PRD_v1.1_核验回执.docx",
     ]
-    if args.require_archive:
-        # 只有 PRD v1.2 正式生效后才允许带此参数运行。
+    if args.require_archive and not switched:
+        checker.check(False, "--require-archive used while current_active_baseline is not PRD_v1.2")
+    if switched:
+        checker.check(effective, "v1.1 archived only after PRD v1.2 is effective")
         checker.check(archive.is_dir(), "v1.1 archive directory exists")
         for name in v1_1_files:
             checker.check((archive / name).is_file(), f"archived: {name}")
             checker.check(not (ROOT / name).exists(), f"v1.1 removed from root: {name}")
     else:
-        # 红线：v1.2 生效前不得归档 v1.1；v1.1 必须留在根目录作为当前活基线。
-        checker.check(not archive.exists(), "v1.1 not archived before PRD v1.2 is effective")
+        # 红线：v1.2 生效前不得归档 v1.1；活基线切换前 v1.1 必须留在根目录。
+        checker.check(not archive.exists(), "v1.1 not archived before the active-baseline switch")
         for name in v1_1_files:
             checker.check((ROOT / name).is_file(), f"active baseline stays at root: {name}")
 

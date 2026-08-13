@@ -1,0 +1,28 @@
+fixture_id: N39-advance-permission-unbound
+description: >-
+  带未关闭条件推进，许可位是 true 但既没写出自哪条 Founder 裁决、也没绑定 Commit——
+  一个光秃秃的布尔值不算许可。
+checker: check_conditional_ledger
+expected: FAIL
+payload:
+  rules:
+    conditional_equals_pass: false
+    verbal_resolution_accepted: false
+  conditions:
+  - condition_id: COND-X03
+    source_decision_id: DIYU-CBFSK-FR-ORG-002
+    source_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    description: 隐藏评测集选址尚未落地。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: M2
+    required_evidence:
+    - 独立私有仓库已创建且访问控制生效
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
+    closure_commit: null
+    founder_closure_decision: null
+  verdicts: []
+  merge_requested: true
+  founder_explicit_permission_to_advance: true
+  founder_permission_ref: null
+  founder_permission_commit: null

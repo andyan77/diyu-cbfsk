@@ -1,0 +1,73 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FR-GRANULARITY-005
+project_id: DIYU-CBFSK-001
+title: 里程碑执行粒度框架
+ruling_date: "2026-08-13"
+issued_by: Founder
+issued_via: founder_direct_dispatch
+landed_in: >-
+  Founder 指示「随任一自然提交落入 governance/founder_rulings/」；本裁决随
+  DIYU-CBFSK-FOUNDER-SIGNOFF-001 签署子 Commit 一并落盘。
+effective_from: M1
+changes_m0_fourteen_items: false
+changes_effort_baseline: false
+changes_m0_execution_mode: false
+
+structure:
+  per_milestone:
+    milestone_plan: 1
+    execution_packages: 2-4（含收口包）
+    unified_closeout: 1
+  execution_prompt_compilation: JIT
+  execution_prompt_compilation_note: >-
+    执行 Prompt 按仓库当时状态即时编译，不提前写死。
+
+amendments:
+  - id: 修正①
+    subject: M0 执行模式
+    ruling: M0 维持已签的单包模式（MILESTONE_SINGLE_PACKAGE），不回改。
+    reference: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第五条 / DIYU-CBFSK-EXEC-REQ-M0-003
+  - id: 修正②
+    subject: 机器件实现深度
+    ruling: >-
+      全部机器件按最小实现落地，只服务 FR-CALIBRATION-004 七类硬门——
+      状态机＝状态文件里的字段；包合同＝一页纸模板；依赖失效＝CI 哈希比对。
+  - id: 修正③
+    subject: 禁止先行建设执行框架本身
+    ruling: >-
+      不得先建执行框架再干活。模板先作文档约定，自动化按需生长。
+    execution_side_meaning: >-
+      执行侧不得以「先把粒度框架工程化」为由新增调度器、状态机服务或包编排代码；
+      任何自动化只能在真实需要出现时逐步生长。
+  - id: 修正④
+    subject: M1~M12 分包表定位
+    ruling: >-
+      顾问端 35 包蓝图仅为参考，不具约束力；正式包边界由各里程碑开工时的
+      Milestone Plan 即时确定。
+
+limits:
+  max_concurrent_packages: 2
+
+founder_touchpoints:
+  per_milestone: 2
+  per_milestone_detail:
+    - Milestone Plan + Envelope 批准
+    - 收口裁决
+  additional_exact_prompt_approval_required:
+    - M2 冻结
+    - M5 晋级
+    - M10 封闭运行
+    - M11 真实品牌注入
+    - M12 发布
+  additional_approval_reason: 五个包不可逆
+
+review_cadence:
+  within_package: 包内自检 + CI
+  milestone_closeout: Guardian →（ChatGPT 总顾问，可豁免）→ Founder
+  extra_review_scope: 仅上述五个不可逆包加审
+  waiver_note: >-
+    顾问可豁免仍须走 §11.2 记录性豁免（理由、风险接受人、时间戳），
+    不得静默跳过，也不得把豁免记为已完成。
+
+signed_by: Founder
+signed_at: "2026-08-13"

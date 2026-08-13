@@ -4,8 +4,13 @@ project_id: DIYU-CBFSK-001
 generated_at: "2026-08-13"
 founder_ruling_id: DIYU-CBFSK-FR-ORG-002
 ruling_ref: S5 / D-27
-effective: false
+effective: true
 effective_precondition: founder_signature_on_prd_v1_2
+effective_precondition_satisfied_by:
+  receipt_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+  founder_prd_decision: PASS
+  signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  signed_at: "2026-08-13"
 
 principle: >-
   Git 克隆提供完整对象历史，目录命名不能构成读取权限隔离。因此隐藏评测内容必须物理隔离于主仓，
@@ -46,6 +51,11 @@ allowed_storage:
       - CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
       - 知识引出工作面
     provisioned: false
+    selected_by_founder: true
+    selection_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条
+    selection_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    provisioning_deadline: M2 前落地
+    provisioning_tracked_by: COND-011
   - id: STORE-B
     kind: founder_controlled_private_object_storage
     owner: FOUNDER_PRODUCT_AUTHORITY
@@ -60,10 +70,15 @@ current_state:
   hidden_brand_generated: false
   fixture_brand_generated: false
   any_hidden_asset_touched_by_this_task: false
-  storage_location_selected_by_founder: false
+  storage_location_selected_by_founder: true
+  selected_storage_id: STORE-A
+  selected_storage_kind: separate_private_repository_with_restricted_access
+  selected_storage_provisioned: false
   note: >-
-    本任务只建立存储合同，不生成任何隐藏题、隐藏品牌或夹具品牌资产，也未选择具体存储位置。
-    存储位置由 Founder 在 M2 冻结前裁决并记录。
+    Founder 已于签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条裁定隐藏评测集选址＝STORE-A
+    （独立私有仓库，受限访问），M2 前落地。选址已定不等于已落地：在 STORE-A 实际 provision
+    且访问控制生效之前，不得生成任何隐藏题、隐藏品牌、夹具品牌或答案资产（COND-011 跟踪）。
+    本任务仍未生成任何该类资产。
 
 runner_interface:
   contract: 主仓只保存 runner 接口定义与结果摘要；runner 在 Founder 控制环境中读取隐藏内容。

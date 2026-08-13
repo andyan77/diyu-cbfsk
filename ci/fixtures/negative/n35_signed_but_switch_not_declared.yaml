@@ -1,6 +1,6 @@
-fixture_id: N15-premature-archive-v1.1
+fixture_id: N35-signed-but-switch-not-declared
 description: >-
-  v1.2 未生效却已归档 v1.1——红线「在 v1.2 生效前归档 v1.1」。
+  v1.2 已生效但活真源仍是 v1.1，且签署回执没有声明切换待办——半截切换伪装成已完成。
 checker: check_active_product_truth
 expected: FAIL
 payload:
@@ -8,11 +8,18 @@ payload:
   files_declaring_sole_product_truth:
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   active_status: PENDING_FOUNDER_SIGNATURE
-  candidate_effective: false
+  candidate_effective: true
   active_baseline_is_candidate: false
   pending_active_baseline_switch: false
-  active_baseline_signature: {}
-  archive_v1_1_exists: true
+  active_baseline_signature:
+    authorized: true
+    signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    authorized_status_values:
+    - PENDING_FOUNDER_SIGNATURE
+    - SIGNED
+    basis: founder_prd_decision=PASS
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  archive_v1_1_exists: false
   root_files:
   - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
   - 笛语跨品牌服装搭配专家内核_M0执行申请_v1.1.docx

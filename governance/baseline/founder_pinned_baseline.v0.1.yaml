@@ -126,12 +126,28 @@ active_baseline_candidates:
     local_remote_semantic_equal: true
     status: CONFIRMED_ACTIVE_BASELINE_INPUT_MODIFIED_IN_THIS_TASK
     authorized_modification_in_this_task: true
-    authorization_ref: 执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）
-    post_change_binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
+    authorization_ref: >-
+      执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
+      本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
+    post_change_binary_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503
     post_change_note: >-
-      入参哈希 e5a4d75c… 是 Phase 0 输入快照；本任务按 §15.1 授权改写 README，
-      冻结候选前把交付态哈希写入 post_change_binary_sha256，之后任何再改都会被
-      check_baseline_hashes 当场拦下。
+      入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
+      这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
+      同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
+    authorized_modification_history:
+      - change_id: README-MOD-01
+        authorization_ref: 执行 Prompt v2.0 §15.1
+        binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
+        landed_in_commit: a235b558095b8f85ebc921aab853434dc406761d
+        content: 基线迁移与 PRD v1.2 候选索引改写
+      - change_id: README-MOD-02
+        authorization_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条
+        binary_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503
+        landed_in_commit: SIGNOFF_CHILD_COMMIT_OF_9335180f9e1fd3d480f9b39e0a23597ee52079c7
+        content: 状态位块改为签署后状态、v1.2 段改为已签署生效、Checker 计数由 13 更正为 16、裁决目录补 FR-GRANULARITY-005
+        note: >-
+          活基线指针切换、基线段改写与 v1.1 归档属下一次授权改写（README-MOD-03），
+          按签署包执行序列放在合并 main 之后的最终 Commit。
 
 historical_evidence:
   - file_name: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.0.docx

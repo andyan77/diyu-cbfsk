@@ -14,10 +14,34 @@ rules:
 
 allowed_status: [OPEN, EVIDENCE_SUBMITTED, VERIFIED, CLOSED, WAIVED]
 
+merge_state:
+  merge_requested: true
+  founder_explicit_permission_to_advance: true
+  founder_permission_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+  founder_permission_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  approved_commit_scope: >-
+    9335180f9e1fd3d480f9b39e0a23597ee52079c7 及其唯一直接子 Commit；子 Commit 内容仅限签署回执、状态位更新、
+    required_delta 三项修复（含其门禁改造与 fixture）
+  open_conditions_at_permission: [COND-004, COND-006, COND-007, COND-008, COND-010, COND-011]
+  note: >-
+    本块是 check_conditional_ledger 读取的合并状态真源，取代此前 collect() 里写死的 False。
+    带未关闭条件推进必须由 Founder 显式许可并绑定完整 Commit 哈希，否则判 ADVANCE_WITH_OPEN_CONDITIONS。
+
+placeholder_resolution:
+  guardian_finding: NB-08
+  resolved_placeholder: PENDING_FIRST_CANDIDATE_COMMIT
+  resolved_to: a235b558095b8f85ebc921aab853434dc406761d
+  affected_conditions: [COND-001, COND-002, COND-003, COND-005, COND-007]
+  basis: >-
+    该占位符写于首个候选 Commit 自身，落盘当时无法自指其所在提交。
+    git log --diff-filter=A -- governance/conditions/conditional_decision_ledger.yaml
+    证实本台账首次落盘于 a235b558095b8f85ebc921aab853434dc406761d，故解析为该 Commit 完整哈希。
+  resolution_is_retrospective: true
+
 conditions:
   - condition_id: COND-001
     source_decision_id: DIYU-CBFSK-FR-ORG-002
-    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    source_commit: a235b558095b8f85ebc921aab853434dc406761d
     description: 冻结候选 Commit 必须经独立 Guardian 审查并给出 PASS / CONDITIONAL / BLOCK。
     owner: FOUNDER_PRODUCT_AUTHORITY
     due_milestone: PRE_MERGE
@@ -33,28 +57,41 @@ conditions:
         guardian_workspace: /home/faye/claude-guardian-diyu-cbfsk-clean
         review_timestamp: "2026-08-13T04:52:51-07:00"
         superseded_by_new_commit: true
-    status: OPEN
+    status: CLOSED
     verification_role: CLAUDE_INDEPENDENT_GUARDIAN
-    closure_commit: null
-    founder_closure_decision: null
-
+    closure_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_closure_decision: >-
+      Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第二条：Guardian 已完成两轮审查（f48fed3 REJECT → 9335180f APPROVE_WITH_CONDITIONS），三项 required_delta 于本签署子 Commit 一次落实，Founder 据此关闭本条；Guardian 对该子 Commit 的确认按 §14/§17.4 显式例外延至 M0 收口（见 COND-010）。
+    review_history_round_2:
+      reviewed_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+      decision: APPROVE_WITH_CONDITIONS
+      blocking_findings: 无
+      non_blocking_findings: [NB-07, NB-08]
+      report: governance/reports/guardian_review_report.9335180f.md
+      guardian_workspace: /home/faye/claude-guardian-diyu-cbfsk-9335180
+      review_timestamp: "2026-08-13T05:58:35-07:00"
+    conditional_is_not_pass_acknowledged: true
   - condition_id: COND-002
     source_decision_id: DIYU-CBFSK-FR-ORG-002
-    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    source_commit: a235b558095b8f85ebc921aab853434dc406761d
     description: ChatGPT 总顾问必须对同一冻结 Commit 完成远程对齐审查；不可用时 Founder 须显式 DEFER / 指定替位 / 豁免并接受风险。
     owner: FOUNDER_PRODUCT_AUTHORITY
     due_milestone: PRE_MERGE
     required_evidence:
       - 顾问审查结论绑定 candidate_commit
       - 若豁免，Receipt 写 advisor_review_status=WAIVED_BY_FOUNDER 及理由、风险接受人、时间戳
-    status: OPEN
+    status: WAIVED
     verification_role: GPT_CHIEF_ADVISOR
-    closure_commit: null
-    founder_closure_decision: null
-
+    closure_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_closure_decision: >-
+      Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第一条：advisor_review_status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE；理由＝ChatGPT 执行侧持续连接故障，Guardian 两轮审查已提供充分工程证据；风险接受人＝Founder；依据 §11.2 记录性豁免，非静默跳过。
+    advisor_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
+    risk_accepted_by: Founder
+    waiver_timestamp: "2026-08-13"
+    silently_skipped: false
   - condition_id: COND-003
     source_decision_id: DIYU-CBFSK-FR-ORG-002
-    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    source_commit: a235b558095b8f85ebc921aab853434dc406761d
     description: Founder 对完整 PRD v1.2 作一次正式签署，并单独对 M0 执行申请 v1.2 作授权裁决（两个不同决定）。
     owner: FOUNDER_PRODUCT_AUTHORITY
     due_milestone: PRE_MERGE
@@ -63,11 +100,16 @@ conditions:
       - m0_request_file_hash
       - candidate_commit
       - founder_prd_decision 与 founder_m0_request_decision 分别记录
-    status: OPEN
+    status: CLOSED
     verification_role: FOUNDER_PRODUCT_AUTHORITY
-    closure_commit: null
-    founder_closure_decision: null
-
+    closure_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_closure_decision: >-
+      Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第三、五条：founder_prd_decision=PASS（对象＝PRD v1.2 @ 9335180f）；founder_m0_request_decision=PASS，DIYU-CBFSK-EXEC-REQ-M0-003 授权即时生效。两个决定分别记录。
+    founder_prd_decision: PASS
+    founder_m0_request_decision: PASS
+    prd_file_sha256: ba34ab9eb02256d4fa638e3851c81fa0256be6562c5e802b6473d64b7123c143
+    m0_request_file_sha256: 6b492c42b0e0bfc6a1b1710949eea4682c69ce62e98a9ca6bcf35ad9937e0fea
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
   - condition_id: COND-004
     source_decision_id: DIYU-CBFSK-FR-ORG-002
     source_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
@@ -79,14 +121,17 @@ conditions:
     required_evidence:
       - Founder 例外裁决文本
       - 若要求复核：Codex 复核报告绑定 candidate_commit
-    status: OPEN
+    status: EVIDENCE_SUBMITTED
     verification_role: FOUNDER_PRODUCT_AUTHORITY
     closure_commit: null
-    founder_closure_decision: null
-
+    founder_closure_decision: >-
+      Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条：COND-004＝「复核但不重做」——Codex 恢复后对现基线只读确认，不重新施工。裁决文本已到位；Codex 只读确认报告尚未产生，故本条留 EVIDENCE_SUBMITTED 不作结案。
+    founder_ruling_text: 复核但不重做；恢复后对现基线只读确认，不重新施工。
+    residual_evidence_outstanding:
+      - Codex 恢复后的只读确认报告，须绑定所确认的 Commit 完整哈希
   - condition_id: COND-005
     source_decision_id: DIYU-CBFSK-FR-ORG-002
-    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    source_commit: a235b558095b8f85ebc921aab853434dc406761d
     description: >-
       Founder 工作区见证行（planner_and_guardian_are_different_sessions / _workspaces）
       须在 Guardian 实例化后由 Founder 填写；在此之前不得预置为 true。
@@ -98,14 +143,19 @@ conditions:
       - Founder 于 2026-08-13 签署见证行：planner_and_guardian_are_different_sessions=true、
         planner_and_guardian_are_different_workspaces=true、attested_by=Founder
       - Guardian 已在独立工作区 /home/faye/claude-guardian-diyu-cbfsk-clean 完成审查并出具报告
-    status: EVIDENCE_SUBMITTED
+    status: CLOSED
     verification_role: FOUNDER_PRODUCT_AUTHORITY
-    closure_commit: null
-    founder_closure_decision: null
+    closure_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_closure_decision: >-
+      Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001：两轮 Guardian 工作区见证行均已由 Founder 签署（round 1 于 f48fed3 后补签，round 2 随签署包送达即生效），见证时点均在 Guardian 实例化之后。
 
   - condition_id: COND-006
     source_decision_id: DIYU-CBFSK-FR-ORG-002
-    source_commit: 29899f92-c965-4c33-a020-8e7f781fe82d
+    source_commit: a235b558095b8f85ebc921aab853434dc406761d
+    source_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
+    source_commit_correction_note: >-
+      本条曾把上游执行 run 标识误填入 source_commit（Guardian NB-07）。run 标识已移入
+      source_execution_run_id；source_commit 更正为本条首次落盘的候选 Commit 完整哈希。
     description: >-
       Founder 存档区 治理执行Prompt_分工审计与补强意见书.docx 是否导入主仓作历史证据，尚未裁决；
       当前登记为 FOUNDER_LOCAL_HISTORICAL_EVIDENCE_NOT_IMPORTED。
@@ -120,7 +170,7 @@ conditions:
 
   - condition_id: COND-007
     source_decision_id: DIYU-CBFSK-FR-EVAL-003
-    source_commit: PENDING_FIRST_CANDIDATE_COMMIT
+    source_commit: a235b558095b8f85ebc921aab853434dc406761d
     description: >-
       D-21 语感指标与 D-28 三分类相关的具体质量阈值标记为 M2_FREEZE_REQUIRED；
       执行侧 AI 不得代为冻结阈值。
@@ -170,7 +220,44 @@ conditions:
     required_evidence:
       - Guardian 对新候选 Commit 的全量重审报告
       - 报告须绑定新 Commit 完整哈希并写明 guardian_bootstrap_source
+    status: CLOSED
+    verification_role: CLAUDE_INDEPENDENT_GUARDIAN
+    closure_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_closure_decision: >-
+      Guardian 已按 §14 对 9335180f9e1fd3d480f9b39e0a23597ee52079c7 完成全量重审并出具报告，未沿用 f48fed3 的任何结论；Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 据此关闭本条。
+    reverification_report: governance/reports/guardian_review_report.9335180f.md
+    prior_conclusion_reused: false
+
+  - condition_id: COND-010
+    source_decision_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001 / §14 / §17.4
+    source_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    description: >-
+      本签署子 Commit（含签署回执、状态位更新、三项 required_delta 修复）按 §14 本应触发 Guardian 全量重审；
+      Founder 显式例外将该确认延至 M0 里程碑收口时一并进行。该延后必须留痕，不得视为已确认。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: M0_CLOSEOUT
+    required_evidence:
+      - Guardian 对该子 Commit 与 M0 收口内容的一并确认报告，绑定完整 Commit 哈希
+      - 报告须写明 guardian_bootstrap_source
+    deferral_is_founder_exception: true
+    deferral_sets_precedent: false
     status: OPEN
     verification_role: CLAUDE_INDEPENDENT_GUARDIAN
+    closure_commit: null
+    founder_closure_decision: null
+
+  - condition_id: COND-011
+    source_decision_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条 / S5
+    source_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    description: >-
+      隐藏评测集存储位置经 Founder 裁决为 STORE-A（独立私有仓库，受限访问），须在 M2 前落地；
+      在实际 provision 之前不得生成任何隐藏题、隐藏品牌或答案资产。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    due_milestone: M2
+    required_evidence:
+      - 独立私有仓库已创建且访问控制生效（Planner / Codex / 知识引出工作面不可读）
+      - hidden_benchmark_storage_contract.allowed_storage.STORE-A.provisioned=true 并绑定裁决 Commit
+    status: OPEN
+    verification_role: FOUNDER_PRODUCT_AUTHORITY
     closure_commit: null
     founder_closure_decision: null

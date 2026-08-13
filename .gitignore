@@ -1,0 +1,20 @@
+# ── WSL 遗留的字符设备伪文件（指向 /dev/null，非真实文件，git 无法收录）──
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.idea
+.mcp.json
+.profile
+.ripgreprc
+.vscode
+.zprofile
+.zshrc
+
+# ── 工具与临时产物 ──
+.claude/
+.render_execution_application/
+__pycache__/
+*.pdf
+~$*.docx
+.DS_Store

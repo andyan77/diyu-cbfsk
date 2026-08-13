@@ -1,0 +1,62 @@
+schema_version: "0.1"
+registry_id: DIYU-CBFSK-MAIN-STATE-COVERAGE
+artifact_id: main_state_coverage.v0.1
+project_id: DIYU-CBFSK-001
+established_by: RD-M1-02（DIYU-CBFSK-FOUNDER-RD-M1-01 a4_rd_m1_02_routing → M2-EP02）
+established_in: M2-EP02 Phase 6
+
+contract:
+  purpose: >-
+    守 main 的**实际**状态，而不是台账里的声明。判据用 live git 列出 main 上未被最近一次
+    Guardian PASS 覆盖的提交，逐个要求存在具名追认条目；没有追认即 FAIL。
+  replaces:
+    declarative_source: governance/conditions/conditional_decision_ledger.yaml merge_state
+    why: >-
+      merge_state 是一组声明字段——它说「Founder 许可了合并」，但没有任何东西核对
+      main 上**实际**多了哪些提交、那些提交是否被审过。声明式字段永远与自己一致，
+      因此永远为绿。RD-M1-02 要求的是对着 live git 比，不是读声明。
+    declarative_source_retained: true
+    declarative_source_retained_reason: >-
+      merge_state 仍被 check_conditional_ledger 消费（守「带未关闭条件推进须 Founder 显式许可」），
+      那是另一件事。本判据补的是它守不到的那一面，不摘除它——摘除现役门禁属独立治理动作（GR-GATE-01）。
+  fail_closed_on_missing_git: true
+  fail_closed_reason: >-
+    读不到 git 就无从判断 main 的实际状态。此时判失败而不是跳过——
+    「没读到」不等于「没问题」，跳过会让判据在最需要它的环境里静默失效。
+
+last_guardian_pass:
+  reviewed_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  decision: PASS
+  ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  guardian_decision: APPROVE
+  blocking_findings: 0
+  coverage_semantics: >-
+    该提交及其全部祖先视为已覆盖。Guardian 审的是一个树状态，
+    因此它的祖先链一并被覆盖，不需要逐个列举。
+
+ratified_commits:
+  contract: >-
+    未被 Guardian PASS 覆盖、但已由 Founder 具名追认的提交。每条必须写明追认裁决与理由；
+    追认是有界例外，不是常态通道。
+  items:
+    - commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+      ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+      ruling_clause: 第三条 裁决落盘提交一次性预授权
+      reason_verbatim: 记录本批准的提交无法先于本批准接受审查（无限回归）。故设立有界例外，由本裁决直接授权。
+      scope: ONE_TIME_ONLY
+      sets_precedent: false
+      permitted_contents_ref: DIYU-CBFSK-FOUNDER-M1-PASS-001 permitted_contents L1-L4
+
+historical_ratifications:
+  note: >-
+    以下追认发生在最近一次 Guardian PASS 之前，已被其祖先链覆盖，因此不再需要逐条比对。
+    保留为历史记录，说明追认机制此前如何被使用过。
+  items:
+    - ruling: DIYU-CBFSK-FOUNDER-RD-M1-01
+      clause: a2_ratification
+      scope: ONE_TIME_ONLY
+      sets_precedent: false
+      commits:
+        - 38d13b7dc451ee2372aee8ca3ca2d49c23866c33
+        - c714732ff9a303719dde7a5a70bfa9c2fc36d042
+        - 6499431c66f7bf4a234bd830ee4c810e1ac78694

@@ -1,0 +1,30 @@
+fixture_id: M2-N116
+description: fail-closed 被关掉——判据会在最需要它的环境里静默失效。
+checker: check_m2_main_state_guard
+expected: FAIL
+payload:
+  git_available: true
+  main_ref: origin/main
+  last_guardian_reviewed_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  last_guardian_decision: PASS
+  reviewed_commit_exists: true
+  uncovered_main_commits:
+  - c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  known_commits:
+  - c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  - 2df11012da46ace0de7b7bce6d199a578d32d341
+  ratified_commits:
+  - c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  ratification_entries:
+  - commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+    ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+    reason: 记录本批准的提交无法先于本批准接受审查（无限回归）。
+    sets_precedent: false
+  fail_closed_on_missing_git: false
+  requirements_present: true
+  pinned_packages:
+  - jsonschema
+  declared_packages:
+  - jsonschema
+  - PyYAML
+  - python-docx

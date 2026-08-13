@@ -1,0 +1,38 @@
+schema_version: "0.1"
+manifest_id: DIYU-CBFSK-M2-HIDDEN-ASSET-MANIFEST
+artifact_id: hidden_asset_manifest.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: EMPTY_BLOCKED
+artifact_lifecycle_state: draft
+
+manifest_state:
+  asset_count: 0
+  hidden_benchmark_items: 0
+  hidden_brands: 0
+  fixture_brands: 0
+  answer_assets: 0
+  content_hashes: []
+  frozen: false
+  frozen_note: 冻结自 Founder 收口签署起生效；当前无资产可冻结。
+
+why_empty:
+  reason: HIDDEN_STORAGE_NOT_PROVISIONED
+  record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+  statement: >-
+    空不是「还没写」，是「已经确认没有」。STORE-A 未 provision，Phase 5 的生成未启动，
+    因此本清单如实记 0。留白会被读成待补，写成 0 才能被判据校验。
+  honest_state: true
+  must_not_be_read_as: 隐藏资产已交付
+
+main_repository_compliance:
+  hidden_content_in_main_repository: false
+  only_manifest_counts_hashes_assertions: true
+  enforcement_delegated_to: ci/checkers/check_hidden_benchmark_boundary.py
+  second_implementation_created: false
+
+next_action:
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  action: 处置 hidden_asset_stop_record 中的 OPT-1 / OPT-2 / OPT-3
+  until_then: 本清单保持 count=0，不得以任何形式在主仓补内容

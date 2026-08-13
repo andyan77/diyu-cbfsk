@@ -1,0 +1,138 @@
+schema_version: "1.0"
+project_id: DIYU-CBFSK-001
+change_set:
+  version: PRD_v1.2
+  title: 人设连续性、多模态商品理解与扩展兼容基线
+  baseline_date: "2026-08-12"
+  authority: Founder
+  source_version: PRD_v1.1
+  rulings: [D-17, D-18, D-19, D-20, D-21, D-22, D-23, D-24, D-25, D-26]
+
+resulting_state:
+  project_status: PROJECT_INITIATED
+  execution_status: EXECUTION_NOT_STARTED
+  production_servable: false
+  m0_authorized: false
+  prd_v1_2_effective: false
+  documentation_status: READY_FOR_FOUNDER_REVIEW
+
+invariants:
+  m0_top_level_deliverable_count: 14
+  milestone_sequence: [M0, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12]
+  m11_name: 多品牌、多门店、多品类仿真试点（夹具品牌）
+  m11_gate: 仿真运行门
+  m12_name: Commercial V1.0生产加固
+  commercial_release_gate_count: 8
+  unseen_brand_engineering_baseline: synthetic_closed_unseen_brand
+
+object_counts:
+  input_and_configuration_objects: 12
+  output_and_internal_audit_objects: 15
+  capabilities: 15
+  functional_requirements: 29
+  non_functional_requirements: 12
+  risks: 21
+
+ruling_map:
+  D-17:
+    title: M11 Founder真实品牌注入与Codex夹具回退双路径
+    prd_sections: ["1.3", "4.4", "6.1", "7", "8.7", "13/M11", "14/M11", "15.6", "16", "附录B"]
+    m0_contract_targets: [input_output_boundary, data_and_fixture_workflow, M1_object_model_brief, M2_evaluation_freeze_brief]
+    acceptance_evidence:
+      - FounderProvidedRealBrandPackage
+      - FounderInjectedRealBrandProductionTest
+      - founder_real_brand_package_provided
+      - fallback_source
+    status: PASS
+  D-18:
+    title: 合成封闭未见品牌工程基准与数据池隔离
+    prd_sections: ["8.6", "8.7", "10.3", "16.2", "附录B"]
+    controls:
+      - separate_workspaces
+      - separate_generation_recipes
+      - separate_parameter_spaces
+      - separate_random_seeds
+      - no_founder_package_reuse
+      - no_hidden_brand_specific_prompt
+    status: PASS
+  D-19:
+    title: Commercial V1.0命名与M0—M12工程路线不变
+    prd_sections: ["12", "13", "14", "15.1"]
+    status: PASS
+  D-20:
+    title: 搭配师人设连续性一级能力
+    capability: C-13
+    prd_sections: ["1.3", "3", "4.4", "5.5", "6", "7/FR-23", "7/FR-24", "8", "9.5", "9.6", "10", "11", "13-14", "16", "附录B"]
+    status: PASS
+  D-21:
+    title: 自媒体原生语感一级能力与评测域
+    capability: C-14
+    prd_sections: ["1.3", "3", "4.4", "5", "6", "7/FR-25", "8", "9.7", "9.8", "10", "11", "13-14/M7", "16", "附录B"]
+    status: PASS
+  D-22:
+    title: Visual Merchandising扩展兼容
+    extension_port: VisualMerchandisingExtensionPort
+    current_scope: extension_compatible_not_v1_required
+    prd_sections: ["3.2", "3.3", "5.7", "7/FR-27", "11", "13-14/M1", "13-14/M12", "15.6", "16", "附录B"]
+    status: PASS
+  D-23:
+    title: 多模态商品图像理解正式能力
+    capability: C-15
+    component: MultimodalGarmentUnderstandingLayer
+    provenance_order:
+      - authoritative_structured_fact
+      - human_verified_visual_attribute
+      - multimodal_inferred_visual_attribute
+      - general_model_inference
+    prd_sections: ["1.3", "3", "5.6", "6", "7/FR-22", "8", "10", "11", "13-14/M1-M10", "16", "附录B"]
+    status: PASS
+  D-24:
+    title: 实时成交辅助扩展兼容
+    extension_port: RealtimeSalesAssistExtensionPort
+    current_scope: content_projection_only
+    prd_sections: ["3.2", "4.4/S-07", "5.7", "7/FR-27", "11", "13-14/M1", "13-14/M12", "15.6", "16", "附录B"]
+    status: PASS
+  D-25:
+    title: Founder控制发布模式
+    default_mode: human_review
+    optional_mode: founder_authorized_auto_publish
+    hard_gate: unauthorized_auto_publish_rate=0
+    prd_sections: ["3.2", "3.3", "6", "7/FR-28", "10", "11", "13-14/M1-M12", "15.6", "16", "附录B"]
+    status: PASS
+  D-26:
+    title: 五品类正式真实品牌导入可开启就绪
+    m11_minimum_pilot_categories: 3
+    formal_onboarding_readiness_categories: 5
+    metric: five_category_activation_readiness=100%
+    prd_sections: ["3.1", "7/FR-29", "10", "13-14/M1-M12", "15.5", "16", "附录B"]
+    status: PASS
+
+new_functional_requirement_traceability:
+  FR-22: {milestones: [M1, M2, M6, M8, M10], failure_state: MULTIMODAL_ATTRIBUTE_UNSAFE}
+  FR-23: {milestones: [M1, M2, M7, M10, M12], failure_state: PERSONA_STATE_INVALID}
+  FR-24: {milestones: [M2, M3, M5, M7, M10], failure_state: PERSONA_HARD_CONTRADICTION}
+  FR-25: {milestones: [M2, M3, M5, M7, M10], failure_state: NATIVE_VOICE_QUALITY_FAIL}
+  FR-26: {milestones: [M1, M2, M11], failure_state: FOUNDER_PACKAGE_SCOPE_VIOLATION}
+  FR-27: {milestones: [M0, M1, M12], failure_state: EXTENSION_COMPATIBILITY_BREAK}
+  FR-28: {milestones: [M1, M2, M12], failure_state: UNAUTHORIZED_AUTO_PUBLISH}
+  FR-29: {milestones: [M1, M2, M9, M10, M12], failure_state: FIVE_CATEGORY_NOT_READY}
+
+m2_threshold_policy:
+  quantitative_quality_thresholds: M2_FREEZE_REQUIRED
+  execution_ai_may_freeze_thresholds: false
+  zero_tolerance_hard_failures:
+    - fabricated_persona_credential_rate=0
+    - published_persona_hard_contradiction_rate=0
+    - brand_truth_overridden_by_persona_rate=0
+    - authoritative_fact_override_rate=0
+    - unverifiable_function_claim_rate=0
+    - unauthorized_auto_publish_rate=0
+
+files:
+  current_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  current_m0_request: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+  verification_receipt: PRD_v1.2_核验回执.docx
+  checker: 工具/check_prd_v1_2.py
+  package_auditor: 工具/audit_docx_package.py
+  generator: 工具/build_prd_v1_2.py
+  archive_directory: 归档_v1.1

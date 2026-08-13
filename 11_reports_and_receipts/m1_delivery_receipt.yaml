@@ -38,7 +38,7 @@ package_matrix:
 - package: M1-EP03
   name: 集成与收口
   commits:
-  - THIS_COMMIT
+  - 37f636c73dac1be7457dfc951984b43532056804
   status: DELIVERED
 acceptance_gate_self_check:
   source: PRD v1.2 M1 通过标准 + DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001 验收条款
@@ -147,3 +147,17 @@ artifact_sha256:
   ci/checkers/check_m1_object_coverage.py: c25a916e440bb951bce158e33e37a72c79f371e505d3d0df7de065f3b622c323
   ci/run_schema_fixtures.py: 558c8ba55d6f5b93302c677deeffb4395157e03ad184f4cf60b8f3156840028a
 artifact_sha256_note: 本清单不含本回执自身，逐项可复算：sha256sum <file>。记录的是 M1 候选交付当时的字节状态。
+
+candidate_freeze:
+  candidate_commit: 37f636c73dac1be7457dfc951984b43532056804
+  frozen_at_package: M1-EP03
+  branch: m1/candidate-freeze
+  what_is_frozen: >-
+    上方 artifact_sha256 列出的 33 份 M1 交付物在 37f636c73dac1be7457dfc951984b43532056804 时点的字节状态。
+    本回执自身不在该清单内——钉子写在被钉的文件里会形成自指，永远算不出稳定值。
+  what_is_not_frozen:
+    - M1 是否通过（由 Guardian 里程碑收口审查 →（总顾问，可豁免）→ Founder 裁决决定）
+    - execution_status（保持 M1_IN_PROGRESS，不因候选冻结而改）
+    - 6 项 open_item（只登记路由，未裁决）
+  supersession_note: >-
+    §14：本冻结之后的任何新 Commit 都使针对 37f636c73dac1be7457dfc951984b43532056804 的审查结论失效，须重新复核。

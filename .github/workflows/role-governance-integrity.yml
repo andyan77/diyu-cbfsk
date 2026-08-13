@@ -22,7 +22,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: python -m pip install --quiet pyyaml python-docx
+        run: python -m pip install --quiet -r requirements-ci.txt
 
       - name: Instruction projection drift (D-27 single canonical source)
         run: python3 ci/compile_role_instructions.py --check

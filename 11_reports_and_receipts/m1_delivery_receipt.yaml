@@ -101,13 +101,41 @@ red_line_self_check:
   serving_created: false
   real_inventory_connected: false
   real_customer_connected: false
-open_items_routed_not_adjudicated:
-- OI-M1-01 裁决 acceptance_gate 写 11 输出对象 vs 冻结合同 15
-- OI-M1-02 EP01 Prompt 写六层事实优先级 vs 合同七级
-- OI-M1-03 M3 问题系统 Brief 不存在，未新建，接口面标 INTERFACE_ONLY
-- OI-M1-04 两个扩展端口的 8 个预留对象未建 Schema
-- OI-M1-05 运行时事实分离目前只判 persistence_class 一致性，行为层不可测
-- OI-M1-06 女装 4 条硬约束均未标 safety_critical
+open_items:
+  adjudicated_by: DIYU-CBFSK-FOUNDER-RD-M1-01 B 节（Founder 逐项裁定）
+  adjudicated_at: '2026-08-13'
+  execution_side_role: 只登记状态，不解释裁定、不自行改判
+  items:
+  - id: OI-M1-01
+    item: 裁决 acceptance_gate 写 11 输出对象 vs 冻结合同 15
+    founder_decision: 以 M0 冻结合同 15 项输出为准
+    status: CLOSED_BY_HIGHER_AUTHORITY
+    execution_side_action_needed: 无（M1 已按 15 执行）
+  - id: OI-M1-02
+    item: EP01 Prompt 写六层事实优先级 vs 合同七级
+    founder_decision: 以冻结合同七级事实优先级为准
+    status: CLOSED_BY_HIGHER_AUTHORITY
+    execution_side_action_needed: 无（M1 已按七级执行）
+  - id: OI-M1-03
+    item: M3 问题系统 Brief 不存在，未新建，接口面标 INTERFACE_ONLY
+    founder_decision: 路由至 M3 Milestone Plan；M1 只交接口面，处置正确
+    status: ROUTED_TO_M3
+    execution_side_action_needed: 无
+  - id: OI-M1-04
+    item: 两个扩展端口的 8 个预留对象未建 Schema
+    founder_decision: 接受——只保持端口登记，不提前定型 Schema
+    status: ACCEPTED_AS_IS
+    execution_side_action_needed: 无
+  - id: OI-M1-05
+    item: 运行时事实分离目前只判 persistence_class 一致性，行为层不可测
+    founder_decision: 行为级验证路由 M6/M8/M9
+    status: ROUTED_TO_M6_M8_M9
+    execution_side_action_needed: 无
+  - id: OI-M1-06
+    item: 女装 4 条硬约束均未标 safety_critical
+    founder_decision: 接受当前分类——女装非 100% 全审高风险类，不补标
+    status: ACCEPTED_AS_IS
+    execution_side_action_needed: 无
 next_gate:
   required: CLAUDE_INDEPENDENT_GUARDIAN 里程碑收口审查
   then: 总顾问（可豁免，豁免须记录不得记为完成） → Founder 收口裁决
@@ -149,7 +177,20 @@ artifact_sha256:
 artifact_sha256_note: 本清单不含本回执自身，逐项可复算：sha256sum <file>。记录的是 M1 候选交付当时的字节状态。
 
 candidate_freeze:
-  candidate_commit: 37f636c73dac1be7457dfc951984b43532056804
+  ruling_ref: DIYU-CBFSK-FOUNDER-RD-M1-01 第 D.2 条（审查对象口径修正）
+  two_distinct_concepts_note: >-
+    冻结「交付物字节快照」与「Guardian 审查对象」是两件事，先前混用同一个 candidate_commit 表达，
+    导致「候选之后任何新 Commit 都使结论失效」被读成连收口修复本身也在推翻自己。此处分离。
+  semantic_candidate_commit: 37f636c73dac1be7457dfc951984b43532056804
+  semantic_candidate_meaning: >-
+    M1 语义候选：下方 artifact_sha256 列出的 33 份 M1 交付物字节快照的时点。
+    收口修复不改动这 33 份中的任何一份，因此该快照在修复后仍然成立、不需重算。
+  review_package_head:
+    value: "本仓 m1/candidate-freeze 分支的最终 HEAD（PR #2 的最终 Head）"
+    concrete_hash_recorded_in: ["PR #2 正文", "M1 收口修复交付报告"]
+    why_not_inlined_here: >-
+      最终 Head 就是包含本文件的那个 Commit，写进来会自指——与 artifact_sha256 不含本回执自身同一个道理。
+    meaning: Guardian 与总顾问的实际审查对象。
   frozen_at_package: M1-EP03
   branch: m1/candidate-freeze
   what_is_frozen: >-
@@ -158,6 +199,8 @@ candidate_freeze:
   what_is_not_frozen:
     - M1 是否通过（由 Guardian 里程碑收口审查 →（总顾问，可豁免）→ Founder 裁决决定）
     - execution_status（保持 M1_IN_PROGRESS，不因候选冻结而改）
-    - 6 项 open_item（只登记路由，未裁决）
+    - 6 项 open_item（Founder 已于 RD-M1-01 B 节逐项裁定，状态见 open_items 登记表）
   supersession_note: >-
-    §14：本冻结之后的任何新 Commit 都使针对 37f636c73dac1be7457dfc951984b43532056804 的审查结论失效，须重新复核。
+    §14：**最终 Guardian review target 之后**的任何新 Commit 都使 Guardian 与总顾问的结论失效，须重新复核。
+    衡量基准是 review_package_head，不是 semantic_candidate_commit——后者只标记交付物字节快照，
+    不承担「审查对象」这一角色。

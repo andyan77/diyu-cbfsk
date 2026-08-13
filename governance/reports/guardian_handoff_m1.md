@@ -1,6 +1,8 @@
 # Guardian 交接包 · M1 里程碑收口审查
 
-> 候选 Commit `37f636c73dac1be7457dfc951984b43532056804`（分支 `m1/candidate-freeze`）
+> **审查对象（review_package_head）**＝分支 `m1/candidate-freeze` 的最终 HEAD ＝ PR #2 的最终 Head。
+> **语义候选（semantic_candidate_commit）**＝`37f636c73dac1be7457dfc951984b43532056804`——只标记 33 份 M1 交付物的字节快照时点，**不是**审查对象。
+> 两者分离依 `DIYU-CBFSK-FOUNDER-RD-M1-01` D.2；收口修复不改动那 33 份中的任何一份，故语义候选快照在修复后仍然成立。
 > 里程碑 M1 · 封套 `MILESTONE_PLAN_M1` · 连跑授权 `DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001`
 > 本包由执行侧生成，**不是审查结论**。Guardian 独立复核后自行出结论。
 
@@ -12,6 +14,8 @@ M1 的三个执行包全部落在 `m1/candidate-freeze` 分支上，相对 `orig
 |---|---|---|
 | `8ce837a4569565299be3f8dacf65121bb0908a44` | M1-EP02 | 五类品类适配合同 + 跨品类冲突优先级 + 第 21 个 checker |
 | `37f636c73dac1be7457dfc951984b43532056804` | M1-EP03 | 补齐 Brief 未交付两项 + 终检判据扩展 + 接口交接 + 报告与 Receipt + 候选冻结 |
+| `97b73f63fff65d9eb259b2f23dd51b0498ffbed6` | 冻结 | 钉住语义候选与 33 份交付物字节状态 + 本交接包 |
+| （最终 Head） | M1 收口修复 | CI 依赖单一真源 + 审查对象口径分离 + `RD-M1-01` 裁决落盘 + Open Item 逐项状态 |
 
 M1-EP01 的三个 Commit（`38d13b7dc451ee2372aee8ca3ca2d49c23866c33`、`c714732ff9a303719dde7a5a70bfa9c2fc36d042`、`6499431c66f7bf4a234bd830ee4c810e1ac78694`）已在 main 上，本轮不重复提交，但它们的产出在本轮的审查范围内（M1 是一个里程碑，不是三次独立交付）。
 
@@ -69,4 +73,39 @@ compile_role_instructions --check  12 files, drift=0
 
 - 执行侧不得自审：本包不含任何「已通过 / 已对齐」的结论。
 - Guardian 结论是工程结论，不是 Founder 批准，也不是外部独立审查。
-- §14 supersession：`37f636c73dac1be7457dfc951984b43532056804` 之后的任何新 Commit 都使针对它的复核结论失效。
+- §14 supersession：**最终 Guardian review target 之后**的任何新 Commit 都使 Guardian 与总顾问的结论失效。衡量基准是 `review_package_head`，不是 `semantic_candidate_commit`。
+
+
+## 7. M1 收口修复（`DIYU-CBFSK-FOUNDER-RD-M1-01` D 节，锁死范围）
+
+Founder 在里程碑收口第一步裁定了三件事，并授权**唯一一个最小修复 Commit**，全部在本分支：
+
+**① CI 依赖修复（D.1）。** 实测根因：`role-governance-integrity` 的 `Full checker suite and fixtures` 步骤跑
+`ci/run_all_checks.py`，它加载 `ci/run_schema_fixtures.py`，后者 `import jsonschema`，而 workflow 只装了
+`pyyaml python-docx` → `ModuleNotFoundError: No module named 'jsonschema'`。新增 `requirements-ci.txt`
+（`jsonschema==3.2.0` 与 M1 本地验证环境一致——3.2.0 只实现到 draft-07，M1 的 19 份 Schema 正是按 draft-07 写的），
+三个 workflow 统一从该文件安装，消除三处手写包清单。
+
+**执行侧更正一处口径**：裁决表述为「三个 Actions 全量重跑」，但实测**只有 `role-governance-integrity` 一个在失败**，
+`document-integrity` 与 `secret-and-hidden-boundary` 在 `97b73f63fff65d9eb259b2f23dd51b0498ffbed6` 上均为 success。
+按 D.1 的「若实测根因与假设不符，按实测做最小修复并在报告说明」执行：根因假设正确，失败面小于表述。
+三个 workflow 仍统一改为从 `requirements-ci.txt` 安装（裁决明文要求，且消除同类复发面）。
+
+**② 审查对象口径修正（D.2）**：见文首。`semantic_candidate_commit` 与 `review_package_head` 分离，
+supersession 基准改为最终 review target。
+
+**③ 裁决落盘（D.3）**：`DIYU-CBFSK-FOUNDER-RD-M1-01`（A/B/C/D/E 五节全文）、
+`FR-PROCESS-006-R1` 澄清行（「提交推进」目标限定候选分支）、6 项 Open Item 逐项 Founder 裁定状态入回执登记表。
+
+**禁止项（D.4）自查**：未改 M1 对象语义 · 未改五品类合同 · 未改事实优先级 · 未新增 M2 资产 ·
+未开始桥接 Schema · 本分支未触碰 `m2` 状态位 · 未改知识状态 · 未生成隐藏题或夹具品牌。
+上述由提交门控逐条断言，且 33 份交付物哈希逐份复算一致可证「M1 语义未动」。
+
+**执行侧再披露一次自造失败**：第一版 `requirements-ci.txt` 连 `PyYAML` 一起钉成本地的 `5.4.1`，
+推送后**三个 workflow 全红**（5.4.1 在 Python 3.11 + 新 setuptools 下构建失败），比修复前更糟。
+更正为只钉 `jsonschema`，并在干净 venv 实测通过后才重推；更正以 `--amend` 合入同一修复 Commit
+以符合「唯一一个最小修复 Commit」，候选分支强制推送前该提交未被任何角色审查，原始失败 run
+记录仍在 Actions 里。
+
+**请复核**：修复是否越出 D 节锁死的五项范围；33 份交付物哈希是否确实一字未变；
+`m2_started` 在本分支是否仍为 `false` 且无授权条目；`requirements-ci.txt` 是否只钉了必须钉的那一个。

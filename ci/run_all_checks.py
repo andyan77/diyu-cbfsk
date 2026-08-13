@@ -35,6 +35,7 @@ CHECKERS = [
     "check_m0_zero_contact",
     "check_m0_deliverable_closure",
     "check_m1_object_coverage",
+    "check_m1_category_adapters",
 ]
 
 

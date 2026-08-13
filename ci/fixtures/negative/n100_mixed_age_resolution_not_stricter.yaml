@@ -1,8 +1,8 @@
-fixture_id: N76-m1-womenswear-rule-overreach
-description: 女装适配器把自己声明为其他品类的默认——PRD 13-M1 通过标准明令不得如此。本 fixture 随判据从 check_m1_object_coverage 迁到 check_m1_category_adapters。
+fixture_id: N100-mixed-age-resolution-not-stricter
+description: 亲子与童装组合被解析为折中而非取更严——冻结合同原文要求取更严者。
 checker: check_m1_category_adapters
 expected: FAIL
-expected_judgement: WOMENSWEAR_RULE_OVERREACH
+expected_judgement: MIXED_AGE_RESOLUTION_NOT_STRICTER
 payload:
   frozen_categories:
   - id: CAT-WOMENSWEAR
@@ -53,7 +53,7 @@ payload:
     forbidden: []
     applies_to_categories:
     - CAT-WOMENSWEAR
-    is_default_for_other_categories: true
+    is_default_for_other_categories: false
     inherits_category_rules_from: null
     composes_with: []
     composition_resolution: null
@@ -181,7 +181,7 @@ payload:
       combination:
       - CAT-FAMILY-TREND
       - CAT-KIDSWEAR
-      resolution: stricter_of
+      resolution: average_of
     - id: COMBO-04
       combination:
       - CAT-SPORT-TREND

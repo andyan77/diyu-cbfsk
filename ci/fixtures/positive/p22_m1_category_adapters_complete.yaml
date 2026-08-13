@@ -1,8 +1,7 @@
-fixture_id: N76-m1-womenswear-rule-overreach
-description: 女装适配器把自己声明为其他品类的默认——PRD 13-M1 通过标准明令不得如此。本 fixture 随判据从 check_m1_object_coverage 迁到 check_m1_category_adapters。
+fixture_id: P22-m1-category-adapters-complete
+description: 五类适配器齐备、逐字段与冻结合同一致、安全品类绑定 FC/SC、冲突优先级表唯一且被全部引用。
 checker: check_m1_category_adapters
-expected: FAIL
-expected_judgement: WOMENSWEAR_RULE_OVERREACH
+expected: PASS
 payload:
   frozen_categories:
   - id: CAT-WOMENSWEAR
@@ -53,7 +52,7 @@ payload:
     forbidden: []
     applies_to_categories:
     - CAT-WOMENSWEAR
-    is_default_for_other_categories: true
+    is_default_for_other_categories: false
     inherits_category_rules_from: null
     composes_with: []
     composition_resolution: null

@@ -1,0 +1,84 @@
+schema_version: "0.1"
+contract_id: sport_trend.adapter.v0.1
+artifact_kind: contract_file
+milestone: M1
+execution_package: M1-EP02
+status: M1_EP02_DELIVERED
+object_ref: IN-02
+prd_anchors: [PRD-4.1, PRD-3.3-P-07, PRD-9.4, PRD-6.4, PRD-16.2, FR-02, FR-11]
+
+frozen_source:
+  file: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
+  status: M0_FROZEN
+  pointer: launch_categories.items[CAT-SPORT-TREND]
+
+category_id: CAT-SPORT-TREND
+category_name: 运动潮流时装
+core_audience: 运动、通勤、休闲跨场景人群
+unique_professional_contract: [运动类型, 活动幅度, 功能面料, 支撑, 伸展, 透气, 鞋服关系, 安全]
+forbidden: [把视觉建议包装为专业性能, 伤病预防或医疗效果承诺]
+key_outputs: [运动前后场景, 功能与潮流平衡, 可售组合]
+hard_constraint_family: sport_function_and_safety
+priority_rule: 功能合同优先
+founder_full_review_required: true
+
+scope:
+  applies_to_categories: [CAT-SPORT-TREND]
+  is_default_for_other_categories: false
+  inherits_category_rules_from: null
+  inherits_note: 功能与安全判断自成一套，不由女装视觉规则派生。
+
+hard_constraints:
+  - id: SP-HC-01
+    statement: 不得把视觉建议包装为专业性能。
+    prd_anchor: PRD-4.1 CAT-SPORT-TREND.forbidden / PRD-9.4
+    severity: safety_critical
+    forbidden_claim_kind: 专业性能
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: SP-HC-02
+    statement: 不得作伤病预防承诺。
+    prd_anchor: PRD-9.4
+    severity: safety_critical
+    forbidden_claim_kind: 伤病预防
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: SP-HC-03
+    statement: 不得作医疗效果承诺。
+    prd_anchor: PRD-9.4
+    severity: safety_critical
+    forbidden_claim_kind: 医疗效果
+    failure_state: CATEGORY_SAFETY_VIOLATION
+  - id: SP-HC-04
+    statement: 功能信息不足时不得用纯视觉搭配替代性能与安全判断。
+    prd_anchor: PRD-6.4 / PRD-9.4
+    severity: safety_critical
+    fail_closed_ref: FC-06
+    failure_state: SPORT_FUNCTION_INSUFFICIENT
+  - id: SP-HC-05
+    statement: 功能面料的成分与性能只能取权威结构化商品事实，不得由图片推断。
+    prd_anchor: PRD-5.6 / D-23 / NG-08
+    severity: safety_critical
+    failure_state: MULTIMODAL_ATTRIBUTE_UNSAFE
+  - id: SP-HC-06
+    statement: 功能合同优先于视觉表达；两者冲突时以功能与安全为准。
+    prd_anchor: PRD-4.1 CAT-SPORT-TREND.priority_rule
+    severity: safety_critical
+    conflict_priority_rank: 3
+    failure_state: CATEGORY_SAFETY_VIOLATION
+
+forbidden_claims: [专业性能, 伤病预防, 医疗效果]
+
+safety_boundary:
+  age_appropriateness: 未成年人运动任务同时触发童装或青少年一侧约束，按 COMBO-04/05 取更严。
+  body_expression: 不得以运动表现为由对身体作价值排序。
+  performance_claims: 全面禁止——性能、伤病预防与医疗效果三类承诺均不得输出。
+  serving_stop: 安全硬门失败 → 本品类立即关闭 Serving。
+
+fail_closed_bindings: [FC-06]
+stop_condition_bindings: [SC-06]
+founder_review:
+  coverage: "100%"
+  sampling_allowed: false
+  basis: category_scope_contract.v1.0 category_safety_by_design.founder_review_coverage —— 运动功能安全属高风险知识，覆盖率 100%，不得抽样。
+
+conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+m1_scope_note: 本文件是品类合同，不是品类知识。M1 不生成任何品类知识内容、语料或夹具品牌资产。

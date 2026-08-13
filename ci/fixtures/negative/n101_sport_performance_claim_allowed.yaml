@@ -1,8 +1,8 @@
-fixture_id: N76-m1-womenswear-rule-overreach
-description: 女装适配器把自己声明为其他品类的默认——PRD 13-M1 通过标准明令不得如此。本 fixture 随判据从 check_m1_object_coverage 迁到 check_m1_category_adapters。
+fixture_id: N101-sport-performance-claim-allowed
+description: 运动适配器只禁了专业性能，伤病预防与医疗效果承诺仍被放行。
 checker: check_m1_category_adapters
 expected: FAIL
-expected_judgement: WOMENSWEAR_RULE_OVERREACH
+expected_judgement: SPORT_PERFORMANCE_CLAIM_ALLOWED
 payload:
   frozen_categories:
   - id: CAT-WOMENSWEAR
@@ -53,7 +53,7 @@ payload:
     forbidden: []
     applies_to_categories:
     - CAT-WOMENSWEAR
-    is_default_for_other_categories: true
+    is_default_for_other_categories: false
     inherits_category_rules_from: null
     composes_with: []
     composition_resolution: null
@@ -167,8 +167,6 @@ payload:
     - SC-06
     forbidden_claims:
     - 专业性能
-    - 伤病预防
-    - 医疗效果
     conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
     founder_review_coverage: 100%
     founder_review_sampling_allowed: false

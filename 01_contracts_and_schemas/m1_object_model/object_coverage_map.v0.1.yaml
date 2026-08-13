@@ -25,6 +25,15 @@ inputs:
   landing_kind: contract_file
   landing: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml
   note: PRD 13-M1 特例：UniversalExpertKernel 与 CategoryAdapter 是合同文件而非数据 Schema，映射表注明即可，不为其造 JSON Schema。
+  m1_adapter_contracts:
+  - 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
+  m1_adapter_contracts_note: >-
+    landing 仍指向 M0 冻结的 category_scope_contract（五类的数量与硬约束家族由它定义，适配器不得改写）；
+    M1-EP02 交付的五份适配器是它的落地实现，由 check_m1_category_adapters 逐字段比对冻结源。
   addressable: true
 - object_id: IN-03
   name: BrandTruthPack
@@ -179,6 +188,14 @@ outputs:
 not_delivered_in_ep01:
 - item: category_adapter_contracts/*.v0.1.yaml（五类）
   routed_to: M1-EP02
+  delivered_in: M1-EP02
+  delivered_files:
+  - 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
+  - 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
 - item: extension_port_contracts（VM / 实时成交辅助 / Bundle 兼容）
   routed_to: M1-EP03
   note: PRD 5.7 端口是合同而非对象 Schema；Bundle 已留 backward_compatible_extension_ports 位。

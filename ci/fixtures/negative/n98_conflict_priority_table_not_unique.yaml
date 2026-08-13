@@ -1,8 +1,8 @@
-fixture_id: N76-m1-womenswear-rule-overreach
-description: 女装适配器把自己声明为其他品类的默认——PRD 13-M1 通过标准明令不得如此。本 fixture 随判据从 check_m1_object_coverage 迁到 check_m1_category_adapters。
+fixture_id: N98-conflict-priority-table-not-unique
+description: 冲突优先级表出现第二份实现——两份一旦分叉，「以哪份为准」就没有答案（EQ-1）。
 checker: check_m1_category_adapters
 expected: FAIL
-expected_judgement: WOMENSWEAR_RULE_OVERREACH
+expected_judgement: CONFLICT_PRIORITY_TABLE_NOT_UNIQUE
 payload:
   frozen_categories:
   - id: CAT-WOMENSWEAR
@@ -53,7 +53,7 @@ payload:
     forbidden: []
     applies_to_categories:
     - CAT-WOMENSWEAR
-    is_default_for_other_categories: true
+    is_default_for_other_categories: false
     inherits_category_rules_from: null
     composes_with: []
     composition_resolution: null
@@ -176,6 +176,7 @@ payload:
     canonical_file: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
     declaring_files:
     - 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+    - 01_contracts_and_schemas/legacy/conflict_priority_copy.yaml
     combination_rules:
     - id: COMBO-01
       combination:

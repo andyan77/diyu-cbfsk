@@ -7,6 +7,10 @@ PRD 13 节 M1 的通过标准是一句自然语言——「不存在未定义对
 
 注册表与覆盖映射表都是**派生件**：它们的字段必须与 Schema 文件本身对得上，对不上就是漂移，
 而不是「以注册表为准」——那样等于让派生件反过来定义真源（EQ-1）。
+
+M1 通过标准的第四条「女装规则不得默认覆盖其他品类」不在本文件，在 check_m1_category_adapters：
+品类规则的真源是五份适配器合同，判据必须读那里。EP01 期间它写在这里，读的是 object_coverage_map
+里一个全仓不存在的键，恒为假、永不触发——判据有检出力但 collect 喂它恒假值，属假绿，EP02 迁走并改读真源。
 """
 
 from __future__ import annotations
@@ -95,11 +99,6 @@ def validate(payload: dict) -> list[str]:
     if style.get("declared_count") != len(dims):
         errors.append(
             f"STYLE_SPACE_DIMENSION_DRIFT: declares {style.get('declared_count')} but lists {len(dims)}"
-        )
-
-    if payload.get("womenswear_is_default_for_other_categories"):
-        errors.append(
-            "WOMENSWEAR_RULE_OVERREACH: womenswear rules are declared to apply to other categories by default"
         )
 
     return errors
@@ -205,9 +204,6 @@ def collect() -> dict:
             "declared_count": style["dimension_count"],
             "dimension_ids": [d["id"] for d in style["dimensions"]],
         },
-        "womenswear_is_default_for_other_categories": bool(
-            (coverage.get("category_defaults") or {}).get("womenswear_rules_apply_to_other_categories_by_default")
-        ),
     }
 
 

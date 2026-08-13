@@ -1,8 +1,8 @@
-fixture_id: N76-m1-womenswear-rule-overreach
-description: 女装适配器把自己声明为其他品类的默认——PRD 13-M1 通过标准明令不得如此。本 fixture 随判据从 check_m1_object_coverage 迁到 check_m1_category_adapters。
+fixture_id: N90-category-adapter-missing
+description: 运动品类在冻结五类之内却没有适配器合同。
 checker: check_m1_category_adapters
 expected: FAIL
-expected_judgement: WOMENSWEAR_RULE_OVERREACH
+expected_judgement: CATEGORY_ADAPTER_MISSING
 payload:
   frozen_categories:
   - id: CAT-WOMENSWEAR
@@ -39,9 +39,9 @@ payload:
     hard_constraint_family: sport_function_and_safety
     founder_full_review_required: true
     core_audience: 运动人群
-    unique_professional_contract: &id007
+    unique_professional_contract:
     - 运动类型
-    forbidden: &id008
+    forbidden:
     - 把视觉建议包装为专业性能
   adapters:
   - file: 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
@@ -53,7 +53,7 @@ payload:
     forbidden: []
     applies_to_categories:
     - CAT-WOMENSWEAR
-    is_default_for_other_categories: true
+    is_default_for_other_categories: false
     inherits_category_rules_from: null
     composes_with: []
     composition_resolution: null
@@ -141,34 +141,6 @@ payload:
     stop_condition_bindings:
     - SC-06
     forbidden_claims: []
-    conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
-    founder_review_coverage: 100%
-    founder_review_sampling_allowed: false
-  - file: 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
-    category_id: CAT-SPORT-TREND
-    hard_constraint_family: sport_function_and_safety
-    founder_full_review_required: true
-    core_audience: 运动人群
-    unique_professional_contract: *id007
-    forbidden: *id008
-    applies_to_categories:
-    - CAT-SPORT-TREND
-    is_default_for_other_categories: false
-    inherits_category_rules_from: null
-    composes_with: []
-    composition_resolution: null
-    hard_constraint_ids:
-    - CAT-SPORT-TREND-HC-01
-    safety_critical_constraint_ids:
-    - SP-HC-01
-    fail_closed_bindings:
-    - FC-06
-    stop_condition_bindings:
-    - SC-06
-    forbidden_claims:
-    - 专业性能
-    - 伤病预防
-    - 医疗效果
     conflict_priority_ref: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
     founder_review_coverage: 100%
     founder_review_sampling_allowed: false

@@ -30,6 +30,9 @@ BINDING = f"{M2_DIR}/envelope/m1_source_binding.v0.1.yaml"
 PROFILE_DIR = f"{M2_DIR}/envelope/profiles"
 KNOWLEDGE_STATE_MACHINE = "01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml"
 M1_REGISTRY = "01_contracts_and_schemas/m1_object_model/schema_registry.v0.1.yaml"
+M1_DELIVERY_RECEIPT = "11_reports_and_receipts/m1_delivery_receipt.yaml"
+ROLE_MODEL = "governance/bootstrap/role_operating_model.v0.2.yaml"
+M1_APPROVED_COMMIT = "2df11012da46ace0de7b7bce6d199a578d32d341"
 INSTANCE_FIXTURE_DIR = ROOT / "ci" / "fixtures" / "m2" / "envelope_instances"
 
 ENVELOPE_SCHEMA_ID = "https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json"
@@ -61,7 +64,6 @@ STATE_FIELD_OWNER = {
 ARTIFACT_LIFECYCLE_STATES = frozenset({"draft", "validated", "frozen", "superseded"})
 RUNTIME_VALIDITY_STATES = frozenset({"current", "stale", "expired", "revoked"})
 CONDITIONAL_GROUPS = ("scope", "correlation", "temporal")
-M1_EP01 = "M1-EP01"
 
 
 def validate(payload: dict) -> list[str]:
@@ -78,21 +80,33 @@ def validate(payload: dict) -> list[str]:
                 f"M1_FROZEN_ARTIFACT_DRIFT: {bid} {row.get('artifact_path')} pins "
                 f"{row.get('declared_sha256')!r} but the file hashes to {row.get('actual_sha256')!r}"
             )
-        if not row.get("in_m1_ep01_registry"):
+        # 真值取自 M1 Delivery Receipt——它是 Founder 批准的 M1 里程碑自己记录的交付面，
+        # 不是 M2 侧的说法。绑定一个不在其中的文件，就是在绑定未经批准的东西。
+        if not row.get("in_m1_delivery_receipt"):
             errors.append(
-                f"BINDING_OUTSIDE_M1_EP01: {bid} binds {row.get('artifact_path')!r}, "
-                "which is absent from the M1-EP01 schema registry"
+                f"BINDING_OUTSIDE_APPROVED_M1_SURFACE: {bid} binds {row.get('artifact_path')!r}, "
+                f"which is absent from {M1_DELIVERY_RECEIPT} artifact_sha256"
+            )
+        elif row.get("declared_sha256") != row.get("m1_receipt_sha256"):
+            errors.append(
+                f"M1_FROZEN_ARTIFACT_DRIFT: {bid} pins {row.get('declared_sha256')!r} but the approved "
+                f"M1 receipt records {row.get('m1_receipt_sha256')!r}"
             )
 
-    if payload.get("binding_source_execution_package") != M1_EP01:
+    if payload.get("binding_source_commit") != M1_APPROVED_COMMIT:
         errors.append(
-            f"BINDING_OUTSIDE_M1_EP01: binding table declares source package "
-            f"{payload.get('binding_source_execution_package')!r}, expected {M1_EP01!r}"
+            f"BINDING_NOT_ON_APPROVED_M1_COMMIT: binding table source_commit="
+            f"{payload.get('binding_source_commit')!r}, Founder-approved M1 commit is {M1_APPROVED_COMMIT!r}"
         )
-    if payload.get("registry_execution_package") != M1_EP01:
+    if payload.get("binding_source_approval_ruling") != "DIYU-CBFSK-FOUNDER-M1-PASS-001":
         errors.append(
-            f"BINDING_OUTSIDE_M1_EP01: M1 registry declares execution_package "
-            f"{payload.get('registry_execution_package')!r}, expected {M1_EP01!r}"
+            f"BINDING_WITHOUT_APPROVAL_RULING: binding table names "
+            f"{payload.get('binding_source_approval_ruling')!r}"
+        )
+    for missing in payload.get("approved_m1_schemas_not_bound") or []:
+        errors.append(
+            f"APPROVED_M1_SURFACE_NOT_BOUND: {missing} is a registered M1 schema but no envelope binds it — "
+            "最终绑定必须覆盖完整 M1 表面，漏一件就是漏一条评测依据"
         )
     if not is_full_commit_hash(payload.get("binding_source_commit")):
         errors.append(
@@ -152,9 +166,9 @@ def validate(payload: dict) -> list[str]:
                 f"MULTIPLE_ENVELOPE_SCHEMAS: {pid} composes {prof.get('envelope_schema_id')!r}, "
                 f"the single envelope contract is {ENVELOPE_SCHEMA_ID!r}"
             )
-        if prof.get("binding_status") == "FINAL" and payload.get("m1_closeout_merged") is not True:
+        if prof.get("binding_status") == "FINAL" and payload.get("m1_founder_accepted") is not True:
             errors.append(
-                f"PREMATURE_FINAL_BINDING: {pid} claims FINAL before M1 closeout is merged into main"
+                f"PREMATURE_FINAL_BINDING: {pid} claims FINAL before M1 reaches FOUNDER_ACCEPTED"
             )
         if prof.get("binding_status") == "PROVISIONAL" and prof.get("final_m1_binding_required") is not True:
             errors.append(f"PROVISIONAL_WITHOUT_REBIND_OBLIGATION: {pid}")
@@ -231,16 +245,19 @@ def collect() -> dict:
     registry = load_yaml(M1_REGISTRY)
     ksm = load_yaml(KNOWLEDGE_STATE_MACHINE)
 
-    registry_files = {entry["file"] for entry in registry["entries"]}
+    m1_receipt_hashes = load_yaml(M1_DELIVERY_RECEIPT)["artifact_sha256"]
+    model = load_yaml(ROLE_MODEL)
 
     bindings = []
     digest_home = {}
+    bound_paths = set()
     for entry in binding["entries"]:
         rel = entry["artifact_path"]
         path = ROOT / rel
         exists = path.exists()
         actual = sha256_file(path) if exists else None
         digest_home[entry["sha256"]] = rel
+        bound_paths.add(rel)
         bindings.append(
             {
                 "binding_id": entry["binding_id"],
@@ -248,9 +265,15 @@ def collect() -> dict:
                 "artifact_exists": exists,
                 "declared_sha256": entry["sha256"],
                 "actual_sha256": actual,
-                "in_m1_ep01_registry": rel in registry_files,
+                "in_m1_delivery_receipt": rel in m1_receipt_hashes,
+                "m1_receipt_sha256": m1_receipt_hashes.get(rel),
             }
         )
+
+    # 双向覆盖：注册表里的每份 Schema 都必须被绑定，漏一件即失败（只测一向会漏掉缺项）
+    approved_not_bound = sorted(
+        entry["file"] for entry in registry["entries"] if entry["file"] not in bound_paths
+    )
 
     store = {envelope["$id"]: envelope, profile_schema["$id"]: profile_schema}
 
@@ -316,8 +339,8 @@ def collect() -> dict:
     return {
         "bindings": bindings,
         "binding_source_commit": binding["source_commit"],
-        "binding_source_execution_package": binding["source_execution_package"],
-        "registry_execution_package": registry["execution_package"],
+        "binding_source_approval_ruling": binding.get("source_approval_ruling"),
+        "approved_m1_schemas_not_bound": approved_not_bound,
         "envelope_required_fields": envelope.get("required") or [],
         "envelope_forbids_extra_properties": envelope.get("additionalProperties") is False,
         "envelope_in_place_modification_const": (
@@ -330,8 +353,8 @@ def collect() -> dict:
         "state_field_owner": {field: _state_field_owner(envelope, field) for field in STATE_FIELD_OWNER},
         "profiles": profiles,
         "instance_fixtures": instance_fixtures,
-        # M1 收口是否已合入 main 由 M2-EP02 重新核实；EP01 基线上尚未发生，因此为 false。
-        "m1_closeout_merged": False,
+        # 真值取自规范源 project_state.m1_status，不取自 M2 侧的自述。
+        "m1_founder_accepted": model["project_state"].get("m1_status") == "FOUNDER_ACCEPTED",
     }
 
 

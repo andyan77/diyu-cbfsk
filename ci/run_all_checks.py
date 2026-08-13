@@ -37,6 +37,7 @@ CHECKERS = [
     "check_m1_object_coverage",
     "check_m1_category_adapters",
     "check_sequential_registration",
+    "check_m2_gate_retirement_guard",
     "check_m2_governance_landing",
     "check_m2_envelope_contract",
     "check_m2_identity_isolation",

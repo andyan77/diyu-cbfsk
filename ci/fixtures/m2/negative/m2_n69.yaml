@@ -1,5 +1,5 @@
-fixture_id: M2-N05
-description: M1 尚未 FOUNDER_ACCEPTED 就把 Profile 标 FINAL——把临时绑定说成已定稿。
+fixture_id: M2-N69
+description: 注册表里有 Schema 没被绑定——最终绑定漏一件就是漏一条评测依据（双向覆盖）。
 checker: check_m2_envelope_contract
 expected: FAIL
 payload:
@@ -20,7 +20,8 @@ payload:
     m1_receipt_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
   binding_source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
   binding_source_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
-  approved_m1_schemas_not_bound: []
+  approved_m1_schemas_not_bound:
+  - 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
   envelope_required_fields:
   - artifact_id
   - object_ref
@@ -107,4 +108,4 @@ payload:
     expected: INVALID
     actual: INVALID
     detail: knowledge_state not allowed
-  m1_founder_accepted: false
+  m1_founder_accepted: true

@@ -1,104 +1,378 @@
-schema_version: "0.1"
+schema_version: '0.1'
 artifact_id: m1_source_binding.v0.1
 project_id: DIYU-CBFSK-001
 milestone: M2
-execution_package: M2-EP01
-status: M2_EP01_DELIVERED
-artifact_lifecycle_state: draft
-binding_status: PROVISIONAL
-
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: validated
+binding_status: FINAL
 contract:
-  purpose: >-
-    本表是 M1 产物 SHA256 的**唯一**记录处。Envelope 实例与 Profile 成员的 source_artifact_sha256
-    必须取自本表；任何文件、报告或 checker 都不得再自行抄一份哈希值（EQ-1）。
-  drift_rule: >-
-    ci/checkers/check_m2_envelope_contract.py 重算每份 artifact_path 的字节 SHA256 并与本表比对。
-    对不上即判 M1_FROZEN_ARTIFACT_DRIFT——M1 冻结物被原位改动，属 Charter 熔断条款，停止并提交 Founder 裁决。
+  purpose: 本表是 M1 产物 SHA256 的**唯一**记录处。Envelope 实例与 Profile 成员的 source_artifact_sha256 必须取自本表；任何文件、报告或 checker 都不得再自行抄一份哈希值（EQ-1）。
+  drift_rule: ci/checkers/check_m2_envelope_contract.py 重算每份 artifact_path 的字节 SHA256 并与本表比对。对不上即判 M1_FROZEN_ARTIFACT_DRIFT——M1
+    冻结物被原位改动，属 Charter 熔断条款。
   digest_recipe: sha256(file_bytes)
-
-source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
-source_commit_role: M2 启动包 v1.1 signed_baseline_commit / M1-EP01 收口 Commit
-source_execution_package: M1-EP01
-source_registry: 01_contracts_and_schemas/m1_object_model/schema_registry.v0.1.yaml
-source_registry_execution_package_must_be: M1-EP01
-
-binding_scope:
-  only_m1_ep01_artifacts: true
-  m1_ep02_artifacts_bound: false
-  m1_ep03_artifacts_bound: false
-  rationale: >-
-    签署只授权 signed_baseline_commit 这一个 Commit，其上不存在 M1-EP02 / M1-EP03 产物。
-    绑定尚不存在的产物等于凭空造引用，因此本表只收 M1-EP01 已交付且在注册表内登记的 Schema。
-  enforcement: >-
-    每条 artifact_path 必须出现在 source_registry 的 entries[].file 中，
-    且注册表自身的 execution_package 必须为 M1-EP01；两项任一不成立即 BINDING_OUTSIDE_M1_EP01。
-
-rebind_rule:
-  trigger: M1 收口合入 main
-  action: REBIND_AND_RETEST
-  owner_package: M2-EP02
-  meaning: >-
-    仅新增 M1-EP02 / M1-EP03 产物（既有产物字节未变）不是漂移，属正常前进；
-    此时由 M2-EP02 重算全部绑定、把 binding_status 由 PROVISIONAL 改 FINAL 并重跑评测组合。
-  distinction: >-
-    「既有 M1 冻结物内容变了」= M1_FROZEN_ARTIFACT_DRIFT（熔断，停）；
-    「只是多了新产物」= REBIND_AND_RETEST（EP02 正常动作）。两者不可混为一谈。
-
-entries:
-  - binding_id: MB-01
-    object_id: null
-    object_name: StylingResultBundle
-    artifact_path: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
-    schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
-    schema_version: "0.1"
-    persistence_class: runtime_fact
-    sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
-  - binding_id: MB-02
-    object_id: OUT-11
-    object_name: DecisionTrace
-    artifact_path: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
-    schema_id: https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
-    schema_version: "0.1"
-    persistence_class: runtime_fact
-    sha256: 586a54ac54fd266dc6925891ff84a4f770fbb84d2b6e73b3f22ba342877cc9dc
-  - binding_id: MB-03
-    object_id: OUT-12
-    object_name: VisualAttributeExtractionResult
-    artifact_path: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json
-    schema_id: https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
-    schema_version: "0.1"
-    persistence_class: runtime_fact
-    sha256: b3e47ae858a31bcd54b02d4c6d9f33c9b8bd0581a232fc4f61788b148f11bf5a
-  - binding_id: MB-04
-    object_id: IN-03
-    object_name: BrandTruthPack
-    artifact_path: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
-    schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
-    schema_version: "0.1"
-    persistence_class: long_term_truth
-    sha256: 47e30608b9ea8739869150d4b9a63aefbe8f8d69231dfd128f0f68cd76bf731e
-  - binding_id: MB-05
-    object_id: IN-09
-    object_name: StylistPersonaProfile
-    artifact_path: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json
-    schema_id: https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
-    schema_version: "0.1"
-    persistence_class: long_term_truth
-    sha256: 8cfc5ac3650dce9ec5b8b8d6fd81481fa991e78e6c899afe01efacb8bb3184c7
-  - binding_id: MB-06
-    object_id: SHARED_DEFS
-    object_name: M1 公共定义
-    artifact_path: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
-    schema_id: https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json
-    schema_version: "0.1"
-    persistence_class: n/a
-    sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
-
+source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+source_commit_role: Founder 批准的 M1 里程碑提交（DIYU-CBFSK-FOUNDER-M1-PASS-001 approved hash）
+source_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+source_milestone: M1
+merged_into_main_at: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+final_binding:
+  performed_in: M2-EP02 Phase 2
+  previous_status: PROVISIONAL
+  previous_source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  previous_binding_count: 6
+  rebind_reason: REBIND_AND_RETEST —— M1 已收口合入 main，PROVISIONAL 绑定按合同升为 FINAL
+  final_m1_binding_required: false
+  provisional_markers_removed: true
+drift_verification:
+  method: 逐件复算字节 SHA256，与 11_reports_and_receipts/m1_delivery_receipt.yaml artifact_sha256 比对
+  records_compared: 33
+  mismatches: 0
+  missing: 0
+  result: NO_DRIFT
+  stop_condition_not_triggered: M1_FROZEN_ARTIFACT_DRIFT
+  evidence_level: runtime_verified
+surface_coverage:
+  schema: 19
+  style_space: 1
+  category_adapter: 5
+  conflict_priority: 1
+  interface_handoff: 1
+  derived_registry: 2
+  total: 29
+not_bound:
+  extension_port_contracts:
+    path: 01_contracts_and_schemas/extension_port_contracts.v0.1.yaml
+    reason: 两个扩展端口均 RESERVED_NOT_IMPLEMENTED，M2 评测不消费它们。授权指定的绑定面未列入本项；绑定一个不被消费的合同只会制造虚假依赖。
+  hidden_evaluation_assets:
+    reason: 隐藏资产不进主仓，且本包状态见 Phase 5 报告
 m1_semantics_untouched:
   top_level_objects_changed: false
   fact_priority_changed: false
   category_contract_changed: false
   frozen_schema_edited_in_place: false
-  statement: >-
-    本包只新增引用层，未打开任何 M1 Schema 文件写入。七级事实优先级仍由
-    common_defs.schema.v0.1.json#/definitions/factPriorityLevel 单独定义，M2 不复述、不重排、不扩展。
+  statement: 本包只扩展引用层，未打开任何 M1 文件写入。七级事实优先级仍由 common_defs.schema.v0.1.json#/definitions/factPriorityLevel 单独定义，M2 不复述、不重排、不扩展。
+entries:
+- binding_id: MB-01
+  surface: schema
+  object_id: null
+  object_name: StylingResultBundle
+  artifact_path: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-02
+  surface: schema
+  object_id: IN-05
+  object_name: AudienceProfile
+  artifact_path: 01_contracts_and_schemas/m1_object_model/audience_profile.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 209e84e61efbbf8c3dc11b7cad477c06883af52111928eec41f92213028adbc7
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/audience_profile.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-03
+  surface: schema
+  object_id: IN-03
+  object_name: BrandTruthPack
+  artifact_path: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 47e30608b9ea8739869150d4b9a63aefbe8f8d69231dfd128f0f68cd76bf731e
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-04
+  surface: schema
+  object_id: SHARED_DEFS
+  object_name: M1 公共定义
+  artifact_path: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
+  object_kind: contract_document
+  sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: n/a
+- binding_id: MB-05
+  surface: schema
+  object_id: IN-11
+  object_name: FounderProvidedRealBrandPackage
+  artifact_path: 01_contracts_and_schemas/m1_object_model/founder_provided_real_brand_package.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 6721f1f828c870c5e76a3a74f2c08193ea360050d4cdaa695ec880600e14ca0d
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/founder_provided_real_brand_package.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-06
+  surface: schema
+  object_id: IN-04
+  object_name: InventorySnapshot / GarmentAndInventory
+  artifact_path: 01_contracts_and_schemas/m1_object_model/garment_and_inventory.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: ac622b53804db1c4f8ebfa21abc13df090b73f43e4752fddcb16ab7d94ed40f5
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-07
+  surface: schema
+  object_id: C-04
+  object_name: HumanVisualProfile
+  artifact_path: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: 7dd3df0af76f2c1a7792a1ace483946406b492cc053c65f115f06e153a979b79
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/human_visual_profile.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-08
+  surface: schema
+  object_id: IN-06
+  object_name: IndividualProfile
+  artifact_path: 01_contracts_and_schemas/m1_object_model/individual_profile.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: 840d38c92837938a6892ede2312e65273ffb55afd48e8a20bf358f995d742bb4
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/individual_profile.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-09
+  surface: schema
+  object_id: D-20-05
+  object_name: PersonaConflictRecord
+  artifact_path: 01_contracts_and_schemas/m1_object_model/persona_conflict_record.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 0b56fc3dcf9c0e6c3f29c9ebe8d71d7df7bc4d5ac0830101bfc693b7f30c208b
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-10
+  surface: schema
+  object_id: IN-10
+  object_name: PersonaMemorySnapshot
+  artifact_path: 01_contracts_and_schemas/m1_object_model/persona_memory_snapshot.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 69d7a67f6c66122016649308724f607b0997ac4256a86a00dcda5ec8fde1bbb6
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-11
+  surface: schema
+  object_id: D-21-01
+  object_name: PlatformVoiceProfile
+  artifact_path: 01_contracts_and_schemas/m1_object_model/platform_voice_profile.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 4b718a70df4096944acb3807cd6319f00f6989f91cbce445548c5e7d54464f3b
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-12
+  surface: schema
+  object_id: IN-08
+  object_name: ProductImageAssetBundle
+  artifact_path: 01_contracts_and_schemas/m1_object_model/product_image_asset_bundle.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 22075ef1f63a433565682cbae1ef4ef235e498aa76cd14e077acfabd7dbd0ef7
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-13
+  surface: schema
+  object_id: IN-12
+  object_name: PublicationPolicy
+  artifact_path: 01_contracts_and_schemas/m1_object_model/publication_policy.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: f00db419f0fdbe3464b8bb0d3f91c37eb6e1bda10e4ce741714712a96319093d
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-14
+  surface: schema
+  object_id: D-20-03
+  object_name: PublishedViewpointLedger
+  artifact_path: 01_contracts_and_schemas/m1_object_model/published_viewpoint_ledger.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: a869bca2699dc588119d48579322e4fe847c2734162916b10be4728075073794
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-15
+  surface: schema
+  object_id: D-20-04
+  object_name: SeriesContinuityState
+  artifact_path: 01_contracts_and_schemas/m1_object_model/series_continuity_state.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 58e6ae42abac6ccf8a07286e32a3e54362a00278eba23c203a35cc4491edee14
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-16
+  surface: schema
+  object_id: OUT-11
+  object_name: DecisionTrace
+  artifact_path: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: 586a54ac54fd266dc6925891ff84a4f770fbb84d2b6e73b3f22ba342877cc9dc
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-17
+  surface: schema
+  object_id: IN-07
+  object_name: StylingTaskContext
+  artifact_path: 01_contracts_and_schemas/m1_object_model/styling_task_context.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: 831c1f8bd0aed611feb0831b65b0167c1efb7b065dd91d0f25368a19e510dd53
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-18
+  surface: schema
+  object_id: IN-09
+  object_name: StylistPersonaProfile
+  artifact_path: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json
+  object_kind: long_term_truth_object
+  sha256: 8cfc5ac3650dce9ec5b8b8d6fd81481fa991e78e6c899afe01efacb8bb3184c7
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: long_term_truth
+- binding_id: MB-19
+  surface: schema
+  object_id: OUT-12
+  object_name: VisualAttributeExtractionResult
+  artifact_path: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json
+  object_kind: runtime_fact_object
+  sha256: b3e47ae858a31bcd54b02d4c6d9f33c9b8bd0581a232fc4f61788b148f11bf5a
+  in_m1_delivery_receipt: true
+  schema_id: https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+  schema_version: '0.1'
+  persistence_class: runtime_fact
+- binding_id: MB-20
+  surface: style_space
+  object_id: STYLE_SPACE
+  object_name: BrandStyleSpace
+  artifact_path: 01_contracts_and_schemas/m1_object_model/brand_style_space.v0.1.yaml
+  object_kind: contract_document
+  sha256: a8383b01dd9cca56d69141ad35816086ffc3e4a7d0bce9ac195337de5377c57a
+  in_m1_delivery_receipt: true
+  dimension_count: 14
+- binding_id: MB-21
+  surface: category_adapter
+  object_id: CAT-FAMILY-TREND
+  object_name: 亲子潮流时装
+  artifact_path: 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml
+  object_kind: contract_document
+  sha256: e53681f94871fcbe08508521310dfaa21ad6325c9a786dcb19b7f2779deac01b
+  in_m1_delivery_receipt: true
+  hard_constraint_family: mixed_age_safety
+  hard_constraint_count: 4
+  safety_boundary_present: true
+  fail_closed_binding_count: 1
+  stop_condition_binding_count: 1
+  founder_full_review_required: true
+- binding_id: MB-22
+  surface: category_adapter
+  object_id: CAT-KIDSWEAR
+  object_name: 童装
+  artifact_path: 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+  object_kind: contract_document
+  sha256: 6810710d25d1ea74a623221738d5022378a15f6b70feec55c7d8695744391fba
+  in_m1_delivery_receipt: true
+  hard_constraint_family: child_safety_and_age_appropriateness
+  hard_constraint_count: 5
+  safety_boundary_present: true
+  fail_closed_binding_count: 1
+  stop_condition_binding_count: 1
+  founder_full_review_required: true
+- binding_id: MB-23
+  surface: category_adapter
+  object_id: CAT-SPORT-TREND
+  object_name: 运动潮流时装
+  artifact_path: 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
+  object_kind: contract_document
+  sha256: c0332f0655e8c832226a7b5ee4e28d16991e366a407332fd9e6b34686084ee41
+  in_m1_delivery_receipt: true
+  hard_constraint_family: sport_function_and_safety
+  hard_constraint_count: 6
+  safety_boundary_present: true
+  fail_closed_binding_count: 1
+  stop_condition_binding_count: 1
+  founder_full_review_required: true
+- binding_id: MB-24
+  surface: category_adapter
+  object_id: CAT-TEEN-TREND
+  object_name: 青少年潮流时装
+  artifact_path: 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml
+  object_kind: contract_document
+  sha256: a3a64b49d94d102889ab95703d48cce59337f331bbf44d1edff7abf0dc0cced4
+  in_m1_delivery_receipt: true
+  hard_constraint_family: adolescent_body_and_age_appropriateness
+  hard_constraint_count: 6
+  safety_boundary_present: true
+  fail_closed_binding_count: 1
+  stop_condition_binding_count: 1
+  founder_full_review_required: true
+- binding_id: MB-25
+  surface: category_adapter
+  object_id: CAT-WOMENSWEAR
+  object_name: 女装
+  artifact_path: 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
+  object_kind: contract_document
+  sha256: d7c168ef6d6b1b46f8eec3a952849b7a59c4d7382ae927c8e76e7a5b5514e84c
+  in_m1_delivery_receipt: true
+  hard_constraint_family: adult_expression_boundary
+  hard_constraint_count: 4
+  safety_boundary_present: true
+  fail_closed_binding_count: 1
+  stop_condition_binding_count: 0
+  founder_full_review_required: false
+- binding_id: MB-26
+  surface: conflict_priority
+  object_id: cross_category_conflict_priority.v0.1
+  object_name: 跨品类冲突优先级
+  artifact_path: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+  object_kind: contract_document
+  sha256: 3740dbcbda3925b8a42e9bb13eb24ddab2a8fc5351a446eb38c4bbebb934df79
+  in_m1_delivery_receipt: true
+  ordered_rule_count: 6
+  combination_rule_count: 5
+  uniqueness: declared
+- binding_id: MB-27
+  surface: interface_handoff
+  object_id: M1_INTERFACE_HANDOFF
+  object_name: M1 接口交接面
+  artifact_path: 01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml
+  object_kind: contract_document
+  sha256: 1fd11e87f888e4b95085d6a2b91e010df76fdfc814b3307340f41812b3cedea5
+  in_m1_delivery_receipt: true
+- binding_id: MB-28
+  surface: derived_registry
+  object_id: SCHEMA_REGISTRY
+  object_name: M1 Schema 注册表
+  artifact_path: 01_contracts_and_schemas/m1_object_model/schema_registry.v0.1.yaml
+  object_kind: contract_document
+  sha256: 288b60c797858d732e6dc5867f62860e88f4f4f5ed03b3048becf1169d0ba4b2
+  in_m1_delivery_receipt: true
+- binding_id: MB-29
+  surface: derived_registry
+  object_id: OBJECT_COVERAGE_MAP
+  object_name: M1 对象覆盖映射表
+  artifact_path: 01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.1.yaml
+  object_kind: contract_document
+  sha256: 11b6a84f7e4355ecbe572eca12c2b55474201817183214e47bd350ef591d0680
+  in_m1_delivery_receipt: true

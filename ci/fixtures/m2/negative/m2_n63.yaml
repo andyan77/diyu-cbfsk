@@ -1,0 +1,23 @@
+fixture_id: M2-N63
+description: 册子声明 live_gate_count 与实际 LIVE 条目数不符——可被静默缩水。
+checker: check_m2_gate_retirement_guard
+expected: FAIL
+payload:
+  gates:
+  - checker: check_docx_canonical_hashes
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  - checker: check_hidden_benchmark_boundary
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  - checker: check_m2_gate_retirement_guard
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  live_gate_count: 5
+  registered_checkers:
+  - check_docx_canonical_hashes
+  - check_hidden_benchmark_boundary
+  - check_m2_gate_retirement_guard

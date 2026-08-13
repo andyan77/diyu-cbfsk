@@ -1,0 +1,77 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001
+project_id: DIYU-CBFSK-001
+title: M2 恢复执行授权 ＋ EP02→EP03 一站到底 ＋ OI-01／OI-06 裁决
+ruling_date: "2026-08-13"
+issued_by: Founder
+issued_via: founder_direct_dispatch
+ruling_base_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+landed_in: governance/founder_rulings/DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001.yaml（M2-EP02 Phase 1）
+effective_from: M2-EP02
+
+transcription_only: >-
+  下方 adjudications 的 verbatim 字段为 Founder 裁决原文，一字不改落盘。
+  执行侧不得新增、扩张或解释性改写任何一条；如与 Founder 原始表述有出入，以 Founder 原文为准并报告。
+
+resume_authorization:
+  m2_paused: false
+  worktree: /home/faye/diyu-cbfsk-m2
+  branch: candidate/m2
+  resume_from_commit: 43251b21a32fc9a3fee375675a611577babca570
+  new_baseline_main: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  execution_status_new_value: M2_IN_PROGRESS
+  execution_status_migration:
+    from: M1_M2_PARALLEL_IN_PROGRESS
+    to: M2_IN_PROGRESS
+    basis: M1 已收口，并行状态不再成立
+  continuous_execution:
+    packages: [M2-EP02, M2-EP03]
+    stop_between_packages: false
+    separate_review_between_packages: false
+    unified_closeout_after_both: true
+  ep03_exact_prompt_approval:
+    granted: true
+    irreversible_package: true
+    scope_rewriting_forbidden: true
+    note: 本授权块同时构成对 M2-EP03（含 M2 冻结）的精确 Prompt 批准；执行侧不得改写其范围。
+
+adjudications:
+  - id: OI-01
+    subject: 三层哈希机制退役
+    status: ADJUDICATED_NOT_IMPLEMENTED
+    closes_open_item: false
+    verbatim: >-
+      OI-01：check_docx_canonical_hashes 维持有效不摘除；FR-CALIBRATION-004 中「三层哈希机制退役」标记
+      ADJUDICATED_NOT_IMPLEMENTED，明确不授权摘除或削弱任何现役门禁；退役实施前置清单见 EP02 Phase 7；通则——任何现役门禁的摘除或降级均为独立治理动作，须
+      Founder 单独授权，永不作为其他任务的副作用。
+    landed_in:
+      - governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml three_layer_hash_mechanism
+      - 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+    general_rule:
+      id: GR-GATE-01
+      statement: 任何现役门禁的摘除或降级均为独立治理动作，须 Founder 单独授权，永不作为其他任务的副作用。
+      scope: 全项目长期生效
+      enforced_by: ci/checkers/check_m2_gate_retirement_guard.py
+  - id: OI-06
+    subject: README-MOD-10 与 founder_pinned_baseline 指纹联动更新
+    status: CLOSED
+    closes_open_item: true
+    verbatim: >-
+      OI-06：追认 README-MOD-10 与 founder_pinned_baseline 指纹联动更新，未越界；口径固化——凡「允许更新 X」自动包含仓库机制强制要求的联动登记项，不必逐次裁决，但须在报告中列明联动项。OI-06
+      关闭。
+    general_rule:
+      id: GR-LINKED-01
+      statement: 凡「允许更新 X」自动包含仓库机制强制要求的联动登记项，不必逐次裁决，但须在报告中列明联动项。
+      scope: 全项目长期生效
+      reporting_obligation: 联动项须在交付报告中列明
+    ratified:
+      change_id_at_ratification: README-MOD-10
+      change_id_now: README-MOD-12
+      renumber_note: >-
+        追认时该条目编号为 README-MOD-10。EP02 Phase 0 受控合并发现 main 与 candidate/m2
+        并行分配了同一编号，依冲突解决规则将 M2-EP01 条目重编为 README-MOD-12（内容与授权来源不变）。
+        追认对象是「README 与指纹联动更新」这一动作，不因编号变化而改变。
+
+signed_by: Founder
+signed_at: "2026-08-13"

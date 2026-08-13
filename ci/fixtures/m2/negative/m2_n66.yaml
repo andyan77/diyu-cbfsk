@@ -1,5 +1,5 @@
-fixture_id: M2-N05
-description: M1 尚未 FOUNDER_ACCEPTED 就把 Profile 标 FINAL——把临时绑定说成已定稿。
+fixture_id: M2-N66
+description: 绑定表指纹与 M1 批准回执记录不符——绑的不是被批准的那个字节状态。
 checker: check_m2_envelope_contract
 expected: FAIL
 payload:
@@ -10,7 +10,7 @@ payload:
     declared_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
     actual_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
     in_m1_delivery_receipt: true
-    m1_receipt_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+    m1_receipt_sha256: '1111111111111111111111111111111111111111111111111111111111111111'
   - binding_id: MB-04
     artifact_path: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
     artifact_exists: true
@@ -107,4 +107,4 @@ payload:
     expected: INVALID
     actual: INVALID
     detail: knowledge_state not allowed
-  m1_founder_accepted: false
+  m1_founder_accepted: true

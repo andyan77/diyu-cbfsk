@@ -81,7 +81,19 @@ outside_hard_gates:
 three_layer_hash_mechanism:
   ruling: 退役
   replacement: 签署绑定 commit 哈希与 artifact SHA256
-  landing_status: NOT_IMPLEMENTED_IN_M2_EP01
+  landing_status: ADJUDICATED_NOT_IMPLEMENTED
+  adjudication:
+    ruling: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 OI-01
+    ruling_base_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+    decision: check_docx_canonical_hashes 维持有效不摘除
+    retirement_authorized: false
+    weakening_authorized: false
+    prerequisites_list: 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+    general_rule: 任何现役门禁的摘除或降级均为独立治理动作，须 Founder 单独授权，永不作为其他任务的副作用。
+    note: >-
+      本字段的 ruling 仍写「退役」——那是 FR-CALIBRATION-004 原文，不改写。
+      landing_status 由 NOT_IMPLEMENTED_IN_M2_EP01 改为 ADJUDICATED_NOT_IMPLEMENTED：
+      从「执行侧未做且待裁决」变为「Founder 已裁决不做」。两者都不表示已退役。
   implementation_gap:
     statement: >-
       本条尚未在仓库落地。截至 M2-EP01 候选，三层哈希机制仍在运行且为绿：

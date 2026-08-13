@@ -1,0 +1,105 @@
+schema_version: "0.1"
+artifact_id: three_layer_hash_retirement_prerequisites.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+phase: Phase 7
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+authorization: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 OI-01
+ruling_status: ADJUDICATED_NOT_IMPLEMENTED
+
+scope:
+  this_document_does: 只出清单——逐项列明三层哈希分别对应哪些机制、各自守什么、摘除后哪条硬门失去覆盖、替代方案是什么
+  this_document_does_not:
+    - 摘除任何门禁
+    - 削弱任何判据
+    - 授权任何退役动作
+  decision_owner: Founder
+  decision_point: M2 收口
+  current_state: 三层全部现役且为绿
+
+mechanism_inventory:
+  single_implementation: ci/checkers/_common.py
+  single_implementation_note: >-
+    三层哈希只有这一个实现；任何文件、报告或 checker 都不得再自行推导一套
+    （governance/baseline/founder_pinned_baseline.v0.1.yaml hash_contract）。
+  layers:
+    - layer_id: L1
+      name: binary_sha256
+      implementation: ci/checkers/_common.py sha256_file
+      consumed_by:
+        - ci/checkers/check_baseline_hashes.py
+        - ci/checkers/check_docx_canonical_hashes.py
+      guards: 文件字节是否与 Founder 钉死的基线一致
+      detects: 任何字节级改动，含未登记的 README 改写与 DOCX 替换
+      hard_gate_covered: HG-6 产品真值版本标识
+      failure_states: [AUTHORIZED_FILE_CHANGED_AFTER_FREEZE, PRODUCT_BASELINE_SEMANTIC_CONFLICT, FOUNDER_REFERENCE_HASH_MISMATCH]
+      coverage_lost_if_retired: >-
+        失去「文件是否被动过」的字节级判定。README 与 PRD 的授权改写登记链（README-MOD-NN）
+        将无从校验，指纹登记机制随之失效。
+      replacement_available: 部分——artifact SHA256 可覆盖同样的字节判定，但需重建登记链接线
+    - layer_id: L2
+      name: canonical_docx_xml_sha256
+      implementation: ci/checkers/_common.py canonical_docx_xml_sha256
+      consumed_by: [ci/checkers/check_docx_canonical_hashes.py]
+      guards: DOCX 的 XML 结构在剔除 Word 易变编辑标识后是否一致
+      detects: 打包差异与结构性改动的区分——同一内容重新保存会变字节但不变 canonical
+      hard_gate_covered: HG-6 产品真值版本标识
+      failure_states: [PACKAGING_ONLY_DIFFERENCE]
+      coverage_lost_if_retired: >-
+        失去「只是重新保存」与「内容真的改了」的区分能力。退役后每次 Word 重新保存都会
+        触发字节级告警，实际结果是告警被当噪声忽略——门禁形同虚设。
+      replacement_available: 无现成替代；commit 哈希与 artifact SHA256 都是字节级，不具备结构等价判定
+    - layer_id: L3
+      name: semantic_text_sha256
+      implementation: ci/checkers/_common.py semantic_text_sha256
+      consumed_by: [ci/checkers/check_docx_canonical_hashes.py]
+      guards: DOCX 正文与页眉页脚的 NFKC 规范化文本是否一致
+      detects: 产品真源的语义漂移——排版可变、文字不可变
+      hard_gate_covered: HG-6 产品真值版本标识
+      failure_states: [PRODUCT_BASELINE_SEMANTIC_CONFLICT]
+      coverage_lost_if_retired: >-
+        失去 PRD 语义漂移的检出。这是三层中唯一能回答「产品合同的文字有没有变」的一层，
+        也是「在未完成基线对账时修改产品真源」这条红线的机器形式。
+      replacement_available: 无——commit 哈希只能证明「这份文件在这个提交里」，不能证明「文字没变」
+
+retirement_prerequisites:
+  all_required: true
+  items:
+    - id: PRE-RET-01
+      requirement: Founder 单独授权，绑定完整 Commit 哈希
+      basis: GR-GATE-01 —— 任何现役门禁的摘除或降级均为独立治理动作，永不作为其他任务的副作用
+      satisfied: false
+    - id: PRE-RET-02
+      requirement: 替代门禁先落地并实测为绿，再摘旧门——不得先摘后补
+      detail: 替代方案须覆盖 L1/L2/L3 各自的 failure_states，逐条对应
+      satisfied: false
+    - id: PRE-RET-03
+      requirement: 替代门禁须各配负例夹具（EQ-3），证明其真有检出力
+      satisfied: false
+    - id: PRE-RET-04
+      requirement: governance/baseline/founder_pinned_baseline.v0.1.yaml hash_contract 与全部派生哈希同步重算
+      basis: EQ-2 合同与实现严格一致
+      satisfied: false
+    - id: PRE-RET-05
+      requirement: governance/gates/live_gate_roster.v0.1.yaml 对应条目改 RETIRED 并填 retirement_authorization
+      satisfied: false
+    - id: PRE-RET-06
+      requirement: L2 的结构等价判定若无替代，须 Founder 明示接受「失去打包差异与真实改动的区分」这一后果
+      note: 这是三层中最难替代的一层，清单如实标注而不是假装有替代方案
+      satisfied: false
+
+honest_assessment:
+  replaceable_by_artifact_sha256: [L1]
+  not_replaceable_by_artifact_sha256: [L2, L3]
+  statement: >-
+    FR-CALIBRATION-004 的替代方案「签署绑定 commit 哈希与 artifact SHA256」只覆盖 L1 的字节判定。
+    L2（结构等价）与 L3（语义等价）没有现成替代——commit 哈希能证明「这份文件在这个提交里」，
+    不能证明「排版变了但文字没变」或「文字变了」。按现有替代方案直接退役三层，
+    实际效果是 HG-6 产品真值版本标识失去两层覆盖。
+  recommendation: >-
+    建议维持现状。若 Founder 仍要推进退役，建议只退 L1（由 artifact SHA256 承接），
+    L2/L3 保留至有等价替代为止——分层退役比整体退役风险可控得多。
+  evidence_level: static_verified
+  evidence_basis: 逐个 checker 读实现与 failure_states，未做退役实验（退役实验本身即越权）

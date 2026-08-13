@@ -1,5 +1,5 @@
 fixture_id: M2-N06
-description: Profile 为运行时对象声明 temporal 必填，成员却没带——条件必填声明了却不兑现。
+description: Profile 声明 temporal 必填，成员却没带——条件必填声明了却不兑现。
 checker: check_m2_envelope_contract
 expected: FAIL
 payload:
@@ -9,16 +9,18 @@ payload:
     artifact_exists: true
     declared_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
     actual_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
-    in_m1_ep01_registry: true
-  - binding_id: MB-06
+    in_m1_delivery_receipt: true
+    m1_receipt_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+  - binding_id: MB-04
     artifact_path: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
     artifact_exists: true
     declared_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
     actual_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
-    in_m1_ep01_registry: true
-  binding_source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
-  binding_source_execution_package: M1-EP01
-  registry_execution_package: M1-EP01
+    in_m1_delivery_receipt: true
+    m1_receipt_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
+  binding_source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  binding_source_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  approved_m1_schemas_not_bound: []
   envelope_required_fields:
   - artifact_id
   - object_ref
@@ -64,12 +66,12 @@ payload:
     knowledge_state: knowledge_unit
     runtime_validity_state: runtime_fact_object
   profiles:
-  - profile_id: m2_evaluation_provisional_profile
+  - profile_id: m2_evaluation_profile
     envelope_schema_id: https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json
-    binding_status: PROVISIONAL
-    final_m1_binding_required: true
-    final_binding_at: M2-EP02_AFTER_M1_CLOSEOUT
-    source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    binding_status: FINAL
+    final_m1_binding_required: false
+    final_binding_at: M2-EP02_PHASE_2_COMPLETED
+    source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
     schema_errors: []
     members:
     - member_id: PM-01
@@ -84,7 +86,7 @@ payload:
       correlation_present: true
       temporal_required: true
       temporal_present: false
-    - member_id: PM-06
+    - member_id: PM-04
       object_kind: contract_document
       knowledge_state: null
       runtime_validity_state: null
@@ -105,4 +107,4 @@ payload:
     expected: INVALID
     actual: INVALID
     detail: knowledge_state not allowed
-  m1_closeout_merged: false
+  m1_founder_accepted: true

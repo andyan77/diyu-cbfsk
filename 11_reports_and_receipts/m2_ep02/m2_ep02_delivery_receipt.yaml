@@ -64,3 +64,18 @@ ep02_end_state:
   knowledge_distillation_started: false
   production_servable: false
 ep02_end_state_note: Phase 0 受控合并落盘时的状态；EP02 各 Phase 完成后逐步更新，Phase 8 定稿。
+phase_1_adjudications:
+  ruling_landed: governance/founder_rulings/DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001.yaml
+  transcription_only: true
+  OI-01:
+    status: ADJUDICATED_NOT_IMPLEMENTED
+    closed: false
+    gate_removed_or_weakened: false
+    landed:
+    - governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
+    - 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+    general_rule_enforced_by: ci/checkers/check_m2_gate_retirement_guard.py
+  OI-06:
+    status: CLOSED
+    closed: true
+    general_rule: 凡「允许更新 X」自动包含仓库机制强制要求的联动登记项，须在报告中列明联动项

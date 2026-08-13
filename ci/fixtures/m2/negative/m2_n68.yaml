@@ -1,5 +1,5 @@
-fixture_id: M2-N05
-description: M1 尚未 FOUNDER_ACCEPTED 就把 Profile 标 FINAL——把临时绑定说成已定稿。
+fixture_id: M2-N68
+description: FINAL 绑定没具名 Founder 批准裁决——没有批准来源的「最终」只是执行侧自称最终。
 checker: check_m2_envelope_contract
 expected: FAIL
 payload:
@@ -19,7 +19,7 @@ payload:
     in_m1_delivery_receipt: true
     m1_receipt_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
   binding_source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
-  binding_source_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  binding_source_approval_ruling: null
   approved_m1_schemas_not_bound: []
   envelope_required_fields:
   - artifact_id
@@ -107,4 +107,4 @@ payload:
     expected: INVALID
     actual: INVALID
     detail: knowledge_state not allowed
-  m1_founder_accepted: false
+  m1_founder_accepted: true

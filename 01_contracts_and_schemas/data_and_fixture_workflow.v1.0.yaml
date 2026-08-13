@@ -84,6 +84,14 @@ reference_brand_archives:
     rule: 不直接写入正式预算；M0 以 3—5 个档案的实测工时校准单价后再入预算。
     m0_calibration_status: NOT_PERFORMED
     m0_calibration_reason: M0 不生成任何档案（本合同 m0_scope_statement），单价校准随 M1 首批档案执行。
+    founder_confirmation:
+      decision_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 第二条
+      decision_date: "2026-08-13"
+      decision: 确认延至 M1 执行；M0 如实记 NOT_PERFORMED
+      reading_confirmed: >-
+        PRD 8.7 要求 M0 以 3—5 个档案实测工时校准单价，而同一份执行申请禁止 M0 生成任何档案；
+        执行侧按「不生成」红线优先处理，Founder 确认该读法正确。
+      calibration_milestone: M1
 
 corpus_and_archive_owner:
   prd_anchor: PRD-8.7 时序与责任 / R-12

@@ -212,7 +212,12 @@ m2_threshold_policy:
     - unauthorized_auto_publish_rate=0
 
 files:
-  current_active_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+  current_active_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  current_active_product_truth_status: SIGNED
+  superseded_product_truth: 归档_v1.1/笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.1.docx
+  current_active_product_truth_correction_note: >-
+    本字段在 v1.2 签署生效并完成活基线切换后仍指向 v1.1（Guardian M0 审查发现），
+    依 DIYU-CBFSK-FOUNDER-M0-DECISION-001 第一条第 2 项更正。
   candidate_product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
   candidate_m0_request: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
   verification_receipt: PRD_v1.2_核验回执.docx

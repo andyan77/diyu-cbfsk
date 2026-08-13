@@ -4,7 +4,8 @@
 > 执行申请 `DIYU-CBFSK-EXEC-REQ-M0-003`（Founder 已签署，即时生效）
 > 产品真源 PRD v1.2 · `SIGNED` · 签署基准 Commit `9335180f9e1fd3d480f9b39e0a23597ee52079c7`
 > 执行角色 `TEMPORARY_EXECUTION_WRITER`（依 §11.3 Founder 指派，Codex 执行面网络中断）
-> 状态 **`M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`** —— 未经 Founder 裁决，本报告不构成 M0 已通过
+> M0 执行标识 `ec8d723a-4515-45ef-8889-71f6ddafbd0e`（parent＝治理任务 `2fcbfed0-be7e-4b6f-938e-7f84109ab162`）
+> 状态 **`M0_CONDITIONAL_PENDING_GUARDIAN_DELTA_REVIEW`** —— Founder 已裁 CONDITIONAL（`DIYU-CBFSK-FOUNDER-M0-DECISION-001`），四项修复已落盘，升级为 PASS 的生效条件是 Guardian 对修复 Commit 的 delta 复核通过
 
 ## 0. 先说清楚这份报告不是什么
 
@@ -100,8 +101,8 @@ PRD 附录 A 给的是**推荐**目录树，并明确"具体目录应在 M0 根�
 ## 6. 我没有做、也不打算替 Founder 做的事
 
 - **没有冻结任何 M2 阈值**。PRD 10.2 里标 `M2_FREEZE_REQUIRED` 的 20 项指标全部留白，由 Founder 在 M2 冻结时裁决（`COND-007`）。执行侧 AI 代冻阈值本身就是越权。
-- **没有裁定"限额 POC 证据批次额度"**。PRD 15.6 把它的决策节点定在"M0 冻结时"、裁决人是 Founder，所以它在合规合同里登记为 `PENDING_FOUNDER_M0_DECISION`，等 Founder 在 M0 裁决时一并给值。**这是本次 M0 唯一一个到期未决的 Founder 事项**，需要你在裁决时点名。
-- **没有做品牌档案单价校准**。PRD 8.7 要求"M0 以 3—5 个档案的实测工时校准单价后再入预算"，但同一份执行申请禁止 M0 生成任何档案——两条放在一起，M0 无法产生实测工时。我按"不生成"优先，把校准状态如实记为 `NOT_PERFORMED` 并注明随 M1 首批档案执行。**这是一处我按红线优先做的取舍，请你确认口径**。
+- **限额 POC 证据批次额度**：执行侧未代填，登记为待 Founder 裁决。**已由 `DIYU-CBFSK-FOUNDER-M0-DECISION-001` 第二条裁定**——场景实例 ≤500、候选回答 ≤2,000、专家抽评 ≥100 件、限额 6 人月，四项均为上限或下限约束而非目标值，落在 `compliance_review_contract.v1.0.yaml`。
+- **品牌档案单价校准**：PRD 8.7 要求"M0 以 3—5 个档案的实测工时校准单价后再入预算"，但同一份执行申请禁止 M0 生成任何档案——两条放在一起，M0 无法产生实测工时。我按"不生成"优先，把校准状态如实记为 `NOT_PERFORMED`。**Founder 已确认该红线优先读法正确**，校准延至 M1 执行。
 - **没有自称已冻结**。全部 11 份合同状态都是 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`；checker 有一条 `PREMATURE_FROZEN_CLAIM` 专门抓自称 FROZEN/ACCEPTED 的合同。
 
 ## 7. 全量核验结果（本次落盘后重跑，不沿用）
@@ -133,6 +134,23 @@ PRD 附录 A 给的是**推荐**目录树，并明确"具体目录应在 M0 根�
 | ⑩ M0 顶层清单 | `check_m0_deliverable_closure` 的名称逐条对账 |
 | ⑤ 最终意见 | 由 Guardian 给出 APPROVE / APPROVE_WITH_CONDITIONS / REJECT |
 
+## 8.5 Founder M0 裁决与本轮修复
+
+Founder 依 Guardian `APPROVE_WITH_CONDITIONS` 与顾问 `HIGH_QUALITY_CONDITIONAL_PASS` 作出 **M0 = CONDITIONAL**（`DIYU-CBFSK-FOUNDER-M0-DECISION-001`），四项修复完成且 Guardian delta 复核通过后自动升级为 PASS。四项修复已在本 Commit 落盘：
+
+| 项 | 修复内容 | 落点 |
+|---|---|---|
+| M0-FIX-01 | 规范源 `effective` 由 false 改 true（v1.2 已签署生效、main 已合并，原值与 `project_state` 自相矛盾）；红线措辞由「开始 M0 十四项正式施工」改为「**未经授权**开始 M0 施工」 | `role_operating_model.v0.2.yaml` |
+| M0-FIX-02 | `files.current_active_product_truth` 由 v1.1 更正为 v1.2 | `PRD_v1.2_change_map.yaml` |
+| M0-FIX-03 | M0 生成独立 `execution_run_id` = `ec8d723a-4515-45ef-8889-71f6ddafbd0e`，治理任务标识下沉为 `parent_execution_run_id` | `m0_delivery_receipt.yaml` |
+| M0-FIX-04 | `COND-010` 按 `dcd6484` 实际范围（45 文件：门禁改造、FR-GRANULARITY-005、台账推进、合规转录等）改写后关闭 | `conditional_decision_ledger.yaml` |
+
+红线措辞这一处值得单独说明：原文「开始 M0 十四项正式施工」在 M0 获授权开工之后就变成了一条**自我违反**的红线——它把已授权的正当施工也列为越界。改成「未经授权开始 M0 施工」后，红线守的是**授权缺失**而不是**施工本身**，M1 之后同样成立。
+
+按同一裁决，两项 checker 增强（NB-M0-01 零接触扫描加 `scanned_file_count` 断言、NB-M0-02 `PREMATURE` 判据改白名单）**不入本批**，随 M1-EP01 顺手修。M0-FIX-03 新生成的执行标识目前也尚未纳入 `check_execution_uuid` 守卫，同属该批。
+
 ## 9. 下一步
 
-Guardian 独立审查 → 总顾问远程审查（不可用须 Founder 显式 DEFER/替位/豁免，不得静默跳过）→ Founder 作 **PASS / CONDITIONAL / BLOCK** 裁决。裁决为 PASS 或无阻塞 CONDITIONAL 后方可进入 M1；M1 起适用 `DIYU-CBFSK-FR-GRANULARITY-005` 的里程碑粒度框架。
+Guardian 对本修复 Commit 作 **delta 复核**（范围仅限上述四项）→ 顾问 delta 复核可做可豁免（豁免须记录在案，不得记为已完成）→ 复核通过即 **M0 PASS 生效**，README 与状态位随之更新并推送远程。
+
+M0 PASS 生效后，M1-EP01 依 `DIYU-CBFSK-FOUNDER-M0-DECISION-001` 第四条的预批准立即开工，无需另行等待；M1 采 EP01 → EP02 → EP03 串行三包结构，Founder 触点为预批准与收口裁决两次。

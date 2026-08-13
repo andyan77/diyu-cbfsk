@@ -60,7 +60,22 @@ deferred_decision_nodes:
     - {item: 生产模型最终选型, node: M12 生产加固前, owner: FOUNDER_PRODUCT_AUTHORITY, linkage: 境外 API 处理个体资料须先过 CMP-03}
     - {item: 试点三品类选定, node: M10 通过后、M11 启动前, owner: FOUNDER_PRODUCT_AUTHORITY}
     - {item: 商业 KPI 口径与阈值, node: M11 试点基线冻结时, owner: FOUNDER_PRODUCT_AUTHORITY, constraint: 三层信号分离呈现（R-10）}
-    - {item: 限额 POC 证据批次额度, node: M0 冻结时, owner: FOUNDER_PRODUCT_AUTHORITY, status: PENDING_FOUNDER_M0_DECISION}
+    - item: 限额 POC 证据批次额度
+      node: M0 冻结时
+      owner: FOUNDER_PRODUCT_AUTHORITY
+      status: DECIDED
+      decision_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 第二条
+      decision_date: "2026-08-13"
+      decision: 确认 PRD 15.1 建议默认额度
+      quota:
+        scenario_instances_max: 500
+        candidate_answers_max: 2000
+        expert_sampled_review_min: 100
+        effort_cap_person_months: 6
+      quota_is_a_ceiling: true
+      quota_note: >-
+        四项均为上限或下限约束，不是目标值；超出任一项须 Founder 另行裁决，
+        不得由执行侧以「差一点就够」为由自行放宽。
     - {item: 端侧形态, node: M6 前形成提案, owner: 产品负责人提案 + Founder 裁决, mark: 建议默认}
     - {item: 分场景时延目标, node: M6 冻结, owner: 产品负责人提案 + Founder 裁决, mark: 建议默认}
     - {item: 隐藏品牌合成细则, node: M0 合同 → M2 冻结, owner: Guardian 侧 + Founder 确认}

@@ -8,7 +8,7 @@
 
 `role_id: CODEX_EXECUTION_ENGINEER`｜规范源 `DIYU-CBFSK-ROLE-OPERATING-MODEL v0.2`｜Founder 裁决 `DIYU-CBFSK-FR-ORG-002`、`DIYU-CBFSK-FR-EVAL-003`
 
-合同生效状态：`effective: false`（生效前置：founder_signature_on_prd_v1_2_and_final_commit_approval）。
+合同生效状态：`effective: true`（生效前置：founder_signature_on_prd_v1_2_and_final_commit_approval）。
 
 ## 权限
 

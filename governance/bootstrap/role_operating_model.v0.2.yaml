@@ -13,8 +13,17 @@ founder_ruling_ids:
 supersedes:
   - DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-001
   - DIYU-CBFSK-FR-ORG-001-SUPP-01-DRAFT
-effective: false
+effective: true
 effective_precondition: founder_signature_on_prd_v1_2_and_final_commit_approval
+effective_precondition_satisfied_by:
+  founder_prd_decision: PASS
+  founder_merge_approved: true
+  receipt_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+  signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  merged_commit: 1153fc703e381be70d5bbd7d31790644a72cf78a
+effective_correction_note: >-
+  本字段曾在 PRD v1.2 签署生效、main 已合并之后仍留 false，与 project_state 自相矛盾
+  （Guardian M0 审查发现）。依 DIYU-CBFSK-FOUNDER-M0-DECISION-001 第一条第 1 项更正为 true。
 generated_at: "2026-08-13"
 execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
 parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
@@ -529,7 +538,7 @@ engineering_quality_standard:
       statement: 发现结构性缺陷时先消除重复与短路，不在缺陷之上叠加特例。
 
 red_lines:
-  - 开始 M0 十四项正式施工
+  - 未经授权开始 M0 施工
   - 开始 M1 或 M2
   - 开始知识蒸馏
   - 生成夹具品牌或隐藏品牌

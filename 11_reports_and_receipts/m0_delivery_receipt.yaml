@@ -8,12 +8,21 @@ approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
 generated_at: "2026-08-13"
 executed_by: TEMPORARY_EXECUTION_WRITER
 executed_by_basis: 执行 Prompt v2.0 §11.3（Codex 执行面不可用，Founder 指派）
-execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+execution_run_id: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+parent_execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+execution_run_id_note: >-
+  M0 是独立里程碑批次，须有自己的 run 标识；此前误用治理任务
+  DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002 的 run 标识（Guardian M0 审查发现）。
+  依 DIYU-CBFSK-FOUNDER-M0-DECISION-001 第一条第 3 项，M0 生成独立标识，
+  治理任务标识下沉为 parent_execution_run_id。
+  尚未纳入 check_execution_uuid 守卫——按同一裁决「checker 增强不入本批」，
+  与 NB-M0-01 / NB-M0-02 一并随 M1 自然提交落地。
 
-status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+status: M0_CONDITIONAL_PENDING_GUARDIAN_DELTA_REVIEW
 status_meaning: >-
-  十四项交付物已落盘且确定性核验全绿。M0 是否通过由 Founder 裁决；在其作出
-  PASS / CONDITIONAL / BLOCK 之前，本回执不得被引用为「M0 已通过」。
+  Founder 已作 M0 裁决＝CONDITIONAL（DIYU-CBFSK-FOUNDER-M0-DECISION-001），四项修复已于本修复 Commit 落盘。
+  升级为 PASS 的生效条件是 Guardian 对本修复 Commit 的 delta 复核通过；在该复核出结论之前，
+  本回执**不得**被引用为「M0 已通过」，状态位也不得翻为 PASS。
 
 authorization_chain:
   product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
@@ -78,23 +87,25 @@ red_line_self_check:
   m0_fourteen_items_changed: false
   task_described_as_m0_completed: false
 
-open_items_for_founder:
-  - id: M0-OPEN-01
-    item: 限额 POC 证据批次额度
-    prd_anchor: PRD-15.6
-    decision_node: M0 冻结时
-    decision_owner: FOUNDER_PRODUCT_AUTHORITY
-    status: PENDING_FOUNDER_M0_DECISION
-    note: 执行侧不得代为设定额度；请在 M0 裁决时一并给值。
-  - id: M0-OPEN-02
-    item: 品牌档案单价校准（3—5 个档案实测工时）
-    prd_anchor: PRD-8.7 成本口径
-    conflict: >-
-      PRD 8.7 要求 M0 以 3—5 个档案的实测工时校准单价，但同一份执行申请禁止 M0 生成任何档案；
-      两条并置时 M0 无法产生实测工时。
-    executor_resolution: 按「不生成」优先，校准状态如实记为 NOT_PERFORMED，随 M1 首批档案执行。
-    status: AWAITING_FOUNDER_CONFIRMATION_OF_INTERPRETATION
-    note: 这是执行侧按红线优先所作的取舍，须 Founder 确认口径。
+founder_decisions_of_record:
+  ruling_id: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+  ruling_date: "2026-08-13"
+  m0_decision: CONDITIONAL
+  m0_decision_upgrade_condition: >-
+    四项修复完成且 Guardian 对修复 Commit 的 delta 复核通过后，自动升级为 PASS，无需 Founder 再出场。
+  guardian_m0_review: {reviewed_commit: 2780e65dc32b20576635b887bd7634663afe531b, decision: APPROVE_WITH_CONDITIONS}
+  advisor_m0_review: HIGH_QUALITY_CONDITIONAL_PASS
+  resolved_open_items:
+    - id: M0-OPEN-01
+      item: 限额 POC 证据批次额度
+      status: DECIDED
+      decision: 确认建议默认——场景实例 ≤500、候选回答 ≤2,000、专家抽评 ≥100 件、限额 6 人月
+      landed_in: 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml
+    - id: M0-OPEN-02
+      item: 品牌档案单价校准口径
+      status: DECIDED
+      decision: 确认延至 M1 执行，M0 如实记 NOT_PERFORMED；红线优先读法正确
+      landed_in: 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml
 
 deferred_and_tracked:
   - {id: COND-007, item: M2 阈值冻结, note: PRD 10.2 中 20 项 M2_FREEZE_REQUIRED 指标，M0 一律留白}
@@ -116,8 +127,8 @@ artifact_sha256:
   01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml: 85e48201654c8aa5655f4896fa2844474fb04ab5effcd80eca83213a9d7ce37b
   01_contracts_and_schemas/capability_contract.v1.0.yaml: 3ba1487f618a1ed4b76dda7de585399320935f2c2c62c7a865653d5372ba7674
   01_contracts_and_schemas/category_scope_contract.v1.0.yaml: f0e3a53f44f90f52d082a3f80b5b8e75e1d85949ac7e4b520ec0067043768988
-  01_contracts_and_schemas/compliance_review_contract.v1.0.yaml: e971b9e5786e7cb05e3fc98ee7dff08a4e7d7d31539f4594ac8a52435d890a86
-  01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml: 7c0c0cdb9a889ebe982fd0e4b660589bf9de0177749c2a91ad6d0ba62e369cc4
+  01_contracts_and_schemas/compliance_review_contract.v1.0.yaml: bcbae0fa2aa0d65c19fcee70cd8f407367d72eb2210790a9b305e983259362de
+  01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml: a5a0255e94ebe70446d08665360323c1945299bf0e096bbc4eb424bb5d639e43
   01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml: 555244e5c03a35329627996521291fffd1e5d853a057babece66f7806ce84d2f
   01_contracts_and_schemas/input_output_boundary.v1.0.yaml: 859f93d8b1d414e6f082da3d7f09a575fdd09124ec7f31eeeb2fb0d9028184ba
   01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml: 845f15333d2cbfc087a46c9f66585de977e08021c0d3f8d2ab87a7253754591a
@@ -126,7 +137,7 @@ artifact_sha256:
   01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml: bedf1f894545a2e1953615bd6fe8b4ac1ec124316bf0dcfea1aed97767a179fe
   01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml: 10a550bc2ec1e89d258887f946dc0a812a957e870dd8e036d1062f57883145fb
   02_benchmark_manifests/README.md: e0ce50c88681c6ddca167f237fa8dcf2d28c04cd243f5fd1c176a1b2553ac701
-  11_reports_and_receipts/m0_delivery_report.md: 09745a6f5c01ac9e1ae6609bfc2939a0ec660ee11499b93f9f314dfe41e71ab8
+  11_reports_and_receipts/m0_delivery_report.md: ee174917fcbd99dbd808577376a11820a10d67476643527545e515d086a13a11
   ci/checkers/check_m0_contract_completeness.py: 4493723273ab65611a7a4dacda3e6e2172c16a7d23f4d45cb433fb5c61da6341
   ci/checkers/check_m0_deliverable_closure.py: d0d4ebdd03363a4a8512be7dbb9830754ee385f6d24ee68bc30c9392b06c6c4f
   ci/checkers/check_m0_zero_contact.py: ac26723d3fd8d41eb7441d7f8068edbc4ddd415476e770c03c0f65e103d479cb

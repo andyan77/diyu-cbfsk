@@ -23,6 +23,9 @@ merge_state:
     9335180f9e1fd3d480f9b39e0a23597ee52079c7 及其唯一直接子 Commit；子 Commit 内容仅限签署回执、状态位更新、
     required_delta 三项修复（含其门禁改造与 fixture）
   open_conditions_at_permission: [COND-004, COND-006, COND-007, COND-008, COND-010, COND-011]
+  open_conditions_note: >-
+    该清单是签署许可当时的快照，不随后续关闭而改写；当前状态以各条 status 字段为准
+    （COND-010 已依 DIYU-CBFSK-FOUNDER-M0-DECISION-001 关闭）。
   note: >-
     本块是 check_conditional_ledger 读取的合并状态真源，取代此前 collect() 里写死的 False。
     带未关闭条件推进必须由 Founder 显式许可并绑定完整 Commit 哈希，否则判 ADVANCE_WITH_OPEN_CONDITIONS。
@@ -232,19 +235,43 @@ conditions:
     source_decision_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001 / §14 / §17.4
     source_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
     description: >-
-      本签署子 Commit（含签署回执、状态位更新、三项 required_delta 修复）按 §14 本应触发 Guardian 全量重审；
-      Founder 显式例外将该确认延至 M0 里程碑收口时一并进行。该延后必须留痕，不得视为已确认。
+      签署子 Commit dcd64842fb9c69d3ee5eb3042e0fda924f5605eb 按 §14 本应触发 Guardian 全量重审；Founder 显式例外将该确认
+      延至 M0 里程碑收口时一并进行。该延后必须留痕，不得视为已确认。
+    actual_scope_of_deferred_commit:
+      commit: dcd64842fb9c69d3ee5eb3042e0fda924f5605eb
+      correction_note: >-
+        本条原描述把该子 Commit 概括为「签署回执、状态位更新、三项 required_delta 修复」，
+        窄于实际改动面（Guardian M0 审查发现）。按 DIYU-CBFSK-FOUNDER-M0-DECISION-001
+        第一条第 4 项，改写为下列实际范围后关闭。
+      changed_files: 45
+      scope_items:
+        - 签署回执 founder_signoff_receipt.yaml 落盘（含 state_flag_authorizations 授权源）
+        - 三项 required_delta 修复（NB-07 / NB-08 / 本轮 Guardian 记录与见证行）
+        - 门禁改造：check_project_state 与 check_active_product_truth 由「写死必须 false」
+          改为签署授权门控；check_conditional_ledger 合并状态由硬编码改为读台账 merge_state，
+          并新增合并许可须具名绑定 Commit 的判据
+        - 新增 fixture 15 份（N28—N39 / P12—P14）行使上述每条新判据
+        - Founder 裁决 DIYU-CBFSK-FR-GRANULARITY-005 落盘（里程碑执行粒度框架）
+        - 条件台账推进：COND-001/003/005/009 CLOSED、COND-002 WAIVED、
+          COND-004 EVIDENCE_SUBMITTED，新增 COND-010 与 COND-011
+        - 合规七项 Founder 裁决逐条转录进 founder_compliance_decision_ledger.yaml
+        - 状态位翻转与 12 份指令投影重新生成
+        - README 状态块更新与 Manifest 授权改写历史登记
     owner: FOUNDER_PRODUCT_AUTHORITY
     due_milestone: M0_CLOSEOUT
     required_evidence:
       - Guardian 对该子 Commit 与 M0 收口内容的一并确认报告，绑定完整 Commit 哈希
       - 报告须写明 guardian_bootstrap_source
+    evidence_submitted:
+      - Guardian 对 2780e65dc32b20576635b887bd7634663afe531b（其祖先含 dcd64842fb9c69d3ee5eb3042e0fda924f5605eb）作 M0 收口审查，结论 APPROVE_WITH_CONDITIONS
     deferral_is_founder_exception: true
     deferral_sets_precedent: false
-    status: OPEN
+    status: CLOSED
     verification_role: CLAUDE_INDEPENDENT_GUARDIAN
-    closure_commit: null
-    founder_closure_decision: null
+    closure_commit: 2780e65dc32b20576635b887bd7634663afe531b
+    founder_closure_decision: >-
+      DIYU-CBFSK-FOUNDER-M0-DECISION-001 第一条第 4 项：本条描述按子 Commit 实际范围改写后关闭；
+      延后确认已由 Guardian 在 M0 收口审查（对象 2780e65dc32b20576635b887bd7634663afe531b）中一并完成。
 
   - condition_id: COND-011
     source_decision_id: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条 / S5

@@ -1,0 +1,115 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+project_id: DIYU-CBFSK-001
+title: M0 收口裁决 + M1 开工预批准
+ruling_date: "2026-08-13"
+issued_by: Founder
+milestone: M0
+reviewed_commit: 2780e65dc32b20576635b887bd7634663afe531b
+
+basis:
+  guardian_decision: APPROVE_WITH_CONDITIONS
+  guardian_reviewed_commit: 2780e65dc32b20576635b887bd7634663afe531b
+  advisor_decision: HIGH_QUALITY_CONDITIONAL_PASS
+  note: 两者均为 M0 收口审查结论，不是 Founder 批准本身；本文件才是 Founder 裁决。
+
+m0_decision:
+  value: CONDITIONAL
+  conditional_is_not_pass: true
+  upgrade_rule: >-
+    四项修复完成，且 Guardian 对修复 Commit 的 delta 复核通过后，自动升级为 PASS，
+    无需 Founder 再出场。复核未出结论前，不得声明 M0 已通过。
+  upgrade_authority_delegated_to: CLAUDE_INDEPENDENT_GUARDIAN
+  delegation_scope: 仅限判定四项修复是否达成；不得据此扩展为业务批准权。
+  required_fixes:
+    - id: M0-FIX-01
+      item: 规范源状态矛盾修正
+      requirement: effective 置 true；红线措辞改为「未经授权开始 M0 施工」
+      landed_in: governance/bootstrap/role_operating_model.v0.2.yaml
+    - id: M0-FIX-02
+      item: 变更映射活真源更新
+      requirement: current_active_product_truth = PRD v1.2
+      landed_in: PRD_v1.2_change_map.yaml
+    - id: M0-FIX-03
+      item: M0 独立执行标识
+      requirement: M0 生成独立 execution_run_id，治理任务 UUID 记为 parent_execution_run_id
+      landed_in: 11_reports_and_receipts/m0_delivery_receipt.yaml
+      m0_execution_run_id: ec8d723a-4515-45ef-8889-71f6ddafbd0e
+      parent_execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+    - id: M0-FIX-04
+      item: COND-010 范围改写并关闭
+      requirement: 按 dcd6484 实际范围（含门禁改造、FR-GRANULARITY-005、台账推进、合规转录）改写后关闭
+      landed_in: governance/conditions/conditional_decision_ledger.yaml
+  excluded_from_this_batch:
+    basis: Founder 裁定 checker 增强不入本批，随 M1 自然提交顺手修（校准裁决口径）。
+    items:
+      - id: NB-M0-01
+        item: 零接触扫描加 scanned_file_count 断言
+        routed_to: M1-EP01 顺手项
+      - id: NB-M0-02
+        item: PREMATURE 判据改白名单
+        routed_to: M1-EP01 顺手项
+
+due_decisions:
+  - id: M0-OPEN-01
+    item: 限额 POC 证据批次额度
+    decision: 确认建议默认
+    quota: {scenario_instances_max: 500, candidate_answers_max: 2000, expert_sampled_review_min: 100, effort_cap_person_months: 6}
+    landed_in: 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml
+  - id: M0-OPEN-02
+    item: 品牌档案单价校准
+    decision: 确认延至 M1 执行，M0 如实记 NOT_PERFORMED
+    founder_confirms_red_line_priority_reading: true
+    landed_in: 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml
+
+repair_flow:
+  guardian_delta_review:
+    scope: 仅限上述四项修复
+    required: true
+  advisor_delta_review:
+    required: false
+    waivable: true
+    waiver_rule: 豁免须记录在案，不得记为已完成。
+  on_pass:
+    - M0 PASS 生效
+    - README 与状态位随之更新
+    - 推送远程
+
+m1_pre_approval:
+  plan_id: MILESTONE_PLAN_M1
+  granularity_ruling: DIYU-CBFSK-FR-GRANULARITY-005
+  objective: 语义骨架与品类适配合同——把 PRD v1.2 的对象世界变成机器 schema。
+  start_condition: M0 PASS 生效后 M1-EP01 立即开工，无需另行等待。
+  package_structure: EP01 → EP02 → EP03（串行，无并行需求）
+  max_concurrent_packages: 2
+  concurrency_actually_used: 1
+  packages:
+    - id: M1-EP01
+      name: 核心语义与对象注册表
+      task_class: L2
+      baseline: M0 PASS 生效后的 main HEAD
+      scope: 全部输入与输出对象 schema + 风格空间 + 注册表
+    - id: M1-EP02
+      name: 五类品类适配合同
+      scope: >-
+        女装/童装/青少年/亲子/运动各自硬约束与安全边界；跨品类冲突优先级；
+        「女装规则不得默认覆盖其他品类」为可测判据
+    - id: M1-EP03
+      name: 集成与收口
+      scope: >-
+        coverage checker + fixtures 全量、输入输出映射终检、M2/M3 接口 Brief 更新、
+        M1 报告与 Receipt、候选冻结 → Guardian 里程碑收口审查
+  founder_touchpoints:
+    count: 2
+    items: [本次预批准, M1 收口裁决]
+  acceptance_gate:
+    source: PRD v1.2 M1 通过标准
+    criteria:
+      - 不存在未定义对象
+      - 11 个输出对象在 schema 层全部可寻址
+      - 运行时事实与长期真源分离
+  package_level_guardian: false
+  package_level_guardian_note: 包内自检 + CI 绿即提交推进；里程碑收口统一审。踩七类硬门才中断上报。
+
+signed_by: Founder
+signed_at: "2026-08-13"

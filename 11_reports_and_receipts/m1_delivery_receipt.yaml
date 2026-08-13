@@ -3,9 +3,12 @@ receipt_id: m1_delivery_receipt.v0.1
 project_id: DIYU-CBFSK-001
 milestone: M1
 title: M1 语义骨架与品类适配合同 · 候选交付回执
-status: M1_CANDIDATE_PENDING_GUARDIAN_MILESTONE_REVIEW
-status_note: 候选，不是通过。M1 是否通过由 Guardian 里程碑收口审查 →（总顾问，可豁免）→ Founder 裁决决定。在 Founder 裁决前，本回执不得被表述为「M1 已通过」，execution_status
-  保持 M1_IN_PROGRESS。
+status: M1_FOUNDER_ACCEPTED
+status_note: >-
+  M1 已由 Founder 裁决 DIYU-CBFSK-FOUNDER-M1-PASS-001 判定 PASS，m1_status=FOUNDER_ACCEPTED，
+  execution_status 转 M1_COMPLETE。三项前置齐备：Guardian APPROVE（阻断 0，非阻断 1）、
+  总顾问 Delta 复核 PASS、Founder 本裁决。PASS 只表示 M1 里程碑通过——不表示可服务生产、
+  不表示 M2 已启动、不表示知识蒸馏可开始。
 execution_run_id: 0540b6d4-7930-43cc-9a92-cb45285d34fa
 parent_execution_run_id: ec8d723a-4515-45ef-8889-71f6ddafbd0e
 execution_run_id_note: M1 里程碑批次生成独立标识，M0 批次标识下沉为 parent。新增批次即往 check_execution_uuid 的 RUNS 加一条，不再写第二个 checker（EQ-1）——Guardian
@@ -204,3 +207,65 @@ candidate_freeze:
     §14：**最终 Guardian review target 之后**的任何新 Commit 都使 Guardian 与总顾问的结论失效，须重新复核。
     衡量基准是 review_package_head，不是 semantic_candidate_commit——后者只标记交付物字节快照，
     不承担「审查对象」这一角色。
+
+founder_decision:
+  ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  decision: PASS
+  approved_commit_hash: 2df11012da46ace0de7b7bce6d199a578d32d341
+  m1_status: FOUNDER_ACCEPTED
+  execution_status_after: M1_COMPLETE
+  preconditions_all_present: true
+  guardian: {decision: APPROVE, blocking: 0, non_blocking: 1, non_blocking_ids: [NB-M1FIX-01]}
+  chief_advisor: {decision: PASS, delta_review: PASS, waived: false}
+  is_external_independent_review: false
+  is_legal_opinion: false
+
+merge_invariant_verification:
+  mode: FF_ONLY
+  executed_on_command_line: true
+  pr_merge_buttons_used: false
+  commands_and_raw_output:
+    - command: git merge --ff-only 2df11012da46ace0de7b7bce6d199a578d32d341
+      raw_output: |
+        Updating 6499431..2df1101
+        Fast-forward
+    - command: git push origin main
+      raw_output: |
+        To https://github.com/andyan77/diyu-cbfsk.git
+           6499431..2df1101  main -> main
+    - command: git rev-parse origin/main
+      raw_output: |
+        2df11012da46ace0de7b7bce6d199a578d32d341
+    - command: git rev-parse main
+      raw_output: |
+        2df11012da46ace0de7b7bce6d199a578d32d341
+    - command: git log --merges -1 --oneline 6499431c66f7bf4a234bd830ee4c810e1ac78694..origin/main
+      raw_output: ''
+      interpretation: 输出为空＝快进区间内没有任何合并提交
+  result: MERGE_INVARIANT_OK
+  origin_main_equals_approved_commit: true
+  merge_commits_introduced: 0
+  pr_2: {state: closed, merged: true, merge_commit_sha: 2df11012da46ace0de7b7bce6d199a578d32d341}
+  pr_2_note: merge_commit_sha 等于已批准哈希本身，即 GitHub 未生成额外合并提交。
+
+non_blocking_findings_registry:
+  contract: 只登记路由，不在裁决落盘提交中处置——处置属修复动作，超出该提交的允许范围。
+  items:
+    - id: NB-M1FIX-01
+      source: CLAUDE_INDEPENDENT_GUARDIAN on 2df11012da46ace0de7b7bce6d199a578d32d341
+      blocking: false
+      status: REGISTERED_NOT_ADDRESSED
+      routed_to: M2-EP02
+      batched_with: RD-M1-02
+      authorized_by_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+      content_source_of_truth: Guardian 报告原文
+      execution_side_note: 执行侧未在此复述条目内容，避免转述失真；处置时以 Guardian 原文为准。
+
+ruling_landing_commit:
+  authorized_by: DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条（一次性预授权，仅此一笔）
+  review_arrangement: 不单独开 Guardian 轮次；列入下一次里程碑审查的回溯核验清单。
+  permanent_general_rule: 裁决落盘提交仅限记录已生效的 Founder 批准及其直接状态后果，永远不得夹带任何产品、合同或评测内容。
+  artifact_sha256_unchanged: true
+  artifact_sha256_unchanged_note: >-
+    本笔未改动 artifact_sha256 清单内的任何一份文件；33 份哈希逐份复算仍与上方清单一致，
+    该清单记录的仍是 M1 语义候选 2df11012da46ace0de7b7bce6d199a578d32d341 时点的字节状态。

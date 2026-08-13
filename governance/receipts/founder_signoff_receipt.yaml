@@ -225,6 +225,7 @@ state_flag_authorizations:
       - M0_IN_PROGRESS
       - M0_COMPLETE
       - M1_IN_PROGRESS
+      - M1_COMPLETE
     basis: m0_request_signature.founder_m0_request_decision=PASS
     signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
     value_basis:
@@ -243,6 +244,18 @@ state_flag_authorizations:
         merge_commit: 8eaf5f25987d787a546096b6a60a4e6a6b5a30f4
         basis: 第 4 条「合并 main 完成后 M1-EP01 立即开工」；合并已完成，前置成立。
         scope_limit: 不授权任何 M2 取值；m2_started 无授权条目，照样锁死。
+      M1_COMPLETE:
+        ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+        ruling_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+        basis: >-
+          Founder M1 收口裁决 decision=PASS，三项前置齐备（Guardian APPROVE 阻断 0 /
+          总顾问 Delta 复核 PASS / Founder 本裁决）；m1_status 置 FOUNDER_ACCEPTED，
+          execution_status 随之转 M1_COMPLETE。
+        scope_limit: >-
+          仅表示 M1 里程碑完成。不授权 M2 任何取值、不授权知识蒸馏、不授权 production_servable；
+          m2_started 仍无授权条目，置 true 判 UNAUTHORIZED_TRUE_FLAG。
+        m1_status: FOUNDER_ACCEPTED
+        landed_by: 裁决落盘提交（DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条一次性预授权）
   active_baseline_signature:
     authorized: true
     signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx

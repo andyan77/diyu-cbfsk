@@ -1,6 +1,6 @@
 # 笛语跨品牌服装搭配专家内核 · 文档索引
 
-> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1 三包已交付，候选待 Guardian 收口审查
+> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1 `PASS`（`FOUNDER_ACCEPTED`）｜M2 未开工
 
 ## 当前活基线
 
@@ -19,7 +19,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M1_IN_PROGRESS
+execution_status: M1_COMPLETE
 production_servable: false
 m0_authorized: true
 current_active_baseline: PRD_v1.2
@@ -38,6 +38,7 @@ m0_founder_decision: PASS
 m0_founder_decision_original: CONDITIONAL
 m0_guardian_delta_review: APPROVE
 m1_started: true
+m1_status: FOUNDER_ACCEPTED
 m2_started: false
 knowledge_distillation_started: false
 pending_active_baseline_switch: false
@@ -93,7 +94,11 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 
 补齐 Brief 交付清单第 3 项 `human_visual_profile.schema.v0.1.json`（C-04，EP01 遗漏）与第 21 项 `extension_port_contracts.v0.1.yaml`（D-22 / D-24 / FR-27，两个端口均 `RESERVED_NOT_IMPLEMENTED`）；新增派生件 [`m1_interface_handoff.v0.1.yaml`](01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml) 作为 M1→M2/M3 的接口面，M2 冻结须按 `schema_id` / `hard_constraint_id` / `dimension_id` 绑定；覆盖 checker 扩展出 Brief 21 项交付清单、跨包引用完整性、端口注册表一致、接口面漂移与判据接线五类判据。
 
-M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_and_receipts/m1_delivery_report.md)，回执见 [`11_reports_and_receipts/m1_delivery_receipt.yaml`](11_reports_and_receipts/m1_delivery_receipt.yaml)。**M1 是候选，不是通过**——是否通过由 Guardian 里程碑收口审查 →（总顾问，可豁免）→ Founder 裁决决定。M2 未开工。
+M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_and_receipts/m1_delivery_report.md)，回执见 [`11_reports_and_receipts/m1_delivery_receipt.yaml`](11_reports_and_receipts/m1_delivery_receipt.yaml)。
+
+**M1 已通过**：Founder 裁决 [`DIYU-CBFSK-FOUNDER-M1-PASS-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml) `decision: PASS`，批准哈希 `2df11012da46ace0de7b7bce6d199a578d32d341`，三项前置齐备（Guardian `APPROVE` 阻断 0 / 总顾问 Delta 复核 `PASS` / Founder 裁决）。已按 FF-ONLY 合并 main，`origin/main` 实测等于该批准哈希，未产生任何合并提交。
+
+`PASS` 只表示 M1 里程碑通过：**不**表示可服务生产，**不**表示 M2 已启动，**也不**表示知识蒸馏可开始。M2 维持暂停——`candidate/m2` 停在 `43251b21a32fc9a3fee375675a611577babca570` 不动，主线 `m2_started` 仍为 `false` 且无授权条目，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`。M2-EP02／EP03、M3、知识蒸馏、隐藏资产进入主仓均须 Founder 另行裁决。
 
 ## 治理（governance/）
 

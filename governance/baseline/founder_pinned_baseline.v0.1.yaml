@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d
+    post_change_binary_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-11
+        authorization_ref: DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条（裁决落盘提交一次性预授权，允许项 2「状态位」）
+        binary_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986
+        landed_in_commit: M1_PASS_RULING_LANDING_COMMIT
+        content: execution_status 改 M1_COMPLETE、新增 m1_status FOUNDER_ACCEPTED、抬头改 M1 PASS、M1 段改为已通过并写明 PASS 的边界与 M2 暂停状态
       - change_id: README-MOD-10
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001（M1 连跑授权 + M1-EP03 执行包）
         binary_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d

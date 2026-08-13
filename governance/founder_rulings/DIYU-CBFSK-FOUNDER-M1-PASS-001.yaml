@@ -1,0 +1,114 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M1-PASS-001
+project_id: DIYU-CBFSK-001
+title: M1 里程碑收口 PASS ＋ FF-ONLY 合并授权
+ruling_date: "2026-08-13"
+issued_by: Founder
+milestone: M1
+transcription_note: >-
+  执行侧如实转录归档。本文件记录的是**已生效的 Founder 批准及其直接状态后果**，
+  不含任何产品、合同或评测内容（见 general_rule）。如与 Founder 原话有出入，以原话为准。
+
+article_1_m1_decision:
+  milestone: M1
+  decision: PASS
+  approved_commit_hash: 2df11012da46ace0de7b7bce6d199a578d32d341
+  m1_status: FOUNDER_ACCEPTED
+  preconditions_ref: DIYU-CBFSK-FR-PROCESS-006 FR-PROCESS-006-R2（三项前置缺一不可）
+  preconditions:
+    - role: CLAUDE_INDEPENDENT_GUARDIAN
+      result: APPROVE
+      reviewed_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+      blocking_findings: 0
+      non_blocking_findings: 1
+      non_blocking_ids: [NB-M1FIX-01]
+    - role: CHIEF_ADVISOR
+      result: Delta 复核 PASS，正式意见 PASS
+      waived: false
+    - role: FOUNDER_PRODUCT_AUTHORITY
+      result: 本裁决
+  scope_note: >-
+    PASS 只表示 M1 里程碑通过。不表示可服务生产、不表示 M2 已启动、不表示知识蒸馏可开始。
+
+article_2_merge_authorization:
+  mode: FF_ONLY
+  must_be_executed_on_command_line: true
+  forbidden_merge_methods:
+    - {method: Squash and merge, why: 生成新 SHA，main 将不等于已批准哈希}
+    - {method: Rebase and merge, why: 生成新 SHA，main 将不等于已批准哈希}
+    - {method: Create a merge commit, why: 多出合并提交，main 将不等于已批准哈希}
+  invariant: git rev-parse origin/main 必须等于 2df11012da46ace0de7b7bce6d199a578d32d341
+  on_mismatch: 立即停止，报告 MERGE_INVARIANT_MISMATCH，不得自行修补
+  pr_handling: PR #2 应随之自动关闭为 merged；若未自动关闭，仅可在页面关闭，不得再产生任何提交
+  execution_result:
+    executed_at_branch: main
+    fast_forward_from: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    fast_forward_to: 2df11012da46ace0de7b7bce6d199a578d32d341
+    invariant_verified: MERGE_INVARIANT_OK
+    merge_commits_introduced: 0
+    pr_2_state: closed
+    pr_2_merged: true
+    pr_2_merge_commit_sha: 2df11012da46ace0de7b7bce6d199a578d32d341
+    raw_output_landed_in: 11_reports_and_receipts/m1_delivery_receipt.yaml#merge_invariant_verification
+
+article_3_ruling_landing_commit:
+  authorization: 本裁决一次性预授权，仅此一笔，合并之后执行
+  rationale_verbatim: 记录本批准的提交无法先于本批准接受审查（无限回归）。故设立有界例外，由本裁决直接授权。
+  permitted_contents:
+    - id: L1
+      item: 新增 Founder 裁决记录（本块全文，含 approved_commit_hash 完整 40 位）
+    - id: L2
+      item: 状态位：m1 → FOUNDER_ACCEPTED；execution_status → M1_COMPLETE
+    - id: L3
+      item: M1 Receipt 状态更新 ＋ 合并不变式实测输出留痕
+    - id: L4
+      item: 登记 NB-M1FIX-01（非阻断，路由 M2-EP02，与 RD-M1-02 同批）
+  forbidden_contents:
+    - 01_contracts_and_schemas/ 与 00_charter/ 任何改动
+    - 任何 M2 资产或桥接 Schema
+    - m2_started 保持 false 且不得新增授权条目
+    - knowledge_distillation_started、production_servable 不得触碰
+    - 任何超出上述四项的文件改动
+  self_check_required:
+    - 改动文件清单与四项逐条对应
+    - 33 份交付物 sha256 复算仍与 Receipt 一致
+    - 全量 checker 与夹具全绿、退出码 0
+  review_arrangement: 本笔不单独开 Guardian 轮次；列入下一次里程碑审查的回溯核验清单。
+  general_rule_permanent: >-
+    此类「裁决落盘提交」仅限记录已生效的 Founder 批准及其直接状态后果，
+    永远不得夹带任何产品、合同或评测内容。
+
+article_4_subsequent_authorization_boundary:
+  authorized:
+    - FF-ONLY 合并至 main
+    - 一笔裁决落盘提交
+  not_authorized_requires_separate_founder_ruling:
+    - M2-EP02
+    - M2-EP03
+    - M3
+    - 知识蒸馏
+    - 隐藏资产进入主仓
+  m2_hold:
+    status: PAUSED
+    candidate_branch: candidate/m2
+    frozen_at_commit: 43251b21a32fc9a3fee375675a611577babca570
+    untouched: true
+    mainline_m2_started: false
+    m2_ep01_agreed_rulings_not_landed:
+      - {id: OI-01, item: 门禁维持 ＋ 退役前置清单}
+      - {id: OI-06, item: 指纹登记追认}
+    m2_ep01_agreed_rulings_note: 暂不落盘，待 M2 恢复时随 EP02 派发。
+
+non_blocking_findings:
+  - id: NB-M1FIX-01
+    source: CLAUDE_INDEPENDENT_GUARDIAN on 2df11012da46ace0de7b7bce6d199a578d32d341
+    blocking: false
+    routed_to: M2-EP02
+    batched_with: RD-M1-02
+    landed_status: REGISTERED_NOT_ADDRESSED
+    execution_side_note: >-
+      执行侧只登记路由，不在本笔落盘提交中处置——处置属修复动作，超出裁决落盘提交的允许范围。
+      本条目的具体内容以 Guardian 报告原文为准；执行侧未在此复述，避免转述失真。
+
+signed_by: Founder
+signed_at: "2026-08-13"

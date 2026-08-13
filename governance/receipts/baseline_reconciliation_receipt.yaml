@@ -76,7 +76,11 @@ founder_prd_signed: false
 founder_m0_authorized: false
 founder_merge_approved: false
 main_merged: false
-m0_execution_started: false
+m0_execution_started: true
+m0_execution_started_basis: >-
+  DIYU-CBFSK-EXEC-REQ-M0-003 经 Founder 签署即时生效（DIYU-CBFSK-FOUNDER-SIGNOFF-001 第五条），
+  M0 单包已按里程碑单包模式落盘十四项交付物；Founder 尚未作 M0 裁决，故 execution_status 为 M0_IN_PROGRESS。
+m0_delivery_receipt: 11_reports_and_receipts/m0_delivery_receipt.yaml
 m1_started: false
 m2_started: false
 knowledge_distillation_started: false

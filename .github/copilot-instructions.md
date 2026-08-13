@@ -11,7 +11,7 @@
 ## 仓库性质
 
 产品合同仓（PRD、里程碑执行申请、治理合同）。无应用代码，无生产服务。
-当前状态 `M0_AUTHORIZED_NOT_STARTED`，`m0_authorized: true`。
+当前状态 `M0_IN_PROGRESS`，`m0_authorized: true`。
 
 ## 允许的建议
 

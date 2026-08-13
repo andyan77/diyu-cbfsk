@@ -135,7 +135,7 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8
+    post_change_binary_sha256: bb99823b6ac6f17c7c88784a98ed3ef34acd7afb99f8af795d5c6382dd6ede65
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
@@ -146,6 +146,11 @@ active_baseline_candidates:
         binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
         landed_in_commit: a235b558095b8f85ebc921aab853434dc406761d
         content: 基线迁移与 PRD v1.2 候选索引改写
+      - change_id: README-MOD-04
+        authorization_ref: DIYU-CBFSK-EXEC-REQ-M0-003（Founder 已签署，即时生效）
+        binary_sha256: bb99823b6ac6f17c7c88784a98ed3ef34acd7afb99f8af795d5c6382dd6ede65
+        landed_in_commit: M0_SINGLE_PACKAGE_DELIVERY_COMMIT
+        content: 新增 M0 交付段、状态位改为 M0_IN_PROGRESS、Checker 计数由 16 更正为 19
       - change_id: README-MOD-03
         authorization_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列
         binary_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8

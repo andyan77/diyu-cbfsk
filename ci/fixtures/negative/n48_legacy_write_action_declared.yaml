@@ -1,0 +1,22 @@
+fixture_id: N48-legacy-write-action-declared
+description: 仓内声明了向 P7C 回灌的写入动作，属漂移现有资产状态。
+checker: check_m0_zero_contact
+expected: FAIL
+payload:
+  boundary_contract:
+    declared: true
+    zero_contact_targets:
+    - P7C
+    - Content Kernel
+    - DIFY
+    - CSO
+    declared_contact_count: 0
+    allowlist_declared_in_contract: true
+  legacy_path_hits: []
+  legacy_write_hits:
+  - file: docs/plan.md
+    match: 回灌 P7C
+  external_integrations:
+  - name: ERP/PIM/POS/进销存
+    m0_connected: false
+  credentials_touched: 0

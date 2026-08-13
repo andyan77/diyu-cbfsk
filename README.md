@@ -19,7 +19,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M0_AUTHORIZED_NOT_STARTED
+execution_status: M0_IN_PROGRESS
 production_servable: false
 m0_authorized: true
 current_active_baseline: PRD_v1.2
@@ -33,12 +33,14 @@ founder_prd_signed: true
 founder_m0_authorized: true
 founder_merge_approved: true
 main_merged: true
+m0_execution_started: true
+m0_founder_decision: PENDING
 pending_active_baseline_switch: false
 ```
 
 状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权；`production_servable`、`m1_started`、`m2_started`、`knowledge_distillation_started` 属红线位，任何签署都不得授权。
 
-M0 已授权但**尚未开工**；M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。
+M0 已按里程碑单包模式落盘十四项交付物，**等待 Founder 作 PASS / CONDITIONAL / BLOCK 裁决**（交付报告 [`11_reports_and_receipts/m0_delivery_report.md`](11_reports_and_receipts/m0_delivery_report.md)，回执 `m0_delivery_receipt.yaml`）。M1／M2、知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。
 
 ## Founder 裁决 D-17—D-29 摘要
 
@@ -59,6 +61,18 @@ M0 已授权但**尚未开工**；M1／M2、知识蒸馏、夹具或隐藏品牌
 ## M0 执行边界
 
 M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 项版。D-17—D-29 与 S1—S8 分别落入既有 `capability_contract`、`input_output_boundary`、`role_and_decision_rights`、`non_goals_and_stop_conditions`、`architecture_and_integration_boundary`、`data_and_fixture_workflow`、`execution_critical_path_and_decision_gates`、M1 对象模型 Brief 与 M2 评测冻结 Brief。
+
+## M0 交付（十四项）
+
+| 目录 | 内容 |
+|---|---|
+| `00_charter/` | 交付物 1：项目章程（含附录 A 目录 delta 适配映射表） |
+| `01_contracts_and_schemas/` | 交付物 2—11：十份合同 ＋ 交付物 12—13：M1 对象模型 Brief、M2 评测冻结 Brief |
+| `02_benchmark_manifests/` | 公开评测清单目录（名称由 S5／D-27 固定）；M0 只建目录与边界说明，无任何 manifest |
+| `11_reports_and_receipts/` | 交付物 14 之报告与回执 |
+| `ci/checkers/check_m0_*.py` | 交付物 14 之 Checker：支持任务四字段完备、与笛语现有资产零接触、十四项清单闭环 |
+
+十四项合计 **57 条支持任务**，每条都带必需输入、输出、失败状态与负责角色——这正是 PRD 13 节 M0 通过标准第一条的机器化形式。全部合同状态为 `M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION`，Founder 裁决前不得表述为已冻结。
 
 ## 治理（governance/）
 
@@ -86,6 +100,6 @@ M0 顶层交付清单仍为 **14 项**，不新增第 15 项，也不恢复 18 �
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖共 16 个确定性 Checker。
+- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环共 19 个确定性 Checker。
 - `ci/run_fixtures.py`：用字面量 fixture 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

@@ -31,6 +31,9 @@ CHECKERS = [
     "check_effort_baseline_consistency",
     "check_instruction_projection",
     "check_ruling_coverage",
+    "check_m0_contract_completeness",
+    "check_m0_zero_contact",
+    "check_m0_deliverable_closure",
 ]
 
 

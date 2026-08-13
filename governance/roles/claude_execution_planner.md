@@ -59,7 +59,7 @@
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M0_AUTHORIZED_NOT_STARTED
+execution_status: M0_IN_PROGRESS
 m0_authorized: true
 m1_started: false
 m2_started: false

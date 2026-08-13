@@ -1,0 +1,23 @@
+fixture_id: N57-other-checkers-fixture-is-still-a-contact
+description: >-
+  遗留仓路径出现在别的 checker 的 fixture 里——自有 fixture 的例外不外扩，仍判越界。
+checker: check_m0_zero_contact
+expected: FAIL
+payload:
+  boundary_contract:
+    declared: true
+    allowlist_declared_in_contract: true
+    zero_contact_targets:
+    - P7C
+    - Content Kernel
+    - DIFY
+    - CSO
+    declared_contact_count: 0
+  legacy_path_hits:
+  - file: ci/fixtures/negative/n09_hidden_items_in_main_repo.yaml
+    match: ~/diyu/笛语领域通用数据库/clean_output
+  legacy_write_hits: []
+  external_integrations:
+  - name: ERP/PIM/POS/进销存
+    m0_connected: false
+  credentials_touched: 0

@@ -1,0 +1,148 @@
+schema_version: "1.0"
+contract_id: input_output_boundary.v1.0
+deliverable_index: 4
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-6.1, PRD-6.2, PRD-6.3, PRD-6.4, PRD-5.6, PRD-3.2, D-23, D-28]
+
+input_and_configuration_objects:
+  count: 12
+  count_is_frozen: true
+  prd_anchor: PRD-6.1
+  items:
+    - {id: IN-01, name: UniversalExpertKernel, meaning: 跨品牌跨品类的通用专业机制、规则、案例与评测能力。, artifact_kind: contract_file, m1_schema_required: false}
+    - {id: IN-02, name: CategoryAdapter, meaning: 女装、童装、青少年、亲子、运动潮流的品类机制与硬约束。, artifact_kind: contract_file, m1_schema_required: false}
+    - {id: IN-03, name: BrandTruthPack, meaning: 品牌定位、目标人群、风格坐标、禁用规则、价格带、场景、本季策略与已接受案例。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: brand_truth_pack.schema.v0.1.json}
+    - {id: IN-04, name: InventorySnapshot, meaning: 总部或门店在特定时间的可售款色码、库存状态、商品角色、图片与必要属性。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: garment_and_inventory.schema.v0.1.json}
+    - {id: IN-05, name: AudienceProfile, meaning: 目标群体的身份、生活阶段、穿衣任务、审美成熟度、风险接受度与场景。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: audience_profile.schema.v0.1.json}
+    - {id: IN-06, name: IndividualProfile, meaning: 具体消费者的比例、肤色、气质、身高、舒适边界、预算、希望强化或弱化的方面。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: individual_profile.schema.v0.1.json, dual_mode_contract: true}
+    - {id: IN-07, name: StylingTaskContext, meaning: 本次任务目标、平台、账号角色、场景、天气、地区、内容栏目与经营目标。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: styling_task_context.schema.v0.1.json}
+    - {id: IN-08, name: ProductImageAssetBundle, meaning: 商品图片资产、来源、版本、角度、质量、权利保密标记及可用范围。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: product_image_asset_bundle.schema.v0.1.json}
+    - {id: IN-09, name: StylistPersonaProfile, meaning: 搭配师专业身份、能力边界、目标人群、价值观、审美立场、可坚持与可演进观点、禁止表达与账号职责。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: stylist_persona_profile.schema.v0.1.json}
+    - {id: IN-10, name: PersonaMemorySnapshot, meaning: 特定版本下已发布观点、栏目、语言辨识度、修订原因和待处理冲突的可重放快照。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: persona_memory_snapshot.schema.v0.1.json}
+    - {id: IN-11, name: FounderProvidedRealBrandPackage, meaning: Founder 可选提供的真实品牌与测试生产包。, artifact_kind: data_schema, m1_schema_required: true, m0_handling: 只定义合同与隔离，不接收不处理不保存不测试}
+    - {id: IN-12, name: PublicationPolicy, meaning: 品牌、租户、账号、内容类型与风险等级下的发布模式、Founder 授权、审核、撤回、回滚与 Kill Switch 配置。, artifact_kind: data_schema, m1_schema_required: true, m1_schema: publication_policy.schema.v0.1.json, default_mode: human_review}
+  coverage_mapping_rule:
+    prd_anchor: PRD-13-M1 交付物
+    statement: >-
+      M1 必须交付「输入对象覆盖映射表」：12 个输入与配置对象 ↔ Schema/合同文件一一对应；
+      UniversalExpertKernel 与 CategoryAdapter 为合同文件而非数据 Schema，在映射表中注明即可。
+
+individual_profile_dual_mode:
+  prd_anchor: PRD-6.1 个体资料双模式合同
+  capability_data_separation: >-
+    系统对各类款式适合什么体型、肤色、气质、发型、预算与舒适边界的判断属于专家内核的知识能力
+    （MechanismCard / DecisionRuleCard 的正常工作），不依赖任何个体数据采集即可运行。
+  modes:
+    - id: MODE-1
+      name: 非实名搭配模式
+      is_default: true
+      channels: [自然语言自述, 简短问答, 导购代录, 上传照片]
+      retains: [体型, 肤色, 气质, 发型, 预算, 舒适边界, 拒绝项]
+      does_not_retain_long_term: [姓名, 原始肖像]
+    - id: MODE-2
+      name: 完整顾客档案模式
+      requires: [经授权角色发起, 顾客有效授权, 约定用途范围与保存期限]
+      store_desire_is_not_consent: true
+      may_store: [姓名及必要联系方式, 原始照片或肖像, 体型肤色气质发型, 预算舒适边界拒绝项, 尺码试穿购买记录, 历次方案反馈与人工修改, 顾客明确要求保存的其他信息]
+      customer_rights: [查询, 更正, 撤回授权, 申请删除]
+      minors_rule: 未满 14 周岁须取得监护人同意并适用专门规则，与品类安全合同联动。
+  legal_warning: 去除姓名不自动等于匿名化——仍可关联到具体顾客的档案属于个人信息。
+  landing: {m1: individual_profile.schema（含双模式标记位与授权状态字段）, m9: 采集与授权流程合同、同意管理与删除流程 checker}
+
+output_and_internal_audit_objects:
+  count: 15
+  count_is_frozen: true
+  prd_anchor: PRD-6.2
+  items:
+    - {id: OUT-01, name: BrandAudienceInterpretation, meaning: 本次任务下对品牌、品类、目标人群和个体需求的结构化理解。}
+    - {id: OUT-02, name: StylingDiagnosis, meaning: 当前造型或货盘的问题、候选原因、排除项与所需补充事实。}
+    - {id: OUT-03, name: StylingThesis, meaning: 本次搭配必须表达的核心命题和专业观点。}
+    - {id: OUT-04, name: OutfitPlan, meaning: 选中商品、款色码、组合关系、穿法、场景与适用人群。}
+    - {id: OUT-05, name: InclusionExclusionReasons, meaning: 为什么选、为什么不选、哪些常见做法在当前条件下失效。}
+    - {id: OUT-06, name: TransformationPlan, meaning: 增加、删除、替换、再平衡、重设焦点等具体动作。}
+    - {id: OUT-07, name: AlternativePlan, meaning: 缺货、顾客不接受、场景变化或预算变化时的替代与降级方案。}
+    - {id: OUT-08, name: SuitabilityExplanation, meaning: 对比例、肤色、气质、年龄、功能与身份表达的作用和副作用。}
+    - {id: OUT-09, name: NarrativePackage, meaning: 人物处境、常见误解、冲突、决策、变化、结论和可拍摄动作。}
+    - {id: OUT-10, name: ContentProjection, meaning: 面向不同账号、平台与栏目生成的图文、口播、分镜或直播要点。}
+    - {id: OUT-11, name: DecisionTrace, meaning: 事实、知识、模型、候选、排除、不确定性、版本和人工修改记录。}
+    - {id: OUT-12, name: VisualAttributeExtractionResult, meaning: 来自商品图片的分级视觉属性、证据、置信度、冲突、人工覆盖与决策可用性。}
+    - {id: OUT-13, name: PersonaContinuityUpdate, meaning: 当次内容对观点、栏目和人设状态的版本化增量，包含冲突、修订原因与是否可接受。}
+    - {id: OUT-14, name: SocialMediaVoicePlan, meaning: 平台、口播节奏、停顿转折、观点时机、场景与人物处境、镜头动作、专业密度与反模板约束。}
+    - {id: OUT-15, name: PublicationDecision, meaning: 发布模式、授权范围、全部前置检查、人工审核状态、自动发布许可或拒绝原因、撤回回滚与 Kill Switch 记录。}
+  m1_option:
+    prd_anchor: PRD-13-M1
+    rule: M1 可逐个交付 15 个 Schema，或交付一个明确包含全部对象的 StylingResultBundle.schema.v0.1.json 整包（二选一）。
+
+fact_and_rule_priority:
+  prd_anchor: PRD-6.3
+  ordered_levels:
+    - {rank: 1, level: Specific Runtime Facts, zh: 具体运行事实}
+    - {rank: 2, level: Brand Truth Pack + Authoritative Structured Product Fact, zh: 品牌真源 + 权威结构化商品事实}
+    - {rank: 3, level: Human Verified Visual Attribute, zh: 人工确认视觉属性}
+    - {rank: 4, level: Category Hard Constraints + Accepted General Expert Knowledge, zh: 品类硬约束 + 已接受通用专家知识}
+    - {rank: 5, level: Multimodal Inferred Visual Attribute, zh: 多模态视觉推断}
+    - {rank: 6, level: Retrieved Cases, zh: 检索案例}
+    - {rank: 7, level: General Model Inference, zh: 一般模型推断}
+  invariant: 任何下层信息不得覆盖上层明确事实。
+  labeling_rule: 多模态视觉推断与一般模型推断必须显式标记，不得伪装为品牌、商品、库存、顾客或真实经历。
+  founder_package_defaults:
+    source_type: founder_provided_real_brand
+    usage_scope: test_production_only
+    live_market_evidence: false
+    hidden_benchmark_eligible: false
+    knowledge_training_eligible: false
+
+missing_input_fail_closed:
+  prd_anchor: PRD-6.4
+  rules:
+    - {id: FC-01, missing: 真实商品清单, behaviour: 不得输出具体可购买组合；可输出需要补充的数据与通用诊断框架。, failure_state: NO_REAL_PRODUCT_LIST}
+    - {id: FC-02, missing: 门店库存, behaviour: 不得把总部货盘冒充门店现货。, failure_state: STORE_INVENTORY_UNKNOWN}
+    - {id: FC-03, missing: 品牌目标人群或禁用规则, behaviour: 只能提供候选解释，并要求一次高价值补充。, failure_state: BRAND_TRUTH_INSUFFICIENT}
+    - {id: FC-04, missing: 具体消费者资料, behaviour: 不得编造身材、肤色、气质或生活场景。, failure_state: INDIVIDUAL_PROFILE_INSUFFICIENT}
+    - {id: FC-05, missing: 童装或青少年的年龄与场景, behaviour: 不得输出可能不适龄、成人化或安全风险较高的建议。, failure_state: AGE_CONTEXT_INSUFFICIENT}
+    - {id: FC-06, missing: 运动品类功能信息, behaviour: 不得用纯视觉搭配替代性能与安全判断。, failure_state: SPORT_FUNCTION_INSUFFICIENT}
+    - {id: FC-07, missing: 叙事所需真实事件, behaviour: 只能使用群体性处境、假设情境或明确标注的演绎，不得虚构真实顾客。, failure_state: NARRATIVE_REAL_EVENT_ABSENT}
+    - {id: FC-08, missing: 商品图片或其质量与角度不支持某属性, behaviour: 该属性必须失败关闭、降低置信度或请求补图，不得填充不可验证的功能事实。, failure_state: MULTIMODAL_ATTRIBUTE_UNSAFE}
+    - {id: FC-09, missing: 历史观点或人设快照, behaviour: 可建立明确标记的初始人设版本，不得伪造既往履历、观点或顾客经历。, failure_state: PERSONA_STATE_INVALID}
+    - {id: FC-10, missing: PublicationPolicy 或授权过期或前置检查不通过, behaviour: 必须回退为 human_review 或停止发布，不得默认启用自动发布。, failure_state: UNAUTHORIZED_AUTO_PUBLISH}
+
+obligations:
+  - id: OB-IO-01
+    statement: 12 项输入与 15 项输出对象数量与命名在 M0 冻结，M1 只做 Schema 化，不增删对象。
+    required_inputs: [PRD-6.1 表, PRD-6.2 表]
+    outputs: [input_and_configuration_objects.items, output_and_internal_audit_objects.items]
+    failure_state: OBJECT_COUNT_DRIFT
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-6.1 / PRD-6.2
+  - id: OB-IO-02
+    statement: 七级事实优先级为强制不变量，任何下层信息不得覆盖上层明确事实。
+    required_inputs: [各级事实来源标记]
+    outputs: [DecisionTrace 中的优先级裁决记录]
+    failure_state: AUTHORITATIVE_FACT_OVERRIDE
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-6.3 / PRD-10.1
+  - id: OB-IO-03
+    statement: 十条缺失输入必须失败关闭，不得以流畅表达填补事实缺口。
+    required_inputs: [任务输入完整性检查结果]
+    outputs: [失败关闭记录, 需要补充的高价值事实清单]
+    failure_state: FAIL_CLOSED_BYPASSED
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-6.4 / P-03
+  - id: OB-IO-04
+    statement: 完整顾客档案模式必须先取得顾客有效授权，「门店想保存」不能代替授权；未满 14 周岁须监护人同意。
+    required_inputs: [授权角色身份, 顾客授权记录, 监护人同意记录]
+    outputs: [授权状态字段, 建档决定或拒绝记录]
+    failure_state: CUSTOMER_PROFILE_WITHOUT_CONSENT
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-6.1 双模式合同 / PRD-16.2
+  - id: OB-IO-05
+    statement: FounderProvidedRealBrandPackage 默认 usage_scope=test_production_only，不得进入训练、隐藏集或通用知识；M0 不接收不处理不保存不测试任何该类资料。
+    required_inputs: [Founder 注入包元数据（M11 时）]
+    outputs: [使用范围标记, 隔离与 Receipt 记录]
+    failure_state: FOUNDER_PACKAGE_SCOPE_VIOLATION
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-6.3 / PRD-8.7 / FR-26

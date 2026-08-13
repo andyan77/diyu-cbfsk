@@ -1,0 +1,155 @@
+schema_version: "1.0"
+contract_id: project_charter.v1.0
+deliverable_index: 1
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+task_id: GKB-CROSS-BRAND-STYLING-EXPERT-KERNEL-M0-CONTRACT-AND-BENCHMARK-FOUNDATION-001
+product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+product_truth_status: SIGNED
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+status_note: >-
+  本文件是 M0 交付候选。Founder 尚未对 M0 作 PASS / CONDITIONAL / BLOCK 裁决，
+  因此不得表述为「已冻结」或「已接受」。冻结时点＝Founder M0 裁决。
+prd_anchors: [PRD-1.1, PRD-1.2, PRD-1.3, PRD-1.4, PRD-2.3, PRD-13-M0, PRD-15.1, PRD-17.1, PRD-附录A]
+
+identity:
+  name_zh: 笛语跨品牌服装搭配专家内核
+  name_en: DIYU Cross-Brand & Cross-Category Fashion Styling Expert Kernel
+  project_code: DIYU-CBFSK-001
+  product_definition: >-
+    构建一个能够跨品牌、跨品类理解品牌定位与目标人群，联合权威结构化商品事实与有来源、有置信度的
+    商品图片视觉推断，在总部或门店有效货盘约束下生成可解释、可替代、可购买的专业搭配方案，并通过
+    持续、可审计的搭配师人设和自媒体原生语感将专业判断转化为真实、有观点、有场景、有变化的内容的
+    数字化顶级服装搭配专家。
+  prd_anchor: PRD-1.1 / PRD-1.2
+
+north_star_closed_loop:
+  prd_anchor: PRD-1.3
+  requirement: >-
+    面对此前没有专门建设过的新品牌与新货盘，仅读取当次任务必需的品牌事实、品类规则、商品结构化资料
+    与图片、目标人群及有效货盘信息即可闭环。
+  closed_loop_items:
+    - 理解品牌为谁服务、顾客希望成为什么样的人、品牌允许怎样表达身体气质与生活方式
+    - 诊断一套现有衣服为什么成立或不成立，明确增删替换重组简化或重新场景化的部分
+    - 在真实货盘中选商品，说明选中理由、排除理由、副作用与库存不足时的替代方案
+    - 针对体型/肤色/身高比例/气质/年龄阶段/功能需求与场景生成不同答案
+    - 把专业判断转化为账号矩阵可持续发布的叙事化内容
+    - 保留事实来源、决策轨迹、不确定性与人工升级边界
+    - 长期内容经营中保持专业身份、核心价值观、历史观点与栏目连续性，观点演进留痕
+    - 形成非课件化、非模板化、非 AI 腔的自媒体原生语感，跨平台保持核心辨识度
+    - 对商品图片作证据分级多模态理解，视觉推断与权威结构化事实冲突时以权威事实为准
+    - M11 支持 Founder 真实品牌注入测试生产，未提供时回退 Codex 夹具合成，两条路径均不泄漏隐藏集
+    - 通过版本化扩展端口兼容门店空间陈列、实时成交辅助与 Founder 授权自动发布，不误写为 V1.0 强制实现
+
+why_independent_project:
+  prd_anchor: PRD-2.3 / D-01
+  ruling: 解耦立项——不挂靠笛语现有仓，不触碰不重写不漂移 P7C / Content Kernel / DIFY / CSO 任何状态。
+  enforced_by: architecture_and_integration_boundary.v1.0.yaml / check_m0_zero_contact.py
+
+effort_baseline:
+  scope: 全项目 M0—M12
+  person_months: "125—185"
+  duration_months: "15—24"
+  effort_unit: HUMAN_MACHINE_WORK_EQUIVALENT_PERSON_MONTH
+  staffing_commitment: false
+  changed_by_m0: false
+  m0_own_baseline:
+    duration: 2—3 周
+    person_months: 3—4
+  prd_anchor: PRD-15.1 / PRD-13
+
+goals:
+  prd_anchor: PRD-3.1
+  ids: [G-01, G-02, G-03, G-04, G-05, G-06, G-07, G-08, G-09, G-10, G-11, G-12, G-13, G-14, G-15]
+  count: 15
+
+design_principles:
+  prd_anchor: PRD-3.3
+  ids: [P-01, P-02, P-03, P-04, P-05, P-06, P-07, P-08, P-09, P-10, P-11, P-12, P-13, P-14]
+  count: 14
+  p_14_landing: >-
+    合理多解原则的落地口径＝评测任务强制三分类 constraint_correctness / mechanism_correctness /
+    open_decision；②③类禁设唯一 Gold Answer，冻结对象是可接受决策边界。详见
+    m2_evaluation_freeze_brief.md 与 execution_critical_path_and_decision_gates.v1.0.yaml。
+
+m0_deliverables:
+  count: 14
+  count_is_frozen: true
+  no_fifteenth_item: true
+  identical_in: [PRD 13 节 M0, PRD 14 节, PRD 17.1, DIYU-CBFSK-EXEC-REQ-M0-003]
+  items:
+    - {index: 1, name: project_charter.v1.0.yaml, path: 00_charter/project_charter.v1.0.yaml}
+    - {index: 2, name: capability_contract.v1.0.yaml, path: 01_contracts_and_schemas/capability_contract.v1.0.yaml}
+    - {index: 3, name: category_scope_contract.v1.0.yaml, path: 01_contracts_and_schemas/category_scope_contract.v1.0.yaml}
+    - {index: 4, name: input_output_boundary.v1.0.yaml, path: 01_contracts_and_schemas/input_output_boundary.v1.0.yaml}
+    - {index: 5, name: role_and_decision_rights.v1.0.yaml, path: 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml}
+    - {index: 6, name: non_goals_and_stop_conditions.v1.0.yaml, path: 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml}
+    - {index: 7, name: knowledge_state_machine.v1.0.yaml, path: 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml}
+    - {index: 8, name: architecture_and_integration_boundary.v1.0.yaml, path: 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml}
+    - {index: 9, name: compliance_review_contract.v1.0.yaml, path: 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml}
+    - {index: 10, name: data_and_fixture_workflow.v1.0.yaml, path: 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml}
+    - {index: 11, name: execution_critical_path_and_decision_gates.v1.0.yaml, path: 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml}
+    - {index: 12, name: M1 对象模型 Brief, path: 01_contracts_and_schemas/m1_object_model_brief.md}
+    - {index: 13, name: M2 评测冻结 Brief, path: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md}
+    - {index: 14, name: M0 checker / fixtures / report / receipt, path: 11_reports_and_receipts/m0_delivery_report.md}
+  founder_rulings_written_into_prd_body_not_separate_files:
+    prd_anchor: PRD-13 M0 注
+    items: [运行时模型合同 NFR-08, 个体资料双模式 6.1, 商品属性来源与人工发布终态 3.2]
+    m0_closeout_action: 按对应正文条款核验，不单列合同文件
+
+directory_delta_adaptation:
+  prd_anchor: PRD-附录A（推荐目录）+ P783「具体目录应在M0根据现有仓库结构进行delta适配，不得未经检查直接覆盖现有命名」
+  decision: >-
+    本仓即 D-01 裁决的独立项目空间本身（不挂靠笛语现有仓），因此不再在仓内嵌套一层
+    projects/cross_brand_styling_expert_kernel/；附录 A 的编号目录直接落在仓根，
+    并复用仓内已存在的 ci/checkers 与 ci/fixtures，不新建第二套 CI 目录。
+  mapping:
+    - {recommended: "projects/cross_brand_styling_expert_kernel/", actual: "<仓根>", status: ADAPTED, reason: 本仓即独立项目空间}
+    - {recommended: "00_charter/", actual: "00_charter/", status: CREATED_IN_M0}
+    - {recommended: "01_contracts_and_schemas/", actual: "01_contracts_and_schemas/", status: CREATED_IN_M0}
+    - {recommended: "02_benchmark_manifests/", actual: "02_benchmark_manifests/", status: CREATED_IN_M0, note: 仅建目录与边界说明，M0 不产生任何 manifest}
+    - {recommended: "03_question_system/", actual: "03_question_system/", status: DEFERRED_TO, milestone: M3}
+    - {recommended: "04_elicitation_raw/", actual: "04_elicitation_raw/", status: DEFERRED_TO, milestone: M4}
+    - {recommended: "05_candidate_knowledge/", actual: "05_candidate_knowledge/", status: DEFERRED_TO, milestone: M4}
+    - {recommended: "06_accepted_kernel/", actual: "06_accepted_kernel/", status: DEFERRED_TO, milestone: M5}
+    - {recommended: "07_decision_compiler/", actual: "07_decision_compiler/", status: DEFERRED_TO, milestone: M6}
+    - {recommended: "08_narrative_projection/", actual: "08_narrative_projection/", status: DEFERRED_TO, milestone: M7}
+    - {recommended: "09_inventory_and_personalization/", actual: "09_inventory_and_personalization/", status: DEFERRED_TO, milestone: M8/M9}
+    - {recommended: "10_pilots/", actual: "10_pilots/", status: DEFERRED_TO, milestone: M11}
+    - {recommended: "11_reports_and_receipts/", actual: "11_reports_and_receipts/", status: CREATED_IN_M0}
+    - {recommended: "ci/checkers/fixtures/", actual: "ci/checkers/ + ci/fixtures/", status: REUSED_EXISTING, reason: 仓内已有同名结构，按 P783 不覆盖现有命名}
+  empty_directories_not_created:
+    rule: 未被本里程碑消费的目录不预建（EQ-4 无死代码），由对应里程碑开工时创建。
+  existing_repo_names_not_overwritten: [governance/, ci/, 工具/, 归档_v1.0/, 归档_v1.1/]
+
+obligations:
+  - id: OB-CHARTER-01
+    statement: M0 顶层交付清单严格为 14 项，三处（PRD 13 / 14 / 17.1）与执行申请完全一致，不得出现第 15 项或 18 项版回潮。
+    required_inputs: [PRD v1.2 13/14/17.1 节, DIYU-CBFSK-EXEC-REQ-M0-003 交付物表]
+    outputs: [m0_deliverables.items（14 条）, check_m0_deliverables 的清单闭环结论]
+    failure_state: M0_DELIVERABLE_COUNT_DRIFT
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-13-M0 / PRD-17.1
+  - id: OB-CHARTER-02
+    statement: 目录结构按现有仓结构 delta 适配，不得未经检查覆盖现有命名，且未消费的推荐目录不预建。
+    required_inputs: [PRD 附录A 推荐目录树, 现有仓根目录清单]
+    outputs: [directory_delta_adaptation.mapping]
+    failure_state: DIRECTORY_ADAPTATION_UNDOCUMENTED
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: PRD-附录A / P783
+  - id: OB-CHARTER-03
+    statement: 125—185 人月与 15—24 个月基线在 M0 不得被改变；M0 自身基线为 2—3 周 / 3—4 人月。
+    required_inputs: [PRD 15.1, PRD 13 节里程碑表]
+    outputs: [effort_baseline 块]
+    failure_state: EFFORT_BASELINE_CHANGED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-15.1
+  - id: OB-CHARTER-04
+    statement: M0 交付物在 Founder 作出 M0 裁决前一律标记为候选，不得自称已冻结、已接受或 production_servable。
+    required_inputs: [Founder M0 裁决（尚未产生）]
+    outputs: [status 字段, m0_delivery_receipt.yaml 的 founder_m0_decision 字段]
+    failure_state: PREMATURE_FROZEN_CLAIM
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: PRD-13-M0 通过标准 / DIYU-CBFSK-EXEC-REQ-M0-003 四、验收与收口

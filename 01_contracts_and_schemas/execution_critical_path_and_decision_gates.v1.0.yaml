@@ -1,0 +1,194 @@
+schema_version: "1.0"
+contract_id: execution_critical_path_and_decision_gates.v1.0
+deliverable_index: 11
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-12.1, PRD-12.2, PRD-12.3, PRD-13, PRD-10.1, PRD-10.4, D-19, D-28, D-29]
+
+execution_sequence:
+  count: 13
+  prd_anchor: PRD-12.1
+  steps:
+    - {step: 1, action: 正式立项与独立工作面建立}
+    - {step: 2, action: 冻结产品合同、非目标、五类品类边界和事实优先级}
+    - {step: 3, action: 建立对象模型、品牌风格空间、品类适配合同与输出 Schema}
+    - {step: 4, action: 在知识生成之前冻结隐藏评测、评分卡、样本隔离和失败门}
+    - {step: 5, action: 由 GPT 建立高区分度问题系统、反例系统与批次合同}
+    - {step: 6, action: Claude Code 按批次执行知识引出、结构化落盘、分歧与覆盖检查}
+    - {step: 7, action: GPT 与独立 Claude Guardian 进行对抗、反例、跨品牌跨品类迁移审查}
+    - {step: 8, action: 隔离 GPT、隔离 Claude 与规则 Checker 对中低风险候选内部盲评；Founder 对高风险候选 100% 审查并裁决知识晋级}
+    - {step: 9, action: 实现受约束的搭配决策编译器，先通过离线评测}
+    - {step: 10, action: 实现叙事智能与账号矩阵投影，确保叙事源于已接受决策}
+    - {step: 11, action: 接入总部与门店库存和个体适配，完成可售性和隐私边界}
+    - {step: 12, action: 通过未见品牌、未见品类、仿真货盘约束和叙事真实性综合门}
+    - {step: 13, action: 进入多品牌多门店多品类仿真试点，随后完成生产加固和 Founder 最终发布裁决}
+
+milestones:
+  count: 13
+  sequence_frozen: true
+  sequence_ruling: D-19（M12 名称、M0—M12 顺序与工程路线不变）
+  prd_anchor: PRD-13
+  items:
+    - {id: M0, name: 独立立项与合同冻结, duration: 2—3 周, person_months: 3—4, gate: 范围与角色门}
+    - {id: M1, name: 语义骨架与品类适配合同, duration: 4—6 周, person_months: 6—9, gate: 对象完整门}
+    - {id: M2, name: 隐藏评测与评分基线冻结, duration: 5—7 周, person_months: 8—12, gate: 评测隔离门}
+    - {id: M3, name: GPT 高区分度问题系统 V1, duration: 5—7 周, person_months: 7—10, gate: 问题质量门}
+    - {id: M4, name: Claude Code 蒸馏流水线与候选批次, duration: 8—12 周, person_months: 12—18, gate: 候选完整性门}
+    - {id: M5, name: 专家知识合成、审查与接受基线, duration: 8—12 周, person_months: 14—20, gate: 内部知识评审门}
+    - {id: M6, name: 搭配决策编译器 V0.1, duration: 8—10 周, person_months: 12—17, gate: 受约束决策门}
+    - {id: M7, name: 叙事智能、人设连续性与账号投影 V0.1, duration: 6—9 周, person_months: 9—14, gate: 叙事真实、人设连续性与原生语感门}
+    - {id: M8, name: 总部/门店库存约束引擎, duration: 6—8 周, person_months: 9—13, gate: 可售性门}
+    - {id: M9, name: 个体适配与品类安全, duration: 7—10 周, person_months: 10—15, gate: 个体与安全门}
+    - {id: M10, name: 未见品牌/未见品类迁移门, duration: 6—8 周, person_months: 8—12, gate: 核心商业门}
+    - {id: M11, name: 多品牌、多门店、多品类仿真试点（夹具品牌）, duration: 10—14 周, person_months: 14—22, gate: 仿真运行门}
+    - {id: M12, name: Commercial V1.0生产加固, duration: 8—12 周, person_months: 12—18, gate: 八门联合发布}
+
+critical_dependencies:
+  count: 10
+  prd_anchor: PRD-12.2
+  items:
+    - {id: DEP-01, edge: M0 → M1, constraint: 产品边界未冻结，不得建立最终对象模型。}
+    - {id: DEP-02, edge: M1 + M2 → M4, constraint: Schema 与隐藏评测未冻结，不得大批量蒸馏。}
+    - {id: DEP-03, edge: M3 → M4, constraint: Claude Code 只执行经预审的问题包，不自由扩写范围。}
+    - {id: DEP-04, edge: M5 → M6, constraint: 决策编译器可以提前搭骨架，但不得把未接受知识当正式规则。}
+    - {id: DEP-05, edge: M6 → M7, constraint: 叙事内容必须来自可追踪的专业决策。}
+    - {id: DEP-06, edge: M6 → M8, constraint: 库存接入必须服务明确的候选过滤、选择和替代合同。}
+    - {id: DEP-07, edge: M7 + M8 + M9 → M10, constraint: 迁移门同时检查专业、叙事、库存与品类安全。}
+    - {id: DEP-08, edge: M10 → M11, constraint: 迁移门未通过，不得以商业专家身份进入 M11 仿真试点。}
+    - {id: DEP-09, edge: M11 → M12, constraint: 生产加固依据仿真试点问题，不依据假想功能列表。}
+    - {id: DEP-10, edge: M2 → 大规模蒸馏, constraint: M2 隐藏评测未冻结即停止大规模知识蒸馏（强制停止条件 SC-01）。}
+
+parallel_workflows:
+  prd_anchor: PRD-12.3
+  items:
+    - {pair: M1 对象模型 ∥ M2 评测设计, constraint: M2 最终冻结必须引用稳定对象。}
+    - {pair: M3 问题系统 ∥ 蒸馏执行工具, constraint: 正式批次必须等 M2 通过。}
+    - {pair: M4 候选生成 ∥ M6 编译器骨架, constraint: 正式规则接入等 M5 接受。}
+    - {pair: M7 叙事评测, constraint: 可在首批已接受知识出现后启动。}
+    - {pair: M8 库存接口 ∥ M9 个体适配, constraint: 可在 M6 基础稳定后并行。}
+  concurrency_limit:
+    ruling: DIYU-CBFSK-FR-GRANULARITY-005
+    max_concurrent_packages: 2
+    effective_from: M1
+
+hard_gates:
+  count: 11
+  prd_anchor: PRD-10.1
+  items:
+    - {id: HG-01, name: 库存真实性, metric: inventory_hallucination_rate = 0, note: 总部库存不得冒充门店库存。}
+    - {id: HG-02, name: 品牌硬规则, metric: brand_hard_rule_violation_rate = 0}
+    - {id: HG-03, name: 品类安全, metric: 童装、青少年、运动严重安全违规率 = 0}
+    - {id: HG-04, name: 事实叙事, metric: fabricated_real_person_or_event_rate = 0}
+    - {id: HG-05, name: 决策轨迹, metric: 正式结果 DecisionTrace 覆盖率 = 100%}
+    - {id: HG-06, name: 知识状态, metric: 未达 production_servable 的知识不得进入正式生成}
+    - {id: HG-07, name: 评测隔离, metric: 隐藏品牌、隐藏品类和评分答案不得泄漏给候选生成链}
+    - {id: HG-08, name: 人设真实, metric: fabricated_persona_credential_rate = 0；published_persona_hard_contradiction_rate = 0}
+    - {id: HG-09, name: 人设不覆盖真源, metric: brand_truth_overridden_by_persona_rate = 0}
+    - {id: HG-10, name: 多模态事实边界, metric: authoritative_fact_override_rate = 0；unverifiable_function_claim_rate = 0}
+    - {id: HG-11, name: 发布授权, metric: unauthorized_auto_publish_rate = 0}
+
+commercial_release_gates:
+  count: 8
+  prd_anchor: PRD-10.4
+  items:
+    - {id: RG-01, name: Semantic Contract Gate, meaning: 对象、输入、输出、证据分级、优先级、失败状态与扩展兼容完整。}
+    - {id: RG-02, name: Expert Knowledge Gate, meaning: 知识状态链、来源、专家审查和反例通过。}
+    - {id: RG-03, name: Unseen Transfer Gate, meaning: 未见品牌与未见品类迁移通过。}
+    - {id: RG-04, name: Inventory Grounding Gate, meaning: 总部与门店可售性及发布前复核通过；多模态推断不得伪造库存、价格或现货事实。}
+    - {id: RG-05, name: Narrative Truth Gate, meaning: 叙事真实、专业成立、账号差异化、人设连续性与自媒体原生语感通过。}
+    - {id: RG-06, name: Operational Scalability Gate, meaning: 批量、恢复、成本、版本、审计、多租户隔离、发布策略权限回滚 Kill Switch 与扩展端口兼容通过。}
+    - {id: RG-07, name: Safety & Compliance Gate, meaning: 品类安全、隐私授权、AIGC 标识、未成年人信息、数据出境、商品图片权利保密及自动发布授权通过。}
+    - {id: RG-08, name: Founder Final Decision, meaning: Founder 最终批准 Commercial V1.0。}
+  hard_gate_to_release_gate_mapping:
+    required_at: M2
+    requirement: M2 的 hard_gate_definitions 须扩展为「硬门 → 八道门」显式映射表，确保 10.1 每一条硬门都能追溯到承接它的发布门。
+    m0_status: 只登记要求，映射表由 M2 产出。
+    prd_anchor: PRD-10.4 尾段
+
+discovery_gate_criteria:
+  purpose: Discovery 继续 / 转向 / 停止判据
+  prd_anchor: PRD-12 / PRD-16.2 / PRD-13 各里程碑关键门
+  decision_values: [CONTINUE, PIVOT, STOP]
+  rules:
+    - id: DG-01
+      at: 每个里程碑关键门
+      continue_if: 该门全部判据通过且无未关闭阻塞条件
+      pivot_if: 判据失败但根因在实现路径，可在不改变已冻结产品裁决的前提下换实现
+      stop_if: 命中任一强制停止条件，或失败根因要求改变已冻结的产品裁决
+      owner_role: FOUNDER_PRODUCT_AUTHORITY
+    - id: DG-02
+      at: M2 评测隔离门
+      stop_if: 隐藏评测未冻结、夹具与隐藏池污染，或 ②③ 类任务被设唯一 Gold Answer
+      note: 后者对应 D-28 停止条件 SC-20
+    - id: DG-03
+      at: M6 受约束决策门
+      stop_if: 纯 Prompt/RAG 端到端直答，或 LLM-off 后过滤与排除结果改变
+      note: D-29 三条反退化验收
+    - id: DG-04
+      at: M10 核心商业门
+      stop_if: 未见品牌或未见品类迁移门失败
+      consequence: 不得进入商业级专家宣称；只能修复通用机制后重新测试
+    - id: DG-05
+      at: 任意里程碑
+      stop_if: CONDITIONAL 条件缺台账、证据、复核角色、closure commit 或 Founder 关闭决定
+      consequence: 不得声明 PASS 或 CLOSED
+  conditional_is_not_pass: true
+
+m0_gate:
+  name: 范围与角色门
+  pass_standard:
+    prd_anchor: PRD-13-M0 通过标准
+    criteria:
+      - id: M0-PASS-01
+        statement: 所有支持任务都有必需输入、输出、失败状态和负责角色。
+        verified_by: ci/checkers/check_m0_contract_completeness.py
+      - id: M0-PASS-02
+        statement: 与笛语现有资产零接触验证通过（独立解耦裁决），现有 P7C 状态无漂移。
+        verified_by: ci/checkers/check_m0_zero_contact.py
+  acceptance_from_execution_request:
+    source: DIYU-CBFSK-EXEC-REQ-M0-003 四
+    items:
+      - Checker 全绿：十四项交付物均有必需输入、输出、失败状态与负责角色；与现有笛语资产零接触验证通过
+      - Guardian 独立审查报告：无越界、无矛盾、无遗漏、无与 PRD v1.2 及 D-17—D-29 冲突条文
+      - 工作树、版本、输入清单、原始输出与报告可重放；Receipt 完整
+      - Founder 形成明确的 PASS / CONDITIONAL / BLOCK 裁决后，方可进入 M1
+
+obligations:
+  - id: OB-PATH-01
+    statement: M0—M12 顺序、M12 名称与工程路线不变；里程碑数量与关键门不得在执行中被改写。
+    required_inputs: [PRD-13 里程碑表, D-19]
+    outputs: [milestones.items（13 条）]
+    failure_state: MILESTONE_SEQUENCE_DRIFT
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: D-19 / PRD-13
+  - id: OB-PATH-02
+    statement: 十条关键依赖为硬前置，上游未冻结不得启动下游。
+    required_inputs: [上游里程碑冻结状态]
+    outputs: [依赖检查结论]
+    failure_state: DEPENDENCY_VIOLATED
+    owner_role: CLAUDE_EXECUTION_PLANNER
+    prd_anchor: PRD-12.2
+  - id: OB-PATH-03
+    statement: 11 条硬门在 M2 必须逐条映射到承接它的发布门，不得有硬门无承接。
+    required_inputs: [PRD-10.1 硬门表, PRD-10.4 八道门表]
+    outputs: [M2 的 hard_gate_definitions 映射表]
+    failure_state: HARD_GATE_WITHOUT_RELEASE_GATE
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-10.4 尾段
+  - id: OB-PATH-04
+    statement: 每个里程碑门必须产出 CONTINUE / PIVOT / STOP 三值之一，且 CONDITIONAL 不等于 PASS。
+    required_inputs: [门判据结论, 条件台账状态]
+    outputs: [Discovery 裁决记录]
+    failure_state: GATE_DECISION_MISSING
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-16.4 / PRD-12
+  - id: OB-PATH-05
+    statement: M0 范围与角色门的两条通过标准必须由确定性 Checker 验证，不以文档数量替代结果。
+    required_inputs: [十四项交付物, 零接触扫描输入]
+    outputs: [M0 checker 逐项 PASS/FAIL 结论]
+    failure_state: M0_GATE_NOT_MACHINE_VERIFIED
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: PRD-13-M0 / DIYU-CBFSK-EXEC-REQ-M0-003 四

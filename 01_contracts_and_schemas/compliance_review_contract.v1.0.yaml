@@ -1,0 +1,133 @@
+schema_version: "1.0"
+contract_id: compliance_review_contract.v1.0
+deliverable_index: 9
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-10.4, PRD-16.1-R-11, PRD-6.1, PRD-15.6, D-25]
+
+review_mode:
+  current: FOUNDER_PLUS_ISOLATED_AI
+  external_human_review: false
+  external_legal_opinion: false
+  legal_review_type: founder_compliance_self_assessment
+  blanket_self_assessment_allowed: false
+  ai_role: 仅提供对抗性支持，不得冒充律师意见或外部法律结论。
+  prd_anchor: PRD-10.4
+
+responsible_parties:
+  compliance_owner: FOUNDER_PRODUCT_AUTHORITY
+  compliance_owner_duty: 对每项合规问题分别作 ACCEPT / MITIGATE / DEFER / BLOCK 裁决，记录理由、证据、控制、下次复核里程碑与 external_legal_opinion_obtained。
+  adversarial_support: [GPT_CHIEF_ADVISOR, CLAUDE_INDEPENDENT_GUARDIAN]
+  ledger: governance/compliance/founder_compliance_decision_ledger.yaml
+  checker: ci/checkers/check_compliance_ledger.py
+
+checklist:
+  count: 7
+  count_is_frozen_for_first_round: true
+  prd_anchor: PRD-10.4 ①—⑦
+  items:
+    - {id: CMP-01, issue: 未满 14 周岁个人信息与监护人同意机制, law: 个人信息保护法, applicable_stage: M0/M1/M9/M12, trigger: 童装与青少年为首发品类，直接触发}
+    - {id: CMP-02, issue: AI 生成合成内容标识义务与各平台 AIGC 标注规则, law: 人工智能生成合成内容标识办法, applicable_stage: M7/M12, trigger: 账号矩阵批量发布场景}
+    - {id: CMP-03, issue: 数据出境路径核验, law: 促进和规范数据跨境流动规定, applicable_stage: M3/M4/M12, trigger: 任何环节使用境外模型 API 处理个体资料}
+    - {id: CMP-04, issue: 面向公众提供生成式 AI 服务的备案适用性, applicable_stage: M12, trigger: 取决于最终产品形态，形态裁决后核验}
+    - {id: CMP-05, issue: 模型厂商服务条款对知识蒸馏用途的约束, applicable_stage: M3/M4/M5, trigger: GPT×Claude 蒸馏链，核验一次并留档}
+    - {id: CMP-06, issue: 完整顾客档案模式的敏感信息处理、保存期限与删除权流程, law: 网络数据安全管理条例, applicable_stage: M9/M12, note: 含「去标识化≠匿名化」认定}
+    - {id: CMP-07, issue: Founder 或品牌提供的商品图片使用权、保密义务、保存期限、模型处理与输出公开范围, applicable_stage: M11/M12}
+
+decision_timetable:
+  rule: 自 v1.1 起每项均有责任人与截止节点，不再存在「无人负责、无截止节点」状态。
+  prd_anchor: PRD-15.6
+  founder_decisions_of_record:
+    ruling_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    items:
+      - {id: CMP-01, decision: DEFER, gate: M2_FREEZE, node: M2 冻结前完成 Founder 合规自评}
+      - {id: CMP-02, decision: DEFER, gate: M2_FREEZE, node: M2 冻结前完成 Founder 合规自评}
+      - {id: CMP-03, decision: DEFER, gate: M2_FREEZE, node: M2 冻结前完成 Founder 合规自评}
+      - {id: CMP-04, decision: DEFER, gate: PRODUCT_FORM_RULING, node: 产品形态裁决后}
+      - {id: CMP-05, decision: DEFER, gate: M4_DISTILLATION_START, node: M4 蒸馏开跑前核验一次}
+      - {id: CMP-06, decision: DEFER, gate: M2_FREEZE, node: M2 冻结前完成 Founder 合规自评}
+      - {id: CMP-07, decision: MITIGATE, gate: CONTROLS_EFFECTIVE_IMMEDIATELY, node: 采用台账原文三条控制项，即时生效}
+  external_legal_opinion_obtained: false
+  external_legal_opinion_note: 七项全部保持 false；不得把 Founder 自评表述为独立法律意见。
+
+deferred_decision_nodes:
+  prd_anchor: PRD-15.6
+  items:
+    - {item: 生产模型最终选型, node: M12 生产加固前, owner: FOUNDER_PRODUCT_AUTHORITY, linkage: 境外 API 处理个体资料须先过 CMP-03}
+    - {item: 试点三品类选定, node: M10 通过后、M11 启动前, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {item: 商业 KPI 口径与阈值, node: M11 试点基线冻结时, owner: FOUNDER_PRODUCT_AUTHORITY, constraint: 三层信号分离呈现（R-10）}
+    - {item: 限额 POC 证据批次额度, node: M0 冻结时, owner: FOUNDER_PRODUCT_AUTHORITY, status: PENDING_FOUNDER_M0_DECISION}
+    - {item: 端侧形态, node: M6 前形成提案, owner: 产品负责人提案 + Founder 裁决, mark: 建议默认}
+    - {item: 分场景时延目标, node: M6 冻结, owner: 产品负责人提案 + Founder 裁决, mark: 建议默认}
+    - {item: 隐藏品牌合成细则, node: M0 合同 → M2 冻结, owner: Guardian 侧 + Founder 确认}
+    - {item: 真实品牌补验批次启动, node: 首个真实品牌接入时, owner: FOUNDER_PRODUCT_AUTHORITY, mark: 建议默认}
+    - {item: Founder 真实品牌注入, node: M11 试点基线冻结前, owner: FOUNDER_PRODUCT_AUTHORITY, fallback: 未提供即自动回退 Codex 夹具合成，不阻断 M11}
+    - {item: 发布模式, node: 每个品牌/租户/账号/内容类型首次启用自动发布前, owner: FOUNDER_PRODUCT_AUTHORITY, default_if_undecided: human_review}
+    - {item: VisualMerchandisingExtensionPort, node: Founder 提出空间陈列产品化需求时另立 Brief, ruling: D-22}
+    - {item: RealtimeSalesAssistExtensionPort, node: Founder 确认实时终端形态、数据权限、延迟与安全合同后另立 Brief, ruling: D-24}
+
+publication_governance:
+  ruling_id: D-25
+  default_mode: human_review
+  auto_publish_requires: [Founder 按租户/品牌/账号/风险级别显式授权, 全部前置检查通过, 审计, 撤回, 回滚, Kill Switch]
+  hard_gate: unauthorized_auto_publish_rate = 0
+  unchanged: [FR-17 可售性复核, 人工可发布率 ≥75%]
+  m0_state: {publication_mode: human_review, auto_publish_enabled: false}
+
+high_risk_review_coverage:
+  prd_anchor: PRD-10.3
+  rate: "100%"
+  no_sampling_allowed_for: [童装安全, 青少年身体与年龄适当性, 运动功能安全, 隐私与个人信息, 品牌硬规则, 法律/医疗/性能承诺]
+  medium_low_risk: 允许 Founder 分层抽样 + 多个隔离 AI 评审 + 确定性 Checker 组合
+
+safety_and_compliance_gate:
+  prd_anchor: PRD-10.4 八道门之一
+  covers: [品类安全, 隐私与授权, AIGC 标识, 未成年人信息, 数据出境, 商品图片权利与保密, 自动发布授权]
+
+obligations:
+  - id: OB-CMPL-01
+    statement: 七项合规问题必须逐项裁决，不得用一次笼统自评替代。
+    required_inputs: [七项核验清单, Founder 裁决文本]
+    outputs: [founder_compliance_decision_ledger 七条记录]
+    failure_state: BLANKET_SELF_ASSESSMENT
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-10.4
+  - id: OB-CMPL-02
+    statement: 任何裁决为 ACCEPT/MITIGATE/DEFER/BLOCK 时必须同时记录理由与裁决日期；DEFER 不得写成 ACCEPT。
+    required_inputs: [裁决值, 理由, 日期]
+    outputs: [台账 rationale / decision_date 字段]
+    failure_state: DECISION_WITHOUT_RATIONALE
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-10.4
+  - id: OB-CMPL-03
+    statement: external_legal_opinion_obtained 必须如实为 false；不得把 Founder 自评或 AI 意见表述为法律意见。
+    required_inputs: [法律评审实际状态]
+    outputs: [external_legal_opinion_obtained 字段, 评审声明用语]
+    failure_state: UNSUPPORTED_LEGAL_OPINION_CLAIM
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-10.4
+  - id: OB-CMPL-04
+    statement: 高风险知识 Founder 审查覆盖率必须为 100%，不得抽样。
+    required_inputs: [知识风险分级结果]
+    outputs: [high_risk_founder_full_review_rate 数值]
+    failure_state: HIGH_RISK_SAMPLED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-10.3 / PRD-10.2
+  - id: OB-CMPL-05
+    statement: 每个后置事项都必须有责任人与截止节点，不得存在无人负责或无节点状态。
+    required_inputs: [PRD-15.6 后置事项表]
+    outputs: [deferred_decision_nodes.items]
+    failure_state: DEFERRED_ITEM_WITHOUT_OWNER_OR_NODE
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-15.6
+  - id: OB-CMPL-06
+    statement: publication_mode 默认 human_review；未经 Founder 授权不得启用自动发布，违反即触发 Kill Switch。
+    required_inputs: [PublicationPolicy, Founder 授权记录]
+    outputs: [PublicationDecision, Kill Switch 记录]
+    failure_state: UNAUTHORIZED_AUTO_PUBLISH
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: D-25 / FR-28 / PRD-16.2 SC-11

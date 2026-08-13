@@ -1,0 +1,130 @@
+schema_version: "1.0"
+contract_id: non_goals_and_stop_conditions.v1.0
+deliverable_index: 6
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-3.2, PRD-9.4, PRD-9.9, PRD-16.1, PRD-16.2, D-22, D-24, D-25, D-28, D-29]
+
+non_goals:
+  scope: V1.0 产品承诺之外
+  prd_anchor: PRD-3.2
+  items:
+    - {id: NG-01, statement: 三维虚拟试衣、人体精确测量、服装 CAD 仿真与成衣设计。, permanence: OUT_OF_V1_0}
+    - {id: NG-02, statement: 以自动图像识别直接评价消费者「缺陷」或进行外貌排名。, permanence: PERMANENTLY_FORBIDDEN}
+    - {id: NG-03, statement: 以「年薪百万专家」角色提示词替代可验证能力。, permanence: PERMANENTLY_FORBIDDEN}
+    - {id: NG-04, statement: 承诺内容必然爆款，或把播放量直接视为专业知识正确。, permanence: PERMANENTLY_FORBIDDEN}
+    - {id: NG-05, statement: 将一次模型回答、跨模型一致或高分文案直接升级为领域真源。, permanence: PERMANENTLY_FORBIDDEN}
+    - {id: NG-06, statement: 为每个品牌复制一整套独立专家内核。, permanence: PERMANENTLY_FORBIDDEN}
+    - {id: NG-07, statement: V1.0 默认人工审核在环；自动发布仅在 Founder 按租户/品牌/账号/风险级别显式授权后开启，须具备审计、撤回与 Kill Switch。FR-17 与「人工可发布率 ≥75%」质量门保留不变。, permanence: CONDITIONAL_BY_FOUNDER_AUTHORIZATION, ruling: D-25}
+    - {id: NG-08, statement: 品牌专属数据库仍为权威事实来源；多模态视觉推断按 D-23 分层引入，推断不得覆盖权威事实，不得推断成分、性能、库存与安全认证。, permanence: STRUCTURAL_INVARIANT, ruling: D-23}
+    - {id: NG-09, statement: 完整门店空间陈列与实时交互式导购工具不是 V1.0 强制交付物；通过扩展端口保留前后向兼容，不是永久退出项目。, permanence: DEFERRED_NOT_WITHDRAWN, ruling: D-22 / D-24}
+  misreading_guard:
+    NG-07: 不得读成「永久禁止自动发布」，也不得读成「默认开启」。
+    NG-09: 不得读成「永久退出」，也不得读成「V1.0 强制实现」。
+
+body_and_age_expression_boundary:
+  prd_anchor: PRD-9.4
+  internal_fields: [需要强化的优势, 需要弱化关注的区域, 比例调整目标]
+  forbidden_external_language: [遮丑, 身材缺陷, 灾难身材, 绝对显瘦/显高/变美承诺]
+  category_rules:
+    - 童装不得使用成人化身体评价
+    - 青少年不得制造身体羞耻、过度消费焦虑或不适龄性表达
+    - 运动品类不得把视觉建议包装为专业性能、伤病预防或医疗效果
+
+persona_truth_boundary:
+  prd_anchor: PRD-9.9
+  forbidden_fabrication: [搭配师履历, 资历, 从业年限, 服务客户, 顾客经历, 职业事件, 门店现场, 销售结果]
+  evolution_rule: 人设可演进，但必须有原因、证据、版本与冲突处置记录。
+
+mandatory_stop_conditions:
+  prd_anchor: PRD-16.2
+  count: 22
+  rule: 触发即停，不得以「先推进后补救」绕过。
+  items:
+    - {id: SC-01, trigger: M2 隐藏评测未冻结, action: 停止大规模知识蒸馏}
+    - {id: SC-02, trigger: 候选生成与 Guardian 上下文未隔离, action: 停止审查并重建独立工作面}
+    - {id: SC-03, trigger: 模型回答被直接标记为 accepted 或 production_servable, action: 停止并回滚状态}
+    - {id: SC-04, trigger: 未见品牌或品类迁移门失败, action: 不得进入商业级专家宣称；只能修复通用机制后重新测试}
+    - {id: SC-05, trigger: 库存真实性门失败, action: 不得发布门店现货内容}
+    - {id: SC-06, trigger: 童装、青少年或运动安全硬门失败, action: 对应品类立即关闭 Serving}
+    - {id: SC-07, trigger: 叙事存在虚构真实人物、事件或结果, action: 停止自动发布并回溯内容链}
+    - {id: SC-08, trigger: 未取得顾客有效授权即建立完整实名顾客档案, action: 停止建档并回溯清理}
+    - {id: SC-09, trigger: 夹具品牌数据、其合成会话或参数被复用于隐藏集（或反向复用）, action: 停止评测并重建隐藏集}
+    - {id: SC-10, trigger: 多模态推断覆盖权威结构化商品事实, action: 停止对应属性进入正式决策，回滚并重跑冲突回归}
+    - {id: SC-11, trigger: 未经 Founder 授权启用自动发布, action: 立即触发 Kill Switch，停止发布，撤回可撤回内容并审计权限链}
+    - {id: SC-12, trigger: 人设虚构履历、资历、顾客经历或职业事件, action: 停止对应账号发布，回溯人设与内容链}
+    - {id: SC-13, trigger: 严重历史观点冲突且无事实依据、修订原因与版本记录, action: 停止该内容链}
+    - {id: SC-14, trigger: Founder 注入数据进入隐藏集、训练链或通用知识真源, action: 停止测试与候选链，清理污染并重建隔离数据池}
+    - {id: SC-15, trigger: 任一扩展模块破坏现有输出 Schema/Bundle 兼容性或绕过安全、授权、库存门, action: 停止扩展发布并回滚}
+    - {id: SC-16, trigger: Planner 与 Guardian 同会话或同工作区，或 Guardian 读取规划上下文、编辑候选, action: 停止审查并重新建立隔离工作面}
+    - {id: SC-17, trigger: 隐藏题、答案、保密评分细则、隐藏品牌事实包、生成参数或原始输出进入主仓或 Git 历史, action: 停止候选链并重建隔离存储}
+    - {id: SC-18, trigger: 角色不可用却未在 Receipt 记录 Founder 替位或豁免裁决, action: 默认 DEFER，不得继续闭环}
+    - {id: SC-19, trigger: CONDITIONAL 缺少条件台账、证据、复核角色、closure commit 或 Founder 关闭决定, action: 不得声明 PASS 或 CLOSED}
+    - {id: SC-20, trigger: mechanism_correctness 或 open_decision 类任务被设置唯一 Gold Answer, action: 停止 M2 冻结，改回可接受决策边界后重跑, ruling: D-28}
+    - {id: SC-21, trigger: M6 以纯 Prompt/RAG 端到端直答实现，或硬约束由 LLM 单独执行、LLM-off 后过滤与排除结果改变, action: 停止 M6 通过判定并重建确定性执行层, ruling: D-29}
+    - {id: SC-22, trigger: 商品图片缺失、质量不足或角度不支持某属性却仍输出该属性, action: 该属性失败关闭、降低置信度或请求补图, prd_anchor: PRD-6.4}
+
+m0_specific_prohibitions:
+  source: DIYU-CBFSK-EXEC-REQ-M0-003 三、本任务禁止事项
+  items:
+    - 不开始大规模知识蒸馏；不生成品牌专属 Prompt；不复制品牌专属专家
+    - 不接入真实品牌生产与正式库存；不创建 Serving；不进入自动内容发布
+    - 不触碰、不重写、不漂移笛语现有 P7C / Content Kernel / DIFY / CSO 任何状态
+    - 不把模型知识广度当作专家等价证明；不把任何候选知识标记为 accepted 或 production_servable
+    - 隐藏品牌与夹具品牌数据在本任务中只定义工作流合同，不实际生成语料
+    - 不得获取、输出或持久化 Founder 提供的模型 API 明文凭证，也不得以「测试方便」为由索要凭证
+    - 不得把夹具品牌、模拟库存或合成顾客当作真实业务证据；不得在 M1 Schema 冻结前正式生成夹具品牌资产
+    - 不得创建或翻转 Serving、RAG、DIFY、生产发布或 Commercial V1.0 状态
+    - 不得为任何品牌复制独立专家内核、补写隐藏品牌专属 Prompt，或向生成链泄漏隐藏答案
+    - 不得自行更改本申请与 PRD v1.2 中已冻结的产品裁决；发现指令内部矛盾须停下并报 Founder 裁决，不得自行绕过
+    - M0 不得实际接收、处理、保存或测试 Founder 真实品牌资料
+    - M0 不得运行多模态商品识别或产生正式 VisualAttributeExtractionResult
+    - M0 不得建立搭配师人设记忆生产库、写入已发布观点或运行人设持久化
+    - M0 不得启用自动发布；publication_mode 仍为 human_review
+
+key_risks:
+  prd_anchor: PRD-16.1
+  count: 22
+  ids: [R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, R-09, R-10, R-11, R-12, R-13, R-14, R-15, R-16, R-17, R-18, R-19, R-20, R-21, R-22]
+  highest_severity_pair: [R-09 评测泄漏, R-22 唯一答案偏误]
+  note: R-22 严重度对标 R-09（D-28）。
+
+obligations:
+  - id: OB-NG-01
+    statement: 非目标中的「延后」项（NG-07 / NG-09）不得被表述为永久退出，「永久禁止」项不得被表述为可授权开启。
+    required_inputs: [PRD-3.2 原文, D-22/D-24/D-25]
+    outputs: [non_goals.items 的 permanence 字段, misreading_guard]
+    failure_state: NON_GOAL_MISREPRESENTED
+    owner_role: CLAUDE_EXECUTION_PLANNER
+    prd_anchor: PRD-3.2
+  - id: OB-NG-02
+    statement: 22 条强制停止条件逐条有触发器与动作，触发即停，不得以补救承诺替代停止。
+    required_inputs: [PRD-16.2 全部条目]
+    outputs: [mandatory_stop_conditions.items]
+    failure_state: STOP_CONDITION_BYPASSED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-16.2
+  - id: OB-NG-03
+    statement: 对外语言不得进行身体羞辱或作绝对效果承诺；内部只使用中性字段。
+    required_inputs: [SuitabilityExplanation 草稿, 对外内容草稿]
+    outputs: [对外语言检查结论]
+    failure_state: BODY_EXPRESSION_VIOLATION
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-9.4 / FR-10
+  - id: OB-NG-04
+    statement: M0 阶段的十四条任务级禁止事项在本里程碑内全程有效，违反任一条即中断上报 Founder。
+    required_inputs: [DIYU-CBFSK-EXEC-REQ-M0-003 三节原文]
+    outputs: [m0_specific_prohibitions, M0 红线自查表]
+    failure_state: M0_RED_LINE_CROSSED
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: DIYU-CBFSK-EXEC-REQ-M0-003 三
+  - id: OB-NG-05
+    statement: 发现指令内部矛盾必须停下并报 Founder 裁决，不得自行绕过。
+    required_inputs: [执行 Prompt 与合同文本]
+    outputs: [矛盾点报告, Founder 裁决记录]
+    failure_state: INTERNAL_CONTRADICTION_BYPASSED
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: DIYU-CBFSK-EXEC-REQ-M0-003 三

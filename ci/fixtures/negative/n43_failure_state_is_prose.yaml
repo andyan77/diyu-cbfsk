@@ -1,0 +1,31 @@
+fixture_id: N43-failure-state-is-prose
+description: >-
+  失败状态写成一句散文而不是具名状态，无法被别处引用或断言。
+checker: check_m0_contract_completeness
+expected: FAIL
+payload:
+  known_roles:
+  - FOUNDER_PRODUCT_AUTHORITY
+  - GPT_CHIEF_ADVISOR
+  - CLAUDE_EXECUTION_PLANNER
+  - CODEX_EXECUTION_ENGINEER
+  - CLAUDE_INDEPENDENT_GUARDIAN
+  - CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+  - TEMPORARY_EXECUTION_WRITER
+  contracts:
+  - path: 01_contracts_and_schemas/example.v1.0.yaml
+    present: true
+    contract_id: example.v1.0
+    prd_anchors:
+    - PRD-13-M0
+    status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+    obligations:
+    - id: OB-X-01
+      statement: 示例支持任务。
+      required_inputs:
+      - 输入 A
+      outputs:
+      - 输出 B
+      failure_state: 如果库存不对就应该停下来
+      owner_role: CODEX_EXECUTION_ENGINEER
+  expected_contract_count: 1

@@ -1,0 +1,23 @@
+fixture_id: N46-contract-without-obligations
+description: >-
+  合同一条支持任务都没定义，通过标准无从验证。
+checker: check_m0_contract_completeness
+expected: FAIL
+payload:
+  known_roles:
+  - FOUNDER_PRODUCT_AUTHORITY
+  - GPT_CHIEF_ADVISOR
+  - CLAUDE_EXECUTION_PLANNER
+  - CODEX_EXECUTION_ENGINEER
+  - CLAUDE_INDEPENDENT_GUARDIAN
+  - CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+  - TEMPORARY_EXECUTION_WRITER
+  contracts:
+  - path: 01_contracts_and_schemas/example.v1.0.yaml
+    present: true
+    contract_id: example.v1.0
+    prd_anchors:
+    - PRD-13-M0
+    status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+    obligations: []
+  expected_contract_count: 1

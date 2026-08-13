@@ -1,0 +1,163 @@
+schema_version: "1.0"
+contract_id: role_and_decision_rights.v1.0
+deliverable_index: 5
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-4.3, PRD-8.2, PRD-16.3, PRD-16.4, D-27, FR-30]
+
+single_source_of_truth:
+  canonical_source: governance/bootstrap/role_operating_model.v0.2.yaml
+  rule: >-
+    本合同不复制角色权限矩阵，也不构成第三套产品真源。角色权限、投影与守卫的唯一规范源是上面这份
+    规范源文件；本合同只做「M0 域内的角色—决策权—失败状态」映射，并声明与规范源的一致性义务。
+  drift_guard: ci/checkers/check_instruction_projection.py（instruction_projection_drift = 0）
+  prd_anchor: D-27 / FR-30
+
+review_mode:
+  current: FOUNDER_PLUS_ISOLATED_AI
+  external_human_review: false
+  external_legal_opinion: false
+  human_team: {founder: 1, external_domain_experts: 0, external_legal_reviewers: 0, independent_human_data_stewards: 0}
+  ai_surfaces: [GPT 总顾问, Claude 执行规划, Codex 执行工程, Claude 独立 Guardian]
+  isolation_rule: >-
+    Planner 与 Guardian 必须为不同工作区、不同会话、不同任务合同；Guardian 不得读取规划上下文或编辑候选。
+  workspace_evidence_strength: 工作区记录只能作为程序性佐证；无稳定 session ID 时须标记 session_id_available=false 并由 Founder 人工见证。
+  prd_anchor: PRD-8.2 / PRD-16.3
+
+roles:
+  - id: FOUNDER_PRODUCT_AUTHORITY
+    human: true
+    decision_boundary: 唯一最终裁决——产品、风险、合规自评、里程碑、知识晋级、发布与合并。
+    m0_duties: [冻结业务范围与风险接受, 对 M0 作 PASS/CONDITIONAL/BLOCK 裁决, 逐项合规裁决]
+    may_not: []
+  - id: GPT_CHIEF_ADVISOR
+    human: false
+    decision_boundary: 只读建议与远程对齐审查；无写入、Guardian 或最终批准权。ChatGPT Web 与 Work 合计一个独立评审票。
+    m0_duties: [对冻结 Commit 作远程对齐审查（不可用时须 Founder 显式 DEFER/替位/豁免）]
+    may_not: [写仓, 任 Guardian, 作最终批准]
+  - id: CLAUDE_EXECUTION_PLANNER
+    human: false
+    decision_boundary: 只读规划；不得写仓、改裁决或自审。
+    m0_duties: [产出任务包、允许与禁止路径、Checker 与验收标准]
+    may_not: [写仓, 改 Founder 裁决, 审查自己规划的任务]
+  - id: CODEX_EXECUTION_ENGINEER
+    human: false
+    decision_boundary: 范围写入与候选冻结；无权改产品合同或未经 Founder 合并。
+    m0_duties: [按授权范围施工、Checker、Fixtures、Report、Receipt 与候选 Commit]
+    may_not: [改产品合同, 未经 Founder 授权合并]
+  - id: CLAUDE_INDEPENDENT_GUARDIAN
+    human: false
+    decision_boundary: 隔离上下文只读审查冻结 Commit；只可 PASS/CONDITIONAL/BLOCK 并给证据。
+    m0_duties: [按 DIYU-CBFSK-EXEC-REQ-M0-003 第五节逐项返回 ①—⑩ 审查结论]
+    may_not: [参与规划, 施工, 修复, 产品重设计, 商业批准]
+  - id: TEMPORARY_EXECUTION_WRITER
+    human: false
+    activation_condition: Codex 不可用且 Founder 依 §11.3 显式指派
+    decision_boundary: 等同 CODEX_EXECUTION_ENGINEER 的范围写入权，须独立工作区与同等证据。
+    may_not: [兼任本任务 Guardian]
+    prd_anchor: PRD-16.4
+  - id: FUTURE_EXTERNAL_HUMAN_REVIEW_EXTENSION
+    human: true
+    status: NOT_ENABLED
+    decision_boundary: 当前未启用，不构成基线前置；未来意见不自动取代 Founder 裁决。
+
+prohibited_representations:
+  - 不得把 AI 评审表述为外部专家共识或外部独立审查
+  - 不得把 Founder 自评表述为独立法律意见
+  - 不得把 Claude 的工程完整性审查写成 Founder 的业务批准
+
+task_classification:
+  prd_anchor: PRD-16.4
+  levels:
+    - id: L1
+      scope: 错别字、标点、无语义格式、机械同步、链接与索引，或不改变合同含义的版式修复
+      flow: Founder 确认 L1 → Codex 修改 → 确定性 Checker → Founder 批准具体 Commit
+      forbidden_when: 涉及范围、能力、角色、状态、阈值、风险、Schema、安全、合规、CI、知识晋级、发布或隐藏评测
+    - id: L2
+      scope: 已冻结合同内实现、无产品语义变化的 Schema/Checker 与常规测试报告
+      flow: Planner → Founder 任务包/基线批准 → Codex → Guardian → PR → ChatGPT 总顾问 → Founder 批准 → 合并
+    - id: L3
+      scope: PRD、角色权限、知识状态、隐藏评测、安全、合规、发布门、模型切换、知识晋级、Commercial 版本与主仓治理
+      flow: 不得未经 Founder 显式豁免跳过独立 Guardian、总顾问远程审查或 Founder 具体 Commit 批准
+  m0_classification: L3
+
+role_unavailability:
+  default: DEFER
+  rules:
+    - {role: GPT_CHIEF_ADVISOR, options: [Founder DEFER, 指定替位顾问, 显式豁免并接受风险], must_record_in: Receipt}
+    - {role: CODEX_EXECUTION_ENGINEER, default: 顺延, emergency: 指定 TEMPORARY_EXECUTION_WRITER（不得兼任 Guardian，须独立工作区与同等证据）}
+  stop_condition: 角色不可用却未在 Receipt 记录 Founder 替位或豁免裁决 → 默认 DEFER，不得继续闭环。
+
+conditional_closure:
+  rule: CONDITIONAL 不等于 PASS。
+  ledger: governance/conditions/conditional_decision_ledger.yaml
+  required_fields: [source commit, owner, due milestone, required evidence, verification role, closure commit, Founder closure decision]
+  supersession: 修复产生新 Commit 后旧 Guardian 与总顾问结论失效，必须重审。
+  prd_anchor: PRD-16.4 / PRD-16.2
+
+authorization_hierarchy:
+  prd_anchor: PRD-16.4 尾段
+  order: [PRD, 里程碑执行申请, Founder 裁决, 任务包与执行 Prompt, 角色 Prompt]
+  invariant: 下层文件不得扩大上层权限。
+
+stakeholders:
+  prd_anchor: PRD-4.3
+  items:
+    - {role: 品牌 Founder 或老板, need: 判断产品是否形成可感知的专业差异、品牌资产与商业价值。}
+    - {role: 品牌总部商品/陈列/内容团队, need: 使用全货盘建立品牌搭配观点、内容栏目、商品组合与门店指导。}
+    - {role: 区域/加盟商/门店经营者, need: 基于本店真实库存、本地天气与顾客需求生产可买可试穿的内容。}
+    - {role: 搭配师/店长/导购, need: 获得专业诊断、试穿建议、替代方案与可表达的内容。}
+    - {role: 终端消费者, need: 理解什么适合自己、为什么、怎样扬长避短、如何使用现有衣物。}
+    - {role: 知识工程与评测团队, need: 构建、审查、版本化和验证专家知识与失败边界。}
+    - {role: 内容策略/CSO 团队, need: 将已接受专业判断投影为不同账号、平台与栏目。}
+
+account_matrix:
+  prd_anchor: PRD-4.5
+  rule: 不同账号必须具有不同事实权限、专业视角、内容职责和行动目标；不得以同一稿件换口吻形成矩阵。
+  items:
+    - {account: 品牌总部搭配师账号, readable_facts: 品牌全部有效货品、品牌策略与目标人群, duty: 品牌穿衣主张、全货盘搭配、衣橱体系、系列变化与审美教育}
+    - {account: 门店搭配师账号, readable_facts: 本店真实库存、当地天气、客群与门店任务, duty: 现在可以买到、可以试穿、适合本地生活的具体组合}
+    - {account: 品牌主账号, readable_facts: 品牌真源与季度表达, duty: 品牌价值、生活方式、季度主题，不承担所有个体搭配细节}
+    - {account: 店长账号, readable_facts: 门店经营现场与角色权限内事实, duty: 货品取舍、真实运营判断、顾客常见困难，不虚构个人经历}
+    - {account: 导购账号, readable_facts: 当班门店可售货品与试穿反馈, duty: 试穿问题、搭配替代、服务细节与成交辅助}
+    - {account: 亲子或运动等品类角色账号, readable_facts: 对应品类事实与安全边界, duty: 品类特有场景、功能、家庭关系或运动生活方式内容}
+
+obligations:
+  - id: OB-ROLE-01
+    statement: 角色权限的唯一规范源是 role_operating_model.v0.2.yaml；本合同与任何投影都不得成为第三套产品真源。
+    required_inputs: [governance/bootstrap/role_operating_model.v0.2.yaml]
+    outputs: [12 份确定性投影, instruction_projection_drift 数值]
+    failure_state: PROJECT_CI_INTEGRITY_FAIL
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: D-27 / FR-30
+  - id: OB-ROLE-02
+    statement: Planner 与 Guardian 必须不同会话、不同工作区、不同任务合同；Guardian 不得读取规划上下文或编辑候选。
+    required_inputs: [工作区佐证记录, Founder 见证行]
+    outputs: [workspace_attestation 实例]
+    failure_state: PLANNER_GUARDIAN_NOT_ISOLATED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-8.2 / PRD-16.2
+  - id: OB-ROLE-03
+    statement: 角色不可用时默认 DEFER，替位或豁免必须记入 Receipt，不得静默绕过。
+    required_inputs: [角色可用性状态, Founder 裁决文本]
+    outputs: [Receipt 中的替位或豁免记录]
+    failure_state: ROLE_SILENTLY_BYPASSED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-16.2 / PRD-16.4
+  - id: OB-ROLE-04
+    statement: CONDITIONAL 必须进条件台账并绑定七项字段；缺任一项不得声明 PASS 或 CLOSED。
+    required_inputs: [Guardian 或总顾问的 CONDITIONAL 结论]
+    outputs: [conditional_decision_ledger 条目]
+    failure_state: CONDITIONAL_WITHOUT_LEDGER
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-16.4
+  - id: OB-ROLE-05
+    statement: 不得把 AI 评审表述为外部专家、把 Founder 自评表述为独立法律意见，或把工程审查写成业务批准。
+    required_inputs: [各类评审结论文本]
+    outputs: [评审声明用语, check_external_review_claims 结论]
+    failure_state: EXTERNAL_REVIEW_MISREPRESENTED
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: PRD-8.2 / DIYU-CBFSK-EXEC-REQ-M0-003 二、执行角色与流程

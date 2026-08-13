@@ -1,0 +1,22 @@
+fixture_id: N47-legacy-asset-path-referenced
+description: 仓内出现指向笛语现有仓的可执行路径——这是接触，不是叙述。
+checker: check_m0_zero_contact
+expected: FAIL
+payload:
+  boundary_contract:
+    declared: true
+    zero_contact_targets:
+    - P7C
+    - Content Kernel
+    - DIFY
+    - CSO
+    declared_contact_count: 0
+    allowlist_declared_in_contract: true
+  legacy_path_hits:
+  - file: tools/sync.py
+    match: ~/diyu/笛语领域通用数据库/clean_output
+  legacy_write_hits: []
+  external_integrations:
+  - name: ERP/PIM/POS/进销存
+    m0_connected: false
+  credentials_touched: 0

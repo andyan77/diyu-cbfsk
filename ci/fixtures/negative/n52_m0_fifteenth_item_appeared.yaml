@@ -1,0 +1,70 @@
+fixture_id: N52-m0-fifteenth-item-appeared
+description: >-
+  清单里多出第 15 项——M0 顶层交付清单恒为 14 项，第 15 项即红线。
+checker: check_m0_deliverable_closure
+expected: FAIL
+payload:
+  declared_items:
+  - index: 1
+    name: project_charter.v1.0.yaml
+    path: p/1
+    present: true
+  - index: 2
+    name: capability_contract.v1.0.yaml
+    path: p/2
+    present: true
+  - index: 3
+    name: category_scope_contract.v1.0.yaml
+    path: p/3
+    present: true
+  - index: 4
+    name: input_output_boundary.v1.0.yaml
+    path: p/4
+    present: true
+  - index: 5
+    name: role_and_decision_rights.v1.0.yaml
+    path: p/5
+    present: true
+  - index: 6
+    name: non_goals_and_stop_conditions.v1.0.yaml
+    path: p/6
+    present: true
+  - index: 7
+    name: knowledge_state_machine.v1.0.yaml
+    path: p/7
+    present: true
+  - index: 8
+    name: architecture_and_integration_boundary.v1.0.yaml
+    path: p/8
+    present: true
+  - index: 9
+    name: compliance_review_contract.v1.0.yaml
+    path: p/9
+    present: true
+  - index: 10
+    name: data_and_fixture_workflow.v1.0.yaml
+    path: p/10
+    present: true
+  - index: 11
+    name: execution_critical_path_and_decision_gates.v1.0.yaml
+    path: p/11
+    present: true
+  - index: 12
+    name: M1 对象模型 Brief
+    path: p/12
+    present: true
+  - index: 13
+    name: M2 评测冻结 Brief
+    path: p/13
+    present: true
+  - index: 14
+    name: M0 checker / fixtures / report / receipt
+    path: p/14
+    present: true
+  - index: 15
+    name: m0_extra_playbook.yaml
+    path: p/15
+    present: true
+  contract_indices: []
+  count_is_frozen: true
+  no_fifteenth_item: true

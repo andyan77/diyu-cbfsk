@@ -21,7 +21,7 @@ parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
 
 project_state:
   project_status: PROJECT_INITIATED
-  execution_status: M0_AUTHORIZED_NOT_STARTED
+  execution_status: M0_IN_PROGRESS
   m0_authorized: true
   m1_started: false
   m2_started: false

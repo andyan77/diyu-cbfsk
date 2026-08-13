@@ -1,0 +1,117 @@
+schema_version: "1.0"
+contract_id: capability_contract.v1.0
+deliverable_index: 2
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-5.1, PRD-5.2, PRD-5.3, PRD-5.4, PRD-5.5, PRD-5.6, PRD-5.7, PRD-7, PRD-11.1]
+
+principle:
+  prd_anchor: PRD-5.1
+  statement: >-
+    产品能力不是「专业知识 + 文案润色」。专家内核必须在同一次任务中完成专业判断与叙事价值发现；
+    叙事不是把「提高腰线」改写得口语化，而是识别目标人群真实处境、常见误解、品牌与身体条件冲突、
+    造型变化和可被记住的专业结论。
+
+capabilities:
+  count: 15
+  prd_anchor: PRD-5.2
+  items:
+    - {id: C-01, name_en: Brand Interpretation, name_zh: 品牌解析, definition: 解析品牌定位、目标市场、风格坐标、身体关系、正式度、审美风险与禁用表达。, primary_component: BrandResolver, related_fr: [FR-01], milestones: [M1, M5, M10]}
+    - {id: C-02, name_en: Audience Intelligence, name_zh: 受众智能, definition: 理解身份、生活阶段、穿衣目标、审美成熟度、预算、风险接受度和真实场景。, primary_component: AudienceResolver, related_fr: [FR-03], milestones: [M1, M9]}
+    - {id: C-03, name_en: Category Adaptation, name_zh: 品类适配, definition: 共享底层机制，同时调用女装、童装、青少年、亲子与运动潮流的品类规则和硬约束。, primary_component: CategoryRouter / CategoryAdapter, related_fr: [FR-02, FR-19], milestones: [M1, M9, M10]}
+    - {id: C-04, name_en: Human Visual Profile, name_zh: 人体视觉档案, definition: 用比例、量感、线条、视觉重心、肤色与气质描述需求，不依赖粗糙身材标签。, primary_component: AudienceResolver, related_fr: [FR-04, FR-10], milestones: [M1, M9]}
+    - {id: C-05, name_en: Garment & Outfit Semantics, name_zh: 商品与组合语义, definition: 理解品类、廓形、长度、材质、色彩、图案、结构、功能与商品角色。, primary_component: GarmentSemanticLayer, related_fr: [FR-05], milestones: [M1, M6]}
+    - {id: C-06, name_en: Styling Diagnosis, name_zh: 造型诊断, definition: 指出现有造型为什么成立或不成立，区分视觉、品牌、功能、库存和场景问题。, primary_component: M6 搭配决策编译器内的诊断步（CandidateComposer 之前，不新增独立服务）, related_fr: [FR-07], milestones: [M6], note: PRD-11.1 注记——M6 合同与 compiler qualification report 必须包含诊断流验收}
+    - {id: C-07, name_en: Transformation Grammar, name_zh: 变换语法, definition: 执行增加、删除、替换、再平衡、重设焦点、简化、现代化、增强结构、放松结构与重新场景化。, primary_component: CandidateComposer, related_fr: [FR-09], milestones: [M5, M6]}
+    - {id: C-08, name_en: Inventory-grounded Composition, name_zh: 库存约束组合, definition: 只从有效货盘生成候选；识别断码、低库存、库存角色和发布前状态变化。, primary_component: InventoryGroundingLayer, related_fr: [FR-06, FR-17], milestones: [M8]}
+    - {id: C-09, name_en: Multi-objective Trade-off, name_zh: 多目标取舍, definition: 在品牌、个体、场景、功能、经营目标和顾客接受度冲突时做可解释选择。, primary_component: StylingRanker, related_fr: [FR-08], milestones: [M6]}
+    - {id: C-10, name_en: Decision Trace, name_zh: 决策轨迹, definition: 保存使用事实、规则、候选、排除、副作用、不确定性、替代和人工升级。, primary_component: DecisionTraceEngine, related_fr: [FR-07], milestones: [M6, M12]}
+    - {id: C-11, name_en: Narrative Intelligence, name_zh: 叙事智能, definition: 从专业判断中发现人、处境、误解、冲突、变化与结论，避免教程式知识点堆砌。, primary_component: NarrativeEngine, related_fr: [FR-12, FR-13, FR-14], milestones: [M7]}
+    - {id: C-12, name_en: Cross-brand/category Transfer, name_zh: 跨品牌跨品类迁移, definition: 在未见品牌和边缘品类任务上保持核心判断与安全边界。, primary_component: EvaluationRunner, related_fr: [FR-18, FR-19], milestones: [M10]}
+    - {id: C-13, name_en: Stylist Persona Continuity Intelligence, name_zh: 搭配师人设连续性智能, definition: 版本化管理专业身份、核心价值观、稳定审美立场、历史观点、栏目和有依据的观点演进，检测无依据冲突与模型切换引发的人设漂移。, primary_component: PersonaMemoryEngine / PublishedViewpointLedger, related_fr: [FR-23, FR-24], milestones: [M1, M2, M7, M10, M12], ruling: D-20}
+    - {id: C-14, name_en: Social-Media Native Voice Intelligence, name_zh: 自媒体原生语感智能, definition: 将已接受专业判断转化为平台原生、口播自然、场景具体、镜头可拍且非课件/模板/AI腔的表达，保持人设语言辨识度。, primary_component: SocialMediaVoiceEngine, related_fr: [FR-25], milestones: [M2, M3, M5, M7, M10], ruling: D-21}
+    - {id: C-15, name_en: Multimodal Garment Understanding, name_zh: 多模态商品理解, definition: 从商品图片提取或判断类别、廓形、松量、长度、肩腰线、视觉体量与重心、结构垂坠光泽、图案尺度、色彩关系、装饰复杂度、可见穿法、风格倾向与商品间视觉兼容关系，并对证据分级。, primary_component: MultimodalGarmentUnderstandingLayer, related_fr: [FR-22], milestones: [M1, M2, M6, M8, M10], ruling: D-23}
+
+brand_style_space:
+  prd_anchor: PRD-5.3
+  rule: 不得把品牌只归入「法式、通勤、轻奢」等单标签；M1 建立连续风格坐标。
+  minimum_dimensions: [结构感, 装饰度, 趋势度, 女性/中性表达, 身体曲线关系, 正式度, 色彩强度, 材质质朴/光泽, 视觉密度, 年龄表达, 城市/自然, 文化倾向, 搭配门槛, 个性强度]
+  landing_milestone: M1
+
+human_and_garment_visual_mechanism:
+  prd_anchor: PRD-5.4
+  internal_objective: 强化优势、弱化非优势区域、调整视觉重心与身份表达；不对身体作价值排序。
+  variables: [横纵分割, 腰线, 肩部体量, 上下重心, 面部附近色彩, 材质体积感, 图案位置, 露肤, 鞋口裤脚, 包袋位置, 领口, 配饰]
+  must_record: [副作用, 失效条件]
+
+persona_continuity_model:
+  prd_anchor: PRD-5.5 / PRD-9.5 / PRD-9.6 / PRD-9.9
+  not_allowed_definition: 几个形容词、一段语气说明、固定 Prompt 或每次临时生成的人格
+  must_cover: [专业身份与能力边界, 目标人群, 核心价值观, 稳定审美立场, 对品牌/身体/场景/消费/潮流的基本判断, 常用观察视角, 可坚持与可演进观点, 禁止表达, 不得虚构的履历资历顾客经历职业事件, 与其他账号角色的职责差异]
+  supporting_objects: [PersonaMemorySnapshot, PublishedViewpointLedger, SeriesContinuityState, PlatformVoiceProfile, PersonaContinuityUpdate, PersonaConflictRecord]
+  priority_rule: 品牌真源 + 已接受专业判断 + 品类安全 + 商品与库存事实 > 搭配师人设 > 平台表达偏好
+  persona_may_not_override: [上层事实, 安全边界, 专业结论]
+
+multimodal_visual_mechanism:
+  prd_anchor: PRD-5.6
+  pipeline: ProductImageAssetBundle → MultimodalGarmentUnderstandingLayer → VisualAttributeExtractionResult
+  attribute_provenance_levels: [authoritative, human_confirmed, model_inferred]
+  provenance_aliases:
+    authoritative: authoritative_structured_fact
+    human_confirmed: human_verified_visual_attribute
+    model_inferred: multimodal_inferred_visual_attribute
+  per_attribute_must_store: [attribute_provenance, 证据, 置信度, 图片版本, 模型版本, 推断时间, 冲突, 人工修订, 是否允许进入正式决策]
+  image_may_never_evidence: [成分, 性能, 库存, 安全认证]
+
+extension_ports:
+  prd_anchor: PRD-5.7 / PRD-15.6 / D-22 / D-24
+  rule: 两类扩展当前均不是 V1.0 强制实现或 M12 硬门；不得写成永久退出。
+  ports:
+    - id: VisualMerchandisingExtensionPort
+      reserved_objects: [StoreSpaceContext, FixtureAndCapacityContext, MannequinStylingContext, PlanogramContext, DisplayExecutionResult]
+      decision_node: Founder 提出空间陈列产品化需求时另立 Brief
+      m0_action: 只维护端口、Schema 版本与向后兼容
+    - id: RealtimeSalesAssistExtensionPort
+      reserved_objects: [SalesAssociateSessionContext, CustomerInteractionState, RealtimeRecommendationResult]
+      decision_node: Founder 确认实时终端形态、数据权限、延迟与安全合同后另立 Brief
+      m0_action: 只维护端口、Schema 版本与安全路由
+
+obligations:
+  - id: OB-CAP-01
+    statement: 十五项能力逐条有定义、承接组件、关联 FR 与落地里程碑，不得出现无承接的浮动能力。
+    required_inputs: [PRD-5.2 能力表, PRD-7 FR 清单, PRD-11.1 组件表]
+    outputs: [capabilities.items（15 条，每条含 primary_component / related_fr / milestones）]
+    failure_state: CAPABILITY_WITHOUT_LANDING
+    owner_role: CLAUDE_EXECUTION_PLANNER
+    prd_anchor: PRD-5.2
+  - id: OB-CAP-02
+    statement: C-06 造型诊断由 M6 编译器承接为 CandidateComposer 之前的诊断步，不新增独立服务。
+    required_inputs: [PRD-11.1 注记]
+    outputs: [capabilities.items C-06 的 primary_component 与 note]
+    failure_state: DIAGNOSIS_SERVICE_SPRAWL
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-11.1
+  - id: OB-CAP-03
+    statement: 视觉推断不得覆盖权威事实，图片不得作为成分、性能、库存或安全认证的证据。
+    required_inputs: [ProductImageAssetBundle, 权威结构化商品事实]
+    outputs: [VisualAttributeExtractionResult, attribute_provenance 字段]
+    failure_state: MULTIMODAL_ATTRIBUTE_UNSAFE
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-5.6 / FR-22 / D-23
+  - id: OB-CAP-04
+    statement: 人设不得覆盖品牌真源、已接受专业判断、品类安全与商品库存事实。
+    required_inputs: [StylistPersonaProfile, 品牌真源, 品类安全合同]
+    outputs: [PersonaContinuityUpdate, 优先级裁决记录]
+    failure_state: PERSONA_STATE_INVALID
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-5.5 / FR-23
+  - id: OB-CAP-05
+    statement: 两类扩展端口保持版本化与向后兼容，未开启时不增加 V1.0 强制交付门，也不得表述为永久退出。
+    required_inputs: [ExtensionPortRegistry, 现有 Schema/Bundle 版本]
+    outputs: [扩展端口注册记录, 向后兼容回归结论]
+    failure_state: EXTENSION_COMPATIBILITY_BREAK
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-5.7 / FR-27 / D-22 / D-24

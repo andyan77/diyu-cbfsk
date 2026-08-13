@@ -1,0 +1,31 @@
+fixture_id: N44-owner-role-not-in-canonical-source
+description: >-
+  负责角色是规范源里不存在的角色名——等于没有人真正负责。
+checker: check_m0_contract_completeness
+expected: FAIL
+payload:
+  known_roles:
+  - FOUNDER_PRODUCT_AUTHORITY
+  - GPT_CHIEF_ADVISOR
+  - CLAUDE_EXECUTION_PLANNER
+  - CODEX_EXECUTION_ENGINEER
+  - CLAUDE_INDEPENDENT_GUARDIAN
+  - CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+  - TEMPORARY_EXECUTION_WRITER
+  contracts:
+  - path: 01_contracts_and_schemas/example.v1.0.yaml
+    present: true
+    contract_id: example.v1.0
+    prd_anchors:
+    - PRD-13-M0
+    status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+    obligations:
+    - id: OB-X-01
+      statement: 示例支持任务。
+      required_inputs:
+      - 输入 A
+      outputs:
+      - 输出 B
+      failure_state: EXAMPLE_FAILURE
+      owner_role: DATA_TEAM_LEAD
+  expected_contract_count: 1

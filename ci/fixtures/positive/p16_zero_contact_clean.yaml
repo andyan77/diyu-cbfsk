@@ -1,0 +1,20 @@
+fixture_id: P16-zero-contact-clean
+description: 边界合同齐备、无遗留资产路径、无写入动作、六类外部集成均未连接、凭证接触为 0。
+checker: check_m0_zero_contact
+expected: PASS
+payload:
+  boundary_contract:
+    declared: true
+    zero_contact_targets:
+    - P7C
+    - Content Kernel
+    - DIFY
+    - CSO
+    declared_contact_count: 0
+    allowlist_declared_in_contract: true
+  legacy_path_hits: []
+  legacy_write_hits: []
+  external_integrations:
+  - name: ERP/PIM/POS/进销存
+    m0_connected: false
+  credentials_touched: 0

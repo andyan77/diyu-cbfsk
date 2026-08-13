@@ -1,0 +1,20 @@
+fixture_id: N49-external-integration-connected-in-m0
+description: M0 阶段把外部集成标为已连接——集成在 M0 只做合同定义。
+checker: check_m0_zero_contact
+expected: FAIL
+payload:
+  boundary_contract:
+    declared: true
+    zero_contact_targets:
+    - P7C
+    - Content Kernel
+    - DIFY
+    - CSO
+    declared_contact_count: 0
+    allowlist_declared_in_contract: true
+  legacy_path_hits: []
+  legacy_write_hits: []
+  external_integrations:
+  - name: 发布平台
+    m0_connected: true
+  credentials_touched: 0

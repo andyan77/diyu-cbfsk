@@ -1,0 +1,132 @@
+schema_version: "1.0"
+receipt_id: DIYU-CBFSK-M0-DELIVERY-RECEIPT-001
+deliverable_index: 14
+project_id: DIYU-CBFSK-001
+milestone: M0
+task_id: GKB-CROSS-BRAND-STYLING-EXPERT-KERNEL-M0-CONTRACT-AND-BENCHMARK-FOUNDATION-001
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+generated_at: "2026-08-13"
+executed_by: TEMPORARY_EXECUTION_WRITER
+executed_by_basis: 执行 Prompt v2.0 §11.3（Codex 执行面不可用，Founder 指派）
+execution_run_id: 2fcbfed0-be7e-4b6f-938e-7f84109ab162
+
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+status_meaning: >-
+  十四项交付物已落盘且确定性核验全绿。M0 是否通过由 Founder 裁决；在其作出
+  PASS / CONDITIONAL / BLOCK 之前，本回执不得被引用为「M0 已通过」。
+
+authorization_chain:
+  product_truth: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+  product_truth_status: SIGNED
+  product_truth_sha256: ba34ab9eb02256d4fa638e3851c81fa0256be6562c5e802b6473d64b7123c143
+  m0_request: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx
+  m0_request_sha256: 6b492c42b0e0bfc6a1b1710949eea4682c69ce62e98a9ca6bcf35ad9937e0fea
+  founder_signoff_receipt: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+  signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  m0_execution_mode: MILESTONE_SINGLE_PACKAGE
+  m0_execution_mode_source: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第五条 / DIYU-CBFSK-FR-GRANULARITY-005 修正①
+
+deliverables:
+  count: 14
+  count_is_frozen: true
+  all_present: true
+  fifteenth_item_created: false
+  verified_by: ci/checkers/check_m0_deliverable_closure.py
+
+supporting_tasks:
+  total_obligations: 57
+  four_fields_complete: 57
+  four_fields: [required_inputs, outputs, failure_state, owner_role]
+  verified_by: ci/checkers/check_m0_contract_completeness.py
+
+zero_contact:
+  targets: [P7C, Content Kernel, DIFY, CSO]
+  tracked_text_files_scanned: 120
+  legacy_path_hits: 0
+  legacy_write_action_hits: 0
+  external_integrations_connected: 0
+  credentials_touched: 0
+  verified_by: ci/checkers/check_m0_zero_contact.py
+
+verification_at_delivery:
+  governance_checkers: 19 PASS / 0 FAIL
+  fixtures: 74 behaved as declared (17 positive / 57 negative)
+  prd_contract_checker: 62 PASS / 0 FAIL（--require-archive）
+  docx_package_audit: 3 PASS / 0 FAIL
+  instruction_projection_drift: 0
+  new_checkers: [check_m0_contract_completeness, check_m0_zero_contact, check_m0_deliverable_closure]
+  new_fixtures: 19
+
+red_line_self_check:
+  knowledge_units_created: 0
+  candidate_knowledge_created: 0
+  any_knowledge_accepted_or_production_servable: false
+  fixture_brands_generated: 0
+  hidden_brands_generated: 0
+  corpus_items_generated: 0
+  founder_real_brand_data_touched: false
+  multimodal_recognition_run: false
+  persona_memory_production_store_created: false
+  publication_mode: human_review
+  auto_publish_enabled: false
+  serving_created: false
+  real_inventory_connected: false
+  real_customer_connected: false
+  legacy_diyu_assets_touched: false
+  model_api_credentials_touched: 0
+  effort_baseline_changed: false
+  m0_fourteen_items_changed: false
+  task_described_as_m0_completed: false
+
+open_items_for_founder:
+  - id: M0-OPEN-01
+    item: 限额 POC 证据批次额度
+    prd_anchor: PRD-15.6
+    decision_node: M0 冻结时
+    decision_owner: FOUNDER_PRODUCT_AUTHORITY
+    status: PENDING_FOUNDER_M0_DECISION
+    note: 执行侧不得代为设定额度；请在 M0 裁决时一并给值。
+  - id: M0-OPEN-02
+    item: 品牌档案单价校准（3—5 个档案实测工时）
+    prd_anchor: PRD-8.7 成本口径
+    conflict: >-
+      PRD 8.7 要求 M0 以 3—5 个档案的实测工时校准单价，但同一份执行申请禁止 M0 生成任何档案；
+      两条并置时 M0 无法产生实测工时。
+    executor_resolution: 按「不生成」优先，校准状态如实记为 NOT_PERFORMED，随 M1 首批档案执行。
+    status: AWAITING_FOUNDER_CONFIRMATION_OF_INTERPRETATION
+    note: 这是执行侧按红线优先所作的取舍，须 Founder 确认口径。
+
+deferred_and_tracked:
+  - {id: COND-007, item: M2 阈值冻结, note: PRD 10.2 中 20 项 M2_FREEZE_REQUIRED 指标，M0 一律留白}
+  - {id: COND-011, item: 隐藏评测集 STORE-A 落地, deadline: M2 前}
+  - {id: COND-010, item: 签署子 Commit 的 Guardian 确认, deadline: M0 收口时一并进行}
+
+next_required_actions:
+  - CLAUDE_INDEPENDENT_GUARDIAN 在隔离工作区对本交付作独立审查，逐项返回执行申请第五节 ①—⑩ 结论
+  - GPT_CHIEF_ADVISOR 远程对齐审查；不可用时 Founder 须显式 DEFER / 指定替位 / 豁免并接受风险，不得静默跳过
+  - FOUNDER_PRODUCT_AUTHORITY 作出 PASS / CONDITIONAL / BLOCK 裁决，并一并裁决 M0-OPEN-01 与 M0-OPEN-02
+  - 裁决为 PASS 或无阻塞 CONDITIONAL 后方可进入 M1
+
+self_reference_limitation: >-
+  本回执与十四项交付物同处一个提交，因此不自指其所在 Commit 的哈希。可复算配方：
+  git rev-parse HEAD 取本交付 Commit；下方 artifact_sha256 清单不含本回执自身，逐项可复算。
+
+artifact_sha256:
+  00_charter/project_charter.v1.0.yaml: 3b92accc2fea3c7cca9f92e7fcbd4cd94bb37e4c4836634b7bd197128df447f4
+  01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml: 85e48201654c8aa5655f4896fa2844474fb04ab5effcd80eca83213a9d7ce37b
+  01_contracts_and_schemas/capability_contract.v1.0.yaml: 3ba1487f618a1ed4b76dda7de585399320935f2c2c62c7a865653d5372ba7674
+  01_contracts_and_schemas/category_scope_contract.v1.0.yaml: f0e3a53f44f90f52d082a3f80b5b8e75e1d85949ac7e4b520ec0067043768988
+  01_contracts_and_schemas/compliance_review_contract.v1.0.yaml: e971b9e5786e7cb05e3fc98ee7dff08a4e7d7d31539f4594ac8a52435d890a86
+  01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml: 7c0c0cdb9a889ebe982fd0e4b660589bf9de0177749c2a91ad6d0ba62e369cc4
+  01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml: 555244e5c03a35329627996521291fffd1e5d853a057babece66f7806ce84d2f
+  01_contracts_and_schemas/input_output_boundary.v1.0.yaml: 859f93d8b1d414e6f082da3d7f09a575fdd09124ec7f31eeeb2fb0d9028184ba
+  01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml: 845f15333d2cbfc087a46c9f66585de977e08021c0d3f8d2ab87a7253754591a
+  01_contracts_and_schemas/m1_object_model_brief.md: 91dd38337d92a09846e514af4f94ee55e4f033d49eb86ce0354e578dc6056089
+  01_contracts_and_schemas/m2_evaluation_freeze_brief.md: 2021e88dfe70132fc3f4e70b6e2f319c7461bcddbbc7d87a7ace72fa25ad7b5c
+  01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml: bedf1f894545a2e1953615bd6fe8b4ac1ec124316bf0dcfea1aed97767a179fe
+  01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml: 10a550bc2ec1e89d258887f946dc0a812a957e870dd8e036d1062f57883145fb
+  02_benchmark_manifests/README.md: e0ce50c88681c6ddca167f237fa8dcf2d28c04cd243f5fd1c176a1b2553ac701
+  11_reports_and_receipts/m0_delivery_report.md: 09745a6f5c01ac9e1ae6609bfc2939a0ec660ee11499b93f9f314dfe41e71ab8
+  ci/checkers/check_m0_contract_completeness.py: 4493723273ab65611a7a4dacda3e6e2172c16a7d23f4d45cb433fb5c61da6341
+  ci/checkers/check_m0_deliverable_closure.py: d0d4ebdd03363a4a8512be7dbb9830754ee385f6d24ee68bc30c9392b06c6c4f
+  ci/checkers/check_m0_zero_contact.py: ac26723d3fd8d41eb7441d7f8068edbc4ddd415476e770c03c0f65e103d479cb

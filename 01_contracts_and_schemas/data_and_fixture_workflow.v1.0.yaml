@@ -1,0 +1,174 @@
+schema_version: "1.0"
+contract_id: data_and_fixture_workflow.v1.0
+deliverable_index: 10
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-8.6, PRD-8.7, PRD-10.3, PRD-16.1-R-09, PRD-16.1-R-12, S5, D-17, D-18, D-27]
+
+m0_scope_statement:
+  defines_only: true
+  generates_nothing: true
+  statement: >-
+    M0 只定义品牌档案、评测语料与夹具品牌的工作流合同，不实际生成任何语料、夹具品牌、隐藏品牌
+    或图片资产。语料生成属 M1—M2 执行范围；夹具品牌资产不得在 M1 Schema 冻结前正式生成。
+  m0_generated_assets: {fixture_brands: 0, hidden_brands: 0, reference_brand_archives: 0, corpus_items: 0}
+
+fixture_brand_path:
+  ruling: 已裁决
+  prd_anchor: PRD-8.7
+  supplier: CODEX_EXECUTION_ENGINEER
+  method: 依据已冻结 Schema 与品类合同模拟合成夹具品牌、商品和图片描述，经 Claude Code 完整性审核后冻结。
+  uses: [M1—M6 开发调试, M6 fixtures, 非隐藏回归, M3—M6 知识引出仿真货盘, M11 仿真试点]
+  mandatory_markers: [synthetic_fixture_brand, non_real_inventory, non_commercial_evidence]
+  m11_fallback: M11 未收到 Founder 真实品牌包时全部使用该路径。
+  earliest_generation_milestone: M1（Schema 冻结之后）
+
+hidden_brand_path:
+  ruling: 已裁决
+  prd_anchor: PRD-8.7 / PRD-8.6
+  planned_count: 30—50 个合成封闭未见品牌
+  build_deadline: M2 冻结前建成
+  isolation_requirements:
+    - 夹具池与隐藏池必须在不同工作区使用不同生成配方、参数空间、随机种子和审核上下文
+    - 隐藏品牌只进入冻结隐藏集，不得向候选生成链泄漏
+    - 不得因测试失败补写品牌专属 Prompt
+  receipt_must_record: [脚本, 参数, 种子, 清单哈希]
+  homogeneity_control:
+    ruling: 已裁决
+    reason: 防止「考卷与教材同锅」
+    levers: [不同配方, 不同参数空间, 不同随机种子, 不同工作区, 隐藏池专属风格坐标覆盖]
+    guardian_output: 同质性报告
+    m2_action: 执行泄漏 + 同质性双检查
+
+physical_isolation:
+  ruling_ref: S5 / D-27
+  prd_anchor: PRD-8.7
+  contract_file: governance/storage/hidden_benchmark_storage_contract.yaml
+  forbidden_locations: [主仓任何目录, 主仓 Git 历史, 主仓 LFS, 主仓加密压缩包, Planner 或 Codex 可读位置]
+  forbidden_content: [隐藏题, 答案, 保密评分细则, 隐藏品牌事实包, 生成参数, 原始输出]
+  allowed_in_main_repo: [benchmark_schema, frozen_manifest, content_hashes, runner_interface, result_summary, 非秘密元数据]
+  public_directory_name: 02_benchmark_manifests/
+  public_directory_created_in_m0: true
+  public_directory_content_at_m0: 仅目录与边界说明，无任何 manifest
+  selected_storage:
+    id: STORE-A
+    kind: separate_private_repository_with_restricted_access
+    selected_by: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第四条
+    provisioned: false
+    provisioning_deadline: M2 前落地
+    tracked_by: COND-011
+  checker: ci/checkers/check_hidden_benchmark_boundary.py
+
+founder_real_brand_injection:
+  ruling_id: D-17
+  prd_anchor: PRD-8.7 / FR-26
+  milestone: M11
+  optional: true
+  is_m11_hard_gate: false
+  may_contain: [品牌定位, 目标人群, 风格, 商品名, SKU, 款色码, 说明, 图片, 角色, 可选库存或可售状态, 测试任务]
+  if_only_products_and_images: 可验证真实商品理解与测试生产，不得制造库存数量、销售状态或门店现货事实。
+  forbidden_uses: [训练, 隐藏测试, 隐藏品牌生成/增强/校准, 通用专家知识固化, 公开, 当作真实商业结果证据]
+  substitution_rule: 一个注入真实品牌可替代一个夹具测试位，其余位继续由 Codex 合成。
+  m0_handling: M0 不接收、不处理、不保存、不测试任何 Founder 真实品牌资料。
+  failure_state: FOUNDER_PACKAGE_SCOPE_VIOLATION
+
+reference_brand_archives:
+  planned_count: 120—180 个
+  build_window: M1—M5 渐进建设，不必全部挤进 M2
+  cost_calibration:
+    status: 待验证假设
+    estimate: 约 14—42 人月
+    rule: 不直接写入正式预算；M0 以 3—5 个档案的实测工时校准单价后再入预算。
+    m0_calibration_status: NOT_PERFORMED
+    m0_calibration_reason: M0 不生成任何档案（本合同 m0_scope_statement），单价校准随 M1 首批档案执行。
+
+corpus_and_archive_owner:
+  prd_anchor: PRD-8.7 时序与责任 / R-12
+  requirement: M0 必须在本合同中指定「语料与档案建设负责人」。
+  assigned_owner_role: CODEX_EXECUTION_ENGINEER
+  assigned_owner_accountable_to: FOUNDER_PRODUCT_AUTHORITY
+  owner_duties:
+    - 30—50 个隐藏品牌在 M2 冻结前建成
+    - 120—180 个参考品牌档案 M1—M5 渐进建设
+    - 仿真货盘与 M8 接入的生产库存物理分离，不得互相混写
+    - 每批合成资产的脚本、参数、种子与清单哈希入 Receipt
+  fallback_if_unavailable: 依 role_and_decision_rights 的角色不可用规则默认 DEFER，由 Founder 指派 TEMPORARY_EXECUTION_WRITER；不得静默顺延。
+  risk_ref: R-12
+
+simulation_vs_production_separation:
+  rule: 仿真货盘与 M8 接入的生产库存物理分离，不得互相混写。
+  failure_state: SIMULATED_INVENTORY_MIXED_WITH_PRODUCTION
+
+inherent_limitation:
+  prd_anchor: PRD-8.7 固有局限
+  statement: >-
+    夹具与隐藏品牌均为模型合成后，「未见品牌测试」证明的是对新合成品牌的迁移，对真实品牌的迁移强度
+    弱一档——第一个真实品牌接入即第一次真实考试。
+  mitigations: [M11 真实品牌补验批次, 对外宣称限制, 本合同的同质性控制]
+  must_not_be_omitted_from_external_claims: true
+
+hidden_test_design:
+  prd_anchor: PRD-10.3
+  count: 13
+  items:
+    - 同一商品放入不同品牌，检查品牌语法和目标人群是否改变
+    - 同一品牌面对不同年龄、体型、肤色、气质、职业与场景，检查答案是否真正差异化
+    - 同一造型要求分别做加法与减法，检查系统是否只会添加
+    - 品牌风格、个体视觉目标、运动功能和库存任务发生冲突，检查取舍
+    - 主推款不适合具体顾客，检查系统能否拒绝强推
+    - 不存在库存、事实缺失或门店断码，检查系统是否失败关闭
+    - 给出未见品牌事实包，禁止为其补写专属 Prompt
+    - 给出品类边缘任务，检查是否错误调用女装规则
+    - 给出高质量但虚构顾客故事，检查事实叙事门
+    - 给出历史观点、栏目状态与品牌事实变化，检查人设稳定性、合理演进、无依据冲突和无新价值重复
+    - 将同一人设与专业结论投影到不同平台，检查核心人格一致性、平台原生表达、口播节奏、可拍性、课件模板 AI 腔
+    - 给出多角度、低质量和与结构化事实冲突的商品图片，检查视觉属性准确性、置信度校准、跨图一致性与失败关闭
+    - 替换底层模型后重放人设与内容任务，检查核心价值观、历史观点和多模态决策边界漂移
+  m0_status: 只登记设计要求，不产生任何题目。
+
+obligations:
+  - id: OB-DATA-01
+    statement: M0 只定义工作流合同，不生成任何语料、夹具品牌、隐藏品牌或图片资产。
+    required_inputs: [PRD-8.7 合同要求]
+    outputs: [m0_generated_assets（四项均为 0）]
+    failure_state: PREMATURE_ASSET_GENERATION
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: DIYU-CBFSK-EXEC-REQ-M0-003 三
+  - id: OB-DATA-02
+    statement: 必须指定语料与档案建设负责人，并写明不可用时的处置，不得留「无人负责」。
+    required_inputs: [角色可用性, Founder 指派]
+    outputs: [corpus_and_archive_owner 块]
+    failure_state: CORPUS_OWNER_UNASSIGNED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-8.7 / R-12
+  - id: OB-DATA-03
+    statement: 夹具池与隐藏池必须使用不同配方、参数空间、随机种子、工作区，禁止任一方向的复用。
+    required_inputs: [生成脚本, 参数, 种子, 工作区标识]
+    outputs: [Receipt 中的脚本参数种子与清单哈希, Guardian 同质性报告]
+    failure_state: FIXTURE_HIDDEN_POOL_CONTAMINATION
+    owner_role: CLAUDE_INDEPENDENT_GUARDIAN
+    prd_anchor: PRD-8.7 / PRD-16.2 SC-09
+  - id: OB-DATA-04
+    statement: 隐藏题、答案、评分细则、隐藏品牌事实包、生成参数与原始输出不得进入主仓或 Git 历史。
+    required_inputs: [工作树全文件, 全 Git 历史]
+    outputs: [隐藏边界扫描结论]
+    failure_state: HIDDEN_ASSET_IN_MAIN_REPO
+    owner_role: CLAUDE_INDEPENDENT_GUARDIAN
+    prd_anchor: S5 / D-27 / PRD-16.2 SC-17
+  - id: OB-DATA-05
+    statement: Founder 注入资料默认 test_production_only，不得进入训练、隐藏集或通用知识真源。
+    required_inputs: [Founder 注入包元数据]
+    outputs: [使用范围标记, 隔离数据池记录]
+    failure_state: FOUNDER_PACKAGE_SCOPE_VIOLATION
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: D-17 / PRD-16.2 SC-14
+  - id: OB-DATA-06
+    statement: 合成品牌的固有局限必须如实记录，不得在对外宣称中省略。
+    required_inputs: [合成路径说明, M11 补验批次结论]
+    outputs: [inherent_limitation 块, 对外宣称限制]
+    failure_state: OVERCLAIMED_TRANSFER_STRENGTH
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-8.7 固有局限

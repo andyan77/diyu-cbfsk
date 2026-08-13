@@ -1,0 +1,166 @@
+schema_version: "1.0"
+contract_id: architecture_and_integration_boundary.v1.0
+deliverable_index: 8
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-2.3, PRD-11.1, PRD-11.2, PRD-11.3, PRD-5.7, D-01, D-29, FR-27, FR-30]
+
+decoupling_ruling:
+  ruling_id: D-01
+  prd_anchor: PRD-2.3 / DIYU-CBFSK-EXEC-REQ-M0-003 二
+  statement: 独立立项、独立项目空间，不挂靠笛语现有仓。
+  zero_contact_targets: [P7C, Content Kernel, DIFY, CSO]
+  zero_contact_meaning: 不触碰、不重写、不漂移上述任何状态；本项目不读其运行状态、不写其数据、不改其配置。
+  verification: 与笛语现有资产零接触验证通过，现有 P7C 状态无漂移。
+  enforced_by: ci/checkers/check_m0_zero_contact.py
+  m0_actual_contact_count: 0
+  boundary_documentation_allowlist:
+    rationale: >-
+      零接触判据要能落地，必须有文件写得出遗留资产的名字与路径形态——否则边界无法被定义，
+      也无法被测试。允许「描述边界」的文件在此显式列出，由 Founder 与 Guardian 审阅，
+      不得在 checker 代码里隐式放行，也不得扩展到产品文档或数据文件。
+    paths:
+      - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml
+      - 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml
+      - ci/checkers/check_m0_zero_contact.py
+    plus_rule: >-
+      ci/fixtures/ 下 checker 字段指向 check_m0_zero_contact 的 fixture——它们是本判据自己的
+      测试数据，「描述一次越界」不等于越界本身。
+    everything_else: 一律判 LEGACY_ASSET_PATH 或 LEGACY_ASSET_WRITE_ACTION，包括别的 checker 的 fixture。
+
+high_level_components:
+  count: 19
+  prd_anchor: PRD-11.1
+  items:
+    - {id: CMP-01, name: BrandResolver, duty: 解析品牌事实与风格坐标。}
+    - {id: CMP-02, name: CategoryRouter / CategoryAdapter, duty: 选择品类机制与硬约束。}
+    - {id: CMP-03, name: AudienceResolver, duty: 解析目标受众与具体个体。}
+    - {id: CMP-04, name: GarmentSemanticLayer, duty: 标准化商品、款色码、图像和功能属性。}
+    - {id: CMP-05, name: InventoryGroundingLayer, duty: 生成特定时间、特定范围的可售候选。}
+    - {id: CMP-06, name: ConstraintEngine, duty: 执行库存、品牌、品类、安全、用户拒绝和场景硬约束。, d29_requirement: 必须由确定性、可审计代码执行并可用 fixtures 单测；关闭 LLM 组件后过滤与排除结果不变。}
+    - {id: CMP-07, name: CandidateComposer, duty: 生成有限、可解释的搭配候选。}
+    - {id: CMP-08, name: StylingRanker, duty: 在可行解集合上按品牌、个体、场景、功能与经营目标排序和取舍。, d28_requirement: 输出是有序的合法候选族，不是唯一 argmax。}
+    - {id: CMP-09, name: DecisionTraceEngine, duty: 保存事实、知识、模型、候选、排除、不确定性和版本。, d28_d29_requirement: 每个排除项须标注触发它的确定性规则；被舍弃的合法候选族及取舍理由一并记录。}
+    - {id: CMP-10, name: NarrativeEngine, duty: 从已接受判断中生成 StylingThesis 和 NarrativePackage。}
+    - {id: CMP-11, name: AccountProjector, duty: 按账号权限、角色和平台生成内容。}
+    - {id: CMP-12, name: EvaluationRunner, duty: 运行隐藏评测、回归、漂移和成本检查。}
+    - {id: CMP-13, name: MultimodalGarmentUnderstandingLayer, duty: 摄取商品图片并写入 garment_and_inventory.schema.attribute_provenance。, constraint: 只允许 authoritative > human_confirmed > model_inferred 分层；推断不得覆盖权威事实，也不得推断成分、性能、库存与安全认证。}
+    - {id: CMP-14, name: PersonaMemoryEngine, duty: 版本化保存人设档案、快照、栏目状态、观点更新与冲突。}
+    - {id: CMP-15, name: PublishedViewpointLedger, duty: 记录已公开主要观点、证据、发布上下文、修订原因与演进链。}
+    - {id: CMP-16, name: SocialMediaVoiceEngine, duty: 根据人设与平台输出原生表达、口播节奏、镜头协同与反模板约束。}
+    - {id: CMP-17, name: PublicationPolicyController, duty: 执行 human_review 与 Founder 授权 auto_publish 策略，保存权限、审计、撤回、回滚与 Kill Switch 状态。}
+    - {id: CMP-18, name: AutoPublishKillSwitch, duty: 对 Founder 授权自动发布执行即时全局或细粒度停止，记录触发人、范围、原因、撤回和回滚结果。}
+    - {id: CMP-19, name: ExtensionPortRegistry, duty: 版本化管理两类扩展端口及未来可选扩展，维持 Schema/Bundle 兼容。}
+  diagnosis_note:
+    prd_anchor: PRD-11.1 注记
+    statement: C-06 造型诊断由 M6 搭配决策编译器承接，作为 CandidateComposer 之前的诊断步，不新增独立服务；M6 合同与 compiler qualification report 必须包含诊断流验收。
+
+anti_degeneration_contract:
+  ruling_id: D-29
+  landing_milestone: M6
+  three_required_checks:
+    - id: AD-01
+      name: 硬约束确定性执行
+      requirement: ConstraintEngine 由确定性、可审计代码执行，可用 fixtures 单测。
+    - id: AD-02
+      name: LLM-off 不变性
+      requirement: 关闭 LLM 组件后，过滤与排除结果不变。
+      artifact: llm_off_invariance_replay_fixtures
+    - id: AD-03
+      name: DecisionTrace 规则归因
+      requirement: 每个排除项须标注触发它的确定性规则。
+  forbidden_implementation: M6 以纯 Prompt/RAG 端到端直答实现
+  stop_condition: 三条任一不通过 → 停止 M6 通过判定并重建确定性执行层。
+  m6_artifact: architecture_conformance_check_report
+
+non_functional_requirements:
+  count: 12
+  prd_anchor: PRD-11.2
+  items:
+    - {id: NFR-01, name: 可审计, requirement: 每次任务保留输入快照、知识版本、模型版本、输出、人工修改和发布状态。}
+    - {id: NFR-02, name: 可重放, requirement: 相同输入与版本可重新运行并比较核心决策漂移。}
+    - {id: NFR-03, name: 多租户隔离, requirement: 品牌事实、库存、顾客信息、内容和反馈必须隔离。}
+    - {id: NFR-04, name: 任务恢复, requirement: 批量知识蒸馏、评测与内容生成支持检查点、失败重试和幂等。}
+    - {id: NFR-05, name: 成本守卫, requirement: 记录每批问题、模型调用、接受知识和可发布内容的单位成本。}
+    - {id: NFR-06, name: 隐私最小化, requirement: 个体资料按任务最小化收集；照片不是 V1 唯一事实来源。}
+    - {id: NFR-07, name: 版本化, requirement: 品牌真源、库存快照、知识、评测、Prompt、模型与内容均有版本。}
+    - {id: NFR-08, name: 可替换模型, requirement: 模型无关；基础模型变更必须通过完整回归，模型与版本写入 DecisionTrace，不得把能力绑定为某个模型的不可审计黑盒。, model_supply: 测试期按需向 Founder 提出需求、由 Founder 提供模型 API，本阶段不考虑自部署模型。, decision_node: M12 生产加固前, decision_owner: FOUNDER_PRODUCT_AUTHORITY, precondition: 若候选为境外模型 API 且处理个体资料，须先通过合规核验清单第③项数据出境核验。}
+    - {id: NFR-09, name: 人设状态版本化与可重放, requirement: 人设档案、快照、观点账本、栏目状态、冲突与观点修订必须可版本化、可回放、可回滚。}
+    - {id: NFR-10, name: 多模态推断来源与置信度, requirement: 每项视觉推断必须保存图片来源与版本、模型与版本、时间、置信度、证据、冲突、人工修订与正式决策许可。}
+    - {id: NFR-11, name: 扩展端口前后向兼容, requirement: 扩展必须以版本化端口、可选 Schema 或 Bundle 模块实现；未开启和旧版消费者的现有输出不受破坏。}
+    - {id: NFR-12, name: 发布模式权限审计与 Kill Switch, requirement: publication_mode 默认 human_review；授权自动发布必须细粒度限定、全链审计、可撤回回滚、可即时停止。}
+
+external_integrations:
+  prd_anchor: PRD-11.3
+  m0_status: 全部为合同定义，M0 不建立任何实际连接。
+  items:
+    - {id: EXT-01, name: ERP/PIM/POS/进销存, scope: 商品、款色码、库存、可售状态、门店与价格。, m0_connected: false}
+    - {id: EXT-02, name: 媒体生成服务, scope: 商品图、AI 模特、视频素材和剪辑工程可接入成熟外部能力，不作为本内核自研主线。, m0_connected: false}
+    - {id: EXT-03, name: 内容发布与账号管理, scope: 可接入现有矩阵平台，但发布前必须通过事实和库存复核。, m0_connected: false}
+    - {id: EXT-04, name: 内部评审工作台, scope: 支持打分、评论、分歧、接受拒绝、边界补充与版本记录。, m0_connected: false}
+    - {id: EXT-05, name: 商品图片与多模态模型, scope: 可接入品牌授权图片与符合合同的多模态模型；图片权利、保密和数据边界须先行核验。, m0_connected: false}
+    - {id: EXT-06, name: 发布平台, scope: 默认仅对接人工审核流程；只有 PublicationPolicyController 确认 Founder 授权与全部前置门通过后才能调用自动发布扩展。, m0_connected: false}
+
+credential_boundary:
+  source: DIYU-CBFSK-EXEC-REQ-M0-003 三
+  rules:
+    - 不得获取、输出或持久化 Founder 提供的模型 API 明文凭证
+    - 不得以「测试方便」为由索要凭证
+    - 凭证只能以环境变量注入，禁止硬编码，禁止写入报告、日志或 Receipt
+  m0_credentials_touched: 0
+
+project_ci:
+  ruling_id: D-27
+  canonical_source: governance/bootstrap/role_operating_model.v0.2.yaml
+  projections_are_not_product_truth: true
+  github_actions_must_guard: [投影漂移, 双活产品真源, 角色越权, 隐藏资产与秘密边界]
+  metrics: {instruction_projection_drift: 0, dual_active_product_truth: 0, hidden_content_hits_in_public_repo: 0}
+  failure_state: PROJECT_CI_INTEGRITY_FAIL
+  prd_anchor: FR-30
+
+obligations:
+  - id: OB-ARCH-01
+    statement: 与笛语现有资产零接触；不触碰、不重写、不漂移 P7C / Content Kernel / DIFY / CSO 任何状态。
+    required_inputs: [本仓全部文件, 现有笛语资产命名清单]
+    outputs: [零接触验证结论, m0_actual_contact_count]
+    failure_state: LEGACY_ASSET_CONTACT
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: D-01 / PRD-13-M0 通过标准
+  - id: OB-ARCH-02
+    statement: ConstraintEngine 必须确定性执行且 LLM-off 后过滤与排除结果不变，DecisionTrace 每个排除项标注触发规则。
+    required_inputs: [硬约束规则集, llm_off_invariance_replay_fixtures]
+    outputs: [architecture_conformance_check_report 三条结论]
+    failure_state: M6_DEGENERATED_TO_PROMPT_RAG
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: D-29 / PRD-16.2 SC-21
+  - id: OB-ARCH-03
+    statement: StylingRanker 输出有序合法候选族而非唯一 argmax；被舍弃的合法候选族与取舍理由一并记录。
+    required_inputs: [可行解集合, 排序目标权重]
+    outputs: [有序候选族, DecisionTrace 取舍记录]
+    failure_state: SINGLE_ARGMAX_OUTPUT
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: D-28 / PRD-11.1
+  - id: OB-ARCH-04
+    statement: 扩展端口必须版本化且向后兼容，未开启时不破坏现有输出，也不得绕过安全、授权与库存门。
+    required_inputs: [ExtensionPortRegistry, 现有 Schema/Bundle 版本]
+    outputs: [兼容回归结论]
+    failure_state: EXTENSION_COMPATIBILITY_BREAK
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: FR-27 / NFR-11
+  - id: OB-ARCH-05
+    statement: 不得获取、输出或持久化模型 API 明文凭证；凭证只能以环境变量注入。
+    required_inputs: [模型调用配置]
+    outputs: [凭证接触计数（须为 0）]
+    failure_state: CREDENTIAL_EXPOSURE
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: DIYU-CBFSK-EXEC-REQ-M0-003 三
+  - id: OB-ARCH-06
+    statement: 六类外部集成在 M0 只做合同定义，不建立任何实际连接。
+    required_inputs: [PRD-11.3 集成清单]
+    outputs: [external_integrations.items（m0_connected 全为 false）]
+    failure_state: PREMATURE_EXTERNAL_CONNECTION
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: PRD-11.3 / DIYU-CBFSK-EXEC-REQ-M0-003 三

@@ -1,0 +1,160 @@
+schema_version: "1.0"
+contract_id: knowledge_state_machine.v1.0
+deliverable_index: 7
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-8.1, PRD-8.4, PRD-8.5, PRD-8.6, PRD-3.3-P-06, PRD-3.3-P-09, PRD-16.2, D-28]
+
+method_ruling:
+  prd_anchor: PRD-8.1
+  name: Black-box Behavioral Distillation（黑盒行为蒸馏）
+  statement: >-
+    项目不读取 Claude 模型内部权重。GPT 通过高区分度问题设计，迫使 Claude 在品牌、品类、受众、库存、
+    身体、场景、功能、冲突与叙事条件下外显判断；Claude Code 负责批量执行、结构化落盘、跨批次比较与检查。
+    输出只能进入模型引出的候选知识链。
+  invariant: 模型输出是候选（P-06），模型不拥有最终知识裁决权。
+
+states:
+  count: 7
+  is_linear_chain: true
+  no_skipping: true
+  prd_anchor: PRD-8.4
+  items:
+    - id: S1
+      state: model_elicited_candidate
+      meaning: Claude 或 GPT 回答形成的初始候选。
+      entry_condition: 经预审的问题包产生的回答已结构化落盘
+      exit_to: cross_model_contested
+      owner_role: CODEX_EXECUTION_ENGINEER
+    - id: S2
+      state: cross_model_contested
+      meaning: 由另一模型攻击、反例化、要求补充条件并记录分歧。
+      entry_condition: 已完成跨模型对抗轮次并记录分歧
+      exit_to: source_or_case_checked
+      owner_role: CLAUDE_EXECUTION_PLANNER
+    - id: S3
+      state: source_or_case_checked
+      meaning: 有来源、真实案例或可验证机制支持。
+      entry_condition: 来源、案例或机制证据齐备
+      exit_to: founder_ai_reviewed
+      owner_role: CODEX_EXECUTION_ENGINEER
+    - id: S4
+      state: founder_ai_reviewed
+      meaning: 隔离 GPT、隔离 Claude、规则 Checker 与 Founder 按风险分级完成内部评审。
+      must_not_be_stated_as: 外部专家共识
+      entry_condition: 高风险 100% Founder 审查；中低风险按分层抽样 + 多隔离 AI + 确定性 Checker
+      exit_to: benchmark_validated
+      owner_role: FOUNDER_PRODUCT_AUTHORITY
+    - id: S5
+      state: benchmark_validated
+      meaning: 通过隐藏测试、反例与跨品牌跨品类迁移。
+      entry_condition: 冻结隐藏集上的评测结论达阈值
+      exit_to: founder_accepted
+      owner_role: FOUNDER_PRODUCT_AUTHORITY
+    - id: S6
+      state: founder_accepted
+      meaning: Founder 接受其业务作用与边界。
+      entry_condition: Founder 明确接受裁决
+      exit_to: production_servable
+      owner_role: FOUNDER_PRODUCT_AUTHORITY
+    - id: S7
+      state: production_servable
+      meaning: 同时通过知识、技术、风险与运行门后才可服务。
+      entry_condition: 四类门全部通过
+      exit_to: null
+      owner_role: FOUNDER_PRODUCT_AUTHORITY
+      red_line: M0—M11 期间任何知识不得进入本状态
+
+state_machine_invariants:
+  - id: KSM-INV-01
+    statement: 模型回答不得被直接标记为 accepted 或 production_servable；违反即停止并回滚状态。
+    prd_anchor: PRD-16.2
+  - id: KSM-INV-02
+    statement: 未达 production_servable 的知识不得进入正式生成。
+    prd_anchor: PRD-10.1
+  - id: KSM-INV-03
+    statement: 内容表现、用户反馈与门店修改只进入候选账本，不直接改写知识真源（FR-20）。
+    landing: M12 交付物 feedback_to_candidate_ledger
+  - id: KSM-INV-04
+    statement: 任何知识、规则与评测改动只按已接受基线做增量检查（P-09 Delta-only Promotion）。
+  - id: KSM-INV-05
+    statement: founder_ai_reviewed 不得表述为外部专家共识或外部独立审查。
+    guard: ci/checkers/check_external_review_claims.py
+
+knowledge_unit_types:
+  count: 13
+  prd_anchor: PRD-8.5
+  items:
+    - {id: KU-01, type: ConceptCard, role: 规范概念、属性、同义词、边界。}
+    - {id: KU-02, type: MechanismCard, role: 服装变量怎样影响视觉、功能、身份和场景，包含副作用与失效条件。}
+    - {id: KU-03, type: DecisionRuleCard, role: 前置条件、判断逻辑、冲突优先级、输出与例外。}
+    - {id: KU-04, type: DiagnosticCard, role: 观察、候选原因、证据、排除、动作与升级。}
+    - {id: KU-05, type: TransformationPattern, role: 增删替换、再平衡、焦点转移、现代化和场景化模式。}
+    - {id: KU-06, type: CategoryConstraintCard, role: 童装、青少年、亲子、运动等品类硬约束与安全边界。}
+    - {id: KU-07, type: CaseTrace, role: 品牌、受众、货盘、候选、排除、取舍、结果、干扰变量和可迁移范围。}
+    - {id: KU-08, type: NarrativePatternCard, role: 从已接受决策中形成处境、误解、冲突、变化和结论的叙事模式。}
+    - {id: KU-09, type: NegativeCase, role: 看似合理但专业、品牌、库存、功能或事实边界错误的反例。}
+    - {id: KU-10, type: EvaluationCard, role: 题目、输入、预期边界、评分标准、硬失败和裁决说明。, mandatory_field: evaluation_task_class, constraint: "②③类不得写入唯一 Gold Answer", ruling: D-28}
+    - {id: KU-11, type: PersonaContinuityRuleCard, role: 人设核心不变项、可演进项、观点冲突、栏目续接、重复抑制与修订证据。}
+    - {id: KU-12, type: SocialMediaVoicePatternCard, role: 平台原生表达、口播节奏、镜头动作、专业密度、反模板与反 AI 腔的适用边界。}
+    - {id: KU-13, type: MultimodalAttributeRuleCard, role: 图像可推断视觉属性、不可验证属性、冲突优先级、置信度和人工覆盖规则。}
+
+scale_plan:
+  prd_anchor: PRD-8.6
+  nature: 工程预算，不是凑数指标
+  items:
+    - {asset: 高区分度基础问题, planned: 400—700 条}
+    - {asset: 场景化问题实例, planned: 12,000—25,000 条, note: 通过组合覆盖与试验设计展开，不穷举笛卡尔积}
+    - {asset: Claude 候选回答与对抗轮次, planned: 25,000—50,000 份}
+    - {asset: 正式候选知识单元, planned: 6,000—10,000 个}
+    - {asset: V1.0 已接受专家知识, planned: 4,000—6,500 个, note: 允许低于候选数量}
+    - {asset: 隐藏与回归评测用例, planned: 8,000—15,000 个}
+    - {asset: 参考品牌事实档案, planned: 120—180 个, note: 不等于为每品牌建立专家}
+    - {asset: 封闭测试用合成未见品牌, planned: 30—50 个, note: 开发与知识生成链不可针对性读取品牌资料、配方或答案}
+
+m0_state:
+  knowledge_units_created: 0
+  candidates_created: 0
+  any_unit_at_or_beyond_founder_accepted: false
+  any_unit_production_servable: false
+  statement: M0 只定义状态机与单元类型，不产生任何知识单元或候选。
+
+obligations:
+  - id: OB-KSM-01
+    statement: 候选知识必须逐级通过七状态链，不得跳级，每级有进入条件与负责角色。
+    required_inputs: [候选知识单元, 各级证据]
+    outputs: [状态字段, 状态迁移记录]
+    failure_state: KNOWLEDGE_STATE_SKIPPED
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: PRD-8.4
+  - id: OB-KSM-02
+    statement: 模型回答不得被直接标记为 accepted 或 production_servable。
+    required_inputs: [模型原始回答, 状态标记请求]
+    outputs: [拒绝记录或回滚记录]
+    failure_state: MODEL_OUTPUT_PROMOTED_WITHOUT_REVIEW
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-16.2 / P-06
+  - id: OB-KSM-03
+    statement: founder_ai_reviewed 状态的评审结论不得表述为外部专家共识。
+    required_inputs: [内部评审面板结论]
+    outputs: [评审声明用语]
+    failure_state: EXTERNAL_REVIEW_MISREPRESENTED
+    owner_role: TEMPORARY_EXECUTION_WRITER
+    prd_anchor: PRD-8.4
+  - id: OB-KSM-04
+    statement: EvaluationCard 必须标注 evaluation_task_class；mechanism_correctness 与 open_decision 类不得写入唯一 Gold Answer。
+    required_inputs: [评测题目, 任务分类判定]
+    outputs: [evaluation_task_class 字段, 可接受决策边界]
+    failure_state: SINGLE_GOLD_ANSWER_ON_OPEN_TASK
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: D-28 / PRD-16.2 SC-20
+  - id: OB-KSM-05
+    statement: 内容表现与用户反馈只进候选账本，不直接改写知识真源。
+    required_inputs: [内容表现数据, 门店修改记录]
+    outputs: [feedback_to_candidate_ledger 条目]
+    failure_state: FEEDBACK_WROTE_TRUTH_DIRECTLY
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: FR-20

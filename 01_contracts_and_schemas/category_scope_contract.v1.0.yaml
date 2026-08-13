@@ -1,0 +1,127 @@
+schema_version: "1.0"
+contract_id: category_scope_contract.v1.0
+deliverable_index: 3
+project_id: DIYU-CBFSK-001
+milestone: M0
+approval_request_id: DIYU-CBFSK-EXEC-REQ-M0-003
+product_truth_signature_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+status: M0_CANDIDATE_PENDING_FOUNDER_M0_DECISION
+prd_anchors: [PRD-4.1, PRD-4.2, PRD-3.3-P-07, PRD-9.4, PRD-16.2, FR-02, FR-11, FR-19, FR-29]
+
+launch_categories:
+  count: 5
+  count_is_frozen: true
+  prd_anchor: PRD-4.1
+  items:
+    - id: CAT-WOMENSWEAR
+      name: 女装
+      core_audience: 成人女性；职业、生活方式与个体审美差异显著
+      unique_professional_contract: [身体比例, 肤色, 气质, 年龄表达, 正式度, 场景转换, 衣橱重构]
+      key_outputs: [总部全货盘搭配, 门店现货搭配, 个体适配, IP内容]
+      hard_constraint_family: adult_expression_boundary
+    - id: CAT-KIDSWEAR
+      name: 童装
+      core_audience: 儿童与家长双重决策者
+      unique_professional_contract: [年龄与发育, 活动自由, 穿脱便利, 面料触感, 安全, 耐洗, 成长余量]
+      forbidden: [成人化身体评价]
+      key_outputs: [家长决策内容, 儿童自主选择, 场景与功能搭配]
+      hard_constraint_family: child_safety_and_age_appropriateness
+      founder_full_review_required: true
+    - id: CAT-TEEN-TREND
+      name: 青少年潮流时装
+      core_audience: 青春期与年轻潮流人群
+      unique_professional_contract: [同伴文化, 身份探索, 圈层符号, 校规与家庭边界, 身体发育, 年龄适当性]
+      forbidden: [身体羞耻, 过度消费焦虑, 不适龄性表达]
+      key_outputs: [趋势解释, 圈层语境, 校园与社交场景, 可控尝试]
+      hard_constraint_family: adolescent_body_and_age_appropriateness
+      founder_full_review_required: true
+    - id: CAT-FAMILY-TREND
+      name: 亲子潮流时装
+      core_audience: 家庭组合与亲子关系表达
+      unique_professional_contract: [关联而不雷同, 年龄差异, 色彩图案呼应, 舒适, 安全, 拍摄与出行场景]
+      key_outputs: [亲子成套逻辑, 家庭场景叙事, 单店组合]
+      hard_constraint_family: mixed_age_safety
+      founder_full_review_required: true
+      note: 亲子任务同时触发童装或青少年一侧的品类硬约束，取更严者。
+    - id: CAT-SPORT-TREND
+      name: 运动潮流时装
+      core_audience: 运动、通勤、休闲跨场景人群
+      unique_professional_contract: [运动类型, 活动幅度, 功能面料, 支撑, 伸展, 透气, 鞋服关系, 安全]
+      priority_rule: 功能合同优先
+      key_outputs: [运动前后场景, 功能与潮流平衡, 可售组合]
+      hard_constraint_family: sport_function_and_safety
+      founder_full_review_required: true
+      forbidden: [把视觉建议包装为专业性能, 伤病预防或医疗效果承诺]
+
+architecture_rule:
+  prd_anchor: PRD-4.1 尾段
+  statement: 产品架构从第一天按跨品类设计；商业 V1.0 须完成上述五类的显式支持。
+
+future_categories:
+  status: NOT_IN_V1_0
+  items: [男装, 中性时装, 户外生活方式, 鞋包配饰]
+  rule: 不得在 V1.0 中暗示已完整支持。
+
+brand_scope:
+  prd_anchor: PRD-4.2
+  rules:
+    - 覆盖市面主流品牌风格，而非只覆盖少数参考品牌
+    - 以连续风格坐标、受众模型与品牌事实包解析品牌，不以品牌名称直接映射固定搭配模板
+    - 支持总部品牌级、区域级、加盟门店级不同货盘与内容权限
+    - 品牌专属数据库只保存真实品牌参数、禁用规则、本季策略和历史接受案例，不重复建设专家通识
+
+category_safety_by_design:
+  prd_anchor: PRD-3.3 P-07 / FR-11
+  statement: 童装、青少年和运动品类必须具有独立的安全、功能、年龄适当性和表达边界。
+  hard_gate: 严重安全违规率 = 0
+  founder_review_coverage: 高风险知识（童装安全、青少年身体与年龄适当性、运动功能安全）Founder 审查覆盖率 100%，不得抽样。
+  stop_condition: 童装、青少年或运动安全硬门失败 → 对应品类立即关闭 Serving。
+
+activation_readiness:
+  prd_anchor: FR-29 / D-26
+  metric: five_category_activation_readiness
+  required_before_real_brand_import: "100%"
+  scope: 五类 Category Adapter、安全合同、主要 Schema、M10 评测、版本/部署/权限/Feature Flag 全部可开启
+  failure_state: FIVE_CATEGORY_NOT_READY
+
+m11_pilot_rule:
+  prd_anchor: D-26 / PRD-13-M11
+  minimum_categories_in_pilot: 3
+  unchanged_by_founder_injection: true
+
+obligations:
+  - id: OB-CAT-01
+    statement: 品类路由必须识别五类及其组合任务并调用对应适配器，错误品类规则调用率为 0。
+    required_inputs: [StylingTaskContext.category, CategoryAdapter 合同]
+    outputs: [路由结果, DecisionTrace 中的品类规则来源]
+    failure_state: CATEGORY_ROUTING_ERROR
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: FR-02
+  - id: OB-CAT-02
+    statement: 童装、青少年、运动建议必须通过年龄、功能、活动与安全规则，严重安全违规率为 0。
+    required_inputs: [年龄与场景信息, 品类硬约束卡, 功能与安全规则]
+    outputs: [安全校验结论, 拒绝或收窄记录]
+    failure_state: CATEGORY_SAFETY_VIOLATION
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: FR-11 / PRD-10.1
+  - id: OB-CAT-03
+    statement: 童装/青少年年龄与场景不明时不得输出可能不适龄、成人化或安全风险较高的建议。
+    required_inputs: [年龄段, 使用场景]
+    outputs: [失败关闭记录, 需要补充的事实清单]
+    failure_state: AGE_CONTEXT_INSUFFICIENT
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-6.4
+  - id: OB-CAT-04
+    statement: 运动品类功能信息不足时不得用纯视觉搭配替代性能与安全判断。
+    required_inputs: [运动类型, 活动幅度, 功能面料信息]
+    outputs: [功能判断结论或失败关闭记录]
+    failure_state: SPORT_FUNCTION_INSUFFICIENT
+    owner_role: CODEX_EXECUTION_ENGINEER
+    prd_anchor: PRD-6.4 / PRD-9.4
+  - id: OB-CAT-05
+    statement: 五类正式导入就绪度未达 100% 前不得进入正式真实品牌导入。
+    required_inputs: [五类适配器状态, 安全合同状态, M10 评测结论, Feature Flag 状态]
+    outputs: [five_category_activation_readiness 数值与证据]
+    failure_state: FIVE_CATEGORY_NOT_READY
+    owner_role: FOUNDER_PRODUCT_AUTHORITY
+    prd_anchor: FR-29 / D-26

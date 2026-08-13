@@ -1,0 +1,138 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+project_id: DIYU-CBFSK-001
+title: M2 章程——架构桥接并入 M2、六层架构、身份隔离永久解耦与三包一收口
+ruling_date: "2026-08-13"
+issued_by: Founder
+issued_via: founder_direct_dispatch
+ruling_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+signature_receipt: DIYU-CBFSK-FOUNDER-M2-KICKOFF-SIGNATURE-001
+landed_in: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml（M2-EP01 首个 Commit）
+effective_from: M2
+changes_m0_fourteen_items: false
+changes_effort_baseline: false
+changes_m1_frozen_schema: false
+
+verbatim_ruling: >-
+  采纳顾问方案及Cowork四条修正。当前M1继续执行，不修改已冻结候选；M1收口后、M2最终冻结前，设置一个非正式里程碑的L2跨阶段架构桥接包，以组合式公共元数据信封承接M1
+  Schema，并完成六份最小ADR。项目采用包含叙事与人设平面的六层架构；商业楔子默认内容先行、API第二步，商业交付形态在M10通过后、M11设计冻结前由Founder裁决。ADR必须声明最小实现、落地里程碑、当前不建设和激活条件；Billing、开发者门户和Marketplace在商业形态裁决前不得建设。基线锦标赛同时衡量质量、成本、延迟与人工干预。项目永久坚持造型理解与身份识别解耦，不建设人脸身份识别、验证、模板存储或跨会话面部关联能力。竞品市场事实按候选证据治理，未经核验不得进入正式产品合同或对外宣称。补充裁决：桥接内容不再作为独立L2任务或M1.5节点执行，统一并入M2。M2采用一份Milestone
+  Plan、三个执行包和一次最终收口：M2-EP01完成M1→M2公共元数据信封、六份最小ADR、身份识别隔离及评测治理基础；M2-EP02完成评分卡、基线锦标赛与隐藏评测资产；M2-EP03完成集成、冻结、回归、Report和Receipt。M1当前执行不中断，M1已冻结领域Schema不得原位修改；M2通过组合式Envelope/Profile消费M1产物。EP01完成后只运行确定性内部Checker，不单独进入Guardian、总顾问和Founder审查；三个执行包全部完成后，对最终候选Commit统一进行一次Guardian、一次总顾问审查和一次Founder裁决。若桥接实施要求改变M1顶层对象、核心语义、事实优先级或品类合同，则立即停止并提交Founder裁决，不得在M2内部静默修改。
+
+verbatim_integrity:
+  transcription_only: true
+  statement: >-
+    上方 verbatim_ruling 为 Founder 裁决原文，一字不改落盘。如与 Founder 原始表述有出入，
+    以 Founder 原文为准，并由执行侧报告差异，不得由执行侧自行改写。
+  execution_side_added_nothing: true
+  verbatim_sha256: 7dc570449527bd3c13d3e64086d0a725c8a8e2af9c5831dbfb8ecf4f1874a1de
+  digest_recipe: sha256(utf-8(verbatim_ruling))
+  digest_purpose: >-
+    裁决原文此前只靠「一字不改」这句承诺守着。指纹让任何改写可被 check_m2_governance_landing
+    当场判 M2_CHARTER_VERBATIM_DRIFT；改原文必须同时更新本指纹并具名裁决。
+
+internal_supersession_note:
+  superseded_sentence: M1收口后、M2最终冻结前，设置一个非正式里程碑的L2跨阶段架构桥接包
+  superseded_by_sentence: 补充裁决：桥接内容不再作为独立L2任务或M1.5节点执行，统一并入M2。
+  disposition: >-
+    同一份裁决内后句取代前句。本 Plan 与 M2-EP01 按「补充裁决」执行——不设 M1.5 节点、
+    不建独立 L2 桥接包，桥接内容统一并入 M2-EP01。前句原文保留在 verbatim_ruling 内不删改。
+  recorded_by: EXECUTION_SIDE
+
+milestone_plan_m2:
+  plan_id: MILESTONE_PLAN_M2
+  plan_version: 1.1.0
+  goal: 评测治理与评分体系，并入架构桥接内容（Envelope/Profile、六份最小 ADR、身份隔离、评测治理基础）
+  structure:
+    milestone_plan: 1
+    execution_packages: 3
+    unified_closeout: 1
+  packages:
+    - id: M2-EP01
+      status: DISPATCHED
+      scope: M1→M2 公共元数据信封（PROVISIONAL）+ 六份最小 ADR + 身份识别隔离 + 评测治理基础
+    - id: M2-EP02
+      status: NOT_DISPATCHED
+      scope: 受控合并至 M1 最终收口 → Profile 最终绑定+重测 → 评分卡 + 基线锦标赛 + 隐藏评测资产
+      start_precondition: M1 收口合入 main
+    - id: M2-EP03
+      status: NOT_DISPATCHED
+      scope: 集成 + 冻结候选 + 回归 + Report + Receipt
+      irreversible_package: true
+      additional_approval_required: Founder 精确 Prompt 批准
+      basis: DIYU-CBFSK-FR-GRANULARITY-005 additional_exact_prompt_approval_required
+  review_arrangement:
+    per_package: 仅运行确定性内部 Checker
+    per_package_guardian_review: false
+    per_package_advisor_review: false
+    per_package_founder_review: false
+    at_final_candidate:
+      guardian_review: 1
+      advisor_review: 1
+      founder_decision: 1
+    hidden_asset_freeze_effective_from: Founder 收口签署
+  founder_touchpoints:
+    count: 2
+    detail:
+      - 本签署（Milestone Plan + Envelope 批准）
+      - 收口裁决
+    additional: M2-EP03 精确 Prompt 批准（不可逆包附加批准）
+    consistent_with: DIYU-CBFSK-FR-GRANULARITY-005 founder_touchpoints.per_milestone=2
+  adr_titles:
+    - {id: ADR-001, title: 六层架构与边界}
+    - {id: ADR-002, title: Model Provider Abstraction}
+    - {id: ADR-003, title: Tenant/Scope 与 M1→M2 组合消费}
+    - {id: ADR-004, title: 隐私与身份隔离}
+    - {id: ADR-005, title: 评测锦标赛与最小可观测性}
+    - {id: ADR-006, title: Canonical Connector 边界}
+  non_adr_records:
+    rationale: >-
+      「商业楔子」与「竞品治理」两项自 v1.1 起改为非 ADR 记录，内容不丢失：
+      商业形态是可撤销的业务假设、竞品事实是证据治理政策，二者都不是不可逆技术决策，
+      写成 ADR 会把业务假设伪装成架构约束。
+    records:
+      - {id: commercial_decision_record, landed: 03_m2_evaluation_foundation/commercial_decision_record.v0.1.yaml}
+      - {id: competitive_evidence_policy, landed: 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml}
+
+parallel_constraint:
+  max_concurrent_packages: 2
+  basis: DIYU-CBFSK-FR-GRANULARITY-005 limits.max_concurrent_packages
+  currently_active: [M1 执行链, M2-EP01]
+  quota_full: true
+  m2_ep02_start_forbidden_until: M1 收口合入 main
+  m1_frozen_candidate_modification_allowed: false
+
+permanent_commitments:
+  - id: PC-01
+    statement: 项目永久坚持造型理解与身份识别解耦，不建设人脸身份识别、验证、模板存储或跨会话面部关联能力。
+    activation_condition: 永不
+    landed_in:
+      - 03_m2_evaluation_foundation/adr/ADR-004-privacy-and-identity-isolation.md
+      - 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+      - ci/checkers/check_m2_identity_isolation.py
+  - id: PC-02
+    statement: Billing、开发者门户和Marketplace在商业形态裁决前不得建设。
+    activation_condition: 商业交付形态由 Founder 裁决（M10 通过后、M11 设计冻结前）
+    landed_in:
+      - 03_m2_evaluation_foundation/adr/ADR-006-canonical-connector-boundary.md
+      - 03_m2_evaluation_foundation/commercial_decision_record.v0.1.yaml
+  - id: PC-03
+    statement: 竞品市场事实按候选证据治理，未经核验不得进入正式产品合同或对外宣称。
+    landed_in: 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml
+  - id: PC-04
+    statement: 基线锦标赛同时衡量质量、成本、延迟与人工干预。
+    landed_in: 03_m2_evaluation_foundation/adr/ADR-005-benchmark-tournament-and-observability.md
+
+circuit_breaker:
+  statement: >-
+    若桥接实施要求改变 M1 顶层对象、核心语义、事实优先级或品类合同，则立即停止并提交 Founder 裁决，
+    不得在 M2 内部静默修改。
+  stop_conditions:
+    - NEW_TOP_LEVEL_INPUT_OR_OUTPUT_OBJECT_REQUIRED
+    - FACT_PRIORITY_CHANGE_REQUIRED
+    - CATEGORY_CONTRACT_CHANGE_REQUIRED
+    - M1_FROZEN_ARTIFACT_DRIFT
+  silent_modification_allowed: false
+  triggered_in_m2_ep01: false
+
+signed_by: Founder
+signed_at: "2026-08-13"

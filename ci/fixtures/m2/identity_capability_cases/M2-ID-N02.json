@@ -1,0 +1,20 @@
+{
+  "case_id": "M2-ID-N02",
+  "description": "Schema property 名直接落生物识别模板存储——对象模型层就把它建进去了。",
+  "expected_hits": 1,
+  "note": "",
+  "documents": {
+    "fake/customer_vision.schema.json": {
+      "$id": "https://example.invalid/fake/customer_vision.schema.json",
+      "type": "object",
+      "properties": {
+        "task_scoped_non_identifying_visual_attributes": {
+          "type": "object"
+        },
+        "biometric_template_storage": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

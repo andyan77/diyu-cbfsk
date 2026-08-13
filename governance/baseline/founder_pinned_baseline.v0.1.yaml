@@ -135,12 +135,17 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
+    post_change_binary_sha256: b12a1581413c01ccd8223b7d2f55117debf4b19fd0f96efff0659f7d0aeb82bc
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-10
+        authorization_ref: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 / MILESTONE_PLAN_M2 v1.1 §5 allowed_update（README）
+        binary_sha256: b12a1581413c01ccd8223b7d2f55117debf4b19fd0f96efff0659f7d0aeb82bc
+        landed_in_commit: M2_EP01_DELIVERY_COMMIT
+        content: 抬头补 M2-EP01 已自检、execution_status 改 M1_M2_PARALLEL_IN_PROGRESS、m2_started 置 true 并补六项 M2 状态位、状态位说明改为「授权条目已由 Founder 具名补上」、裁决目录补 FR-CALIBRATION-004 与 FOUNDER-M2-CHARTER-001、新增 M2 评测治理基础段、Checker 计数 20→24
       - change_id: README-MOD-09
         authorization_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 m1_pre_approval（M1-EP01 交付）
         binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22

@@ -1,0 +1,80 @@
+schema_version: "0.1"
+profile_id: DIYU-CBFSK-M2-EVALUATION-ASSET-CLASSIFICATION-PROFILE
+artifact_id: evaluation_asset_classification_profile.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_DELIVERED
+artifact_lifecycle_state: draft
+prd_anchors: [PRD-8.6, PRD-8.7, PRD-10.3, D-18]
+ruling_anchors: [DIYU-CBFSK-FR-ORG-002, DIYU-CBFSK-FR-CALIBRATION-004]
+
+single_implementation:
+  statement: >-
+    隐藏边界只有一套实现。本 Profile **只做分类字段合同**，一切实际的路径/历史/内容边界
+    执行全部委派给既有实现；本包不新建、不复制、不改写任何隔离扫描逻辑。
+  existing_contract: governance/storage/hidden_benchmark_storage_contract.yaml
+  existing_checker: ci/checkers/check_hidden_benchmark_boundary.py
+  existing_workflow: .github/workflows/secret-and-hidden-boundary.yml
+  enforcement_delegated_to: ci/checkers/check_hidden_benchmark_boundary.py
+  second_implementation_created: false
+  stop_condition_if_violated: DUPLICATE_HIDDEN_BOUNDARY_IMPLEMENTATION
+  eq_basis: EQ-1
+  why: >-
+    再写一套隐藏边界扫描，两套判据迟早分叉：一套拦得住、另一套拦不住，
+    而报告只会引用其中一套。宁可只有一套并让它更严，也不要两套互相掩护。
+
+classification_field_contract:
+  field_name: data_classification
+  applies_to: 所有评测资产
+  envelope_alignment:
+    envelope_schema: 03_m2_evaluation_foundation/envelope/m1_to_m2_envelope.schema.v0.1.json
+    same_field: data_classification
+    note: 与 Envelope 的 data_classification 是同一个枚举，不另起一套分类词汇。
+  values:
+    - value: public
+      meaning: 可留在主仓可见路径的公开资产（schema、frozen manifest、hashes、runner 接口、结果摘要）。
+      main_repository_storage_allowed: true
+    - value: internal
+      meaning: 项目内部治理资产，不含隐藏题内容。
+      main_repository_storage_allowed: true
+    - value: restricted_founder_only
+      meaning: 仅 Founder 可读，主仓不得存放正文。
+      main_repository_storage_allowed: false
+    - value: hidden_evaluation
+      meaning: 隐藏评测内容（隐藏题正文、参考答案、评分细则保密部分、隐藏品牌完整事实包、生成参数、隐藏运行原始输出）。
+      main_repository_storage_allowed: false
+      storage_location: STORE-A（独立私有仓库，受限访问）
+      storage_provisioned: false
+      provisioning_tracked_by: COND-011
+
+isolation_assertions:
+  - id: IA-1
+    assertion: hidden_evaluation 与 restricted_founder_only 分类的资产正文不得出现在主仓任何路径或 Git 历史。
+    enforced_by: ci/checkers/check_hidden_benchmark_boundary.py
+    this_package_reimplemented_it: false
+  - id: IA-2
+    assertion: 主仓可见目录 02_benchmark_manifests/ 只放 schema、frozen manifest、hashes、runner 接口、结果摘要与非保密元数据。
+    allowed_artifacts_source: governance/storage/hidden_benchmark_storage_contract.yaml main_repository.allowed_artifacts
+    allowed_artifacts_restated_here: false
+    enforced_by: ci/checkers/check_hidden_benchmark_boundary.py
+  - id: IA-3
+    assertion: 隐藏资产在 STORE-A provision 且访问控制生效前，不得生成任何隐藏题、隐藏品牌、夹具品牌或答案资产。
+    current_status: STORE-A 未 provision（COND-011 跟踪）
+    consequence: M2-EP02 启动隐藏资产建设前须先确认 provision 完成。
+  - id: IA-4
+    assertion: 引用隐藏资产只经许可通道——主仓只保存 runner 接口定义与结果摘要，runner 在 Founder 控制环境中读取隐藏内容。
+    enforced_by: governance/storage/hidden_benchmark_storage_contract.yaml runner_interface
+
+m2_ep01_asset_state:
+  public_assets_created: 0
+  internal_assets_created: 0
+  restricted_founder_only_assets_created: 0
+  hidden_evaluation_assets_created: 0
+  benchmark_items_created: 0
+  fixture_brands_created: 0
+  hidden_brands_created: 0
+  statement: >-
+    本包一件评测资产都没产。分类合同先行、资产本体属 M2-EP02——
+    这正是「先冻结考试口径，再生成内容」的次序，反过来做等于让出题方自己定义什么算及格。
+  any_hidden_content_written_to_main_repository: false

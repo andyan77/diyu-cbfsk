@@ -1,0 +1,143 @@
+schema_version: "0.1"
+manifest_id: DIYU-CBFSK-M2-EP01-MANIFEST-001
+project_id: DIYU-CBFSK-001
+
+control_header:
+  plan_id: MILESTONE_PLAN_M2
+  plan_version: 1.1.0
+  package_id: M2-EP01
+  task_id: DIYU-CBFSK-M2-EP01-001
+  task_class: L2
+  execution_run_id: 41f5cb93-1a3f-4e77-a8e1-142d5ac9de39
+  parent_execution_run_id: null
+  parent_execution_run_id_note: >-
+    M2-EP01 是 M2 里程碑的首个批次，不是任何批次的续跑，因此不设父标识。
+    与 governance_task_continuation / m0_milestone_batch 两个续跑批次口径不同。
+  signed_baseline_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  branch: candidate/m2
+  worktree: /home/faye/diyu-cbfsk-m2
+
+execution_run_id_guard_status:
+  guarded_by_check_execution_uuid: false
+  reason: >-
+    ci/checkers/check_execution_uuid.py 的 RUNS 目前只覆盖 governance_task_continuation 与
+    m0_milestone_batch 两个批次（MINIMUM_GUARDED_RUNS=2）。把 M2-EP01 纳入该守卫需要修改既有 checker，
+    而既有 checker 不在 M2-EP01 路径权限（启动包 v1.1 §5）的 allowed_update 内。
+  precedent: M1-EP01 批次同样未被该守卫覆盖，且未生成 execution_run_id。
+  disposition: OPEN_ITEM
+  routed_to: M2 收口（或获授权后单独受控 Delta）
+  honest_statement: >-
+    本标识已生成并落盘，但**尚未**进入确定性守卫。不得据此声称「执行标识已被守卫」。
+
+baseline_rule:
+  authorized_commit_only: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  worktree_created_from: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  auto_switch_to_new_head: forbidden
+  live_git_observation:
+    observed_at: M2-EP01 Phase 0
+    main_head: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    main_head_equals_signed_baseline: true
+    other_branch_m1_candidate_freeze: 97b73f6
+    note: >-
+      m1/candidate-freeze 分支在本包基线之后已前进（M1-EP02 / M1-EP03 / M1 候选冻结回执），
+      但尚未合入 main。本包基线绑定 signed_baseline_commit，不追随该分支；
+      M1 产物的最终绑定按 Charter 留给 M2-EP02（REBIND_AND_RETEST）。
+
+worktree_discipline:
+  original_repository: /home/faye/笛语跨品牌服装搭配专家内核
+  original_repository_working_tree_read: false
+  original_repository_working_tree_write: false
+  data_source: git 对象库（git worktree add 从 signed_baseline_commit 检出）
+  rationale: M1 正在原目录执行，任何读写都可能与其冲突或造成串扰。
+
+scope:
+  phases:
+    - {id: P0, name: 基线校验、worktree 与签署落盘}
+    - {id: P1, name: 章程与政策落盘}
+    - {id: P2, name: M1→M2 公共元数据信封（PROVISIONAL）}
+    - {id: P3, name: 六份最小 ADR}
+    - {id: P4, name: 身份识别隔离 Checker}
+    - {id: P5, name: 评测治理基础}
+    - {id: P6, name: 注册、自检与交付}
+  forbidden_outputs:
+    - hidden 品牌内容
+    - 隐藏题
+    - 隐藏答案
+    - 夹具品牌数据
+    - 候选知识
+    - 真实品牌数据
+    - 真实客户数据
+    - 多模态模型调用
+    - 知识蒸馏调用
+  forbidden_outputs_produced: none
+
+stop_conditions_watched:
+  - BASELINE_BINDING_MISMATCH
+  - WORKTREE_PATH_ALREADY_EXISTS
+  - CANDIDATE_M2_BRANCH_ALREADY_EXISTS
+  - M1_FROZEN_ARTIFACT_DRIFT
+  - NEW_TOP_LEVEL_INPUT_OR_OUTPUT_OBJECT_REQUIRED
+  - FACT_PRIORITY_CHANGE_REQUIRED
+  - CATEGORY_CONTRACT_CHANGE_REQUIRED
+  - DUPLICATE_HIDDEN_BOUNDARY_IMPLEMENTATION
+  - KNOWLEDGE_STATE_APPLIED_TO_RUNTIME_OBJECT
+  - CHECKER_NOT_REGISTERED_IN_FULL_SUITE
+  - ANY_CHECKER_OR_FIXTURE_FAILS
+  - HIDDEN_CONTENT_WRITTEN_TO_MAIN_REPOSITORY
+stop_conditions_triggered: none
+
+governance_sources_read:
+  read_at_signed_baseline_commit: true
+  items:
+    - governance/bootstrap/role_operating_model.v0.2.yaml
+    - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml
+    - governance/founder_rulings/DIYU-CBFSK-FR-GRANULARITY-005.yaml
+    - governance/founder_rulings/DIYU-CBFSK-FR-PROCESS-006.yaml
+    - governance/receipts/founder_signoff_receipt.yaml
+    - governance/storage/hidden_benchmark_storage_contract.yaml
+    - ci/checkers/check_hidden_benchmark_boundary.py
+    - ci/checkers/check_project_state.py
+    - ci/checkers/check_role_operating_model.py
+    - ci/checkers/check_m1_object_coverage.py
+    - ci/run_all_checks.py
+    - ci/run_fixtures.py
+    - ci/run_schema_fixtures.py
+    - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml
+    - 01_contracts_and_schemas/m2_evaluation_freeze_brief.md
+    - 01_contracts_and_schemas/m1_object_model/schema_registry.v0.1.yaml
+    - 01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.1.yaml
+    - 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
+    - PRD_v1.2_change_map.yaml
+    - README.md
+  m1_frozen_schema_facts_confirmed:
+    input_objects: 12
+    output_objects: 15
+    schema_files: 18
+    fact_priority_levels: 7
+    fact_priority_source: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json#/definitions/factPriorityLevel
+    knowledge_state_levels: 7
+    knowledge_state_source: 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml states
+
+path_authority_note:
+  reference: M2 启动包 v1.1 §5
+  semantic_mapping_applied:
+    - declared: M2 评测基础合同目录
+      actual: 03_m2_evaluation_foundation/
+      note: 基线仓库无既有 M2 合同目录，按语义对应新建；编号续 00/01/02/11 既有序列。
+    - declared: M2 裁决/ADR/政策记录
+      actual: >-
+        governance/founder_rulings/（裁决，随既有裁决目录与 README 索引）；
+        03_m2_evaluation_foundation/adr/（ADR）；03_m2_evaluation_foundation/*.v0.1.yaml（政策记录）
+      note: >-
+        裁决文件落在既有 governance/founder_rulings/ 而非 M2 目录——该目录是全项目裁决唯一登记处
+        （DIYU-CBFSK-FR-GRANULARITY-005 landed_in「随任一自然提交落入 governance/founder_rulings/」），
+        另起一套 M2 专属裁决目录会造成第二份裁决真源（EQ-1）。
+    - declared: M2-EP01 报告与 Receipt 目录
+      actual: 11_reports_and_receipts/m2_ep01/
+      note: 既有 11_reports_and_receipts/ 下新建子目录；未触碰其中任何既有 M0 / M1-EP01 文件。
+  ruling_index_mechanism:
+    machine_registry_exists: false
+    actual_mechanism: >-
+      仓库没有机器可读的裁决索引文件。既有登记方式＝裁决原件落入 governance/founder_rulings/
+      ＋ README.md「治理（governance/）」表内该目录的裁决清单行。本包按既有机制登记两份新裁决，
+      不新建索引机制（FR-GRANULARITY-005 修正③：不得先建执行框架再干活）。

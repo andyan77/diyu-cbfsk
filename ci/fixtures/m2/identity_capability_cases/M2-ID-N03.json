@@ -1,0 +1,15 @@
+{
+  "case_id": "M2-ID-N03",
+  "description": "依赖清单引入持久化人脸特征向量与跨会话面部关联两项实现。",
+  "expected_hits": 2,
+  "note": "",
+  "documents": {
+    "fake/requirements.yaml": {
+      "dependencies": [
+        "persistent_face_embedding",
+        "cross_session_face_linking",
+        "ephemeral_image_processing"
+      ]
+    }
+  }
+}

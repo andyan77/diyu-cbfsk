@@ -1,0 +1,19 @@
+{
+  "case_id": "M2-ID-P02",
+  "description": "ADR 的「当前不建设」清单列出五项禁止能力——声明不建，不是声明要建。",
+  "expected_hits": 0,
+  "note": "",
+  "documents": {
+    "fake/adr_front_matter.yaml": {
+      "adr_id": "ADR-004",
+      "activation_condition": "永不",
+      "not_building_now": [
+        "face_identification_1_to_n",
+        "face_verification_1_to_1",
+        "persistent_face_embedding",
+        "biometric_template_storage",
+        "cross_session_face_linking"
+      ]
+    }
+  }
+}

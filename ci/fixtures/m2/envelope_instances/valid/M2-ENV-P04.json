@@ -1,0 +1,21 @@
+{
+  "fixture_id": "M2-ENV-P04",
+  "description": "Bundle 内定义：object_ref 带 JSON Pointer 后缀，合法。",
+  "schema_id": "https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json",
+  "expected": "VALID",
+  "instance": {
+    "artifact_id": "env.example.bundle_def.v0.1",
+    "object_ref": "01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json#/definitions/OutfitPlan",
+    "object_kind": "runtime_fact_object",
+    "schema_id": "https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json",
+    "schema_version": "0.1",
+    "source_milestone": "M1",
+    "source_commit": "6499431c66f7bf4a234bd830ee4c810e1ac78694",
+    "source_artifact_sha256": "d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e",
+    "data_classification": "internal",
+    "consumption_mode": "by_reference_only",
+    "in_place_modification_allowed": false,
+    "artifact_lifecycle_state": "frozen",
+    "runtime_validity_state": "current"
+  }
+}

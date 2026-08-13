@@ -1,0 +1,104 @@
+schema_version: "0.1"
+artifact_id: m1_source_binding.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_DELIVERED
+artifact_lifecycle_state: draft
+binding_status: PROVISIONAL
+
+contract:
+  purpose: >-
+    本表是 M1 产物 SHA256 的**唯一**记录处。Envelope 实例与 Profile 成员的 source_artifact_sha256
+    必须取自本表；任何文件、报告或 checker 都不得再自行抄一份哈希值（EQ-1）。
+  drift_rule: >-
+    ci/checkers/check_m2_envelope_contract.py 重算每份 artifact_path 的字节 SHA256 并与本表比对。
+    对不上即判 M1_FROZEN_ARTIFACT_DRIFT——M1 冻结物被原位改动，属 Charter 熔断条款，停止并提交 Founder 裁决。
+  digest_recipe: sha256(file_bytes)
+
+source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+source_commit_role: M2 启动包 v1.1 signed_baseline_commit / M1-EP01 收口 Commit
+source_execution_package: M1-EP01
+source_registry: 01_contracts_and_schemas/m1_object_model/schema_registry.v0.1.yaml
+source_registry_execution_package_must_be: M1-EP01
+
+binding_scope:
+  only_m1_ep01_artifacts: true
+  m1_ep02_artifacts_bound: false
+  m1_ep03_artifacts_bound: false
+  rationale: >-
+    签署只授权 signed_baseline_commit 这一个 Commit，其上不存在 M1-EP02 / M1-EP03 产物。
+    绑定尚不存在的产物等于凭空造引用，因此本表只收 M1-EP01 已交付且在注册表内登记的 Schema。
+  enforcement: >-
+    每条 artifact_path 必须出现在 source_registry 的 entries[].file 中，
+    且注册表自身的 execution_package 必须为 M1-EP01；两项任一不成立即 BINDING_OUTSIDE_M1_EP01。
+
+rebind_rule:
+  trigger: M1 收口合入 main
+  action: REBIND_AND_RETEST
+  owner_package: M2-EP02
+  meaning: >-
+    仅新增 M1-EP02 / M1-EP03 产物（既有产物字节未变）不是漂移，属正常前进；
+    此时由 M2-EP02 重算全部绑定、把 binding_status 由 PROVISIONAL 改 FINAL 并重跑评测组合。
+  distinction: >-
+    「既有 M1 冻结物内容变了」= M1_FROZEN_ARTIFACT_DRIFT（熔断，停）；
+    「只是多了新产物」= REBIND_AND_RETEST（EP02 正常动作）。两者不可混为一谈。
+
+entries:
+  - binding_id: MB-01
+    object_id: null
+    object_name: StylingResultBundle
+    artifact_path: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/StylingResultBundle.schema.v0.1.json
+    schema_version: "0.1"
+    persistence_class: runtime_fact
+    sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+  - binding_id: MB-02
+    object_id: OUT-11
+    object_name: DecisionTrace
+    artifact_path: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+    schema_version: "0.1"
+    persistence_class: runtime_fact
+    sha256: 586a54ac54fd266dc6925891ff84a4f770fbb84d2b6e73b3f22ba342877cc9dc
+  - binding_id: MB-03
+    object_id: OUT-12
+    object_name: VisualAttributeExtractionResult
+    artifact_path: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+    schema_version: "0.1"
+    persistence_class: runtime_fact
+    sha256: b3e47ae858a31bcd54b02d4c6d9f33c9b8bd0581a232fc4f61788b148f11bf5a
+  - binding_id: MB-04
+    object_id: IN-03
+    object_name: BrandTruthPack
+    artifact_path: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+    schema_version: "0.1"
+    persistence_class: long_term_truth
+    sha256: 47e30608b9ea8739869150d4b9a63aefbe8f8d69231dfd128f0f68cd76bf731e
+  - binding_id: MB-05
+    object_id: IN-09
+    object_name: StylistPersonaProfile
+    artifact_path: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+    schema_version: "0.1"
+    persistence_class: long_term_truth
+    sha256: 8cfc5ac3650dce9ec5b8b8d6fd81481fa991e78e6c899afe01efacb8bb3184c7
+  - binding_id: MB-06
+    object_id: SHARED_DEFS
+    object_name: M1 公共定义
+    artifact_path: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
+    schema_id: https://diyu-cbfsk.local/m1/common_defs.schema.v0.1.json
+    schema_version: "0.1"
+    persistence_class: n/a
+    sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
+
+m1_semantics_untouched:
+  top_level_objects_changed: false
+  fact_priority_changed: false
+  category_contract_changed: false
+  frozen_schema_edited_in_place: false
+  statement: >-
+    本包只新增引用层，未打开任何 M1 Schema 文件写入。七级事实优先级仍由
+    common_defs.schema.v0.1.json#/definitions/factPriorityLevel 单独定义，M2 不复述、不重排、不扩展。

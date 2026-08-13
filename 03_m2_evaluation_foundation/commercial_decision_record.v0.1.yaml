@@ -1,0 +1,58 @@
+schema_version: "0.1"
+record_id: DIYU-CBFSK-M2-COMMERCIAL-DECISION-RECORD-001
+artifact_id: commercial_decision_record.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_DELIVERED
+artifact_lifecycle_state: draft
+decision_type: COMMERCIAL_DELIVERY_HYPOTHESIS
+authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+
+why_not_an_adr:
+  statement: >-
+    商业交付形态是**可撤销的业务假设**，不是不可逆技术决策。写成 ADR 会让一条尚未裁决的业务猜想
+    获得架构约束的地位，后续工程会照着它建东西。本记录因此定位为「假设登记」，
+    对工程侧只产生一条硬约束：在 Founder 裁决之前不得建设商业化设施。
+  basis: MILESTONE_PLAN_M2 v1.1 non_adr_records
+  charter_sentence: 商业楔子默认内容先行、API第二步，商业交付形态在M10通过后、M11设计冻结前由Founder裁决。
+
+current_default:
+  hypothesis: 内容与账号服务为主、嵌入式造型 API 为辅
+  sequence:
+    - {order: 1, form: 内容先行}
+    - {order: 2, form: API 第二步}
+  binding_on_engineering: false
+  binding_note: >-
+    「默认」只描述当前倾向，不构成对任何里程碑交付物的约束。工程侧不得以本假设为由
+    提前建设任何商业化能力。
+
+revisit:
+  decision_node: M10 通过后、M11 基线冻结前
+  decision_authority: FOUNDER_PRODUCT_AUTHORITY
+  decision_id_when_made: PENDING_FOUNDER_COMMERCIAL_FORM_RULING
+  before_ruling_state: 假设，未裁决
+
+must_not_build_before_ruling:
+  activation_condition: 商业交付形态由 Founder 裁决
+  items:
+    - id: NB-COM-01
+      capability: Billing
+      built: false
+    - id: NB-COM-02
+      capability: 开发者门户
+      built: false
+    - id: NB-COM-03
+      capability: Marketplace
+      built: false
+  enforced_by:
+    - 03_m2_evaluation_foundation/adr/ADR-006-canonical-connector-boundary.md（当前不建设 / 激活条件）
+  charter_sentence: Billing、开发者门户和Marketplace在商业形态裁决前不得建设。
+
+m2_ep01_state:
+  any_commercial_capability_built: false
+  any_billing_code: false
+  any_developer_portal: false
+  any_marketplace: false
+  any_external_connector: false

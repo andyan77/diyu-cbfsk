@@ -30,13 +30,31 @@ parent_execution_run_id: 29899f92-c965-4c33-a020-8e7f781fe82d
 
 project_state:
   project_status: PROJECT_INITIATED
-  execution_status: M1_IN_PROGRESS
+  execution_status: M1_M2_PARALLEL_IN_PROGRESS
   m0_authorized: true
   m1_started: true
-  m2_started: false
+  m2_started: true
   knowledge_distillation_started: false
   production_servable: false
   main_merged: true
+
+parallel_execution:
+  authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+  signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  max_concurrent_packages: 2
+  max_concurrent_packages_basis: DIYU-CBFSK-FR-GRANULARITY-005 limits.max_concurrent_packages
+  active_milestones: [M1, M2]
+  active_packages:
+    - milestone: M1
+      package: M1-EP01
+      package_source: >-
+        本字段按 signed_baseline_commit 6499431c66f7bf4a234bd830ee4c810e1ac78694 的仓库状态如实读取——
+        该 Commit 的 README 记「M1-EP01 已交付，M1-EP02 与 M1-EP03 尚未开工」。
+        M1 链在本包基线之后继续前进，其当前包由 M1 侧自行登记，M2-EP01 不代其改写。
+    - milestone: M2
+      package: M2-EP01
+  quota_full: true
+  m2_ep02_start_precondition: M1 收口合入 main
 
 authority_hierarchy:
   - 平台与系统安全规则

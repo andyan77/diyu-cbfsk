@@ -14,7 +14,7 @@ change_set:
 
 resulting_state:
   project_status: PROJECT_INITIATED
-  execution_status: M1_IN_PROGRESS
+  execution_status: M1_M2_PARALLEL_IN_PROGRESS
   production_servable: false
   m0_authorized: true
   prd_v1_2_effective: true
@@ -30,6 +30,9 @@ resulting_state:
   state_authorization_source: governance/receipts/founder_signoff_receipt.yaml
   signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
   chatgpt_remote_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
+  m2_started: true
+  m2_started_authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+  m2_started_signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
 
 invariants:
   m0_top_level_deliverable_count: 14

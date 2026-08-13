@@ -1,0 +1,22 @@
+{
+  "fixture_id": "M2-ENV-N01",
+  "description": "运行时事实对象携带七级知识状态——三态混写，正是 KNOWLEDGE_STATE_APPLIED_TO_RUNTIME_OBJECT 要拦的。",
+  "schema_id": "https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json",
+  "expected": "INVALID",
+  "instance": {
+    "artifact_id": "env.example.v0.1",
+    "object_ref": "01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json",
+    "object_kind": "runtime_fact_object",
+    "schema_id": "https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json",
+    "schema_version": "0.1",
+    "source_milestone": "M1",
+    "source_commit": "6499431c66f7bf4a234bd830ee4c810e1ac78694",
+    "source_artifact_sha256": "47e30608b9ea8739869150d4b9a63aefbe8f8d69231dfd128f0f68cd76bf731e",
+    "data_classification": "internal",
+    "consumption_mode": "by_reference_only",
+    "in_place_modification_allowed": false,
+    "artifact_lifecycle_state": "frozen",
+    "runtime_validity_state": "current",
+    "knowledge_state": "founder_accepted"
+  }
+}

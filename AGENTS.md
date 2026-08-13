@@ -13,10 +13,10 @@
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M1_IN_PROGRESS
+execution_status: M1_M2_PARALLEL_IN_PROGRESS
 m0_authorized: true
 m1_started: true
-m2_started: false
+m2_started: true
 knowledge_distillation_started: false
 production_servable: false
 main_merged: true

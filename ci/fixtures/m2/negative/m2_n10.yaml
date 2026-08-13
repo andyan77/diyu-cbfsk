@@ -1,0 +1,108 @@
+fixture_id: M2-N10
+description: 信封放开 additionalProperties——能塞任意键就等于能把被包装对象的正文复制进来。
+checker: check_m2_envelope_contract
+expected: FAIL
+payload:
+  bindings:
+  - binding_id: MB-01
+    artifact_path: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
+    artifact_exists: true
+    declared_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+    actual_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+    in_m1_ep01_registry: true
+  - binding_id: MB-06
+    artifact_path: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json
+    artifact_exists: true
+    declared_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
+    actual_sha256: 85f367b2f84a9579b064641a64eeb35f82821190842d56d37c38544a8109b1d2
+    in_m1_ep01_registry: true
+  binding_source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  binding_source_execution_package: M1-EP01
+  registry_execution_package: M1-EP01
+  envelope_required_fields:
+  - artifact_id
+  - object_ref
+  - object_kind
+  - schema_id
+  - schema_version
+  - source_milestone
+  - source_commit
+  - source_artifact_sha256
+  - data_classification
+  - consumption_mode
+  - in_place_modification_allowed
+  - artifact_lifecycle_state
+  envelope_forbids_extra_properties: false
+  envelope_in_place_modification_const: false
+  canonical_knowledge_states:
+  - model_elicited_candidate
+  - cross_model_contested
+  - source_or_case_checked
+  - founder_ai_reviewed
+  - benchmark_validated
+  - founder_accepted
+  - production_servable
+  envelope_knowledge_states:
+  - model_elicited_candidate
+  - cross_model_contested
+  - source_or_case_checked
+  - founder_ai_reviewed
+  - benchmark_validated
+  - founder_accepted
+  - production_servable
+  envelope_lifecycle_states:
+  - draft
+  - validated
+  - frozen
+  - superseded
+  envelope_runtime_validity_states:
+  - current
+  - stale
+  - expired
+  - revoked
+  state_field_owner:
+    knowledge_state: knowledge_unit
+    runtime_validity_state: runtime_fact_object
+  profiles:
+  - profile_id: m2_evaluation_provisional_profile
+    envelope_schema_id: https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json
+    binding_status: PROVISIONAL
+    final_m1_binding_required: true
+    final_binding_at: M2-EP02_AFTER_M1_CLOSEOUT
+    source_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    schema_errors: []
+    members:
+    - member_id: PM-01
+      object_kind: runtime_fact_object
+      knowledge_state: null
+      runtime_validity_state: current
+      in_place_modification_allowed: false
+      sha256_known_binding: true
+      scope_required: false
+      scope_present: false
+      correlation_required: true
+      correlation_present: true
+      temporal_required: true
+      temporal_present: true
+    - member_id: PM-06
+      object_kind: contract_document
+      knowledge_state: null
+      runtime_validity_state: null
+      in_place_modification_allowed: false
+      sha256_known_binding: true
+      scope_required: false
+      scope_present: false
+      correlation_required: false
+      correlation_present: false
+      temporal_required: false
+      temporal_present: false
+  instance_fixtures:
+  - fixture_id: M2-ENV-P01
+    expected: VALID
+    actual: VALID
+    detail: <no error raised>
+  - fixture_id: M2-ENV-N01
+    expected: INVALID
+    actual: INVALID
+    detail: knowledge_state not allowed
+  m1_closeout_merged: false

@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m2/profile_composition.schema.v0.1.json",
+  "title": "M2ProfileComposition",
+  "artifact_id": "profile_composition.schema.v0.1",
+  "description": "Profile 是一组具名的 Envelope 组合视图。它只做两件事：说明这次消费需要哪些 M1 产物，以及每类对象的条件字段组是否必填。Profile 不定义新对象、不改写 Envelope 字段合同——那样等于在组合层再造一份对象模型。",
+  "schema_version": "0.1",
+  "milestone": "M2",
+  "execution_package": "M2-EP01",
+  "prd_anchors": ["PRD-6.1", "PRD-6.2", "D-27"],
+  "ruling_anchors": ["DIYU-CBFSK-FOUNDER-M2-CHARTER-001"],
+  "type": "object",
+  "required": [
+    "profile_id",
+    "profile_version",
+    "purpose",
+    "envelope_schema_id",
+    "binding_status",
+    "final_m1_binding_required",
+    "final_binding_at",
+    "source_commit",
+    "conditional_requirements",
+    "members"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "profile_id": { "type": "string", "minLength": 1 },
+    "profile_version": { "type": "string", "minLength": 1 },
+    "purpose": { "type": "string", "minLength": 1 },
+    "envelope_schema_id": {
+      "description": "本 Profile 的成员必须全部遵循这一份 Envelope Schema。允许多份 Envelope 定义就等于允许多套信封合同。",
+      "const": "https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json"
+    },
+    "binding_status": {
+      "description": "PROVISIONAL 表示绑定的是 M1-EP01 基线产物，M1 尚未收口；FINAL 只有在 M1 收口后重绑并重测才可写。",
+      "type": "string",
+      "enum": ["PROVISIONAL", "FINAL"]
+    },
+    "final_m1_binding_required": { "type": "boolean" },
+    "final_binding_at": { "type": "string", "minLength": 1 },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "conditional_requirements": {
+      "description": "按对象类型声明条件字段组是否必填。这是 Envelope 层「不全局强制」的落点——强制在 Profile，而不是让每份信封都背上全部字段。",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(knowledge_unit|runtime_fact_object|long_term_truth_object|contract_document|evaluation_asset)$": {
+          "type": "object",
+          "required": ["scope", "correlation", "temporal"],
+          "additionalProperties": false,
+          "properties": {
+            "scope": { "type": "boolean" },
+            "correlation": { "type": "boolean" },
+            "temporal": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["member_id", "role_in_profile", "envelope"],
+        "additionalProperties": false,
+        "properties": {
+          "member_id": { "type": "string", "minLength": 1 },
+          "role_in_profile": {
+            "description": "这份产物在本次评测组合里承担什么——写清楚才能判断组合是不是「最小」。",
+            "type": "string",
+            "minLength": 1
+          },
+          "envelope": { "$ref": "https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json" }
+        }
+      }
+    },
+    "not_bound": {
+      "description": "显式声明本 Profile 不绑定什么。留白会被读成「还没想到」，写下来才是「已经排除」。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "m1_ep02_artifacts": { "type": "boolean" },
+        "m1_ep03_artifacts": { "type": "boolean" },
+        "hidden_evaluation_assets": { "type": "boolean" },
+        "note": { "type": "string" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "description": "PROVISIONAL 必须同时声明仍需最终绑定——否则临时绑定会被当成已定稿。",
+      "if": {
+        "properties": { "binding_status": { "const": "PROVISIONAL" } },
+        "required": ["binding_status"]
+      },
+      "then": {
+        "properties": { "final_m1_binding_required": { "const": true } },
+        "required": ["final_m1_binding_required"]
+      }
+    }
+  ]
+}

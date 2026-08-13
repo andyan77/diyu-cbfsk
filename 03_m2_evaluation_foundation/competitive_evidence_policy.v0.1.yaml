@@ -1,0 +1,72 @@
+schema_version: "0.1"
+policy_id: DIYU-CBFSK-M2-COMPETITIVE-EVIDENCE-POLICY-001
+artifact_id: competitive_evidence_policy.v0.1
+policy_version: "0.1"
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_DELIVERED
+artifact_lifecycle_state: draft
+authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+
+why_not_an_adr:
+  statement: >-
+    竞品与市场事实治理是**证据准入政策**，不是架构决策：它约束「什么样的陈述可以进入产品合同」，
+    不约束系统怎么分层、怎么依赖。写成 ADR 会让政策条款混进架构决策序列，日后无法单独修订。
+  basis: MILESTONE_PLAN_M2 v1.1 non_adr_records
+  charter_sentence: 竞品市场事实按候选证据治理，未经核验不得进入正式产品合同或对外宣称。
+
+principle: 竞品与市场事实一律先作候选证据，核验通过才可引用。
+
+evidence_states:
+  - id: CE-S1
+    state: candidate_claim
+    meaning: 已记录的竞品或市场陈述，来源已登记但未核验。
+    may_enter_product_contract: false
+    may_be_stated_publicly: false
+  - id: CE-S2
+    state: source_verified
+    meaning: 来源可定位、可复查，陈述与来源一致。
+    may_enter_product_contract: false
+    may_be_stated_publicly: false
+    note: 来源核实只证明「有人这样说过」，不证明陈述为真。
+  - id: CE-S3
+    state: founder_verified
+    meaning: Founder 逐条核验并接受其作为事实使用。
+    may_enter_product_contract: true
+    may_be_stated_publicly: true
+    verification_authority: FOUNDER_PRODUCT_AUTHORITY
+
+required_fields_per_claim:
+  - claim_id
+  - claim_text
+  - source_ref
+  - source_accessed_at
+  - evidence_state
+  - verified_by
+  - verified_at
+
+prohibitions:
+  - id: CE-P1
+    statement: 未达 founder_verified 的竞品/市场陈述不得写入正式产品合同（PRD、合同 YAML、里程碑验收判据）。
+    failure_state: UNVERIFIED_COMPETITIVE_CLAIM_IN_PRODUCT_CONTRACT
+  - id: CE-P2
+    statement: 未达 founder_verified 的竞品/市场陈述不得对外宣称。
+    failure_state: UNVERIFIED_COMPETITIVE_CLAIM_STATED_PUBLICLY
+  - id: CE-P3
+    statement: AI 检索或模型记忆产出的市场数据默认为 candidate_claim，不因「模型说得很确定」而升级。
+    failure_state: MODEL_ASSERTION_TREATED_AS_MARKET_FACT
+    relation: 与知识状态链同一口径——模型输出是候选，不是已接受事实（PRD-8.1 / P-06）。
+  - id: CE-P4
+    statement: 竞品对比不得表述为外部专家结论或独立第三方验证。
+    failure_state: EXTERNAL_REVIEW_MISREPRESENTED
+    existing_guard: ci/checkers/check_external_review_claims.py
+
+m2_ep01_state:
+  competitive_claims_recorded: 0
+  claims_at_founder_verified: 0
+  ledger_built: false
+  ledger_note: >-
+    本包只落政策，不建台账——当前没有任何竞品陈述需要治理，先建台账即属「先建执行框架再干活」
+    （DIYU-CBFSK-FR-GRANULARITY-005 修正③）。首条竞品陈述出现时按本政策建最小台账。

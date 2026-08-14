@@ -67,7 +67,7 @@ binding_required_when:
   commit_must_be_full_40_hex: true
   resolver: ci/checkers/_common.py clause_resolves（单一实现，裁决引用与本判据共用）
 counts:
-  sites: 80
+  sites: 87
   kind_capability: 1
   kind_derived_state: 5
   kind_discipline_acknowledgement: 1
@@ -356,6 +356,53 @@ sites:
   claim_kind: eligibility
   binding: null
   why_no_binding: 同一裁决的机器可核字段投影，值与上一条同源。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001.yaml
+  key_path: machine_checkable_fields.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 挂起裁决第六节维持不变项的机器投影，说的是够不够格，不是已经签了。
+- file: governance/conditions/m2_seal_ledger.v0.1.yaml
+  key_path: state_flags_at_seal.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 挂起那一刻的状态快照，转录自交付状态推导值。
+- file: governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml
+  key_path: what_this_file_is.merge_authorized_now
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: >-
+    值为 false，即「Founder 尚未授权合并」，不构成 Founder 动作声称。
+    置 true 时必须绑定具名裁决＋完整 40 位签署基线 Commit＋签署人＋签署时点；
+    本轮三门齐备之一就是「本裁决之后的合并授权」，那份授权尚不存在。
+- file: 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml
+  key_path: gaps[0].execution_side_authoring_intent.must_be_confirmed_before_use
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这条撰写意图要 Founder 确认后才能拿来分流」，是要求，不是已确认。
+- file: 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+  key_path: package_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 交付末态里的够格位，由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+  key_path: article_landing.by_article.A4.measurement.merge_authorized_now
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: >-
+    值为 false，即「Founder 尚未授权合并」，不构成 Founder 动作声称。
+    这是交付那一刻对合并协议的快照——报告引的必须是冻结值，不是活登记册，否则报告会随后续施工悄悄改变。
+- file: governance/workspaces/workspace_attestation.M2-SEAL.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。
 - file: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
   key_path: three_layer_hash_mechanism.adjudication.retirement_authorized
   value_when_registered: false

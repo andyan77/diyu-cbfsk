@@ -35,9 +35,26 @@ project_state:
   m1_started: true
   m1_status: FOUNDER_ACCEPTED
   m2_started: true
+  m2_status: SUSPENDED_BY_FOUNDER
   knowledge_distillation_started: false
   production_servable: false
   main_merged: true
+
+m2_suspension:
+  status: SUSPENDED_BY_FOUNDER
+  authority: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_1_suspension
+  nature: 既非通过、亦非失败，为 Founder 主动挂起。
+  freeze_gate: 维持关闭
+  record: governance/conditions/m2_seal_ledger.v0.1.yaml
+  why_execution_status_unchanged: >-
+    execution_status 的合法取值枚举钉在已签署的 founder_signoff_receipt.yaml
+    state_flag_authorizations.execution_status.authorized_values 里，M2_SUSPENDED 不在其中。
+    执行侧往签署件的授权枚举里加一个取值，等于自己给自己扩权——那是 Founder 动作。
+    因此挂起走新字段 m2_status，execution_status 维持 M2_IN_PROGRESS（M2 仍是在飞的里程碑，只是被挂起）。
+  founder_may_migrate_execution_status: >-
+    若 Founder 要 execution_status 也迁到 M2_SUSPENDED，须在签署回执的 authorized_values 里具名补上该取值
+    并绑定完整 40 位签署基线 Commit；执行侧不得代做。
+  disclosed_as_open_item: OI-SEAL-01
 
 parallel_execution:
   authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001

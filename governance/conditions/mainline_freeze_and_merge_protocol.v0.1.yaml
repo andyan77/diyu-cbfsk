@@ -1,0 +1,84 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-MAINLINE-FREEZE-AND-MERGE-PROTOCOL
+artifact_id: mainline_freeze_and_merge_protocol.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-SEAL
+status: CONTRACT_LANDED_NOT_EXECUTED
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_4_merge_and_mainline_seal
+
+what_this_file_is:
+  is: 合并与主线封存的执行口径合同。
+  is_not: 合并授权。
+  merge_authorized_now: false
+  why_not_now: 三门未齐备——Guardian 与总顾问均未出结论，Founder 的合并授权也在本裁决之后另行给出。
+
+three_gates:
+  count: 3
+  rule: 三门齐备后方可合并。
+  items:
+  - id: GATE-1
+    what: Guardian 无阻断
+    satisfied: false
+    evidence: null
+  - id: GATE-2
+    what: 总顾问意见
+    satisfied: false
+    evidence: null
+  - id: GATE-3
+    what: 本 Founder 裁决之后的合并授权
+    satisfied: false
+    evidence: null
+    note: 本裁决本身不构成合并授权——「本裁决之后」是原文措辞。
+  satisfied_count: 0
+  failure_state: MERGE_BEFORE_THREE_GATES
+
+merge_method:
+  inherits: M1 口径
+  ff_only: true
+  ff_only_statement: 当前候选满足快进前提，最终在合并瞬间重新核验；不得表述为平台已保证。
+  command_line_only: true
+  forbidden: PR 页面三个按钮
+  forbidden_why: >-
+    页面按钮会按平台默认策略生成 merge commit 或 squash，改写提交图；
+    FF-ONLY 的全部意义就是 main 上出现的每个提交都与候选上被审过的那个逐字节相同。
+  post_merge_verification:
+    command: git rev-parse origin/main
+    must_equal: 被批准的完整 40 位哈希
+    on_mismatch: 停并报告
+    on_mismatch_note: 不重试、不覆盖、不推测原因——先停下来报告实测值与期望值。
+
+tag:
+  what: 对合并后的该 Commit 打标签作为「M2 挂起点」
+  tag_applied: false
+  tag_name: null
+  recorded_in: governance/conditions/m2_seal_ledger.v0.1.yaml
+  rule: 标签在合并完成且哈希核验通过之后才打；提前打等于给一个还没到位的状态发凭证。
+
+mainline_state_after_merge:
+  state: 冻结观察态
+  entered: false
+  accepts:
+  - 治理登记
+  - 裁决落盘
+  rejects: 新的功能性提交
+  until: Founder 就新支线另行裁决
+  plain: >-
+    合并之后 main 不再接受功能性提交。能进去的只有两类：把已经发生的事登记下来，
+    以及把 Founder 的裁决落成文件。要写新功能，等 Founder 就新支线出裁决。
+  failure_state: FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
+
+machine_checkable_fields:
+  three_gate_count: 3
+  gates_satisfied: 0
+  merge_authorized_now_lives_in: what_this_file_is.merge_authorized_now
+  merge_authorized_now_single_definition_note: 同一个值在一份文件里写两处，改一处漏一处；判据读的是 what_this_file_is 那一处。
+  tag_applied: false
+  frozen_observation_entered: false
+
+failure_states:
+- MERGE_BEFORE_THREE_GATES
+- MERGE_METHOD_VIOLATED
+- FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
+- TAG_APPLIED_BEFORE_MERGE_VERIFIED

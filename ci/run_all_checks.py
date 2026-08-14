@@ -62,6 +62,7 @@ CHECKERS = [
     "check_calibration_launch_pack",
     "check_founder_confirmation_binding",
     "check_m2_predistribution_sequence",
+    "check_m2_suspension_seal",
 ]
 
 

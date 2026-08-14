@@ -39,8 +39,63 @@ discovery:
   - 11_reports_and_receipts/*_delivery_report.md
   - 11_reports_and_receipts/*/*_delivery_report.md
   note: 判据按本 glob 自动发现交付报告；发现了却没登记即 REPORT_NOT_REGISTERED，新报告不能悄悄绕开本册。
-report_count: 11
+report_count: 12
 reports:
+- report: 11_reports_and_receipts/m2_seal/m2_seal_delivery_report.md
+  template: 11_reports_and_receipts/m2_seal/m2_seal_delivery_report.md.tmpl
+  status: templated
+  literal_allowlist:
+  - number: 1
+    context_substring: 一句话
+    why: 章节标题里的中文行文，不是计数。
+  - number: 2
+    context_substring: 第二节
+    why: 裁决条款号，不是计数。
+  - number: 3
+    context_substring: 第三节
+    why: 裁决条款号，不是计数。
+  - number: 4
+    context_substring: 第四节
+    why: 裁决条款号，不是计数。
+  - number: 5
+    context_substring: 第五节
+    why: 裁决条款号，不是计数。
+  - number: 1
+    context_substring: 第一节
+    why: 裁决条款号，不是计数。
+  - number: 4
+    context_substring: 第 4 步
+    why: 引述被取代的旧结论里的步骤序号，属历史陈述。
+  - number: 2
+    context_substring: 两处必须改的
+    why: 表格随后逐行列出，行文数字不另立记录。
+  - number: 2
+    context_substring: 顺带修掉的两处
+    why: 同上，表格逐行列出。
+  - number: 18
+    context_substring: 18 项矩阵
+    why: 交付清单的固有规模名，值由 A2.measurement 现读。
+  - number: 1
+    context_substring: 一条未处置
+    why: 行文，与 A2.measurement.design_gaps_disposed 同源（该值为 0，此处说的是「有缺口未处置」）。
+  - number: 3
+    context_substring: 三条已知设计缺口
+    why: 行文，值由 A2.measurement.design_gaps 现读。
+  - number: 7
+    context_substring: 七项结扎
+    why: 引述裁决第二节的项数，值由 A2.measurement.seal_item_count 现读。
+  - number: 6
+    context_substring: 六位状态旗
+    why: 引述裁决第六节原文用语。
+  - number: 1
+    context_substring: 缺一步
+    why: 行文修辞，不是计数。
+  - number: 3
+    context_substring: 第三门
+    why: 门序号，不是计数。
+  - number: 1
+    context_substring: 第 1 步
+    why: 恢复序列的步骤序号，不是计数。
 - report: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_report.md
   template: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_report.md.tmpl
   status: templated

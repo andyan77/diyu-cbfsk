@@ -116,7 +116,7 @@ naming_corrections:
     is_rename: false
     is_rename_note: renamed_from/renamed_to 为 null 表示本条不是一次改名，而是一次「明确不改名」的裁定留痕。
 
-entry_count: 53
+entry_count: 56
 entries:
   - {id: DIYU-CBFSK-FOUNDER-M0-DECISION-001, kind: founder_ruling}
   - {id: DIYU-CBFSK-FOUNDER-M1-GATE-001, kind: founder_ruling}
@@ -127,6 +127,7 @@ entries:
   - {id: DIYU-CBFSK-FOUNDER-M2-EP05-001, kind: founder_ruling}
   - {id: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001, kind: founder_ruling, corrects: DIYU-CBFSK-FOUNDER-M2-EP05-001}
   - {id: DIYU-CBFSK-FOUNDER-M2-EP06-001, kind: founder_ruling, builds_on: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001}
+  - {id: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001, kind: founder_ruling, builds_on: DIYU-CBFSK-FOUNDER-M2-EP06-001}
   - {id: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001, kind: founder_ruling}
   - {id: DIYU-CBFSK-FOUNDER-RD-M1-01, kind: founder_ruling}
   - {id: DIYU-CBFSK-FR-CALIBRATION-004, kind: founder_ruling, naming_note: 历史合法命名，按 anchor_2 保留不改名}
@@ -145,6 +146,7 @@ entries:
   - {id: DIYU-CBFSK-M2-EP05-INTEGRATION-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-EP05-001, assigned_by: EXECUTION_SIDE, assigned_by_note: 本轮派发件未给出任务 ID，执行侧自建一个并如实标注签发方，不冒充 Founder 指派}
   - {id: DIYU-CBFSK-M2-EP05-CORRECTION-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001, assigned_by: EXECUTION_SIDE, assigned_by_note: 本轮派发件未给出任务 ID，执行侧自建一个并如实标注签发方，不冒充 Founder 指派}
   - {id: DIYU-CBFSK-M2-EP06-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-EP06-001, assigned_by: EXECUTION_SIDE, assigned_by_note: 本轮派发件未给出任务 ID，执行侧自建一个并如实标注签发方，不冒充 Founder 指派}
+  - {id: DIYU-CBFSK-M2-SEAL-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001, assigned_by: EXECUTION_SIDE, assigned_by_note: 同上——本轮派发件未给出任务 ID，执行侧自建并如实标注签发方}
   - {id: DIYU-CBFSK-M2-EP01-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-CHARTER-001}
   - {id: DIYU-CBFSK-M2-EP02-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001}
   - {id: DIYU-CBFSK-DOC-TYPO-FIX-001, kind: task_id, dispatched_by: null, fixture_only: true, note: L1 轻量任务分级判据的正例样本，不是真实派工}
@@ -167,6 +169,7 @@ entries:
   - {id: DIYU-CBFSK-M2-HIDDEN-ASSET-STOP-001, kind: record_id}
   - {id: DIYU-CBFSK-GUARDIAN-HANDOFF-002, kind: record_id}
   - {id: DIYU-CBFSK-M2-PACKAGE-COMMIT-LEDGER-001, kind: record_id}
+  - {id: DIYU-CBFSK-M2-PREMERGE-REVIEW-REQUEST-001, kind: record_id}
   - {id: DIYU-CBFSK-M2-HIDDEN-STOREA-001, kind: prompt_id}
   - {id: DIYU-CBFSK-M2-CALIBRATION-REVIEW-PROMPT-001, kind: prompt_id}
   - id: DIYU-CBFSK-FIXTURE-UNREGISTERED-SAMPLE-001

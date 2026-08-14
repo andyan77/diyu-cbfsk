@@ -61,14 +61,37 @@ entries:
   guardian_decision: NOT_YET_REVIEWED
   advisor_decision: NOT_YET_REVIEWED
 - execution_package: M2-EP06
+  candidate_commit: a4be75e5ee723fe552a293d40632405711920554
+  candidate_commit_backfilled: true
+  candidate_commit_backfill_note: >-
+    EP06 提交时该值写作 RESOLVED_AT_REPORT_TIME（自引用限制）。该提交已成为过去，
+    此处回填为确定哈希——回填由 git 可复算，不是新的声称。这一项即 OI-EP06-03。
+  parent_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+  carried: EP06 接收回执、Founder 审阅队列、分发前序列状态机、阈值裁决工作表合同
+  status: SUPERSEDED_BY_LATER_PACKAGE
+  guardian_decision: NOT_YET_REVIEWED
+  advisor_decision: NOT_YET_REVIEWED
+- execution_package: M2-SEAL-DOC_ONLY
+  candidate_commit: f71617eee44a6008d8180fe81aeea901efc54816
+  parent_commit: a4be75e5ee723fe552a293d40632405711920554
+  carried: 第一版 doc-only 封口台账（无机器守卫）＋ 身份隔离扫描面记账
+  status: SUPERSEDED_BY_LATER_PACKAGE
+  superseded_by_note: >-
+    该版按当时的口头指令做成 doc-only。DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 第二节明文要求判据，
+    doc-only 形态就此作废；其记录的事实经复核属实，予以保留并扩写。
+  produced_by: 另一执行窗口（同一 worktree）
+  guardian_decision: NOT_YET_REVIEWED
+  advisor_decision: NOT_YET_REVIEWED
+- execution_package: M2-SEAL
   candidate_commit: RESOLVED_AT_REPORT_TIME
   candidate_commit_resolution_rule: >-
     本包自己的候选 Commit 在提交那一刻才产生，写不进被提交的内容。
-    值由 `git rev-parse HEAD`（candidate/m2，本包提交后）取出，随交付报告一并补报，
-    并在下一个执行包提交时回填为确定哈希。
-  parent_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
-  carried: EP06 接收回执、Founder 审阅队列、分发前序列状态机、阈值裁决工作表合同
+    值由 `git rev-parse HEAD`（candidate/m2，本包提交后）取出，随交付报告一并补报——
+    裁决第三节明文要求执行侧报出该哈希，它同时是本轮并入前审查的对象。
+  parent_commit: f71617eee44a6008d8180fe81aeea901efc54816
+  carried: M2 挂起裁定、七项结扎、包哈希封存清单、三条设计缺口登记、并入前审查转达件、合并与主线封存协议
   status: CURRENT_CANDIDATE
+  is_premerge_review_target: true
   guardian_decision: NOT_YET_REVIEWED
   advisor_decision: NOT_YET_REVIEWED
 

@@ -59,8 +59,8 @@ retired_codes:
   replacement_naming_rule: 替代码不得含错误编号；边界由 PRD v1.2 正文分层视觉推断条款现场解析。
   must_not_appear_at_any_stop_site: true
 counts:
-  total_codes: 160
-  machine_checked: 69
+  total_codes: 165
+  machine_checked: 74
   human_judgement: 36
   future_runtime: 55
 scan_scope:
@@ -507,6 +507,12 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
+  sites:
+  - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: GATE_DECISION_MISSING
   sites:
   - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
@@ -706,6 +712,12 @@ entries:
   enforcement: future_runtime
   detectors: []
   detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: MERGE_BEFORE_THREE_GATES
+  sites:
+  - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: MILESTONE_RECEIPT_WITHOUT_COVERAGE_ENTRY
   sites:
   - governance/gates/milestone_closure_coverage_rule.v0.1.yaml#failure_state
@@ -888,6 +900,12 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: REVIEW_QUESTION_NOT_VERBATIM
+  sites:
+  - governance/reports/m2_premerge_review_request.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: REVIEW_QUEUE_IN_DISTRIBUTION_PACK
   sites:
   - 03_m2_evaluation_foundation/calibration/founder_review_queue_annotations.v0.1.yaml#failure_state
@@ -938,6 +956,12 @@ entries:
   enforcement: machine_checked
   detectors:
   - check_m2_calibration_review
+- code: SEALED_REVIEW_RECORDS_APPEARED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: SILENT_DELIVERABLE_SUBSTITUTION
   sites:
   - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
@@ -1060,6 +1084,12 @@ entries:
   enforcement: machine_checked
   detectors:
   - check_m2_calibration_review
+- code: UNSEAL_WITHOUT_FOUNDER_RULING
+  sites:
+  - governance/conditions/m2_seal_ledger.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: UNSEEN_BRAND_COUNT_OUT_OF_RANGE
   sites:
   - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state

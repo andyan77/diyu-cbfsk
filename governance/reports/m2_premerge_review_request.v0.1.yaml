@@ -1,0 +1,91 @@
+schema_version: '0.1'
+request_id: DIYU-CBFSK-M2-PREMERGE-REVIEW-REQUEST-001
+artifact_id: m2_premerge_review_request.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-SEAL
+status: ISSUED_AWAITING_BOTH_SIDES
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_3_premerge_review
+transmittal_document: governance/reports/m2_premerge_review_request.md
+
+relay_discipline:
+  rule: 执行侧原样转达两侧。
+  meaning: >-
+    问题由 Founder 改写过，执行侧不得润色、不得补充、不得拆条、不得替换措辞。
+    转达件里的四问与不在范围内四项，逐字等于裁决原文。
+  machine_enforced: true
+  failure_state: REVIEW_QUESTION_NOT_VERBATIM
+
+review_target:
+  what: 本次结扎落盘后形成的最终候选 Commit
+  branch: candidate/m2
+  commit: RESOLVED_AT_REPORT_TIME
+  commit_resolution_rule: >-
+    审查对象是承载本转达件的那个提交，其哈希由提交内容算出，写不进被提交的内容。
+    值由执行侧在交付报告中报出（裁决第三节明文要求），并登记进 governance/receipts/m2_package_commit_ledger.yaml。
+  full_hash_required: true
+  abbreviation_forbidden: true
+  delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
+  main_at_request: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+
+question_stem: 本候选原样并入 main，是否会在主线上造成以下任一情形——
+question_count: 4
+questions:
+- id: Q1
+  name: 虚假状态
+  text: 任何声称完成而实际未完成的记录
+- id: Q2
+  name: 越权授权
+  text: 任何未经 Founder 绑定的状态位或条件被置真
+- id: Q3
+  name: 红线松动
+  text: 六位红线旗、隐藏内容入仓、知识状态链
+- id: Q4
+  name: 误导性基线
+  text: 对将来从 main 起步的工作构成误导
+
+out_of_scope:
+  rule: 已知为否，且已由机器状态如实记录，不需再确认。
+  count: 4
+  items:
+  - M2 能否冻结
+  - 18 项是否闭环
+  - 隐藏资产是否存在
+  - 阈值是否已定
+  why_out_of_scope: >-
+    这四件的答案都是「否」，而且否在哪里、否成什么样，仓内都有可复算的字段。
+    再问一遍只会得到一份重复的否定结论，占掉本该用来找假状态与误导性基线的注意力。
+
+reviewers:
+  count: 2
+  each_produces: 一次结论
+  items:
+  - role: CLAUDE_INDEPENDENT_GUARDIAN
+    workspace_rule: 不同工作区、不同会话、不同任务合同；不得读规划上下文
+    conclusion_received: false
+    conclusion: null
+    report: null
+  - role: CHATGPT_CHIEF_ADVISOR
+    conclusion_received: false
+    conclusion: null
+    report: null
+
+what_reviewers_should_know:
+  candidate_is_not_a_merge_request: 本候选目前不请求合并；合并须三门齐备后另行授权。
+  m2_is_suspended: M2 已由 Founder 主动挂起，既非通过亦非失败。
+  self_check_is_not_review: 47 个确定性判据全绿是执行侧自检，不代替任何一方审查。
+  what_changed_since_a4be75e: 只加封条与审查转达件，未改任何 M2 交付物字节。
+
+machine_checkable_fields:
+  question_count: 4
+  out_of_scope_count: 4
+  reviewer_count: 2
+  conclusions_received: 0
+  merge_requested_by_this_request: false
+
+failure_states:
+- REVIEW_QUESTION_NOT_VERBATIM
+- REVIEW_QUESTION_COUNT_MISSTATED
+- REVIEW_CONCLUSION_SELF_FILLED
+- REVIEW_TARGET_HASH_NOT_FULL_40

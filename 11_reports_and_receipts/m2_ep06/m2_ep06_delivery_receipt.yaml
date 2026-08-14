@@ -11,7 +11,11 @@ base_candidate_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
 base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 branch: candidate/m2
 authority: DIYU-CBFSK-FOUNDER-M2-EP06-001
-describes_current_state: true
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+superseded_note: >-
+  本回执自此只描述 EP06 交付那一刻的状态。M2 其后由 DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 挂起，
+  当前状态以 M2-SEAL 回执为准；本回执各计数字段是那一刻的实测值，不随后续施工更新。
 self_reference_limitation: 本回执随本包内容同处一个提交，无法记录自身所在的候选 Commit——写进来就会改变文件内容，从而改变那个哈希，自己指自己永远差一步。
 candidate_commit_binding:
   value: null

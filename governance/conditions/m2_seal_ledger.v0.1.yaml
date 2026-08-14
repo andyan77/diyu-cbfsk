@@ -1,146 +1,201 @@
 schema_version: "0.1"
-contract_id: m2_seal_ledger.v0.1
-artifact_kind: seal_ledger
+contract_id: DIYU-CBFSK-M2-SEAL-LEDGER
+artifact_id: m2_seal_ledger.v0.1
 project_id: DIYU-CBFSK-001
 milestone: M2
-established_by: Founder 指令（2026-08-14）——「已落盘交付的确保通过审查与远程 CI；尚未落盘交付的进行结扎；当前主线暂时冻结，计划新开支线」
-authority_note: >-
-  本文件是 Founder 口头指令的执行侧落盘。它记录封存事实与解封条件，不新增任何产品裁决，
-  也不改变任何交付物的内容或状态判定——被封各项的状态值仍以各自真源为准（见每项 state_source）。
+execution_package: M2-SEAL
+status: SUSPENDED_BY_FOUNDER
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_2_sealing SEAL-7
+enforced_by: ci/checkers/check_m2_suspension_seal.py
 
-form:
-  kind: DOC_ONLY
+prior_version:
+  landed_at_commit: f71617eee44a6008d8180fe81aeea901efc54816
+  form: DOC_ONLY
   new_checker_added: false
-  founder_choice: 三个强度选项中，Founder 选定「只落封口台账（doc-only）」。
-  what_this_means_honestly: >-
-    **本台账没有机器守卫。** 没有 checker 会在有人推进被封项时判 FAIL；封存靠人遵守，不靠判据拦阻。
-    这是 Founder 知情选择，不是遗漏。若日后要让封存可被机器判定，需另加 checker，属新工作，非本轮范围。
-  what_would_have_been_enforced_if_checker_chosen:
-    - SEALED_ITEM_ADVANCED_WITHOUT_UNSEAL
-    - UNSEAL_WITHOUT_FOUNDER_RULING
-    - SEAL_LEDGER_STALE
+  wrote_verbatim: 本台账没有机器守卫。
+  why_replaced: >-
+    那一版按当时的口头指令做成 doc-only，自述「封存靠人遵守，不靠判据拦阻」。
+    本裁决第二节把口径改成「一律以机器状态封存，不以意图封存」，并在 SEAL-1 明文要求判据，
+    因此本版补上 ci/checkers/check_m2_suspension_seal.py，doc-only 形态就此作废。
+  what_was_kept: 该版记录的事实（被封各项的状态、四项 PARTIAL 的阻断源、封存时的自检与远程 CI 结果）经复核属实，予以保留并扩写。
+  what_was_corrected:
+    field: review_status_at_seal.why_review_cannot_start_now
+    old_claim: 分发前五步闸中 Guardian Delta 是第 4 步，第 3 步的最终分发前候选尚不存在，Delta 没有审查对象。
+    why_now_wrong: >-
+      本裁决第三节把审查对象改为「本次结扎落盘后形成的最终候选 Commit」——该对象在本包提交后即存在。
+      旧结论对旧对象成立，对新对象不成立；留着不改会让人以为审查仍然启动不了。
 
-frozen_branch:
-  branch: candidate/m2
-  delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
-  delivery_state_note: >-
-    a4be75e 是被封存的**交付态**：M2 的全部产物字节以该 Commit 为准。
-    本封条提交是封存动作本身，只加封条、不改任何交付物；封条落盘后 candidate/m2 不再产生新提交。
-  pr: {number: 3, state: OPEN, must_not_merge: true}
-  main_unaffected:
+suspension_reason:
+  headline: Founder 主动挂起，既非通过、亦非失败。
+  verbatim: 性质：既非通过、亦非失败，为 Founder 主动挂起。M2 冻结门维持关闭。
+  what_it_is_not:
+  - 不是 M2 失败——18 项里 14 项 READY，无一项被判不合格
+  - 不是 M2 通过——4 项 PARTIAL、0 项 FROZEN、阈值一条未冻、三方审查均未进行
+  - 不是放弃——封的是推进动作，不是结论
+  plain: >-
+    M2 的图纸基本画完了，实物差一批，而差的那批全卡在同一个前置上（隐藏侧存储未 provision）。
+    Founder 选择在这里停手、把当前状态钉死、把主线封存，而不是硬推到冻结。
+
+frozen_hashes:
+  rule: 一律完整 40 位，禁止以「最新版」代指。
+  main:
     branch: main
     head: c3f6ad372306cc12f139cf38624e9a5cea2cf329
-    state: M1 PASS（FOUNDER_ACCEPTED），本次封存不涉及 main
-  new_branch_plan:
-    status: NOT_DISPATCHED
-    note: Founder 计划新开支线，本轮未派发目标与执行包；执行侧不预设基线、不预备接口面。
+    state: M1 PASS（FOUNDER_ACCEPTED）
+    changed_by_this_seal: false
+  candidate:
+    branch: candidate/m2
+    delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
+    delivery_state_note: >-
+      a4be75e 是被封存的**交付态**：M2 的全部产物字节以该 Commit 为准。
+      其后的提交只加封条，不改任何交付物。
+    seal_commit_chain:
+    - {commit: f71617eee44a6008d8180fe81aeea901efc54816, what: 第一版 doc-only 封口台账}
+    - {commit: RESOLVED_AT_REPORT_TIME, what: 本版——按本裁决补齐七项结扎、装上判据、生成审查转达件}
+    self_reference_limitation: >-
+      本文件所在的那个提交，其哈希由本文件的内容算出，写不进来。
+      最终候选哈希随交付报告报出（裁决第三节要求执行侧报出），并登记进
+      governance/receipts/m2_package_commit_ledger.yaml。
+  pr:
+    number: 3
+    state: OPEN
+    must_not_merge_before_three_gates: true
 
-verified_at_seal:
-  remote_ci:
-    candidate_m2_head: a4be75e5ee723fe552a293d40632405711920554
-    document_integrity: success
-    role_governance_integrity: success
-    secret_and_hidden_boundary: success
-    note: push 与 pull_request 两轮均 success，实测于 GitHub Actions。
-  self_check:
-    checkers: 47
-    predicate_fixtures: 562
-    schema_fixtures: 36
-    exit_code: 0
-    is_this_a_review: false
-    is_this_a_review_note: 全绿是执行侧自检与远程 CI，不代替 Guardian、总顾问或 Founder 任何一方的审查。
-  landed_deliverables:
-    brief_total: 18
+sealed_state:
+  rule: 每一项的取值都指向自己的真源文件，本台账不复述、不另立一套值。
+  seal_1_calibration_pack:
+    distribution_status: NOT_DISTRIBUTED
+    state_source: 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml
+    sealed_file_count: 17
+    review_records_per_side: 0
+    machine_enforced: true
+    restore_rule: 恢复时若包内任一文件哈希变化，一律判为需重新确认，不得直接分发。
+  seal_2_known_design_gaps:
+    gap_count: 3
+    disposed: 0
+    affected_review_units: 5
+    state_source: 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml
+    rule: 恢复前必须先处置，不得直接分发。
+  seal_3_hidden_assets:
+    store_a_provisioned: false
+    cond_011: EVIDENCE_SUBMITTED
+    asset_count: 0
+    manifest_status: EMPTY_BLOCKED
+    steward_prompt_and_input_bundle: 封存但不启用
+    state_source: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+  seal_4_thresholds:
+    cond_007: OPEN
+    metric_count: 34
+    frozen_count: 0
+    worksheet_contract_kept: true
+    worksheet_content_generated: false
+    state_source: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml
+  seal_5_timing_gate:
+    precondition_count: 5
+    satisfied_count: 0
+    founder_confirmation_bound_fields_filled: 0
+    founder_confirmation_bound_fields_required: 5
+    state_source: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  seal_6_deliverable_matrix:
+    total: 18
     ready: 14
     partial: 4
     absent: 0
     frozen: 0
-    frozen_note: FROZEN 需 Founder 签署具体 Commit 与资产版本；当前 0 项，M2 未冻结。
+    common_blocker: HIDDEN_STORAGE_NOT_PROVISIONED
+    common_blocker_note: 四项不是四个独立缺口，是同一个缺口的四处露头。
+    state_source: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
+    partial_items:
+    - {id: D-M2-02, name: unseen_brand_split.v0.1.yaml, missing: 未见品牌实例 0 个, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {id: D-M2-03, name: unseen_category_edge_cases.v0.1.yaml, missing: 边缘任务实例 0 个, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {id: D-M2-07, name: benchmark leakage checker / frozen manifest / receipt, missing: 冻结清单资产数 0 且未冻结, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {id: D-M2-11, name: 泄漏 ＋ 同质性双检查报告, missing: 同质性侧无可比较对象（两池均为 0）, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+
+state_flags_at_seal:
+  m2_status: SUSPENDED_BY_FOUNDER
+  m2_freeze_gate_open: false
+  m2_frozen: false
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+  pr_3_merged: false
+  execution_status: M2_IN_PROGRESS
+  execution_status_note: >-
+    未随挂起迁移。合法取值枚举钉在已签署的 founder_signoff_receipt.yaml
+    state_flag_authorizations.execution_status.authorized_values 里，M2_SUSPENDED 不在其中；
+    执行侧往签署件的授权枚举里加取值等于自己给自己扩权。见未决项 OI-SEAL-01。
 
 review_status_at_seal:
   guardian_review: NOT_PERFORMED
   advisor_review: NOT_PERFORMED
   founder_m2_decision: NOT_MADE
-  why_review_cannot_start_now: >-
-    分发前五步闸中 Guardian Delta 是第 4 步，排在第 2、3 步之后；第 2 步是 Founder 的步。
-    第 3 步的最终分发前候选尚不存在，Delta 没有审查对象。
-    判据 GUARDIAN_UNBLOCK_CLAIMED_BEFORE_PRECONDITION 拦的就是「宣称一个还不存在的对象可以被审查」。
-  paths_to_start_review:
-    - Founder 补第 2 步（审阅队列确认 ＋ 两份 STORE-A 净化证据），序列自然推进到第 4 步
-    - Founder 另出裁决，把「只审已落盘 14 项」从序列中切出单独走
+  premerge_review_commissioned_by_this_ruling: true
+  premerge_review_target: 本次结扎落盘后形成的最终候选 Commit
+  transmittal: governance/reports/m2_premerge_review_request.v0.1.yaml
+  question_count: 4
+  out_of_scope_count: 4
+  note: >-
+    本轮审查问的不是「M2 能不能冻结」，是「这份候选原样并入 main 会不会在主线上留下假状态、越权授权、
+    红线松动或误导性基线」。前者已知为否且已如实记录，不在范围内。
 
-sealed_items:
-  count: 22
-  unseal_authority: FOUNDER_PRODUCT_AUTHORITY
-  unseal_rule: 任一项解封须 Founder 裁决具名该项；执行侧不得自行判定解封条件已满足。
-
-  partial_deliverables:
-    count: 4
-    common_blocker: HIDDEN_STORAGE_NOT_PROVISIONED
-    common_blocker_note: 四项不是四个独立缺口，是同一个缺口的四处露头。
-    state_source: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
-    items:
-      - {id: D-M2-02, brief_index: 2, name: unseen_brand_split.v0.1.yaml, missing: 未见品牌实例 0 个（应 30—50 个）, blocked_on: STORE-A 净化证据回传, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: D-M2-03, brief_index: 3, name: unseen_category_edge_cases.v0.1.yaml, missing: 边缘任务实例 0 个, blocked_on: STORE-A 净化证据回传, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: D-M2-07, brief_index: 7, name: benchmark leakage checker / frozen manifest / receipt, missing: 冻结清单资产数 0 且未冻结, blocked_on: STORE-A 净化证据回传, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: D-M2-11, brief_index: 11, name: 泄漏 ＋ 同质性双检查报告, missing: 同质性侧无可比较对象（夹具池与隐藏池均为 0）, blocked_on: STORE-A 净化证据回传, owner: FOUNDER_PRODUCT_AUTHORITY}
-
-  timing_gate_preconditions:
-    count: 5
-    all_false: true
-    state_source: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
-    state_field: public_blueprint_stable_for_hidden_generation（当前 false）
-    items:
-      - {id: TG-01, condition: 两侧校准评审结果均已回收, current: false, blocked_on: 两侧评审记录回收（现 0 条）}
-      - {id: TG-02, condition: 分歧统计完成, current: false, blocked_on: TG-01}
-      - {id: TG-03, condition: 阈值建议形成, current: false, blocked_on: TG-02}
-      - {id: TG-04, condition: Founder 冻结全部 M2 阈值且 COND-007 = CLOSED, current: false, blocked_on: TG-03 ＋ Founder 裁决, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: TG-05, condition: Founder 确认公开蓝图在指定冻结 Commit 上无需修改, current: false, blocked_on: Founder 确认, owner: FOUNDER_PRODUCT_AUTHORITY}
-
-  predistribution_steps:
-    count: 4
-    completed_outside_seal: {step: 1, status: COMPLETE, completed_at_package: M2-EP06}
-    state_source: governance/conditions/predistribution_sequence.v0.1.yaml
-    items:
-      - {id: STEP-2, owner: FOUNDER_PRODUCT_AUTHORITY, status: NOT_STARTED, action: 审阅队列并给出确认 ＋ 在 B 机器产出两份 STORE-A 净化证据, execution_side_must_not_do: true, why: 两件产物都必须来自被检查一方之外的人——执行侧代填等于自己确认自己写的候选、自己给自己开隔离证明}
-      - {id: STEP-3, owner: 执行侧, status: BLOCKED_BY_STEP_2, action: 落盘 founder_confirmation 五个绑定字段 ＋ STORE-A 证据文件级 intake ＋ 由文件推导 COND-011, at_once: true}
-      - {id: STEP-4, owner: [CLAUDE_INDEPENDENT_GUARDIAN, 总顾问], status: BLOCKED_BY_STEP_3, action: 一次 Guardian Delta 复审 ＋ 一次总顾问 Delta 复核}
-      - {id: STEP-5, owner: 执行侧, status: BLOCKED_BY_STEP_4, action: 分发校准包}
-
-  conditions:
+restore:
+  authority: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_5_restore_conditions
+  ordered_sequence:
+  - {step: 1, action: 处置第二节第 2 项三个已知缺口, owner: FOUNDER_PRODUCT_AUTHORITY, state_source: 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml}
+  - {step: 2, action: 校准包哈希复核通过, owner: 执行侧, state_source: 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml}
+  - {step: 3, action: 分发并回收两侧评审, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 4, action: 聚合, owner: 执行侧}
+  - {step: 5, action: Founder 冻结阈值（COND-007 关闭）, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 6, action: Founder 确认公开蓝图未变（绑定 Commit）, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 7, action: STORE-A provision 与证据 intake, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 8, action: 40 品牌正式批, owner: 执行侧}
+  - {step: 9, action: 统一收口, owner: 执行侧}
+  step_count: 9
+  minimum_actions_note: >-
+    这是**最小**动作清单——每一步都不可跳过，也没有任何一步可以由执行侧代替 Founder 完成。
+    第 1、3、5、6、7 步归 Founder；第 2、4、8、9 步归执行侧，且各自都以前一步为前置。
+  must_not_assume_true_on_restore:
     count: 2
     items:
-      - {id: COND-007, item: 全部 M2 评测阈值仍为 M2_FREEZE_REQUIRED, metrics_in_scope: 34, frozen_count: 0, blocked_on: TG-03 阈值建议形成后由 Founder 裁决, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: COND-011, item: 隐藏存储 provision 条件未关闭, status_at_seal: EVIDENCE_SUBMITTED, blocked_on: STORE-A 两份净化证据回传并通过主仓隐藏边界复检, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - id: MNA-1
+      verbatim: 任何一条上述前置
+      meaning: 恢复时不得因为「上次好像做过了」而跳过任何一步；每一步都要重新取现场证据。
+    - id: MNA-2
+      verbatim: 挂起期间主线的任何变化不自动使输入包保持有效
+      meaning: >-
+        主线在挂起期间即使只落了治理登记，隐藏生成输入包的血统基线也可能已经不再对得上。
+        恢复时必须重算输入包哈希并重新确认，不得沿用挂起前的那一份。
+      state_source: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
 
-  founder_pending_decisions:
-    count: 4
-    note: 这些不是「缺东西」，是等你裁定的具体问题；两侧选项都已算好，判据禁止执行侧代选。
-    items:
-      - {id: SQ-01, item: 共同问题一, affects: 4 个评审单元的锚点判定, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: SQ-02, item: 共同问题二, affects: 1 个评审单元的锚点判定, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: OI-EP06-04, item: 「判定依据不是单一硬门」两种读法, options: {宽读: 子表 30 行, 严读: 70 行}, both_computed: true, owner: FOUNDER_PRODUCT_AUTHORITY}
-      - {id: OI-01, item: 三层哈希退役, finding: L1 可由 artifact SHA256 替代，L2/L3 无现成替代, owner: FOUNDER_PRODUCT_AUTHORITY}
-
-  execution_side_carryover:
-    count: 3
-    note: 这三项归执行侧，解封后由后续执行包处理，不需要 Founder 动作。
-    items:
-      - {id: OI-EP06-03, item: EP06 自身候选 Commit 完整哈希回填台账, owner: TEMPORARY_EXECUTION_WRITER}
-      - {id: OI-EP06-05, item: 阈值裁决工作表出内容（现记录 0 条，算不出分歧分布）, blocked_on: 两侧评审记录回收}
-      - {id: OI-02, item: M2 里程碑 execution_run_id 未纳入 check_execution_uuid 守卫, note: EP01—EP03 执行当时未登记，执行侧不追记也不推断}
+unseal:
+  authority: FOUNDER_PRODUCT_AUTHORITY
+  rule: 任一项解封须 Founder 裁决具名该项；执行侧不得自行判定解封条件已满足。
+  failure_state: UNSEAL_WITHOUT_FOUNDER_RULING
 
 what_this_seal_does_not_mean:
-  - 不表示 M2 已交付——18 项中 4 项 PARTIAL，0 项 FROZEN
-  - 不表示 M2 已通过任何一方审查——Guardian／总顾问／Founder 三方均 NOT_PERFORMED / NOT_MADE
-  - 不表示已落盘 14 项可被下游消费——m2_frozen 仍为 false，阈值一条未冻
-  - 不表示被封各项已被放弃——封的是推进动作，不是结论
-  - 不改变任何状态位：m2_frozen / knowledge_distillation_started / production_servable / m3_started / m4_started 全部保持 false
+- 不表示 M2 已交付——18 项中 4 项 PARTIAL、0 项 FROZEN
+- 不表示 M2 已通过任何一方审查——Guardian／总顾问／Founder 三方均未出结论
+- 不表示已落盘 14 项可被下游消费——m2_frozen 仍为 false，阈值一条未冻
+- 不表示被封各项已被放弃——封的是推进动作，不是结论
+- 不表示主线已合并——三门未齐备，PR #3 仍 OPEN
 
-state_flags_unchanged_by_this_seal:
-  m2_frozen: false
-  knowledge_distillation_started: false
-  production_servable: false
-  m3_started: false
-  m4_started: false
-  pr_3_merged: false
+open_items:
+  count: 1
+  items:
+  - id: OI-SEAL-01
+    what: execution_status 是否随挂起迁移至 M2_SUSPENDED
+    blocked_on: 该取值不在已签署回执的 authorized_values 内；扩枚举是 Founder 动作
+    what_founder_would_need_to_do: 在 founder_signoff_receipt.yaml 的 authorized_values 里具名补上该取值，并绑定完整 40 位签署基线 Commit
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    execution_side_must_not_do: true
+
+failure_states:
+- SEAL_LEDGER_STALE
+- SEALED_ITEM_ADVANCED_WITHOUT_UNSEAL
+- UNSEAL_WITHOUT_FOUNDER_RULING
+- SEAL_HASH_NOT_FULL_40
+- SEAL_RESTORE_SEQUENCE_MISSTATED

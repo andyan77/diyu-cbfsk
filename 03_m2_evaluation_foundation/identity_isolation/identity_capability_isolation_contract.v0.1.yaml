@@ -97,7 +97,7 @@ scan_coverage_record:
     覆盖面数字一律是记录值，不是文中随手写的数。当前值由判据现算比对，历史值绑定它被测出来的那个提交。
   guarded_by: ci/checkers/check_m2_identity_isolation.py SCAN_COVERAGE_COUNT_MISSTATED
   current:
-    scanned_file_count: 757
+    scanned_file_count: 790
     measured_at_package: M2-SEAL
     measured_at_commit: null
     measured_at_commit_note: >-
@@ -106,6 +106,15 @@ scan_coverage_record:
     evidence_level: runtime_verified
     method: check_m2_identity_isolation.collect() 的 scanned_file_count
   history:
+    - measured_at_commit: f71617eee44a6008d8180fe81aeea901efc54816
+      package: M2-SEAL（doc-only 封条那一版）
+      scanned_file_count: 757
+      evidence_level: runtime_verified
+      method: check_m2_identity_isolation.collect() 的 scanned_file_count
+      note: >-
+        另一执行窗口的 doc-only 封口台账使扫描面由 756 增至 757。
+        本包按裁决第二节补齐七项结扎——挂起裁决、包哈希封存清单、缺口登记、转达件、合并协议、
+        新判据与 26 份夹具、回执与模板报告——扫描面继续增大。
     - measured_at_commit: a4be75e5ee723fe552a293d40632405711920554
       package: M2-EP06
       scanned_file_count: 756

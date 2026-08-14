@@ -1,0 +1,172 @@
+fixture_id: N394
+description: 三门未齐就把合并标成已授权。（MERGE_BEFORE_THREE_GATES）
+checker: check_m2_suspension_seal
+expected: FAIL
+payload:
+  m2_status: SUSPENDED_BY_FOUNDER
+  suspension_ruling_ref: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001
+  suspension_clause_path: article_1_suspension
+  ledger_status: SUSPENDED_BY_FOUNDER
+  ledger_hashes:
+    main: cccccccccccccccccccccccccccccccccccccccc
+    delivery_state: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  recorded_main_head: cccccccccccccccccccccccccccccccccccccccc
+  live_main_head: cccccccccccccccccccccccccccccccccccccccc
+  restore_steps:
+  - step: 1
+    action: 第 1 步
+  - step: 2
+    action: 第 2 步
+  - step: 3
+    action: 第 3 步
+  - step: 4
+    action: 第 4 步
+  - step: 5
+    action: 第 5 步
+  - step: 6
+    action: 第 6 步
+  - step: 7
+    action: 第 7 步
+  - step: 8
+    action: 第 8 步
+  - step: 9
+    action: 第 9 步
+  declared_restore_step_count: 9
+  must_not_assume_count: 2
+  unseal_records: {}
+  ledger_sealed_values:
+    threshold_frozen_count: 0
+    hidden_asset_count: 0
+    deliverables_ready: 14
+    deliverables_partial: 4
+  live_sealed_values:
+    threshold_frozen_count: 0
+    hidden_asset_count: 0
+    deliverables_ready: 14
+    deliverables_partial: 4
+  sealed_pack_files:
+    cases/public_calibration_cases.jsonl: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    hard_gates.json: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+  live_pack_files:
+    cases/public_calibration_cases.jsonl: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    hard_gates.json: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+  pack_distribution_status: NOT_DISTRIBUTED
+  declared_pack_digest: b7ff14c8be9aec1f70260a2891057e55a8f61e3286ae6901e971911196710b94
+  recomputed_sealed_digest: b7ff14c8be9aec1f70260a2891057e55a8f61e3286ae6901e971911196710b94
+  declared_pack_file_count: 2
+  review_sink_counts:
+  - side_id: GPT
+    live: 0
+    sealed: 0
+  - side_id: CLAUDE
+    live: 0
+    sealed: 0
+  design_gaps:
+  - id: GAP-SQ-01
+    affects:
+    - CAL-016
+    - CAL-052
+    disposition_status: NOT_STARTED
+    disposed_by: null
+    disposed_at_commit: null
+    execution_side_authoring_intent:
+      value: 考联合色彩语法
+      evidence_level: execution_side_self_report
+      must_be_confirmed_before_use: true
+  - id: GAP-SQ-02
+    affects:
+    - CAL-072
+    disposition_status: NOT_STARTED
+    disposed_by: null
+    disposed_at_commit: null
+  - id: GAP-CRITERION-A
+    affects: []
+    disposition_status: NOT_STARTED
+    disposed_by: null
+    disposed_at_commit: null
+  declared_gap_count: 3
+  declared_gaps_disposed: 0
+  case_ids:
+  - CAL-016
+  - CAL-052
+  - CAL-064
+  - CAL-088
+  - CAL-072
+  ruling_questions:
+  - id: Q1
+    name: 虚假状态
+    text: 任何声称完成而实际未完成的记录
+  - id: Q2
+    name: 越权授权
+    text: 任何未经 Founder 绑定的状态位或条件被置真
+  - id: Q3
+    name: 红线松动
+    text: 六位红线旗、隐藏内容入仓、知识状态链
+  - id: Q4
+    name: 误导性基线
+    text: 对将来从 main 起步的工作构成误导
+  ruling_out_of_scope:
+  - M2 能否冻结
+  - 18 项是否闭环
+  - 隐藏资产是否存在
+  - 阈值是否已定
+  request_questions:
+  - id: Q1
+    name: 虚假状态
+    text: 任何声称完成而实际未完成的记录
+  - id: Q2
+    name: 越权授权
+    text: 任何未经 Founder 绑定的状态位或条件被置真
+  - id: Q3
+    name: 红线松动
+    text: 六位红线旗、隐藏内容入仓、知识状态链
+  - id: Q4
+    name: 误导性基线
+    text: 对将来从 main 起步的工作构成误导
+  request_out_of_scope:
+  - M2 能否冻结
+  - 18 项是否闭环
+  - 隐藏资产是否存在
+  - 阈值是否已定
+  declared_question_count: 4
+  declared_conclusions_received: 0
+  reviewers:
+  - role: CLAUDE_INDEPENDENT_GUARDIAN
+    conclusion_received: false
+    conclusion: null
+    report: null
+  - role: CHATGPT_CHIEF_ADVISOR
+    conclusion_received: false
+    conclusion: null
+    report: null
+  delivery_state_frozen_at: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  transmittal_text: '任何声称完成而实际未完成的记录
+
+    任何未经 Founder 绑定的状态位或条件被置真
+
+    六位红线旗、隐藏内容入仓、知识状态链
+
+    对将来从 main 起步的工作构成误导
+
+    M2 能否冻结
+
+    18 项是否闭环
+
+    隐藏资产是否存在
+
+    阈值是否已定'
+  merge_gates:
+  - id: GATE-1
+    satisfied: false
+  - id: GATE-2
+    satisfied: false
+  - id: GATE-3
+    satisfied: false
+  declared_gates_satisfied: 0
+  merge_authorized_now: true
+  ff_only: true
+  command_line_only: true
+  tag_applied: false
+  frozen_observation_entered: false
+  unregistered_main_commits: []
+  pr_merged: false

@@ -1,0 +1,54 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-M2-SEAL-001
+covers_milestone: M2
+covers_packages: [M2-SEAL]
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+created_by_finding: NB-M2-05
+
+scope_note: >-
+  按里程碑维护的工作面见证分册。判据自动发现本目录下全部见证文件，
+  新增一个执行包＝加一份文件，不改 checker。
+
+records:
+  - workspace_id: diyu-cbfsk-m2-repair
+    workspace_path: /home/faye/diyu-cbfsk-m2
+    conversation_or_session_id: null
+    session_id_available: false
+    session_id_unavailable_reason: >-
+      本执行面无法读取自身会话标识；执行侧不得代为构造一个标识填进去。
+    session_started_at: "2026-08-14T22:30:00-07:00"
+    base_commit: f71617eee44a6008d8180fe81aeea901efc54816
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: M2_SUSPENSION_SEALING_AND_PREMERGE_REVIEW_PREPARATION
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001（第二节结扎、第三节转达）
+    founder_manual_attestation_required: true
+
+concurrent_window_note:
+  what_happened: >-
+    本裁决被同时发到另一个执行窗口，该窗口在同一 worktree 上先落了一版 doc-only 封口台账
+    （f71617eee44a6008d8180fe81aeea901efc54816）。
+  handling: 本包在其之上扩写，不回退——理由见交付回执 prior_window_handling。
+  two_windows_same_worktree: true
+  risk_acknowledged: >-
+    同一 worktree 上两个窗口先后写入，本身就有互相覆盖的风险。本包开工前已实测
+    工作树干净、HEAD 等于该提交、远程与本地一致，未发现覆盖。
+
+guardian_record_absent:
+  reason: 本执行包（M2-SEAL）的 Guardian 审查尚未进行——这是尚未发生的事件，不是待填字段。
+  premerge_review_commissioned: true
+  premerge_review_note: >-
+    裁决第三节委托了一轮并入前审查，对象是本包提交后形成的候选。
+    转达件已备好（governance/reports/m2_premerge_review_request.md），
+    结论未回；执行侧不得代填结论。
+  must_not_be_read_as: 本包已通过 Guardian 审查
+
+founder_workspace_attestation:
+  status: NOT_YET_ATTESTED
+  attested_by: null
+  attested_at: null
+  note: 见证由 Founder 手工补签；执行侧不得代填。

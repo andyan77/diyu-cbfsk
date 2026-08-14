@@ -1,0 +1,132 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-M2-KNOWN-DESIGN-GAPS
+artifact_id: known_design_gaps.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-SEAL
+status: REGISTERED_PENDING_DISPOSITION
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_2_sealing SEAL-2
+
+what_changed_by_this_ruling:
+  before: SQ-01 与 SQ-02 登记为「待 Founder 裁定的共同问题」。
+  after: 二者被裁定为**已知设计缺口**——题目本身有构造问题，不只是判定口径待定。
+  why_it_matters: >-
+    「待裁定的问题」可以带着分发，回收后再讨论；「设计缺口」不行。
+    带着缺口分发，测出来的分歧里混着「题出得有问题」，而分歧统计分不出这一层，
+    最后会把出题的问题记在评审员头上。
+
+hard_rule:
+  statement: 恢复前必须先处置，不得直接分发。
+  source: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_2_sealing SEAL-2
+  restore_sequence_position: 第 1 步（governance/conditions/m2_seal_ledger.v0.1.yaml restore.ordered_sequence）
+  failure_states:
+  - DESIGN_GAP_UNDISPOSED_AT_DISTRIBUTION
+  - DESIGN_GAP_DISPOSED_BY_EXECUTION_SIDE
+  - DESIGN_GAP_COUNT_MISSTATED
+
+disposition_authority:
+  who: FOUNDER_PRODUCT_AUTHORITY
+  execution_side_must_not_choose: true
+  execution_side_must_not_choose_why: >-
+    三条缺口的每个分支都改变题目考什么。执行侧替 Founder 选一支，等于自己改自己出的题，
+    再拿改过的题去测评审员——测出来的一致率没有指涉对象。
+
+gap_count: 3
+gaps:
+- id: GAP-SQ-01
+  affects: [CAL-016, CAL-052, CAL-064, CAL-088]
+  affects_count: 4
+  defect_verbatim: 题干缺品牌色彩硬规则，导致「不编造就答不了」
+  defect_plain: >-
+    这四例的可接受推理区间（ADB-M-03）要求推理必须联合品牌色彩语法，题干却没把品牌色卡写进去。
+    候选要满足边界就得把色卡说出来；说出来又可能被读成凭空生成权威事实。
+    两条路都通不过，是题的问题，不是答的问题。
+  boundary_ref: ADB-M-03
+  disposition_rule_verbatim: 恢复时按锚点真源登记的设计意图分流
+  branches:
+  - branch_id: GAP-SQ-01-A
+    intent: 考联合色彩语法
+    action: 补题干（把该品牌的色彩硬规则写进 scenario）
+  - branch_id: GAP-SQ-01-B
+    intent: 考资料缺失
+    action: 锚点判界外，且须确保配对候选写的是「声明缺失」而非「编造」
+    extra_work_if_chosen: 该格另一例的候选须复核——若它也在编造品牌事实，两例同侧，格内失去对照
+  blocked_on:
+    what: 锚点真源未登记这四例的设计意图，分流依据的字段不存在
+    field_missing: founder_boundary_anchor_truth.v0.1.yaml anchors[].design_intent
+    consequence: 分流规则现在无法执行——不是没做，是依据还没有
+  execution_side_authoring_intent:
+    value: 考联合色彩语法
+    evidence_level: execution_side_self_report
+    basis: >-
+      四例的可接受推理区间原文都写着「须联合肤色／场景光照与品牌色彩语法三者说明」，
+      候选也都是照着「三者联合」写的，未把「资料缺失」作为考点。
+    is_not: Founder 登记的设计意图
+    must_be_confirmed_before_use: true
+    why_recorded_here: >-
+      写出来是为了让 Founder 有个可以否掉的具体对象，不是为了替 Founder 登记。
+      按此意图分流会走 A 支（补题干）；Founder 若认为应是 B 支，四例一起翻。
+  disposition_status: NOT_STARTED
+  disposed_by: null
+  disposed_at_commit: null
+
+- id: GAP-SQ-02
+  affects: [CAL-072]
+  affects_count: 1
+  defect_verbatim: 解族成员资格与指令遵循两个构念混在一题
+  defect_plain: >-
+    ADB-O-06 的可接受边界考的是「换视角但专业结论一致」——这是解族成员资格。
+    而题干的 legal_solution_families 列了三个视角，会被读成「必须覆盖三个」——这是指令遵循。
+    评审员判 REJECT 时，说不清他判的是结论变了，还是视角少了一个。
+  boundary_ref: ADB-O-06
+  disposition_rule_verbatim: 恢复时二选一
+  branches:
+  - branch_id: GAP-SQ-02-A
+    action: 移除「必须三个视角」的要求
+    effect: 该题只考解族成员资格（结论是否一致），指令遵循不再进入判定
+  - branch_id: GAP-SQ-02-B
+    action: 改标为约束题
+    effect: 该题改考指令遵循（视角是否覆盖齐），并须按 ① 类补 0/1 两侧条件与 constraint_ref
+    extra_work_if_chosen: 改类会动 45 格的格内构成（该格由 2 个 ③ 变 1 个 ③ ＋ 1 个 ①），须重算格覆盖
+  disposition_status: NOT_STARTED
+  disposed_by: null
+  disposed_at_commit: null
+
+- id: GAP-CRITERION-A
+  affects: []
+  affects_count: 0
+  affects_note: 不改任何一例的题面，改的是「需重点确认」子表的入选口径。
+  defect_verbatim: 判据 A 的宽读法／严读法分层方案未裁定
+  defect_plain: >-
+    「判定依据不是单一硬门」有两种读法。宽读法＝该例声明的硬门不是恰好一个；
+    严读法＝依据必须落在硬门上，落在边界条款上就算命中。两种读法的子表大小差一倍多。
+  disposition_rule_verbatim: 待 Founder 裁定
+  branches:
+  - branch_id: GAP-CRITERION-A-WIDE
+    reading: 该例声明的硬门不是恰好一个
+    focus_rows: 30
+    currently_implemented: true
+  - branch_id: GAP-CRITERION-A-STRICT
+    reading: 依据必须落在硬门上，边界条款不算
+    focus_rows: 70
+    currently_implemented: false
+  both_computed: true
+  both_computed_source: 03_m2_evaluation_foundation/calibration/founder_review_queue.v0.1.md 计数与口径
+  disposition_status: NOT_STARTED
+  disposed_by: null
+  disposed_at_commit: null
+
+machine_checkable_fields:
+  gap_count: 3
+  gaps_disposed: 0
+  affected_review_units: 5
+  branch_count: 6
+  execution_side_disposed_any: false
+
+failure_states:
+- DESIGN_GAP_UNDISPOSED_AT_DISTRIBUTION
+- DESIGN_GAP_DISPOSED_BY_EXECUTION_SIDE
+- DESIGN_GAP_COUNT_MISSTATED
+- DESIGN_GAP_AFFECTS_UNRESOLVED
+- DESIGN_GAP_INTENT_CLAIMED_AS_FOUNDER_TRUTH

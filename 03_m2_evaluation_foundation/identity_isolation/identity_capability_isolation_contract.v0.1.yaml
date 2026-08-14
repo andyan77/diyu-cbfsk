@@ -97,11 +97,23 @@ scan_coverage_record:
     覆盖面数字一律是记录值，不是文中随手写的数。当前值由判据现算比对，历史值绑定它被测出来的那个提交。
   guarded_by: ci/checkers/check_m2_identity_isolation.py SCAN_COVERAGE_COUNT_MISSTATED
   current:
-    scanned_file_count: 756
-    measured_at_package: M2-EP06
+    scanned_file_count: 757
+    measured_at_package: M2-SEAL
+    measured_at_commit: null
+    measured_at_commit_note: >-
+      封条提交的哈希写不进它自己包含的文件（自引用）。本值实测于封存前的工作区，
+      与封条提交的内容一致；恢复用 git rev-parse candidate/m2。
     evidence_level: runtime_verified
     method: check_m2_identity_isolation.collect() 的 scanned_file_count
   history:
+    - measured_at_commit: a4be75e5ee723fe552a293d40632405711920554
+      package: M2-EP06
+      scanned_file_count: 756
+      evidence_level: runtime_verified
+      method: check_m2_identity_isolation.collect() 的 scanned_file_count
+      note: >-
+        EP06 交付态的实测值。封存提交新增 governance/conditions/m2_seal_ledger.v0.1.yaml 一份文件，
+        扫描面 756 → 757；增量为 1，与新增文件数一致，不是漏扫或多扫。
     - measured_at_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
       package: M2-EP05-CORRECTION
       scanned_file_count: 714

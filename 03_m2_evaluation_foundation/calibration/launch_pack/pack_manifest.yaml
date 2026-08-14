@@ -39,6 +39,8 @@ must_not_contain:
   - STORE-A
   - founder_signature_eligible
   - APPROVE_WITH_CONDITIONS
+  - 锚点判定
+  - founder_review_queue
   anchor_keys:
   - boundary_position
   - constructed_judgment
@@ -88,3 +90,4 @@ failure_states:
 - PACK_FILE_MISSING
 - PACK_CONTAINS_ANCHOR_LABEL
 - PACK_CANDIDATE_MISSING
+- PACK_UNDECLARED_FILE

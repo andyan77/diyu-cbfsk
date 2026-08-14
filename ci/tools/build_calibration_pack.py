@@ -115,7 +115,7 @@ HANDWRITTEN = (
 FORBIDDEN_TOKENS = (
     "m2_frozen", "execution_status", "milestone", "里程碑", "候选 Commit", "Guardian", "总顾问",
     "裁决", "DIYU-CBFSK-FOUNDER", "COND-0", "BLOCK_M2", "PR #", "M2-EP", "隐藏集", "STORE-A",
-    "founder_signature_eligible", "APPROVE_WITH_CONDITIONS",
+    "founder_signature_eligible", "APPROVE_WITH_CONDITIONS", "锚点判定", "founder_review_queue",
 )
 # 锚点标签黑名单：候选输出被构造时落在哪一侧，是本包唯一不能带出去的东西。
 FORBIDDEN_ANCHOR_KEYS = ("boundary_position", "constructed_judgment", "expected_judgment")
@@ -163,7 +163,7 @@ def build_manifest(generated: dict[str, str]) -> str:
             "PACK_DERIVATION_DRIFT", "PACK_MANIFEST_HASH_STALE", "PACK_CASE_SET_DRIFT",
             "PACK_BATCH_PARTITION_BROKEN", "PACK_CONTAINS_GOVERNANCE_CONTEXT",
             "PACK_PROMPT_HASH_MISMATCH", "PACK_FILE_MISSING", "PACK_CONTAINS_ANCHOR_LABEL",
-            "PACK_CANDIDATE_MISSING",
+            "PACK_CANDIDATE_MISSING", "PACK_UNDECLARED_FILE",
         ],
     }
     return yaml.safe_dump(doc, allow_unicode=True, sort_keys=False, width=120)

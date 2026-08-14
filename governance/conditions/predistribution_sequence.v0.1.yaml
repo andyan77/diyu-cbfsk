@@ -1,0 +1,100 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-M2-PREDISTRIBUTION-SEQUENCE
+artifact_id: predistribution_sequence.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP06
+status: STEP_1_COMPLETE_AWAITING_FOUNDER
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-EP06-001 article_3_predistribution_sequence
+
+why_this_file_exists:
+  verbatim_from_ruling: >-
+    校准包一旦分发，其内容即被 180 条评审记录锚定。分发前发现缺陷的修复成本近乎为零，分发后为整批证据作废。
+  plain: >-
+    包发出去以前改一个字，代价是零；发出去以后改一个字，两位评审员已经做的 180 条判定全部作废，要重来。
+    所以分发这件事有一道闸，闸由五步组成，五步走完才开。
+  review_record_count: 180
+  review_record_derivation: 90 个评审单元 × 两侧独立评审
+
+one_review_not_split:
+  rule: 一次审查，不拆多轮。
+  meaning: >-
+    第 4 步的 Guardian Delta 与总顾问 Delta 各做一次，对同一个候选。
+    不得把审查拆成「先审队列、再审证据、再审收口」——每拆一轮，被审对象就换一次，
+    上一轮的结论对下一轮无效（§14），拆到最后没有一轮的结论是对最终候选说的。
+
+steps:
+- step: 1
+  owner: 执行侧
+  actions: [完成审阅队列, 报告完整 Commit 哈希]
+  deliverables:
+  - 03_m2_evaluation_foundation/calibration/founder_review_queue.v0.1.md
+  - governance/receipts/m2_package_commit_ledger.yaml
+  status: COMPLETE
+  completed_at_package: M2-EP06
+- step: 2
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  actions: [审阅队列并给出确认, 在 B 机器产出两份 STORE-A 净化证据]
+  status: NOT_STARTED
+  blocks_everything_after: true
+  execution_side_must_not_do_this_step: true
+  execution_side_must_not_do_this_step_why: >-
+    这一步的两件产物都是「被检查的一方之外的人给出的东西」。执行侧代填队列确认，
+    等于自己确认自己写的候选；执行侧代造 STORE-A 证据，等于自己给自己开隔离证明。
+- step: 3
+  owner: 执行侧
+  at_once: true
+  actions:
+  - 落盘 founder_confirmation 五个绑定字段
+  - STORE-A 证据文件级 intake
+  - 由文件推导 COND-011
+  produces: 最终分发前候选
+  status: BLOCKED_BY_STEP_2
+  at_once_rule: 三件事在同一个执行包内一次性落盘，不拆成三个包。
+  at_once_why: 每拆一个包就多一个候选，多一个候选就要多一轮 Delta——与「一次审查，不拆多轮」直接冲突。
+- step: 4
+  owner: [CLAUDE_INDEPENDENT_GUARDIAN, 总顾问]
+  actions: [一次 Guardian Delta 复审, 一次总顾问 Delta 复核]
+  target: 第 3 步产出的最终分发前候选
+  status: BLOCKED_BY_STEP_3
+- step: 5
+  owner: 执行侧
+  precondition: 两侧结论无阻断
+  action: 分发校准包
+  status: BLOCKED_BY_STEP_4
+
+guardian_review_allowed:
+  current_value: false
+  prior_value: false
+  prior_basis: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 until_corrected.guardian_review_allowed
+  lifted_by: DIYU-CBFSK-FOUNDER-M2-EP06-001 article_3_predistribution_sequence.guardian_unblock
+  lifted_to: true
+  lift_is_conditional: true
+  lift_precondition: 第 3 步产出最终分发前候选
+  why_still_false_now: >-
+    解除的是禁令，不是「现在就可以发起」。第 4 步排在第 2、3 步之后；
+    Founder 尚未给出队列确认与 STORE-A 证据，最终分发前候选就不存在，Delta 没有审查对象。
+    把它现在置 true，等于宣称一个还不存在的对象可以被审查。
+  scope_when_allowed:
+    limited_to: 本轮 Delta
+    delta_scope:
+    - EP05-CORRECTION-001 六项修正
+    - 本序列新增内容
+    must_not_re_review: EP05 已验通过部分
+  failure_state: GUARDIAN_UNBLOCK_CLAIMED_BEFORE_PRECONDITION
+
+calibration_pack_distribution_allowed:
+  current_value: false
+  precondition: 第 5 步的前置——第 1 至 4 步全部完成且两侧结论无阻断
+  steps_complete: 1
+  steps_total: 5
+  failure_state: CALIBRATION_PACK_DISPATCHED_BEFORE_SEQUENCE_COMPLETE
+
+failure_states:
+- PREDISTRIBUTION_STEP_OUT_OF_ORDER
+- PREDISTRIBUTION_STEP_STATUS_INVALID
+- EXECUTION_SIDE_PERFORMED_FOUNDER_STEP
+- GUARDIAN_UNBLOCK_CLAIMED_BEFORE_PRECONDITION
+- CALIBRATION_PACK_DISPATCHED_BEFORE_SEQUENCE_COMPLETE
+- SEQUENCE_STEP_COUNT_MISSTATED

@@ -7,6 +7,9 @@
               手改包里的题会被当场比出来；写两份题就会有两套口径，改一处漏一处。
   分批不重不漏 —— 九批合起来必须正好覆盖 90 例，每例恰好一次。
               少一例是漏评，多一例是同一题被两次计入分歧统计。
+  只装登记过的东西 —— 包目录里出现 Manifest 没登记的文件即 FAIL。
+              此前只核验「登记了的在不在」，没核验「在的登记没登记」——
+              把 Founder 审阅队列这种带答案的文件丢进包目录，判据一声不吭。
   不夹带上下文 —— 里程碑状态、裁决编号、既往结论、另一侧结果一律不得出现在包内。
               评审员知道得越多，分歧率测出来的就越不是他们各自的判断。
 
@@ -19,7 +22,7 @@ import hashlib
 import importlib.util
 import json
 
-from _common import ROOT, cli, load_yaml
+from _common import PACK_SCAN_EXCLUDED, ROOT, cli, load_yaml
 
 LABEL = "check_calibration_launch_pack"
 
@@ -27,8 +30,8 @@ PACK = "03_m2_evaluation_foundation/calibration/launch_pack"
 MANIFEST = f"{PACK}/pack_manifest.yaml"
 SOURCE_SET = "03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml"
 REVIEW_STATE = "03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml"
-# Manifest 自身写着黑名单本身，扫它等于扫规则条文；分发内容之外不入扫描面。
-SCAN_EXCLUDED = ("pack_manifest.yaml",)
+# 豁免面定义在 _common.PACK_SCAN_EXCLUDED——两个判据共用一份，改一处两处同时生效。
+SCAN_EXCLUDED = PACK_SCAN_EXCLUDED
 
 _BUILDER = None
 
@@ -50,6 +53,12 @@ def validate(payload: dict) -> list[str]:
 
     for rel in payload.get("missing_files") or []:
         errors.append(f"PACK_FILE_MISSING: {rel} is listed in the manifest but absent from the pack")
+
+    for rel in payload.get("undeclared_files") or []:
+        errors.append(
+            f"PACK_UNDECLARED_FILE: {rel} sits in the pack directory without a manifest entry — "
+            "包里多一个文件，就多一份会被一起发出去而没人核过的东西"
+        )
 
     for rel in payload.get("derivation_drift") or []:
         errors.append(
@@ -163,6 +172,13 @@ def collect() -> dict:
                 [json.loads(line)["case_id"] for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
             )
 
+    declared_paths = {row["path"] for row in manifest["files"]} | set(SCAN_EXCLUDED)
+    undeclared = [
+        path.relative_to(pack_root).as_posix()
+        for path in sorted(pack_root.rglob("*"))
+        if path.is_file() and path.relative_to(pack_root).as_posix() not in declared_paths
+    ]
+
     tokens = manifest["must_not_contain"]["tokens"]
     anchor_keys = manifest["must_not_contain"].get("anchor_keys")
     forbidden_hits = []
@@ -180,6 +196,7 @@ def collect() -> dict:
 
     return {
         "missing_files": sorted(set(missing)),
+        "undeclared_files": undeclared,
         "derivation_drift": sorted(drift),
         "hash_drift": hash_drift,
         "declared_case_count": manifest["case_count"],

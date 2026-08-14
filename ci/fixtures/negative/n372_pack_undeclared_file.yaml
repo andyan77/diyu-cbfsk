@@ -1,0 +1,30 @@
+fixture_id: N372
+description: 包目录里多出一份 Manifest 没登记的文件——此前只核验「登记了的在不在」，没核验「在的登记没登记」。（PACK_UNDECLARED_FILE）
+checker: check_calibration_launch_pack
+expected: FAIL
+payload:
+  missing_files: []
+  undeclared_files:
+  - founder_review_queue.v0.1.md
+  derivation_drift: []
+  hash_drift: []
+  declared_case_count: 2
+  source_case_ids:
+  - CAL-001
+  - CAL-002
+  pack_case_ids:
+  - CAL-001
+  - CAL-002
+  batch_case_ids:
+  - - CAL-001
+    - CAL-002
+  declared_batch_count: 1
+  declared_batch_size: 10
+  forbidden_hits: []
+  anchor_label_hits: []
+  declared_anchor_keys:
+  - boundary_position
+  - constructed_judgment
+  - expected_judgment
+  manifest_prompt_sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+  state_prompt_sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb

@@ -67,7 +67,7 @@ binding_required_when:
   commit_must_be_full_40_hex: true
   resolver: ci/checkers/_common.py clause_resolves（单一实现，裁决引用与本判据共用）
 counts:
-  sites: 76
+  sites: 80
   kind_capability: 1
   kind_derived_state: 5
   kind_discipline_acknowledgement: 1
@@ -344,6 +344,18 @@ sites:
   claim_kind: eligibility
   binding: null
   why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP06-001.yaml
+  key_path: article_5_unchanged.state_flags_remain_false.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同上——转录裁决第五节维持不变的六位状态旗，说的是够不够格，不是已经签了。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP06-001.yaml
+  key_path: machine_checkable_fields.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同一裁决的机器可核字段投影，值与上一条同源。
 - file: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
   key_path: three_layer_hash_mechanism.adjudication.retirement_authorized
   value_when_registered: false
@@ -629,6 +641,18 @@ sites:
   claim_kind: eligibility
   binding: null
   why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_receipt.yaml
+  key_path: package_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同上——交付末态里的够格位，不是 Founder 的动作。
+- file: governance/workspaces/workspace_attestation.M2-EP06.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
 - file: governance/workspaces/workspace_attestation.M2-EP05-CORRECTION.yaml
   key_path: records[0].founder_manual_attestation_required
   value_when_registered: true

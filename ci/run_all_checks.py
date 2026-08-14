@@ -61,6 +61,7 @@ CHECKERS = [
     "check_report_number_traceability",
     "check_calibration_launch_pack",
     "check_founder_confirmation_binding",
+    "check_m2_predistribution_sequence",
 ]
 
 

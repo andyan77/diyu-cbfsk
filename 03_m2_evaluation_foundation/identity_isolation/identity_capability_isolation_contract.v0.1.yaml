@@ -97,11 +97,17 @@ scan_coverage_record:
     覆盖面数字一律是记录值，不是文中随手写的数。当前值由判据现算比对，历史值绑定它被测出来的那个提交。
   guarded_by: ci/checkers/check_m2_identity_isolation.py SCAN_COVERAGE_COUNT_MISSTATED
   current:
-    scanned_file_count: 714
-    measured_at_package: M2-EP05-CORRECTION
+    scanned_file_count: 756
+    measured_at_package: M2-EP06
     evidence_level: runtime_verified
     method: check_m2_identity_isolation.collect() 的 scanned_file_count
   history:
+    - measured_at_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+      package: M2-EP05-CORRECTION
+      scanned_file_count: 714
+      evidence_level: runtime_verified
+      method: check_m2_identity_isolation.collect() 的 scanned_file_count
+      note: EP05-CORRECTION 交付态的实测值；EP06 新增审阅队列、序列与工作表合同、候选 Commit 台账与 34 份夹具后扫描面自然增大。
     - measured_at_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
       package: M2-EP05
       scanned_file_count: 664

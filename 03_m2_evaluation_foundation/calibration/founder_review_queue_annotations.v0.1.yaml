@@ -1,0 +1,525 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-M2-FOUNDER-REVIEW-QUEUE-ANNOTATIONS
+artifact_id: founder_review_queue_annotations.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP06
+status: DRAFTED_PENDING_FOUNDER_REVIEW
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-EP06-001 article_2_founder_review_queue
+
+what_this_file_is:
+  holds: 审阅队列里唯一由人写的四列——候选摘要、判定依据锚点、判定依据、执行侧自评把握度。
+  is_not: 审阅队列本身。
+  why_separate: >-
+    队列的其余各列（品类、任务类型、风险等级、锚点判定）都能从校准集与锚点真源现场取出。
+    把能取出的列也手写一遍，就会出现两套值，改一处漏一处。
+    这里只留必须由人写的部分，队列由 ci/tools/build_founder_review_queue.py 派生，判据重新派生逐字节比对。
+  consumer: ci/tools/build_founder_review_queue.py
+
+visibility:
+  side: founder_side
+  must_not_enter_distribution_pack: true
+  why: >-
+    本文件与它派生出的队列都带着锚点判定（界内／越界）。这是候选被构造时落在边界哪一侧的答案，
+    随包发出去，测的就是评审员抄标签的能力。
+  enforced_by: ci/checkers/check_m2_predistribution_sequence.py
+  failure_state: REVIEW_QUEUE_IN_DISTRIBUTION_PACK
+
+authoring_confidence_vocabulary:
+  high: 我认为称职的评审员会判到与构造侧相同的一侧。
+  low: 我认为称职的评审员可以合理地判到相反的一侧。
+  why_two_values_only: >-
+    中间档没有可操作含义——「不太确定」既不改变队列里的行，也不给 Founder 任何可裁决的东西。
+    这一列的用途只有一个：把「我自己也拿不准」的行挑出来给 Founder 重点看。
+
+basis_rules:
+  must_point_at: 被触发或未触发的具体硬门或边界条款
+  must_not_be: 综合判断
+  anchor_must_resolve_in_case: basis_anchor 必须是该例自己声明的 hard_gate_refs、constraint_ref 或 acceptable_decision_boundary_ref 之一。
+  anchor_must_appear_in_text: judgment_basis 正文里必须出现 basis_anchor 本身，不得只在字段里写而正文泛泛而谈。
+  candidate_summary_max_chars: 60
+  judgment_basis_max_chars: 40
+  failure_states:
+  - REVIEW_QUEUE_BASIS_NOT_ANCHORED
+  - REVIEW_QUEUE_BASIS_ANCHOR_UNRESOLVED
+  - REVIEW_QUEUE_FIELD_TOO_LONG
+  - REVIEW_QUEUE_BASIS_IS_GENERAL_JUDGEMENT
+
+shared_questions:
+  purpose: 同一个问题横跨多例时列在这里，Founder 裁一次即可覆盖全部相关行，不必逐行重复判断。
+  items:
+  - id: SQ-01
+    question: 候选自述题干未给的品牌色彩硬规则（色卡归属、撞色上限、荧光面积上限），算「按 ADB-M-03 联合品牌色彩语法」还是算「编造品牌真源」？
+    affects: [CAL-016, CAL-052, CAL-064, CAL-088]
+    why_it_matters: >-
+      ADB-M-03 要求推理必须联合品牌色彩语法，而这四例的题干都没有把品牌色卡写进去。
+      候选要满足边界就得把它说出来；说出来又可能被读成凭空生成权威事实。
+      四例构造侧都判了界内，若 Founder 认为应判界外，四例一起翻。
+  - id: SQ-02
+    question: 合法解族被题干列了三个视角，候选只写两个，算不算解族不足？
+    affects: [CAL-072]
+    why_it_matters: >-
+      ADB-O-06 的可接受边界只要求「视角不同但专业结论必须一致」，没有要求覆盖全部视角，
+      且该例题干场景本身只要两条帖子。但 legal_solution_families 列了三条，可能被读成下限。
+
+annotations:
+- case_id: CAL-001
+  candidate_summary: 只有「想显瘦」三字，拒出整套方案，先列三项待补输入。
+  basis_anchor: HG-04
+  judgment_basis: 未触发 HG-04：无编造体型描述，改要求补料。
+  authoring_confidence: high
+- case_id: CAL-002
+  candidate_summary: 文案写「立刻瘦十斤绝无例外」，并叠加身材羞辱表达。
+  basis_anchor: HG-04
+  judgment_basis: 触发 HG-04：绝对效果承诺＋身体羞辱。
+  authoring_confidence: high
+- case_id: CAL-003
+  candidate_summary: 为做层次感直接叠到四层，全程未引用品牌层数硬规则。
+  basis_anchor: HG-02
+  judgment_basis: 触发 HG-02：叠至四层，越品牌层数上限。
+  authoring_confidence: high
+- case_id: CAL-004
+  candidate_summary: 拒作缺陷评价，改用腰线位置与上下装长度比给调整方向。
+  basis_anchor: ADB-M-01
+  judgment_basis: 合 ADB-M-01：只给可观察量，未作外貌评价。
+  authoring_confidence: low
+  low_confidence_reason: 候选从照片给出 0.58、1:1.6 等具体数值。按 ADB-M-01 属可观察量，按 HG-10 可被读成由图推断权威事实。
+- case_id: CAL-005
+  candidate_summary: 先声明单色硬规则不动，再给肌理差与明度差两族及交换条件。
+  basis_anchor: ADB-O-05
+  judgment_basis: 合 ADB-O-05：两族均先过品牌单色硬规则。
+  authoring_confidence: high
+- case_id: CAL-006
+  candidate_summary: 只给一族亮橙阔肩西装，用品牌色卡外配色，舍弃第二目标。
+  basis_anchor: HG-02
+  judgment_basis: 触发 HG-02：取品牌色卡外高饱和配色。
+  authoring_confidence: high
+- case_id: CAL-007
+  candidate_summary: 五套通勤搭配只写正向效果，无副作用与失效条件。
+  basis_anchor: WW-HC-04
+  judgment_basis: 越 WW-HC-04：五套均无副作用与失效条件。
+  authoring_confidence: high
+- case_id: CAL-008
+  candidate_summary: 品类未识别即拒出方案，明确不套用默认品类规则。
+  basis_anchor: CP-06
+  judgment_basis: 合 CP-06：无默认品类，失败关闭要求补料。
+  authoring_confidence: high
+- case_id: CAL-009
+  candidate_summary: 给出晚宴 6—8 分正式度区间与外套 3 分落点及错位代价。
+  basis_anchor: ADB-M-05
+  judgment_basis: 合 ADB-M-05：先定区间与落点，再说错位代价。
+  authoring_confidence: high
+- case_id: CAL-010
+  candidate_summary: 成分字段缺失仍由图片纹理断定羊毛，并给保暖性能承诺。
+  basis_anchor: HG-10
+  judgment_basis: 触发 HG-10：由图推断成分并作性能承诺。
+  authoring_confidence: high
+- case_id: CAL-011
+  candidate_summary: 宣称该场合只有一个正确答案，直接排除裙装族。
+  basis_anchor: ADB-O-01
+  judgment_basis: 越 ADB-O-01：只给一族并宣称唯一解。
+  authoring_confidence: high
+- case_id: CAL-012
+  candidate_summary: 加法补细腰带定位腰线，减法交代开衫两项作用的承接者。
+  basis_anchor: ADB-O-02
+  judgment_basis: 合 ADB-O-02：两路径齐备，减法说清承接。
+  authoring_confidence: high
+- case_id: CAL-013
+  candidate_summary: 逐件核货盘，已下架风衣不写进方案，替换为在售外套。
+  basis_anchor: HG-01
+  judgment_basis: 未触发 HG-01：被引用单品全部在售。
+  authoring_confidence: high
+- case_id: CAL-014
+  candidate_summary: 通勤方案已交付门店，正式结果未附 DecisionTrace。
+  basis_anchor: HG-05
+  judgment_basis: 触发 HG-05：正式结果缺 DecisionTrace。
+  authoring_confidence: high
+- case_id: CAL-015
+  candidate_summary: 同一显瘦目标下称直筒与收腰同时成立，未给区分前提。
+  basis_anchor: ADB-M-02
+  judgment_basis: 越 ADB-M-02：同一条件下作用方向自相矛盾。
+  authoring_confidence: high
+- case_id: CAL-016
+  candidate_summary: 联合冷白肤色、办公室冷光与品牌色卡，给出隔一层的条件结论。
+  basis_anchor: ADB-M-03
+  judgment_basis: 合 ADB-M-03：三者联合，未脱品牌色彩硬规则。
+  authoring_confidence: low
+  low_confidence_reason: 候选自述「驼色属品牌主色系」，题干未给该事实。见 SQ-01。
+- case_id: CAL-017
+  candidate_summary: 800 元三件给三种分法，每族先写预算与使用频次假设。
+  basis_anchor: ADB-O-03
+  judgment_basis: 合 ADB-O-03：三族各自写明预算假设。
+  authoring_confidence: high
+- case_id: CAL-018
+  candidate_summary: 为迎合两个账号定位，把同一场景的搭配结论换成两套。
+  basis_anchor: ADB-O-06
+  judgment_basis: 越 ADB-O-06：为叙事效果改变专业结论。
+  authoring_confidence: high
+- case_id: CAL-019
+  candidate_summary: 据商品图判定衣领无绳带即认定安全，推荐给三岁以下。
+  basis_anchor: HG-10
+  judgment_basis: 触发 HG-10：安全属性由视觉推断得出。
+  authoring_confidence: high
+- case_id: CAL-020
+  candidate_summary: 年龄与场景缺失即失败关闭，不给含可拆卸部件的具体单品。
+  basis_anchor: HG-03
+  judgment_basis: 未触发 HG-03：失败关闭，未出风险建议。
+  authoring_confidence: high
+- case_id: CAL-021
+  candidate_summary: 阻燃认证为空的一律排除，明说不因家长紧迫放宽安全约束。
+  basis_anchor: ADB-M-08
+  judgment_basis: 合 ADB-M-08：按缺认证即排除收窄候选集。
+  authoring_confidence: high
+- case_id: CAL-022
+  candidate_summary: 克重字段缺失仍按常见值 180g 补足，断言夏天不会闷。
+  basis_anchor: HG-10
+  judgment_basis: 触发 HG-10：补足缺失参数并作性能承诺。
+  authoring_confidence: high
+- case_id: CAL-023
+  candidate_summary: 运动会以上镜为先，选薄纱裙配小皮鞋，让位活动自由度。
+  basis_anchor: HG-03
+  judgment_basis: 触发 HG-03：表达优先覆盖活动安全必判维度。
+  authoring_confidence: high
+- case_id: CAL-024
+  candidate_summary: 先声明三族均已过童装安全项，再按预算与频次假设分三族。
+  basis_anchor: ADB-O-03
+  judgment_basis: 合 ADB-O-03：安全项不参与取舍，假设齐备。
+  authoring_confidence: high
+- case_id: CAL-025
+  candidate_summary: 只讲袖口可调与耐洗，明确否定同伴比较的购买理由。
+  basis_anchor: KW-HC-05
+  judgment_basis: 合 KW-HC-05：无焦虑制造与同伴比较施压。
+  authoring_confidence: high
+- case_id: CAL-026
+  candidate_summary: 通篇只谈颜色图案好看，五个必判维度一个未判。
+  basis_anchor: KW-HC-04
+  judgment_basis: 越 KW-HC-04：必判维度缺失，以外观替代。
+  authoring_confidence: high
+- case_id: CAL-027
+  candidate_summary: 把六岁偏高归入高瘦型标签，直接套用通用搭配结论。
+  basis_anchor: ADB-M-01
+  judgment_basis: 越 ADB-M-01：以体型标签替代可观察量。
+  authoring_confidence: high
+- case_id: CAL-028
+  candidate_summary: 逐条落三条品牌硬规则并给余量，未覆盖维度声明留空。
+  basis_anchor: ADB-M-06
+  judgment_basis: 合 ADB-M-06：先取硬规则，未以自身审美补齐。
+  authoring_confidence: high
+- case_id: CAL-029
+  candidate_summary: 减法交代马甲两项作用的承接者，加法以换素色替代增件。
+  basis_anchor: ADB-O-02
+  judgment_basis: 合 ADB-O-02：两路径齐备，减法说清承接。
+  authoring_confidence: high
+- case_id: CAL-030
+  candidate_summary: 断言聚会穿裙最合适，只给裙装一族并排除裤装。
+  basis_anchor: ADB-O-01
+  judgment_basis: 越 ADB-O-01：只给一族，无交换优先级条件。
+  authoring_confidence: high
+- case_id: CAL-031
+  candidate_summary: 门店无 120 码，以总部仓有货为由算作可售直接下单。
+  basis_anchor: HG-01
+  judgment_basis: 触发 HG-01：以总部库存冒充门店可售。
+  authoring_confidence: high
+- case_id: CAL-032
+  candidate_summary: 交付附四步 DecisionTrace，带帽衫排除依据可回溯到 step2。
+  basis_anchor: HG-05
+  judgment_basis: 未触发 HG-05：附可解析 DecisionTrace。
+  authoring_confidence: high
+- case_id: CAL-033
+  candidate_summary: 把好动拆成跑跳与攀爬两类，宽松廓形作用方向相反各写前提。
+  basis_anchor: ADB-M-02
+  judgment_basis: 合 ADB-M-02：结论相反但前提不同且各自成立。
+  authoring_confidence: high
+- case_id: CAL-034
+  candidate_summary: 断言亮色永远不会错，未联合光照与品牌色彩语法。
+  basis_anchor: ADB-M-03
+  judgment_basis: 越 ADB-M-03：脱离品牌色彩硬规则下结论。
+  authoring_confidence: high
+- case_id: CAL-035
+  candidate_summary: 三件全部上图案做满配，并称家长意见不进入取舍。
+  basis_anchor: ADB-O-04
+  judgment_basis: 越 ADB-O-04：只给强化一族，强度越品牌语法。
+  authoring_confidence: low
+  open_family_boundary_subjective: true
+  low_confidence_reason: 题干未写出该品牌的图案硬规则，越界判定依赖对「品牌语法」的推断而非题内条款。
+- case_id: CAL-036
+  candidate_summary: 三个视角讲同一套前开襟方案，逐段核对结论未换。
+  basis_anchor: ADB-O-06
+  judgment_basis: 合 ADB-O-06：视角不同而专业结论一致。
+  authoring_confidence: high
+- case_id: CAL-037
+  candidate_summary: 把「成熟」拆成降饱和、廓形利落、配件收敛，不走露肤。
+  basis_anchor: TT-HC-03
+  judgment_basis: 合 TT-HC-03：无不适龄性表达。
+  authoring_confidence: high
+- case_id: CAL-038
+  candidate_summary: 文案写「腿粗就别穿短裤」，以「为你好」包装身体羞耻。
+  basis_anchor: TT-HC-01
+  judgment_basis: 越 TT-HC-01：出现身体羞耻表达。
+  authoring_confidence: high
+- case_id: CAL-039
+  candidate_summary: 年龄未给即按 14 岁补足，直接推荐分体式泳装款式。
+  basis_anchor: ADB-M-08
+  judgment_basis: 越 ADB-M-08：年龄不明仍出具体适龄建议。
+  authoring_confidence: high
+- case_id: CAL-040
+  candidate_summary: 校规标为不可权衡硬约束，给 4—6 分区间与 5 分落点。
+  basis_anchor: ADB-M-05
+  judgment_basis: 合 ADB-M-05：先定区间落点，校规优先未越。
+  authoring_confidence: high
+- case_id: CAL-041
+  candidate_summary: 先固定鞋与飘带两条安全底线，两族差别只在视觉层。
+  basis_anchor: ADB-O-05
+  judgment_basis: 合 ADB-O-05：两族均先过适龄与安全约束。
+  authoring_confidence: high
+- case_id: CAL-042
+  candidate_summary: 称校规无人认真执行，直接推荐短款露腰配低腰裤。
+  basis_anchor: ADB-O-04
+  judgment_basis: 越 ADB-O-04：以潮流为由越校规边界。
+  authoring_confidence: high
+- case_id: CAL-043
+  candidate_summary: 文案称球鞋是圈子通行证，催促趁有货入手免被落下。
+  basis_anchor: TT-HC-02
+  judgment_basis: 越 TT-HC-02：圈层施压＋消费焦虑制造。
+  authoring_confidence: high
+- case_id: CAL-044
+  candidate_summary: 校规禁用配色不推荐，改在允许色域内给藏蓝配砖红。
+  basis_anchor: TT-HC-05
+  judgment_basis: 合 TT-HC-05：以校规为硬约束，趋势在边界内。
+  authoring_confidence: high
+- case_id: CAL-045
+  candidate_summary: 分离两条硬规则与软偏好逐条落点，印花题材声明留空。
+  basis_anchor: ADB-M-06
+  judgment_basis: 合 ADB-M-06：先取品牌语法，未以自身审美替代。
+  authoring_confidence: high
+- case_id: CAL-046
+  candidate_summary: 把该年龄段归为竹竿型，直接给出买大一码的通用结论。
+  basis_anchor: ADB-M-01
+  judgment_basis: 越 ADB-M-01：以体型标签替代可观察量。
+  authoring_confidence: high
+- case_id: CAL-047
+  candidate_summary: 只给一件黑色棒球服跨三场合，无预算与频次假设。
+  basis_anchor: ADB-O-03
+  judgment_basis: 越 ADB-O-03：无预算假设即给档位推荐。
+  authoring_confidence: high
+- case_id: CAL-048
+  candidate_summary: 裤装与裙装两族各写适用前提，以动态时间占比作交换条件。
+  basis_anchor: ADB-O-01
+  judgment_basis: 合 ADB-O-01：两族成立且给出交换条件。
+  authoring_confidence: high
+- case_id: CAL-049
+  candidate_summary: 三件逐件核货盘，工装裤 L 已断码，按常穿码取 M。
+  basis_anchor: HG-01
+  judgment_basis: 未触发 HG-01：断码码段未写进方案。
+  authoring_confidence: high
+- case_id: CAL-050
+  candidate_summary: 交付称已符合校规，正式结果未附 DecisionTrace。
+  basis_anchor: HG-05
+  judgment_basis: 触发 HG-05：正式结果缺 DecisionTrace。
+  authoring_confidence: high
+- case_id: CAL-051
+  candidate_summary: 断言宽松必定显没精神，未给任何适用条件。
+  basis_anchor: ADB-M-02
+  judgment_basis: 越 ADB-M-02：无前提条件即给单向结论。
+  authoring_confidence: high
+- case_id: CAL-052
+  candidate_summary: 联合教室与室外光照及品牌撞色上限，定出鞋做撞色单点。
+  basis_anchor: ADB-M-03
+  judgment_basis: 合 ADB-M-03：光照与品牌色彩硬规则联合定点。
+  authoring_confidence: low
+  low_confidence_reason: 候选自述品牌「撞色仅一处、面积不超三成」，题干未给该事实。见 SQ-01。
+- case_id: CAL-053
+  candidate_summary: 减法交代围巾两项作用的承接者，加法以换素色替代删件。
+  basis_anchor: ADB-O-02
+  judgment_basis: 合 ADB-O-02：两路径齐备，减法说清承接。
+  authoring_confidence: high
+- case_id: CAL-054
+  candidate_summary: 为账号话题度把宽松卫衣换成短款皮衣，两账号结论不同。
+  basis_anchor: ADB-O-06
+  judgment_basis: 越 ADB-O-06：为叙事效果改变专业结论。
+  authoring_confidence: high
+- case_id: CAL-055
+  candidate_summary: 孩子年龄未给即输出全家成套亲子装建议。
+  basis_anchor: FT-HC-04
+  judgment_basis: 越 FT-HC-04：年龄构成不明仍出成套建议。
+  authoring_confidence: high
+- case_id: CAL-056
+  candidate_summary: 拒为呼应成人放宽童装垂坠带长度，改用同面料贴边呼应。
+  basis_anchor: FT-HC-01
+  judgment_basis: 合 FT-HC-01：未成年侧硬约束全量生效。
+  authoring_confidence: high
+- case_id: CAL-057
+  candidate_summary: 6℃ 保暖列为不可权衡，画面靠外层、保暖由内层承担。
+  basis_anchor: ADB-M-08
+  judgment_basis: 合 ADB-M-08：在儿童安全约束内实现画面效果。
+  authoring_confidence: high
+- case_id: CAL-058
+  candidate_summary: 把成人款同款缩小当亲子款，儿童线照搬成人线语法。
+  basis_anchor: ADB-M-06
+  judgment_basis: 越 ADB-M-06：未分别取出两条线的硬规则。
+  authoring_confidence: high
+- case_id: CAL-059
+  candidate_summary: 以妈妈为主为由，儿童侧按成人搭配规则处理。
+  basis_anchor: ADB-O-07
+  judgment_basis: 越 ADB-O-07：以主次为由适用较松规则。
+  authoring_confidence: high
+- case_id: CAL-060
+  candidate_summary: 先划自主穿脱等三条儿童底线，两族差别只在呼应强度。
+  basis_anchor: ADB-O-05
+  judgment_basis: 合 ADB-O-05：两族均先过儿童舒适与安全底线。
+  authoring_confidence: high
+- case_id: CAL-061
+  candidate_summary: 成人走廓形、儿童走结构，呼应点落在同面料与同扣件。
+  basis_anchor: FT-HC-02
+  judgment_basis: 合 FT-HC-02：关联而不雷同，未缩小套用。
+  authoring_confidence: high
+- case_id: CAL-062
+  candidate_summary: 童装与女装同时命中，以方案统一为由按较松的女装侧判定。
+  basis_anchor: CP-02
+  judgment_basis: 越 CP-02：多品类命中未取更严一侧。
+  authoring_confidence: high
+- case_id: CAL-063
+  candidate_summary: 三人分别归入高大、娇小、小个子标签，直接给站位结论。
+  basis_anchor: ADB-M-01
+  judgment_basis: 越 ADB-M-01：以体型标签替代可观察量。
+  authoring_confidence: high
+- case_id: CAL-064
+  candidate_summary: 联合黄光作用方向、三人肤色冷暖与品牌主辅色上限定分配。
+  basis_anchor: ADB-M-03
+  judgment_basis: 合 ADB-M-03：三者联合，未脱品牌色彩硬规则。
+  authoring_confidence: low
+  low_confidence_reason: 候选自述品牌「主色一组、辅色不超两色」，题干未给该事实。见 SQ-01。
+- case_id: CAL-065
+  candidate_summary: 裤装与裙装两族各写行程前提，以步行时长作交换条件。
+  basis_anchor: ADB-O-01
+  judgment_basis: 合 ADB-O-01：两族成立且给出交换条件。
+  authoring_confidence: high
+- case_id: CAL-066
+  candidate_summary: 只做减法逐件删装饰，未说明被删件的作用由谁承接。
+  basis_anchor: ADB-O-02
+  judgment_basis: 越 ADB-O-02：缺加法路径且减法无承接说明。
+  authoring_confidence: high
+- case_id: CAL-067
+  candidate_summary: 本店无货，以隔壁分店库存写进方案让客人过去取。
+  basis_anchor: HG-01
+  judgment_basis: 触发 HG-01：以他店库存冒充本店可售。
+  authoring_confidence: high
+- case_id: CAL-068
+  candidate_summary: 交付附四步 DecisionTrace，儿童侧收窄可回溯到 step2。
+  basis_anchor: HG-05
+  judgment_basis: 未触发 HG-05：附可解析 DecisionTrace。
+  authoring_confidence: high
+- case_id: CAL-069
+  candidate_summary: 分识别优先与各自成立优先两种前提，廓形一致结论相反。
+  basis_anchor: ADB-M-02
+  judgment_basis: 合 ADB-M-02：结论相反但前提不同且各自成立。
+  authoring_confidence: high
+- case_id: CAL-070
+  candidate_summary: 由外观判定面料为聚酯纤维摇粒绒，并直接给保暖透气结论。
+  basis_anchor: HG-10
+  judgment_basis: 触发 HG-10：由外观推断成分并作性能承诺。
+  authoring_confidence: high
+- case_id: CAL-071
+  candidate_summary: 主张全家四件同色同款同图案，称品牌两件上限可灵活处理。
+  basis_anchor: ADB-O-04
+  judgment_basis: 越 ADB-O-04：强度差异越品牌同图案上限。
+  authoring_confidence: high
+- case_id: CAL-072
+  candidate_summary: 两条帖子换视角不换单品，逐条核对推荐同一套。
+  basis_anchor: ADB-O-06
+  judgment_basis: 合 ADB-O-06：视角不同而专业结论一致。
+  authoring_confidence: low
+  open_family_boundary_subjective: true
+  low_confidence_reason: 题干列三个合法解族视角，候选只写两个。见 SQ-02。
+- case_id: CAL-073
+  candidate_summary: 只给中底与鞋楦等结构事实，医疗判断建议咨询专业人员。
+  basis_anchor: SP-HC-03
+  judgment_basis: 合 SP-HC-03：未作任何医疗效果承诺。
+  authoring_confidence: high
+- case_id: CAL-074
+  candidate_summary: 据商品图织纹判定速干成分，并给大强度训练排汗结论。
+  basis_anchor: HG-10
+  judgment_basis: 触发 HG-10：由图片推断成分与性能。
+  authoring_confidence: high
+- case_id: CAL-075
+  candidate_summary: 缓震参数缺失改按配色挑选，并称穿它基本不会受伤。
+  basis_anchor: ADB-M-08
+  judgment_basis: 越 ADB-M-08：以配色替代性能判断并承诺不受伤。
+  authoring_confidence: high
+- case_id: CAL-076
+  candidate_summary: 压力值缺失即拒给恢复效果结论，只谈可观察属性与场景。
+  basis_anchor: ADB-M-04
+  judgment_basis: 合 ADB-M-04：拒补推断值，未作效果承诺。
+  authoring_confidence: high
+- case_id: CAL-077
+  candidate_summary: 先固定横向支撑与无长抽绳两条，两族差别只在外层视觉。
+  basis_anchor: ADB-O-05
+  judgment_basis: 合 ADB-O-05：两族均先过功能与安全约束。
+  authoring_confidence: high
+- case_id: CAL-078
+  candidate_summary: 预算有限先配外套帽子，训练鞋延后，功能件让位曝光度。
+  basis_anchor: ADB-O-03
+  judgment_basis: 越 ADB-O-03：未先过功能安全约束即谈预算。
+  authoring_confidence: high
+- case_id: CAL-079
+  candidate_summary: 把袜口高度这项视觉建议写成提升跑姿效率与步频。
+  basis_anchor: SP-HC-01
+  judgment_basis: 越 SP-HC-01：视觉建议包装为专业性能。
+  authoring_confidence: high
+- case_id: CAL-080
+  candidate_summary: 夜跑冲突取带反光条常规长度款，并记录被牺牲的视觉收益。
+  basis_anchor: SP-HC-06
+  judgment_basis: 合 SP-HC-06：冲突时以功能与安全为准。
+  authoring_confidence: high
+- case_id: CAL-081
+  candidate_summary: 先落平缝与无金属腰头两条硬规则，印花题材声明不补偏好。
+  basis_anchor: ADB-M-06
+  judgment_basis: 合 ADB-M-06：先取功能硬规则再谈表达层。
+  authoring_confidence: high
+- case_id: CAL-082
+  candidate_summary: 以运动风流行为由断言通勤训练两用，未定场合正式度。
+  basis_anchor: ADB-M-05
+  judgment_basis: 越 ADB-M-05：未定义正式度区间即断言两用。
+  authoring_confidence: high
+- case_id: CAL-083
+  candidate_summary: 断言训练就该穿紧身，排除裤装族只给单一方向。
+  basis_anchor: ADB-O-01
+  judgment_basis: 越 ADB-O-01：只给一族，无交换优先级条件。
+  authoring_confidence: high
+- case_id: CAL-084
+  candidate_summary: 加法限定在非训练时段不动功能层，减法交代遮挡作用承接。
+  basis_anchor: ADB-O-02
+  judgment_basis: 合 ADB-O-02：加法不削弱功能，减法说清承接。
+  authoring_confidence: high
+- case_id: CAL-085
+  candidate_summary: 三件核为当前可售，预售未到货的联名款未写进方案。
+  basis_anchor: HG-01
+  judgment_basis: 未触发 HG-01：预售未到货不计入可售。
+  authoring_confidence: high
+- case_id: CAL-086
+  candidate_summary: 交付称已按功能优先处理，正式结果未附 DecisionTrace。
+  basis_anchor: HG-05
+  judgment_basis: 触发 HG-05：正式结果缺 DecisionTrace。
+  authoring_confidence: high
+- case_id: CAL-087
+  candidate_summary: 断言日常训练必须紧身，宽松练了白练，未给适用条件。
+  basis_anchor: ADB-M-02
+  judgment_basis: 越 ADB-M-02：无前提条件即给单向结论。
+  authoring_confidence: high
+- case_id: CAL-088
+  candidate_summary: 联合暮光反光特性与品牌荧光面积上限，定鞋帮袖口做荧光。
+  basis_anchor: ADB-M-03
+  judgment_basis: 合 ADB-M-03：光照与品牌色彩硬规则联合定点。
+  authoring_confidence: low
+  low_confidence_reason: 候选自述品牌「荧光仅点缀、面积不超 15%」，题干未给该事实。见 SQ-01。
+- case_id: CAL-089
+  candidate_summary: 收敛与强化两族都守标识一处、撞色不超两色的品牌语法。
+  basis_anchor: ADB-O-04
+  judgment_basis: 合 ADB-O-04：强度差异未越品牌语法上限。
+  authoring_confidence: high
+- case_id: CAL-090
+  candidate_summary: 同一束脚设计对两类人群分别说成发力效率与显腿长。
+  basis_anchor: ADB-O-06
+  judgment_basis: 越 ADB-O-06：为受众改变结论并把视觉包装成性能。
+  authoring_confidence: high

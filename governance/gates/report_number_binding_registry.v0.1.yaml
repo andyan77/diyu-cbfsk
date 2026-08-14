@@ -39,8 +39,54 @@ discovery:
   - 11_reports_and_receipts/*_delivery_report.md
   - 11_reports_and_receipts/*/*_delivery_report.md
   note: 判据按本 glob 自动发现交付报告；发现了却没登记即 REPORT_NOT_REGISTERED，新报告不能悄悄绕开本册。
-report_count: 10
+report_count: 11
 reports:
+- report: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_report.md
+  template: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_report.md.tmpl
+  status: templated
+  literal_allowlist:
+  - number: 3
+    context_substring: 'PR #3'
+    why: PR 编号，不是计数。
+  - number: 1
+    context_substring: 本包完成的是第 1 步
+    why: 步骤序号，不是计数；同一值由 package_end_state.predistribution_steps_complete 现读。
+  - number: 2
+    context_substring: 第 2 步
+    why: 步骤序号，不是计数。
+  - number: 3
+    context_substring: 第 3 步
+    why: 步骤序号，不是计数。
+  - number: 4
+    context_substring: 第 4 步
+    why: 步骤序号，不是计数。
+  - number: 5
+    context_substring: TG-05
+    why: 前置条目编号，不是计数。
+  - number: 4
+    context_substring: TG-04
+    why: 前置条目编号，不是计数。
+  - number: 14
+    context_substring: §14
+    why: 裁决条款号，不是计数。
+  - number: 6
+    context_substring: 六项修正
+    why: 引述裁决第一节原文用语（EP05-CORRECTION 六项），是裁决的措辞不是本包的测量值。
+  - number: 1
+    context_substring: 每行一句话
+    why: 行文修辞，不是计数。
+  - number: 6
+    context_substring: 六列
+    why: 工作表列数的中文行文；同一值由 A4.measurement.per_item_fields 现读。
+  - number: 6
+    context_substring: 六位状态旗
+    why: 引述裁决第五节原文用语。
+  - number: 2
+    context_substring: 两处
+    why: 章节标题里的中文行文；结构性修复条目数由表格逐行列出。
+  - number: 6
+    context_substring: 六项修正落在这个提交里
+    why: 同上，引述裁决用语。
 - report: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_report.md
   template: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_report.md.tmpl
   status: templated

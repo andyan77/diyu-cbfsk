@@ -11,7 +11,11 @@ base_candidate_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
 base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 branch: candidate/m2
 authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001
-describes_current_state: true
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_receipt.yaml
+superseded_note: >-
+  本回执自此只描述 EP05-CORRECTION 交付那一刻的状态。EP06 接收了本包的六项修正并追加了审阅队列与分发前序列，
+  当前状态以 EP06 回执为准；本回执各计数字段是那一刻的实测值，不随后续施工更新。
 self_reference_limitation: 本回执随本包内容同处一个提交，无法记录自身所在的候选 Commit。候选 Commit 的绑定在提交完成后由外部记录（PR 与分支引用）承接——写进来就会改变文件内容，从而改变那个哈希，自己指自己永远差一步。
 candidate_commit_binding:
   value: null

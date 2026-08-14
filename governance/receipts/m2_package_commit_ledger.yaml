@@ -1,0 +1,100 @@
+schema_version: '0.1'
+ledger_id: DIYU-CBFSK-M2-PACKAGE-COMMIT-LEDGER-001
+project_id: DIYU-CBFSK-001
+milestone: M2
+established_by: DIYU-CBFSK-FOUNDER-M2-EP06-001 article_1_intake_and_commit_backreport
+recorded_by: TEMPORARY_EXECUTION_WRITER
+candidate_branch: candidate/m2
+
+purpose: >-
+  「本包候选 Commit 的完整 40 位哈希」此前只出现在报告正文里，没有落成机器可读字段。
+  引用位（TG-05 的冻结 Commit、Delta 复审对象、血统基线）因此各自抄一遍，抄错一处无人能发现。
+  本册是 M2 各执行包候选 Commit 的唯一登记处；引用一律指向本册条目，不再各自抄写。
+
+why_the_current_package_cannot_record_its_own_hash:
+  statement: 一个提交的哈希由它自身内容算出，内容里写不进自己的哈希。
+  consequence: 本册只登记已经成为过去的提交；当前包自己的候选 Commit 由报告与 Founder 侧回执承载。
+  precedent: governance/receipts/candidate_freeze_receipt.yaml self_reference_resolved_after_the_fact
+  not_a_workaround: >-
+    这不是绕开要求。要求是「补报完整 40 位哈希」，补报的对象是 EP06 接收的那个候选——
+    它已经存在，因此可以精确登记；EP06 自身的 Head 在提交那一刻才产生，随报告一并给出。
+
+full_hash_required: true
+abbreviation_forbidden: true
+abbreviation_forbidden_basis: 项目 CLAUDE.md 硬规则「引用 Commit 必须写完整哈希，禁止「最新版」」
+
+verification_recipe:
+- git -C <candidate worktree> rev-parse <commit>   # 必须回显本册登记的同一 40 位值
+- git -C <candidate worktree> log --format=%H -1 <commit>
+- 引用一律使用完整哈希
+
+entries:
+- execution_package: M2-EP02
+  candidate_commit: 8ce001293202d33dad59ba535f6d518b6723f01d
+  carried: 隐藏资产 STOP 上报、两项结转判据、EP02 自检
+  status: SUPERSEDED_BY_LATER_PACKAGE
+- execution_package: M2-EP03
+  candidate_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+  carried: 跨包一致性、M2→M3/M4 接口面、冻结候选、全量回归
+  status: SUPERSEDED_BY_LATER_PACKAGE
+- execution_package: M2-EP04
+  candidate_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+  carried: 18 项交付覆盖矩阵、双轴评测矩阵、90 例公开校准集、Guardian 六条发现全闭
+  status: SUPERSEDED_BY_LATER_PACKAGE
+- execution_package: M2-EP05
+  candidate_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+  carried: 四项定锚、幽灵 STOP 码作废、报告数字结构化、Steward v1.1.0、校准启动包、隐藏生成时序门
+  status: SUPERSEDED_BY_LATER_PACKAGE
+  guardian_decision: REJECT
+  advisor_decision: BLOCK_CALIBRATION_DISPATCH
+  decisions_invalidated_by: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 §14
+- execution_package: M2-EP05-CORRECTION
+  candidate_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+  parent_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+  carried: C-1 至 C-9 定向补丁——校准包补齐被评对象、判定语言分离、阈值证据分型、时序门五项、STORE-A 文件级 intake、确认类字段绑定通用判据
+  status: ACCEPTED_PENDING_DELTA_REVIEW
+  accepted_by: DIYU-CBFSK-FOUNDER-M2-EP06-001 article_1_intake_and_commit_backreport
+  is_the_backreported_commit: true
+  backreport_note: >-
+    这就是 EP06 第一节要求补报的那个哈希——EP06 予以接收的六项修正落在这个提交里。
+    此前它只出现在报告正文，未落成字段。
+  guardian_decision: NOT_YET_REVIEWED
+  advisor_decision: NOT_YET_REVIEWED
+- execution_package: M2-EP06
+  candidate_commit: RESOLVED_AT_REPORT_TIME
+  candidate_commit_resolution_rule: >-
+    本包自己的候选 Commit 在提交那一刻才产生，写不进被提交的内容。
+    值由 `git rev-parse HEAD`（candidate/m2，本包提交后）取出，随交付报告一并补报，
+    并在下一个执行包提交时回填为确定哈希。
+  parent_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+  carried: EP06 接收回执、Founder 审阅队列、分发前序列状态机、阈值裁决工作表合同
+  status: CURRENT_CANDIDATE
+  guardian_decision: NOT_YET_REVIEWED
+  advisor_decision: NOT_YET_REVIEWED
+
+binding_consumers:
+  purpose: 「此后一切绑定、复审对象与 TG-05 均以该哈希为准」——这里写清各自绑到哪一条。
+  items:
+  - consumer: TG-05 公开蓝图确认的冻结 Commit
+    binds_to: 第 3 步产出的最终分发前候选
+    resolvable_now: false
+    why_not_now: >-
+      TG-05 要求 Founder 在一个指定冻结 Commit 上确认公开蓝图无需修改。
+      该 Commit 是第 3 步（落盘 founder_confirmation ＋ STORE-A intake）之后的那一个，现在尚不存在。
+      钉在 EP06 头上会让 Founder 在一份还会再改一次的候选上签字。
+  - consumer: 本轮 Guardian / 总顾问 Delta 复审对象
+    binds_to: 第 3 步产出的最终分发前候选
+    resolvable_now: false
+    why_not_now: 第 4 步排在第 2、3 步之后；对象尚未产生。
+  - consumer: 血统基线（bloodline_base_commit）
+    binds_to: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
+    resolvable_now: true
+  - consumer: EP06 接收对象
+    binds_to: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+    resolvable_now: true
+
+failure_states:
+- PACKAGE_COMMIT_NOT_FULL_HASH
+- PACKAGE_COMMIT_LEDGER_ENTRY_MISSING
+- PACKAGE_COMMIT_LEDGER_DRIFT
+- BACKREPORTED_COMMIT_NOT_MARKED

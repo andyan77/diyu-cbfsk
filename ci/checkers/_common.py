@@ -35,6 +35,11 @@ UUID_V4_RE = re.compile(
 )
 
 
+# 分发包扫描的共同豁免：Manifest 自身写着黑名单条文，扫它等于扫规则本身。
+# 两个判据都要扫包目录（一个查治理上下文与锚点标签，一个查审阅队列外泄），豁免只允许有一处定义。
+PACK_SCAN_EXCLUDED = ("pack_manifest.yaml",)
+
+
 def load_yaml(rel: str) -> dict:
     return yaml.safe_load((ROOT / rel).read_text(encoding="utf-8"))
 

@@ -1,0 +1,191 @@
+schema_version: "0.1"
+ruling_id: DIYU-CBFSK-FOUNDER-M2-EP06-001
+project_id: DIYU-CBFSK-001
+milestone: M2
+issued_by: FOUNDER_PRODUCT_AUTHORITY
+ruling_kind: intake_and_predistribution_sequence
+headline: M2-EP06 接收与分发前序列
+supersedes: []
+corrects: []
+builds_on: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001
+
+identifier_assignment:
+  assigned_by: TEMPORARY_EXECUTION_WRITER
+  why: 裁决原文未自带编号；仓内每一份裁决必须有可寻址的编号才能被引用与解析。
+  rule: 编号按既有命名规范分配（FOUNDER- 前缀、里程碑、执行包、序号），不改动裁决任何一个字。
+  founder_may_rename: true
+
+is_not_a_review:
+  verbatim: 本裁决不构成审查。
+  meaning: >-
+    EP06 对 EP05-CORRECTION-001 六项修正「予以接收，视为已落地待复核」。
+    「接收」是收下并排进复核队列，不是「已核验通过」。真正的核验发生在第三节第 4 步的两侧 Delta。
+
+article_1_intake_and_commit_backreport:
+  headline: 接收与补报
+  intake:
+    accepts: EP05-CORRECTION-001 六项修正
+    status_granted: 已落地待复核
+    constitutes_review: false
+  backreport_required:
+    what: 本包候选 Commit 的完整 40 位哈希
+    why_required: EP06 报告未给出
+    binds_from_now_on: [一切绑定, 复审对象, TG-05]
+    full_hash_required: true
+    abbreviation_forbidden: true
+
+article_2_founder_review_queue:
+  headline: 追加一项小交付——Founder 审阅队列
+  scope: 在本包内完成，不另开包
+  purpose: 使 90 份候选输出可在合理时间内完成 Founder 审阅
+  one_row_per: 评审单元
+  row_fields:
+  - case_id
+  - 品类
+  - 任务类型
+  - 风险等级
+  - 候选摘要
+  - 锚点判定
+  - 判定依据
+  field_limits:
+    candidate_summary_max_chars: 60
+    judgment_basis_max_chars: 40
+  anchor_call_vocabulary: [界内, 越界]
+  basis_rule:
+    must_point_at: 被触发或未触发的具体硬门或边界条款
+    must_not_be: 综合判断
+  focus_subtable:
+    name: 需重点确认
+    inclusion: 凡满足任一者列入
+    criteria:
+    - 判定依据不是单一硬门
+    - 开放题的合法解族边界依赖主观判断
+    - 撰写时执行侧自评把握度较低
+  visibility:
+    side: 公开侧文件
+    must_not_enter_distribution_pack: true
+  report_with_commit_hash: true
+
+article_3_predistribution_sequence:
+  headline: 分发前序列
+  one_review_not_split: true
+  one_review_not_split_verbatim: 一次审查，不拆多轮
+  steps:
+  - step: 1
+    owner: 执行侧
+    actions: [完成审阅队列, 报告完整 Commit 哈希]
+  - step: 2
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    actions: [审阅队列并给出确认, 在 B 机器产出两份 STORE-A 净化证据]
+  - step: 3
+    owner: 执行侧
+    at_once: true
+    at_once_verbatim: 一次性
+    actions:
+    - 落盘 founder_confirmation 五个绑定字段
+    - STORE-A 证据文件级 intake
+    - 由文件推导 COND-011
+    produces: 最终分发前候选
+  - step: 4
+    owner: [CLAUDE_INDEPENDENT_GUARDIAN, 总顾问]
+    actions: [一次 Guardian Delta 复审, 一次总顾问 Delta 复核]
+    target: 第 3 步产出的最终分发前候选
+  - step: 5
+    owner: 执行侧
+    precondition: 两侧结论无阻断
+    action: 方可分发校准包
+  guardian_unblock:
+    lifts: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 until_corrected.guardian_review_allowed
+    from: false
+    to: true
+    scope_limited_to: 本轮 Delta
+    scope_limited_verbatim: 仅限本轮 Delta
+    delta_scope:
+    - EP05-CORRECTION-001 六项修正
+    - 本序列新增内容
+    must_not_re_review: EP05 已验通过部分
+    not_yet_startable_reason: >-
+      第 4 步排在第 2、3 步之后。Founder 尚未给出队列确认与 STORE-A 证据，第 3 步的最终分发前候选就不存在，
+      Delta 没有审查对象。解除的是禁令，不是「现在就可以发起」。
+  why:
+    verbatim: >-
+      校准包一旦分发，其内容即被 180 条评审记录锚定。分发前发现缺陷的修复成本近乎为零，分发后为整批证据作废。
+    review_record_count: 180
+    record_count_derivation: 90 个评审单元 × 两侧独立评审
+
+article_4_threshold_decision_worksheet:
+  headline: 聚合阶段追加交付——阈值裁决工作表
+  due_at: 聚合完成时须同时产出
+  due_at_is_not_now: true
+  consumed_by: Founder 在 TG-04 逐项圈选
+  per_item_fields:
+  - id: metric_meaning
+    what: 指标含义一句话
+    style_rule: 不用术语堆砌
+  - id: prd_suggested_value
+    what: 当前 PRD 建议值（若有）／无则注明
+  - id: calibration_disagreement
+    what: 本次校准的分歧分布——与该指标相关的评审单元上，两侧判定不一致的比例与典型分歧点
+  - id: too_loose_consequence
+    what: 判松了会发生什么
+    style_rule: 一句具体后果
+  - id: too_tight_consequence
+    what: 判紧了会发生什么
+    style_rule: 一句具体后果
+  - id: three_options
+    what: 三档可选值及各自含义
+  empirical_cutpoint_handling:
+    count: 2
+    no_recommendation_this_round: true
+    reason: 估计输入不存在
+    disposition_options:
+    - 延后至有真实运行数据的里程碑
+    - 改判为政策阈值
+    decided_by: Founder 在 TG-04
+    must_be_listed_in_worksheet: true
+
+article_5_unchanged:
+  headline: 维持不变
+  not_authorized:
+  - 分发校准包（在第三节序列完成前）
+  - 任何隐藏批次含试产
+  - 发起本轮 Delta 以外的审查
+  - 合并 PR #3
+  - 置 m2_frozen
+  - M3
+  - M4
+  - production_servable
+  state_flags_remain_false:
+    m2_frozen: false
+    founder_signature_eligible: false
+    m3_started: false
+    m4_started: false
+    knowledge_distillation_started: false
+    production_servable: false
+  candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  section_14_still_applies: true
+  section_14_meaning: 本裁决产生新 Commit 后，先前结论即失效，须对新 Head 各做一次 Delta 核验。
+
+machine_checkable_fields:
+  article_count: 5
+  sequence_step_count: 5
+  review_queue_row_field_count: 7
+  focus_subtable_criteria_count: 3
+  candidate_summary_max_chars: 60
+  judgment_basis_max_chars: 40
+  worksheet_per_item_field_count: 6
+  empirical_cutpoint_count: 2
+  empirical_disposition_option_count: 2
+  review_record_count_after_dispatch: 180
+  not_authorized_count: 8
+  guardian_review_allowed_after_step_3: true
+  guardian_review_allowed_now: false
+  calibration_pack_distribution_allowed: false
+  formal_hidden_batch_allowed: false
+  merge_allowed: false
+  m2_frozen: false
+  founder_signature_eligible: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false

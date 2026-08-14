@@ -44,13 +44,15 @@ m2_ep01_status: SELF_CHECKED
 m2_ep02_status: SELF_CHECKED
 m2_ep03_status: SELF_CHECKED
 m2_ep04_status: SELF_CHECKED
-m2_ep05_status: SELF_CHECKED
+m2_ep05_status: SUPERSEDED_BY_CORRECTION
+m2_ep05_correction_status: SELF_CHECKED
 m2_evaluation_profile_status: FINAL_BOUND
 m2_milestone_decision: BLOCK_M2_FREEZE_AND_MERGE
 m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
 m2_deliverables_ready: 14/18
 m2_public_blueprint_status: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
 public_blueprint_stable_for_hidden_generation: false
+calibration_pack_distribution_allowed: false
 m2_hidden_assets_status: NOT_STARTED
 founder_signature_eligible: false
 m2_frozen: false
@@ -150,7 +152,9 @@ M2 前三包形成候选后，Founder 收口裁决为 **`BLOCK_M2_FREEZE_AND_MER
 
 `m2_frozen` 仍为 `false`，`founder_signature_eligible` 为 `false`。最终资产存在门 12 条判据当前满足 1 条；条件与状态语义已分离（`COND-011` 管存储、`m2_hidden_assets_status` 管资产、`COND-007` 管阈值且无「隐藏侧」），STOP 分五型，本轮三个 STOP 各自归型见 [`m2_condition_state_semantics.v0.1.yaml`](governance/conditions/m2_condition_state_semantics.v0.1.yaml)。
 
-M2 当前现状以 [`11_reports_and_receipts/m2_ep05/`](11_reports_and_receipts/m2_ep05/) 为准；[`m2_delivery_report.md`](11_reports_and_receipts/m2_delivery_report.md) 已标 `SUPERSEDED`，作为 EP03 时点的历史记录保留。各包报告见 [`m2_ep01/`](11_reports_and_receipts/m2_ep01/)、[`m2_ep02/`](11_reports_and_receipts/m2_ep02/)、[`m2_ep04/`](11_reports_and_receipts/m2_ep04/)。
+**M2-EP05-CORRECTION 定向补丁**（裁决 [`DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001.yaml)，`BLOCK_CALIBRATION_DISPATCH`）：校准包此前**没有被评对象**——评审员对着题干打分，判的是空气。本包给 90 个评审单元各挂一份[候选输出](03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml)（机制题与开放题另带决策轨迹），全部标 `non_candidate_knowledge`：禁止进入知识状态链与任何候选知识池；预期标签只进[边界锚点真源](03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml)，**不进分发包**。判定语言拆成两个字段——`judgment` 答「算不算」、`score` 答「算的那些做得多好」，②③ 类分数钉到[五档锚点](03_m2_evaluation_foundation/calibration/numeric_scoring_anchors.v0.1.yaml)上，聚合直接比较 `judgment`，严禁用尚未冻结的阈值把分数转成成立与否。阈值[证据分型](03_m2_evaluation_foundation/calibration/metric_review_unit_mapping.v0.1.yaml)：`POLICY_THRESHOLD` 是 Founder 的产品裁决，不得装成统计估计；`EMPIRICAL_CUTPOINT` 必须有 estimator、样本下限与映射到的评审单元，输入不齐时不出建议值。[时序门](governance/conditions/hidden_generation_timing_gate.v0.1.yaml)前置由四项改五项（加「阈值全部冻结且 COND-007 关闭」与「Founder 在指定冻结 Commit 上确认公开蓝图」）。STORE-A 证据改为[文件级 intake](03_m2_evaluation_foundation/hidden_assets/store_a_evidence/)——判据读那两份真实 YAML 并扫描全部标量拒绝定位符，台账只记推导结果，不再充当证据。新增全仓判据 [`check_founder_confirmation_binding`](ci/checkers/check_founder_confirmation_binding.py)：凡声称「Founder 已确认／已批准／已授权／已签署」的布尔位，为真时必须挂具名文件＋可解析条款＋完整 40 位 Commit＋签署人＋签署时点——**被守的一方自己就能开门，这是本轮堵的洞**。
+
+M2 当前现状以 [`11_reports_and_receipts/m2_ep05_correction/`](11_reports_and_receipts/m2_ep05_correction/) 为准；[`m2_delivery_report.md`](11_reports_and_receipts/m2_delivery_report.md) 已标 `SUPERSEDED`，作为 EP03 时点的历史记录保留。各包报告见 [`m2_ep01/`](11_reports_and_receipts/m2_ep01/)、[`m2_ep02/`](11_reports_and_receipts/m2_ep02/)、[`m2_ep04/`](11_reports_and_receipts/m2_ep04/)。
 
 ## 治理（governance/）
 
@@ -178,7 +182,7 @@ M2 当前现状以 [`11_reports_and_receipts/m2_ep05/`](11_reports_and_receipts/
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：共 **45 个**确定性 Checker——M0／M1 既有 21 个，M2-EP01～EP03 新增 11 个，M2-EP04 再增 9 个（十八项交付闭环、里程碑闭环通则、能力矩阵、校准集、评审证据、错误码夹具覆盖棘轮、披露纪律、Guardian 报告绑定、隐藏生成就绪度），M2-EP05 再增 4 个（编号解析、STOP 码 enforcement、报告数字溯源、校准启动包）。
+- `ci/checkers/`：共 **46 个**确定性 Checker——M0／M1 既有 21 个，M2-EP01～EP03 新增 11 个，M2-EP04 再增 9 个（十八项交付闭环、里程碑闭环通则、能力矩阵、校准集、评审证据、错误码夹具覆盖棘轮、披露纪律、Guardian 报告绑定、隐藏生成就绪度），M2-EP05 再增 4 个（编号解析、STOP 码 enforcement、报告数字溯源、校准启动包），M2-EP05-CORRECTION 再增 1 个（Founder 确认类字段绑定，永久生效）。
 - `ci/tools/`：报告渲染器（模板里的 `{{ref:路径#字段}}` 生成时现读机器记录）与校准启动包生成器（题目由题库派生，不写第二份）。
 - `ci/run_fixtures.py`：判据层 fixture——用字面量 payload 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_schema_fixtures.py`：结构层 fixture——用字面量实例驱动 M1 对象 JSON Schema 本身；每份 Schema 正负各一，只证明「对的能过」不算验证过。

@@ -14,18 +14,25 @@ measurement:
   method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
   evidence_level: runtime_verified
   measured_by: ci/checkers/check_error_code_fixture_coverage.py
-  measured_at_package: M2-EP05
-  declared_codes_total: 573
-  fail_fixtures_run: 440
-  covered_codes: 426
+  measured_at_package: M2-EP05-CORRECTION
+  declared_codes_total: 620
+  fail_fixtures_run: 479
+  covered_codes: 473
   uncovered_codes: 147
 measurement_history:
-  purpose: >-
-    measurement 是「现在这一刻」的实测值，会随判据增加而变。
-    报告要引的是它当时那一刻的值——把历史报告接到 measurement 上，
-    报告的内容会随后续施工悄悄改变，那不是报告，是仪表盘。
-  entries:
-    - measured_at_package: M2-EP04
+  purpose: measurement 是「现在这一刻」的实测值，会随判据增加而变。 报告要引的是它当时那一刻的值——把历史报告接到 measurement 上， 报告的内容会随后续施工悄悄改变，那不是报告，是仪表盘。
+  indexed_by: measured_at_package
+  why_not_a_list: 历史条目原本是数组，报告按下标 entries.0 引用。再插一条历史，下标就整体位移——EP04 的报告会悄悄开始念 EP05 的数字，而两份报告都没被改过。按包名索引，加多少条都不动已有引用。
+  by_package:
+    M2-EP05:
+      measured_at_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+      declared_codes_total: 573
+      fail_fixtures_run: 440
+      covered_codes: 426
+      uncovered_codes: 147
+      evidence_level: runtime_verified
+      method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
+    M2-EP04:
       measured_at_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
       evidence_level: runtime_verified
       declared_codes_total: 523

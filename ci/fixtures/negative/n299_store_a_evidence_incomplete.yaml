@@ -1,5 +1,5 @@
 fixture_id: N299
-description: STORE-A 证据声称已收到，却缺访问控制矩阵字段——隔离是否生效仍无从核验。（STORE_A_EVIDENCE_INCOMPLETE）
+description: 两份净化文件都在，但缺 founder_attestation——签署证明缺席，隔离只是自称。（STORE_A_EVIDENCE_INCOMPLETE）
 checker: check_m2_hidden_generation_readiness
 expected: FAIL
 payload:
@@ -22,6 +22,7 @@ payload:
   - 隐藏资产生成合同
   - 硬门定义
   - Steward 执行 Prompt
+  - 时序门合同
   input_status: FRESH
   existing_assets_status: NONE_GENERATED
   steward_prompt:
@@ -83,7 +84,6 @@ payload:
     - id: TG-04
       declared: false
       recomputed: null
-    founder_confirmed: false
     formal_batch_started: false
     pilot_brand_count: 0
     counted_brand_count: 0
@@ -91,7 +91,15 @@ payload:
     pilot_counted_in_brand_count: false
     boundary_recheck_performed: false
     store_a_evidence:
-      status: RECEIVED
+      declared_status: RECEIVED
+      derived_status: RECEIVED
+      files:
+      - name: store_identity.yaml
+        exists: true
+        sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      - name: access_matrix.yaml
+        exists: true
+        sha256: dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
       required_fields:
       - access
       - created_from_scratch
@@ -101,10 +109,44 @@ payload:
       - shares_main_history
       - store_id
       received_fields:
-      - store_id
-      - repository_visibility
+      - access
       - created_from_scratch
       - fork_of_main
+      - repository_visibility
       - shares_main_history
-      - founder_attestation
-      locator_present: false
+      - store_id
+      required_values:
+        repository_visibility: private
+        created_from_scratch: true
+        fork_of_main: false
+        shares_main_history: false
+      actual_values:
+        repository_visibility: private
+        created_from_scratch: true
+        fork_of_main: false
+        shares_main_history: false
+        store_id: STORE-A
+      required_access: &id001
+        founder: admin
+        hidden_steward: read_write
+        main_codex: none
+        claude_planner: none
+        guardian: none
+        chief_advisor: none
+        m3_m4_elicitation: none
+      actual_access: *id001
+      leaks: []
+      cond_011_may_close: false
+    founder_confirmation:
+      confirmed: false
+      confirmed_by: null
+      confirmed_at: null
+      confirmed_at_commit: null
+      commit_is_full_hash: false
+      ruling_ref: null
+      ruling_clause_path: null
+      ruling_file_exists: false
+      ruling_clause_resolves: null
+    declared_precondition_count: 4
+  declared_content_digest: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  actual_content_digest: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

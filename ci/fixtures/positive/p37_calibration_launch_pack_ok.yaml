@@ -27,3 +27,8 @@ payload:
   forbidden_hits: []
   manifest_prompt_sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365
   state_prompt_sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365
+  declared_anchor_keys:
+  - boundary_position
+  - constructed_judgment
+  - expected_judgment
+  anchor_label_hits: []

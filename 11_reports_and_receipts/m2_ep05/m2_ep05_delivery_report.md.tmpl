@@ -26,9 +26,9 @@ Steward Prompt 升到 v1.1.0，校准评审启动包已可独立分发，隐藏�
 | 真实模型调用 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.real_model_calls}} 次 |
 | 隐藏资产生成 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.hidden_assets_generated}} 个 |
 
-错误码夹具覆盖实跑：声明 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement.declared_codes_total}} 条，
-有负例行使 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement.covered_codes}} 条，
-挂账 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement.uncovered_codes}} 条。
+错误码夹具覆盖实跑：声明 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP05.declared_codes_total}} 条，
+有负例行使 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP05.covered_codes}} 条，
+挂账 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP05.uncovered_codes}} 条。
 本包新增的 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#new_checkers.count}} 个 Checker
 **零欠账**，棘轮上限未动。
 
@@ -57,7 +57,7 @@ ANCHOR-3 有一处必须说清：裁决免掉的是「因它而阻断收口」�
 存在性核验就完全失效。
 
 处置：建标识符注册表，登记全仓
-{{ref:governance/identifiers/identifier_registry.v0.1.yaml#entry_count}} 个编号，逐个标类型；
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.identifier_registry.entry_count}} 个编号，逐个标类型；
 新判据 `check_identifier_resolution` 全量扫描仓内编号 token，
 任务 ID 通过 `dispatched_by` 指向真实签署件而可解析，裁决 ID 必须真有文件。
 射程从两个键扩到注册表声明的全部引用位，**少扫一个键即 FAIL**。
@@ -70,11 +70,11 @@ ANCHOR-3 有一处必须说清：裁决免掉的是「因它而阻断收口」�
 
 | enforcement | 条数 | 含义 |
 |---|---|---|
-| `machine_checked` | {{ref:governance/gates/stop_code_enforcement_registry.v0.1.yaml#counts.machine_checked}} | 有现役判据实现该码，可实测触发与否 |
-| `human_judgement` | {{ref:governance/gates/stop_code_enforcement_registry.v0.1.yaml#counts.human_judgement}} | 须由人判断，机器只能记录判断结果 |
-| `future_runtime` | {{ref:governance/gates/stop_code_enforcement_registry.v0.1.yaml#counts.future_runtime}} | 要等产品或隐藏资产实际运行才有可检对象 |
+| `machine_checked` | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.machine_checked}} | 有现役判据实现该码，可实测触发与否 |
+| `human_judgement` | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.human_judgement}} | 须由人判断，机器只能记录判断结果 |
+| `future_runtime` | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.future_runtime}} | 要等产品或隐藏资产实际运行才有可检对象 |
 
-合计 {{ref:governance/gates/stop_code_enforcement_registry.v0.1.yaml#counts.total_codes}} 条。
+合计 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.total_codes}} 条。
 `machine_checked` 不是自称——判据现场比对：检测器必须在现役门禁册内 `LIVE`，
 且码字符串必须真出现在那份判据源码里。
 
@@ -113,7 +113,7 @@ EP04 报告写 500/350/149，台账实测 523/376/147，而且 500−350≠149�
 
 v1.0.0 止于报告纪律，缺施工、测试、私有审查、冻结与 Runner，另一台机器拿着它跑不到底。
 v1.1.0 补齐
-{{ref:03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml#steward_prompt.phase_count}}
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.hidden_generation_input_bundle.steward_prompt_phase_count}}
 个阶段：隔离预检 → 私仓与 Provision 证明 → 输入包哈希校验 → 工具链建设 → 品牌 → 商品与图像 →
 评测题 → 双检查 → 私有审查 → 冻结与 Merkle Root → 净化导出 → Report/Receipt 与 COMPLETE 完成门。
 
@@ -121,7 +121,7 @@ v1.1.0 补齐
 **不得用后一阶段的产出倒推前一阶段的结论**。
 
 输入包同步升到 v1.1.0，
-{{ref:03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml#file_count}}
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.hidden_generation_input_bundle.file_count}}
 份文件哈希全量重算，另落 `steward_prompt.sha256` 旁挂文件。
 v1.0.0 两份文件**删除**——同一份输入包留两个版本会产生两套哈希口径，改一处漏一处。
 
@@ -180,7 +180,7 @@ STORE-A 证据两份净化文件的最低字段与禁写内容已定；
 {{ref:governance/conditions/m2_condition_state_semantics.v0.1.yaml#final_asset_existence_gate.total_count}} 条判据，
 当前满足 {{ref:governance/conditions/m2_condition_state_semantics.v0.1.yaml#final_asset_existence_gate.satisfied_count}} 条。
 
-现役门禁册 {{ref:governance/gates/live_gate_roster.v0.1.yaml#live_gate_count}} 个，
+现役门禁册 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.live_gate_roster.live_gate_count}} 个，
 与 `run_all_checks` 注册表双向比对一致。
 
 ---

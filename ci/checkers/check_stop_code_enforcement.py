@@ -100,6 +100,24 @@ def validate(payload: dict) -> list[str]:
                     f"STOP_CODE_ENFORCEMENT_UNCLASSIFIED: {code} is future_runtime without saying when it becomes checkable"
                 )
 
+    # NB-M2E5-01：条目自报的 sites 必须与实扫结果一致。
+    # 自报路径没人核对，等于册子说它守着哪些位置就守着哪些位置——那不是登记，是自述。
+    scanned: dict[str, set[str]] = {}
+    for site in payload.get("sites") or []:
+        scanned.setdefault(site.get("code"), set()).add(f"{site.get('file')}#{site.get('key')}")
+    for entry in entries:
+        code = entry.get("code")
+        declared_sites = set(entry.get("sites") or [])
+        actual_sites = scanned.get(code, set())
+        for missing in sorted(declared_sites - actual_sites):
+            errors.append(
+                f"STOP_CODE_SITE_MISSTATED: {code} claims a declaration at {missing}, the scan finds none there"
+            )
+        for extra in sorted(actual_sites - declared_sites):
+            errors.append(
+                f"STOP_CODE_SITE_MISSTATED: {code} is declared at {extra}, which the registry entry does not list"
+            )
+
     retired = {r.get("code") for r in payload.get("retired_codes") or []}
     for site in payload.get("sites") or []:
         code = site.get("code")

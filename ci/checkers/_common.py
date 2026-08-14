@@ -181,6 +181,9 @@ FOUNDER_RULING_DIR = "governance/founder_rulings"
 # 这里按来源类型分流而不是开豁免——分流后存在性照样现场核验，凭空写的编号仍然会落空。
 NON_RULING_AUTHORIZATION_SOURCES = {
     "DIYU-CBFSK-EXEC-REQ-M0-003": "笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx",
+    # Founder 签署回执：它是 Founder 亲签的授权记录，只是不住在裁决目录里。
+    # 收进来而不是开豁免——收进来之后，存在性与条款路径照样现场解析。
+    "DIYU-CBFSK-FOUNDER-SIGNOFF-001": "governance/receipts/founder_signoff_receipt.yaml",
 }
 _RULING_ID_RE = re.compile(r"DIYU-CBFSK-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}")
 
@@ -194,6 +197,30 @@ def extract_ruling_id(reference) -> str | None:
         return None
     match = _RULING_ID_RE.search(reference)
     return match.group(0) if match else None
+
+
+def clause_resolves(rel: str, clause_path=None) -> dict:
+    """「这个文件在不在、这条具名条款解不解析得出来」——只有这一个实现。
+
+    裁决引用、签署回执引用、Founder 见证记录引用，走的都是这一条路。
+    各写一份的结果是：某一处忘了查条款，凭空写的路径就在那一处过关。
+    """
+    out = {"file": rel, "file_exists": False, "clause_path": clause_path, "clause_resolves": None}
+    if not rel:
+        return out
+    path = ROOT / rel
+    out["file_exists"] = path.exists()
+    if not out["file_exists"] or clause_path is None or not rel.endswith((".yaml", ".yml")):
+        return out
+    node = yaml.safe_load(path.read_text(encoding="utf-8"))
+    for key in str(clause_path).split("."):
+        if isinstance(node, dict) and key in node:
+            node = node[key]
+        else:
+            out["clause_resolves"] = False
+            return out
+    out["clause_resolves"] = node not in (None, "", [], {})
+    return out
 
 
 def founder_ruling_evidence(reference, clause_path=None) -> dict:
@@ -217,22 +244,9 @@ def founder_ruling_evidence(reference, clause_path=None) -> dict:
         out["kind"] = None
         return out
     if ruling_id in NON_RULING_AUTHORIZATION_SOURCES:
-        out["kind"] = "execution_request"
-        out["file"] = NON_RULING_AUTHORIZATION_SOURCES[ruling_id]
-        out["file_exists"] = (ROOT / out["file"]).exists()
-        return out
-    rel = f"{FOUNDER_RULING_DIR}/{ruling_id}.yaml"
-    out["file"] = rel
-    path = ROOT / rel
-    out["file_exists"] = path.exists()
-    if not out["file_exists"] or clause_path is None:
-        return out
-    node = yaml.safe_load(path.read_text(encoding="utf-8"))
-    for key in str(clause_path).split("."):
-        if isinstance(node, dict) and key in node:
-            node = node[key]
-        else:
-            out["clause_resolves"] = False
-            return out
-    out["clause_resolves"] = node not in (None, "", [], {})
+        rel = NON_RULING_AUTHORIZATION_SOURCES[ruling_id]
+        out["kind"] = "founder_signature_record" if rel.endswith(".yaml") else "execution_request"
+    else:
+        rel = f"{FOUNDER_RULING_DIR}/{ruling_id}.yaml"
+    out.update({k: v for k, v in clause_resolves(rel, clause_path).items() if k != "clause_path"})
     return out

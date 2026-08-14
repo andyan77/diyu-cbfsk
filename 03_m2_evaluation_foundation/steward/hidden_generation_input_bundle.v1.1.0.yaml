@@ -6,9 +6,12 @@ project_id: DIYU-CBFSK-001
 milestone: M2
 execution_package: M2-EP05
 authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_4_steward_prompt_v1_1_0
-source_main_candidate_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
-source_main_candidate_commit_note: 本包在该提交之上继续施工；输入包的文件哈希取自**本包交付态**，不是该提交当时的状态。source_main_candidate_commit 记的是血缘起点，files[].sha256
-  记的是实际交付内容——两者不是同一件事，不得混用。
+bloodline_base_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+bloodline_base_commit_note: 本字段记的是血缘起点——本包从哪一版继续施工，仅此而已。 files[].sha256 记的是实际交付内容，两者不是同一件事。
+renamed_from: source_main_candidate_commit
+renamed_reason: 旧名里的 candidate_commit 让人读成「本包属于哪个候选提交」。那个绑定不可能写在本文件里： 写进去，文件就变了，候选提交的哈希也跟着变——自己指自己，永远差一步。 候选 Commit 的绑定移到交付回执与外部签署记录，本文件只留血缘起点。
+  裁决依据：DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c8_four_non_blocking NB-2。
+candidate_commit_binding_lives_in: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_receipt.yaml
 consumer_role: FOUNDER_HIDDEN_BENCHMARK_STEWARD
 consumer_storage: STORE-A
 steward_prompt:
@@ -45,8 +48,10 @@ required_file_categories:
   file_count: 1
 - category: Steward 执行 Prompt
   file_count: 1
-required_category_count: 12
-file_count: 20
+- category: 时序门合同
+  file_count: 1
+required_category_count: 13
+file_count: 21
 staleness_rule:
   id: SR-STALE-01
   machine_judgement: true
@@ -65,10 +70,10 @@ current_state:
 machine_checkable_fields:
   file_count:
     type: integer
-    current_value: 20
+    current_value: 21
   required_category_count:
     type: integer
-    required_value: 12
+    required_value: 13
   all_hashes_match:
     type: boolean
     required_value: true
@@ -85,6 +90,7 @@ failure_states:
 - REQUIRED_CATEGORY_MISSING
 - STEWARD_PROMPT_HASH_STALE
 - BUNDLE_FILE_COUNT_MISSTATED
+- BUNDLE_CONTENT_DIGEST_STALE
 files:
 - path: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
   sha256: d49c63ca0fa1e1e3534008d79340cf04c408851228ca0aa93c3ac69ebd19804f
@@ -137,6 +143,9 @@ files:
 - path: 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml
   sha256: 4e374540690771e38c76f9e92bce19f13e2212924d6bf62ae24b1f830ef51c58
   category: 可接受决策边界注册表
+- path: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  sha256: 9a9ced2d4c8a48b60291166dc463a06db01c353f47c8fdb155cb66546fc3ae52
+  category: 时序门合同
 - path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml
   sha256: ba417eaaa7f9ae7814bb1892c8ed1f3e6dc32f91759a0694443b14fa4ccd6def
   category: 隐藏资产生成合同
@@ -160,3 +169,4 @@ timing_gate:
   pilot_brand_limit: 2
   pilot_not_counted_in_brand_count: true
   authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate
+bundle_content_digest: bea52649196147f4ec18d5a14cb7d85c52d5df141632581626d47ce0ecee3b3a

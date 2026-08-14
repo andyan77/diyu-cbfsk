@@ -22,6 +22,7 @@ payload:
   - 隐藏资产生成合同
   - 硬门定义
   - Steward 执行 Prompt
+  - 时序门合同
   input_status: STALE
   existing_assets_status: GENERATED
   steward_prompt:
@@ -83,7 +84,6 @@ payload:
     - id: TG-04
       declared: false
       recomputed: null
-    founder_confirmed: false
     formal_batch_started: false
     pilot_brand_count: 0
     counted_brand_count: 0
@@ -91,7 +91,15 @@ payload:
     pilot_counted_in_brand_count: false
     boundary_recheck_performed: false
     store_a_evidence:
-      status: NOT_RECEIVED
+      declared_status: NOT_RECEIVED
+      derived_status: NOT_RECEIVED
+      files:
+      - name: store_identity.yaml
+        exists: false
+        sha256: null
+      - name: access_matrix.yaml
+        exists: false
+        sha256: null
       required_fields:
       - access
       - created_from_scratch
@@ -101,4 +109,33 @@ payload:
       - shares_main_history
       - store_id
       received_fields: []
-      locator_present: false
+      required_values:
+        repository_visibility: private
+        created_from_scratch: true
+        fork_of_main: false
+        shares_main_history: false
+      actual_values: {}
+      required_access:
+        founder: admin
+        hidden_steward: read_write
+        main_codex: none
+        claude_planner: none
+        guardian: none
+        chief_advisor: none
+        m3_m4_elicitation: none
+      actual_access: {}
+      leaks: []
+      cond_011_may_close: false
+    founder_confirmation:
+      confirmed: false
+      confirmed_by: null
+      confirmed_at: null
+      confirmed_at_commit: null
+      commit_is_full_hash: false
+      ruling_ref: null
+      ruling_clause_path: null
+      ruling_file_exists: false
+      ruling_clause_resolves: null
+    declared_precondition_count: 4
+  declared_content_digest: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  actual_content_digest: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

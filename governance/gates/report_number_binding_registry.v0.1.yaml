@@ -1,89 +1,148 @@
-schema_version: "0.1"
+schema_version: '0.1'
 registry_id: DIYU-CBFSK-REPORT-NUMBER-BINDING-REGISTRY
 artifact_id: report_number_binding_registry.v0.1
 project_id: DIYU-CBFSK-001
 established_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_3_numeric_reference_structuring
 established_at_package: M2-EP05
 finding: NB-M2E4-03
-
-purpose: >-
-  报告里的计数数字必须追得到某个机器记录字段。EP04 报告写 500/350/149 而台账实测 523/376/147，
-  三个数字彼此还对不上（500−350≠149）——根因不是抄错一次，是数字与台账之间根本没有连线。
-
+purpose: 报告里的计数数字必须追得到某个机器记录字段。EP04 报告写 500/350/149 而台账实测 523/376/147， 三个数字彼此还对不上（500−350≠149）——根因不是抄错一次，是数字与台账之间根本没有连线。
 rule:
   statement: 报告一律改为引用台账 measurement 字段，由生成时读取。
   mechanism: 报告写成模板（*.md.tmpl），数字位写 {{ref:<路径>#<点分键路径>}}；判据重渲染后与落盘报告逐字节比对。
-  why_not_just_fix_the_numbers: >-
-    抄一遍正确数字只解决这一次。台账下次一变，报告又回到「看着像真的但没人再核过」的状态。
-    连上线之后，改数字这件事只能发生在台账里。
-  count_units_in_scope: [项, 条, 例, 份, 道, 张, 格, 个, 类, 批, 轮, 次, 品牌, 商品, 图像, 阶段, 处]
-  allowlist_discipline: >-
-    确实不是测量值的数字（历史引述里的原始数字、条款序号、比例说明）逐条登记并写明理由。
-    白名单是公开可数的——判据看不见就算过，等于没有规则。
-
+  why_not_just_fix_the_numbers: 抄一遍正确数字只解决这一次。台账下次一变，报告又回到「看着像真的但没人再核过」的状态。 连上线之后，改数字这件事只能发生在台账里。
+  count_units_in_scope:
+  - 项
+  - 条
+  - 例
+  - 份
+  - 道
+  - 张
+  - 格
+  - 个
+  - 类
+  - 批
+  - 轮
+  - 次
+  - 品牌
+  - 商品
+  - 图像
+  - 阶段
+  - 处
+  allowlist_discipline: 确实不是测量值的数字（历史引述里的原始数字、条款序号、比例说明）逐条登记并写明理由。 白名单是公开可数的——判据看不见就算过，等于没有规则。
 effective_from_package: M2-EP05
 retroactivity:
-  templated_retroactively: [11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md]
-  templated_retroactively_reason: >-
-    EP04 报告是本条发现的直接对象，裁决第三节点名要求改；其余既往报告不回改，
-    理由与 STOP 分栏规则同源：为满足一条后立的格式规则去回改历史报告，等于用今天的口径重写昨天的现场。
-
+  templated_retroactively:
+  - 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md
+  templated_retroactively_reason: EP04 报告是本条发现的直接对象，裁决第三节点名要求改；其余既往报告不回改， 理由与 STOP 分栏规则同源：为满足一条后立的格式规则去回改历史报告，等于用今天的口径重写昨天的现场。
 discovery:
   globs:
-    - 11_reports_and_receipts/*_delivery_report.md
-    - 11_reports_and_receipts/*/*_delivery_report.md
+  - 11_reports_and_receipts/*_delivery_report.md
+  - 11_reports_and_receipts/*/*_delivery_report.md
   note: 判据按本 glob 自动发现交付报告；发现了却没登记即 REPORT_NOT_REGISTERED，新报告不能悄悄绕开本册。
-
-report_count: 9
+report_count: 10
 reports:
-  - report: 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_report.md
-    template: 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_report.md.tmpl
-    status: templated
-    literal_allowlist:
-      - {number: 31, context_substring: 被引用, why: 引述 Guardian NB-M2E4-01 发现时的原始计数，是那一刻的现场数字，不随仓库变化而更新。}
-      - {number: 40, context_substring: 正式批, why: 「40 品牌正式批」是裁决第七节的原文用语，属被禁止动作的名称，不是本包的测量值。}
-  - report: 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md
-    template: 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md.tmpl
-    status: templated
-    literal_allowlist:
-      - {number: 30, context_substring: 高风险例, why: 本包一次性执行事实（90 例中高风险格子的例数），非持续测量字段；历史报告不回改。}
-      - {number: 6, context_substring: 捏造裁决 ID, why: 本包新增负例份数，一次性执行事实。}
-      - {number: 11, context_substring: 合规台账下限, why: 本包为该发现补的负例份数，一次性执行事实。}
-      - {number: 12, context_substring: 符号名回填, why: 本包回填的基线符号名条数，一次性执行事实。}
-      - {number: 4, context_substring: 披露纪律判据, why: 判据当场查出的未披露报告份数，一次性执行事实。}
-      - {number: 12, context_substring: 披露纪律判据, why: 同上，未披露未决项条数。}
-      - {number: 9, context_substring: "判据（`ci/checkers/`", why: 本包新增判据个数，一次性执行事实。}
-      - {number: 9, context_substring: 新增 9 个 checker, why: 同上，联动登记项里的同一事实。}
-      - {number: 20, context_substring: 重命名 `RESUME-AUTHORIZATION`, why: 本包同步更新的引用处数，一次性执行事实。}
-      - {number: 2, context_substring: 收口裁决第二节第, why: 条款序号，不是计数值——正则把「第 2 条」误判为计数。}
-  - report: 11_reports_and_receipts/m0_delivery_report.md
-    status: legacy_untemplated
-    reason: 立规前的历史报告；回改等于用今天的口径重写昨天的现场，按 retroactivity 不追溯。
-  - report: 11_reports_and_receipts/m1_delivery_report.md
-    status: legacy_untemplated
-    reason: 同上。
-  - report: 11_reports_and_receipts/m1_ep01_delivery_report.md
-    status: legacy_untemplated
-    reason: 同上。
-  - report: 11_reports_and_receipts/m1_ep02_delivery_report.md
-    status: legacy_untemplated
-    reason: 同上。
-  - report: 11_reports_and_receipts/m2_delivery_report.md
-    status: legacy_untemplated
-    reason: 同上；本包另按裁决第六节在其首行加 SUPERSEDED 声明。
-  - report: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md
-    status: legacy_untemplated
-    reason: 同上。
-  - report: 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_report.md
-    status: legacy_untemplated
-    reason: 同上。
-
+- report: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_report.md
+  template: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_report.md.tmpl
+  status: templated
+  literal_allowlist:
+  - number: 90
+    context_substring: 本包给 90 个评审单元
+    why: 一句话摘要里的规模数。正文与未决项表格的同一数字均由 ref 现读；此处摘要保留自然表述，其值与 article_landing.by_article.C-1.measurement.review_units 同源。
+  - number: 3
+    context_substring: 'PR #3'
+    why: PR 编号，不是计数。
+  - number: 4
+    context_substring: 前置由四项
+    why: 「四项」是改造前的旧值，属历史陈述；改造后的值由 ref 现读。
+  - number: 2
+    context_substring: 2 条经验切点指标
+    why: 未决项表格内的行文数字，与 C-4 段的 ref 取自同一字段。
+  - number: 0
+    context_substring: 记录各 0 条
+    why: 未决项表格内的行文数字；两侧记录为空由 calibration_review_state 现算守着。
+  - number: 14
+    context_substring: §14
+    why: 裁决条款号，不是计数。
+  - number: 5
+    context_substring: TG-05
+    why: 前置条目编号，不是计数。
+  - number: 4
+    context_substring: TG-04
+    why: 前置条目编号，不是计数。
+  - number: 314
+    context_substring: N314
+    why: 夹具编号，不是计数。
+- report: 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_report.md
+  template: 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_report.md.tmpl
+  status: templated
+  literal_allowlist:
+  - number: 31
+    context_substring: 被引用
+    why: 引述 Guardian NB-M2E4-01 发现时的原始计数，是那一刻的现场数字，不随仓库变化而更新。
+  - number: 40
+    context_substring: 正式批
+    why: 「40 品牌正式批」是裁决第七节的原文用语，属被禁止动作的名称，不是本包的测量值。
+- report: 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md
+  template: 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md.tmpl
+  status: templated
+  literal_allowlist:
+  - number: 30
+    context_substring: 高风险例
+    why: 本包一次性执行事实（90 例中高风险格子的例数），非持续测量字段；历史报告不回改。
+  - number: 6
+    context_substring: 捏造裁决 ID
+    why: 本包新增负例份数，一次性执行事实。
+  - number: 11
+    context_substring: 合规台账下限
+    why: 本包为该发现补的负例份数，一次性执行事实。
+  - number: 12
+    context_substring: 符号名回填
+    why: 本包回填的基线符号名条数，一次性执行事实。
+  - number: 4
+    context_substring: 披露纪律判据
+    why: 判据当场查出的未披露报告份数，一次性执行事实。
+  - number: 12
+    context_substring: 披露纪律判据
+    why: 同上，未披露未决项条数。
+  - number: 9
+    context_substring: 判据（`ci/checkers/`
+    why: 本包新增判据个数，一次性执行事实。
+  - number: 9
+    context_substring: 新增 9 个 checker
+    why: 同上，联动登记项里的同一事实。
+  - number: 20
+    context_substring: 重命名 `RESUME-AUTHORIZATION`
+    why: 本包同步更新的引用处数，一次性执行事实。
+  - number: 2
+    context_substring: 收口裁决第二节第
+    why: 条款序号，不是计数值——正则把「第 2 条」误判为计数。
+- report: 11_reports_and_receipts/m0_delivery_report.md
+  status: legacy_untemplated
+  reason: 立规前的历史报告；回改等于用今天的口径重写昨天的现场，按 retroactivity 不追溯。
+- report: 11_reports_and_receipts/m1_delivery_report.md
+  status: legacy_untemplated
+  reason: 同上。
+- report: 11_reports_and_receipts/m1_ep01_delivery_report.md
+  status: legacy_untemplated
+  reason: 同上。
+- report: 11_reports_and_receipts/m1_ep02_delivery_report.md
+  status: legacy_untemplated
+  reason: 同上。
+- report: 11_reports_and_receipts/m2_delivery_report.md
+  status: legacy_untemplated
+  reason: 同上；本包另按裁决第六节在其首行加 SUPERSEDED 声明。
+- report: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md
+  status: legacy_untemplated
+  reason: 同上。
+- report: 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_report.md
+  status: legacy_untemplated
+  reason: 同上。
 failure_states:
-  - REPORT_TEMPLATE_MISSING
-  - REPORT_RENDER_DRIFT
-  - UNTRACED_COUNT_IN_REPORT
-  - REPORT_REF_UNRESOLVED
-  - REPORT_NOT_REGISTERED
-  - REPORT_BINDING_COUNT_MISSTATED
-  - REPORT_BINDING_STATUS_INVALID
-  - LEGACY_REPORT_WITHOUT_REASON
+- REPORT_TEMPLATE_MISSING
+- REPORT_RENDER_DRIFT
+- UNTRACED_COUNT_IN_REPORT
+- REPORT_REF_UNRESOLVED
+- REPORT_NOT_REGISTERED
+- REPORT_BINDING_COUNT_MISSTATED
+- REPORT_BINDING_STATUS_INVALID
+- LEGACY_REPORT_WITHOUT_REASON

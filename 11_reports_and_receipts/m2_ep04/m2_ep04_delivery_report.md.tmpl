@@ -69,7 +69,7 @@
 | 编号 | 处置 | 关键证据 |
 |---|---|---|
 | `NB-M2-01` | 受控位授权与 main 追认引用的裁决，现场解析文件与具名条款路径 | 捏造裁决 ID 的 6 条负例已落盘；执行时当场发现 `EXEC-REQ-M0-003` 是执行申请非裁决，按来源类型分流而非开豁免 |
-| `NB-M2-02` | 合规台账下限由 payload 改为模块常量（夹具再也压不低），补 11 条负例；全仓横扫 | 实跑：**{{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.entries.0.declared_codes_total}} 条声明错误码，{{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.entries.0.covered_codes}} 条有夹具行使，{{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.entries.0.uncovered_codes}} 条挂账**，装棘轮：上限只降不升，新增 checker 零欠账 |
+| `NB-M2-02` | 合规台账下限由 payload 改为模块常量（夹具再也压不低），补 11 条负例；全仓横扫 | 实跑：**{{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP04.declared_codes_total}} 条声明错误码，{{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP04.covered_codes}} 条有夹具行使，{{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP04.uncovered_codes}} 条挂账**，装棘轮：上限只降不升，新增 checker 零欠账 |
 | `NB-M2-03` | 覆盖面数字改实测值 | EP01 报告 **235 → 270**，里程碑报告 **255 → 419**；在各自提交上建临时 worktree 跑该提交自带的 checker 实测 |
 | `NB-M2-04` | 12 条符号名回填真实完整哈希 | 用各条已登记的 `binary_sha256` 反查 README 历史 blob，12 条全部命中且互不冲突；末条自指按 `self_reference_limitation` 处理 |
 | `NB-M2-05` | 工作面见证改自动发现 | 目录扫描替代硬编码单一文件；新增 `M2-EP04` 分册，其中**不伪造** Guardian 记录 |
@@ -163,7 +163,7 @@
 | `OI-M2-ANCHOR` | D-10 编号更正与多模态评测边界待 Founder 确认 | AWAITING_FOUNDER |
 | `OI-M2-METRIC-GROUPING` | Brief 第 5 节「人设四项／语感六项／多模态六项」与 PRD 10.2 逐行条数不符 | REGISTERED |
 | `OI-M2-NAMING` | FR-* 五份 Founder 裁决文件不带 FOUNDER- 前缀 | AWAITING_FOUNDER |
-| `OI-M2-FIXTURE-DEBT` | {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.entries.0.uncovered_codes}} 条已声明错误码尚无 expected=FAIL 夹具行使 | REGISTERED_WITH_RATCHET |
+| `OI-M2-FIXTURE-DEBT` | {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP04.uncovered_codes}} 条已声明错误码尚无 expected=FAIL 夹具行使 | REGISTERED_WITH_RATCHET |
 | `COND-007` | 阈值冻结 | OPEN |
 | `COND-011` | 隐藏存储 provision | EVIDENCE_SUBMITTED |
 | `OD-M2-01` | 真实基线锦标赛运行 | DEFERRED_BY_FOUNDER |

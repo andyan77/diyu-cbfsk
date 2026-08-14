@@ -59,9 +59,9 @@ retired_codes:
   replacement_naming_rule: 替代码不得含错误编号；边界由 PRD v1.2 正文分层视觉推断条款现场解析。
   must_not_appear_at_any_stop_site: true
 counts:
-  total_codes: 147
-  machine_checked: 57
-  human_judgement: 35
+  total_codes: 157
+  machine_checked: 66
+  human_judgement: 36
   future_runtime: 55
 scan_scope:
   keys:
@@ -102,6 +102,18 @@ entries:
   enforcement: future_runtime
   detectors: []
   detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: AGGREGATION_NOT_RECOMPUTED_FROM_RECORDS
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: ANCHOR_ASSIGNMENT_RULE_VIOLATED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
 - code: AUTHORITATIVE_FACT_OVERRIDDEN
   sites:
   - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml#failure_state
@@ -191,6 +203,7 @@ entries:
 - code: CALIBRATION_REVIEW_EVIDENCE_MISSING
   sites:
   - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  - 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#failure_state
   - governance/conditions/m2_condition_state_semantics.v0.1.yaml#current_blocker
   - governance/conditions/m2_condition_state_semantics.v0.1.yaml#stop_id
   - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001.yaml#current_blocker
@@ -215,12 +228,30 @@ entries:
   enforcement: machine_checked
   detectors:
   - check_m2_calibration_review
+- code: CALIBRATION_STATED_AS_CAPABILITY_BASELINE
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: CLAUDE_INDEPENDENT_GUARDIAN 与 Founder 在报告审查时判定
+- code: CANDIDATE_DECISION_TRACE_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
 - code: CANDIDATE_M2_BRANCH_ALREADY_EXISTS
   sites:
   - governance/receipts/founder_m2_kickoff_signature_receipt.yaml#stop_condition_not_triggered
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: CANDIDATE_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
 - code: CAPABILITY_NOT_APPLICABLE_TO_TASK_CLASS
   sites:
   - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
@@ -449,6 +480,13 @@ entries:
   enforcement: machine_checked
   detectors:
   - check_m2_hidden_generation_readiness
+- code: FOUNDER_CONFIRMATION_UNBOUND
+  sites:
+  - governance/conditions/hidden_generation_timing_gate.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_founder_confirmation_binding
+  - check_m2_hidden_generation_readiness
 - code: FOUNDER_PACKAGE_IN_HIDDEN_SET
   sites:
   - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
@@ -475,9 +513,6 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
-  equivalent_machine_protection:
-    checker: check_guardian_report_binding
-    note: 报告缺失由 FULLTEXT_NOT_PROVIDED 状态与 PLACEHOLDER_TREATED_AS_REPORT 承接；本码是状态名，不是判据码。
 - code: GUARDIAN_REPORT_GAP_UNDECLARED
   sites:
   - governance/reports/guardian_report_registry.v0.1.yaml#failure_state
@@ -527,9 +562,6 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
-  equivalent_machine_protection:
-    checker: check_hidden_benchmark_boundary
-    note: 同等保护已由隐藏边界判据以另一组错误码承接；本码本身无实现，故不列 machine_checked。
 - code: HIDDEN_ASSET_STATUS_AHEAD_OF_EVIDENCE
   sites:
   - governance/conditions/m2_condition_state_semantics.v0.1.yaml#failure_state
@@ -578,6 +610,12 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: JUDGMENT_SCORE_INCONSISTENT
+  sites:
+  - 03_m2_evaluation_foundation/calibration/numeric_scoring_anchors.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
 - code: KNOWLEDGE_STATE_SKIPPED
   sites:
   - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml#failure_state
@@ -738,6 +776,12 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: PACK_CONTAINS_ANCHOR_LABEL
+  sites:
+  - 03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_calibration_launch_pack
 - code: PERSONA_DRIFT_WITHOUT_RECORD
   sites:
   - 03_m2_evaluation_foundation/scoring/persona_continuity_scoring_rubric.v0.1.yaml#failure_state
@@ -869,6 +913,13 @@ entries:
   enforcement: future_runtime
   detectors: []
   detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SCORE_USED_AS_JUDGMENT
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
 - code: SILENT_DELIVERABLE_SUBSTITUTION
   sites:
   - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
@@ -985,6 +1036,12 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: UNFROZEN_THRESHOLD_USED_IN_AGGREGATION
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
 - code: UNSEEN_BRAND_COUNT_OUT_OF_RANGE
   sites:
   - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state

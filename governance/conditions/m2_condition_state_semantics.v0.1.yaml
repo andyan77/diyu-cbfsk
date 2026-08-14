@@ -175,6 +175,34 @@ hidden_generation_timing_gate:
     但不得开 40 品牌正式批——蓝图还可能被校准结果改动。
   authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate
 
+merge_readiness_statement:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c8_four_non_blocking NB-3
+  required_wording: 当前候选满足快进前提，最终在合并瞬间重新核验。
+  must_not_be_stated_as: 平台已保证
+  why: >-
+    「当前可快进」是一个观测结果，观测发生在观测的那一刻。main 在此之后前进一步，
+    这句话就不再成立，而说过这句话的报告不会自己更新。
+    把它写成「平台已保证」，读的人会以为有人在合并那一刻替他挡着——没有人挡着。
+  single_definition: true
+  consumed_by: 各交付报告以 ref 引用本字段，不各自复述一句。
+
+correction_open_items:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001
+  items:
+    - open_item: OI-M2-CALIBRATION-CANDIDATES
+      what: 90 个候选输出由主执行侧撰写，属评测刺激材料，尚未经 Founder 确认边界锚点。
+      status: OPEN
+      owner: FOUNDER_PRODUCT_AUTHORITY
+      blocks: 校准包分发
+    - open_item: OI-M2-ANCHOR-TRUTH-CONFIRMATION
+      what: founder_boundary_anchor_truth.v0.1 由执行侧起草，founder_confirmation 五个绑定字段全部为空。
+      status: OPEN
+      owner: FOUNDER_PRODUCT_AUTHORITY
+    - open_item: OI-M2-EMPIRICAL-CUTPOINT-INPUTS
+      what: 2 条 EMPIRICAL_CUTPOINT 指标的估计输入尚不存在（两侧记录为 0、Founder 审查队列为空），因此不出建议值。
+      status: OPEN
+      blocked_by: [CALIBRATION_REVIEW_EVIDENCE_MISSING, FOUNDER_REVIEW_QUEUE_EMPTY]
+
 anchor_closures:
   authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors
   items:

@@ -106,6 +106,14 @@ def validate(payload: dict) -> list[str]:
             "启动包不得夹带治理上下文、既往结论或另一侧结果"
         )
 
+    for hit in payload.get("anchor_label_hits") or []:
+        errors.append(
+            f"PACK_CONTAINS_ANCHOR_LABEL: {hit['file']} contains {hit['key']!r} — "
+            "候选被构造时落在边界哪一侧，是本包唯一不能带出去的东西；带出去就是把答案发出去"
+        )
+    if payload.get("declared_anchor_keys") is None:
+        errors.append("PACK_CONTAINS_ANCHOR_LABEL: the manifest declares no anchor-key blacklist at all")
+
     if payload.get("manifest_prompt_sha256") != payload.get("state_prompt_sha256"):
         errors.append(
             "PACK_PROMPT_HASH_MISMATCH: the pack manifest and the review-state record disagree on the prompt hash — "
@@ -156,7 +164,9 @@ def collect() -> dict:
             )
 
     tokens = manifest["must_not_contain"]["tokens"]
+    anchor_keys = manifest["must_not_contain"].get("anchor_keys")
     forbidden_hits = []
+    anchor_label_hits = []
     for path in sorted(pack_root.rglob("*")):
         if not path.is_file() or path.name in SCAN_EXCLUDED:
             continue
@@ -164,6 +174,9 @@ def collect() -> dict:
         for token in tokens:
             if token in text:
                 forbidden_hits.append({"file": path.relative_to(ROOT).as_posix(), "token": token})
+        for key in anchor_keys or ():
+            if key in text:
+                anchor_label_hits.append({"file": path.relative_to(ROOT).as_posix(), "key": key})
 
     return {
         "missing_files": sorted(set(missing)),
@@ -176,6 +189,8 @@ def collect() -> dict:
         "pack_case_ids": pack_ids,
         "batch_case_ids": batch_ids,
         "forbidden_hits": forbidden_hits,
+        "anchor_label_hits": anchor_label_hits,
+        "declared_anchor_keys": anchor_keys,
         "manifest_prompt_sha256": manifest["review_prompt"]["sha256"],
         "state_prompt_sha256": load_yaml(REVIEW_STATE)["prompt"]["sha256"],
     }

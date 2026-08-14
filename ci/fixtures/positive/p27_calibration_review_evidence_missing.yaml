@@ -55,3 +55,78 @@ payload:
     blocked_by: null
   declared_metric_count: 3
   hidden_set_tuning_forbidden: true
+  aggregation_unfrozen_threshold_used: false
+  aggregation_declared_statistics:
+    total_cases_both_sided: 0
+    verdict_conflict_count: null
+    verdict_conflict_rate: null
+    legitimate_disagreement_count: null
+    hard_gate_conflict_count: null
+  aggregation_recomputed_statistics:
+    total_cases_both_sided: 0
+    verdict_conflict_count: null
+    verdict_conflict_rate: null
+    legitimate_disagreement_count: null
+    hard_gate_conflict_count: null
+  expected_records_per_side: 90
+  cases: []
+  required_record_fields:
+  - case_id
+  - candidate_id
+  - reviewer_role
+  - model
+  - model_version
+  - review_prompt_hash
+  - judgment
+  - score
+  - hard_gate_result
+  - disagreement_code
+  - review_note
+  - reviewed_at
+  allowed_judgments:
+  - ACCEPT
+  - REJECT
+  - AMBIGUOUS
+  allowed_hard_gate_values:
+  - PASS
+  - FAIL
+  - NOT_APPLICABLE
+  allowed_disagreement_codes:
+  - AMBIGUOUS_SCENARIO
+  - BOUNDARY_TOO_WIDE
+  - BOUNDARY_TOO_NARROW
+  - CLASS_MISASSIGNED
+  - HARD_GATE_NOT_APPLICABLE
+  - MISSING_INPUT_OBJECT
+  constraint_judgment_score_binding:
+    ACCEPT: 1.0
+    REJECT: 0.0
+    AMBIGUOUS: 0.0
+  metric_mapping:
+  - metric_id: metric_a
+    evidence_kind: POLICY_THRESHOLD
+    estimator: null
+    minimum_sample_count: null
+    estimator_inputs_available: false
+    recomputed_by_checker_from_raw_records: false
+    blocked_by: null
+  - metric_id: metric_b
+    evidence_kind: POLICY_THRESHOLD
+    estimator: null
+    minimum_sample_count: null
+    estimator_inputs_available: false
+    recomputed_by_checker_from_raw_records: false
+    blocked_by: null
+  - metric_id: high_risk_founder_full_review_rate
+    evidence_kind: POLICY_THRESHOLD
+    estimator: null
+    minimum_sample_count: null
+    estimator_inputs_available: false
+    recomputed_by_checker_from_raw_records: false
+    blocked_by: null
+  mapping_counts:
+    metrics: 3
+    policy_threshold: 3
+    empirical_cutpoint: 0
+    empirical_with_inputs_available: 0
+  aggregation_conflict_computed_from: judgment

@@ -1,0 +1,51 @@
+fixture_id: N336
+description: 具名文件在，但条款路径在那份文件里解析不出来——指向了一条不存在的条款。（FOUNDER_CONFIRMATION_UNBOUND）
+checker: check_founder_confirmation_binding
+expected: FAIL
+payload:
+  declared_scope:
+    excluded_prefixes:
+    - ci/fixtures/
+    key_stems: &id001
+    - approved
+    - authorized
+    - confirmed
+    - signed
+  actual_excluded_prefixes:
+  - ci/fixtures/
+  actual_key_stems: *id001
+  registered_sites:
+  - file: a.yaml
+    key_path: state.founder_prd_signed
+    claim_kind: founder_act_claim
+    value_when_registered: true
+    binding:
+      authority_kind: founder_signature_record
+      authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+      authority_file: governance/receipts/founder_signoff_receipt.yaml
+      authority_clause_path: state_flag_authorizations.flags.founder_prd_signed.authorized
+      signature_base_commit: '9999999999999999999999999999999999999999'
+      commit_basis: founder_signoff_receipt.signature_base_commit
+      signed_by: FOUNDER_PRODUCT_AUTHORITY
+      signed_at: '2026-08-13'
+  - file: b.yaml
+    key_path: rules.deletion_requires_founder_approval
+    claim_kind: requirement
+    value_when_registered: true
+    binding: null
+    why_no_binding: 是要求，不是已发生。
+  discovered_sites:
+  - file: a.yaml
+    key_path: state.founder_prd_signed
+    value: true
+  - file: b.yaml
+    key_path: rules.deletion_requires_founder_approval
+    value: true
+  binding_resolutions:
+    a.yaml::state.founder_prd_signed:
+      file_exists: true
+      clause_resolves: false
+  declared_counts:
+    sites: 2
+    bound: 1
+    act_claims_true: 1

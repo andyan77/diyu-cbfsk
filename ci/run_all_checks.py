@@ -60,6 +60,7 @@ CHECKERS = [
     "check_stop_code_enforcement",
     "check_report_number_traceability",
     "check_calibration_launch_pack",
+    "check_founder_confirmation_binding",
 ]
 
 

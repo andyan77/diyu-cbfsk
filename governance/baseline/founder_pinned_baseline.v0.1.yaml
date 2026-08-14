@@ -135,7 +135,7 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 870c3a8f2ade67cdb2be50c08471085941bc92e84189ef4fd692a8b0898d0ce1
+    post_change_binary_sha256: 8e9ed9527e13ba42fd38737019e03eeaaffea6579d1b539c209c0431fa3b6a42
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
@@ -154,11 +154,31 @@ active_baseline_candidates:
       backfilled_in_package: M2-EP04
       guarded_by: ci/checkers/check_sequential_registration.py LANDED_COMMIT_BLOB_MISMATCH
     authorized_modification_history:
+      - change_id: README-MOD-16
+        authorization_ref: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 allowed_updates（状态真源及其机械投影）
+        binary_sha256: 8e9ed9527e13ba42fd38737019e03eeaaffea6579d1b539c209c0431fa3b6a42
+        landed_in_commit: null
+        self_referential: true
+        self_reference_limitation: >-
+          本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
+          landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，
+          且要求必须声明本字段（SELF_REFERENCE_UNDECLARED）。收口后可由 Founder 回填。
+        content: >-
+          状态块补 m2_ep05_correction_status 与 calibration_pack_distribution_allowed；
+          M2 段新增 EP05-CORRECTION 一节（候选输出、判定语言、阈值证据分型、时序门五项、
+          STORE-A 文件级 intake、确认类字段绑定通用判据）；M2 现状指针改指 m2_ep05_correction/；
+          Checker 计数 45→46。
+        linked_registration_note: >-
+          依 OI-06 口径，「允许更新 README」自动包含本仓机制强制要求的联动登记项
+          （本条目 + post_change_binary_sha256），无需逐次裁决，但须在交付报告列明联动项。
       - change_id: README-MOD-15
         authorization_ref: DIYU-CBFSK-FOUNDER-M2-EP05-001 allowed_updates（状态真源及其机械投影）
         binary_sha256: 870c3a8f2ade67cdb2be50c08471085941bc92e84189ef4fd692a8b0898d0ce1
-        landed_in_commit: null
-        self_referential: true
+        landed_in_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+        self_referential: false
+        self_reference_resolved_after_the_fact: >-
+          写本条时它所在的提交尚不存在，故当时记 null 并声明自指。该提交已成为过去，
+          哈希现可回填——回填由 git 可复算，不是新的声称。
         self_reference_limitation: >-
           本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
           landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，

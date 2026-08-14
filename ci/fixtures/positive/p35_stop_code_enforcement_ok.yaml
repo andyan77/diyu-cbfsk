@@ -39,6 +39,9 @@ payload:
   - file: governance/conditions/sample.yaml
     key: stop_id
     code: HIDDEN_STORAGE_NOT_PROVISIONED
+  - file: 03_m2_evaluation_foundation/splits/sample.yaml
+    key: failure_state
+    code: SAFETY_BOUNDARY_CROSSED
   - file: governance/receipts/sample.yaml
     key: stop_condition_not_triggered
     code: WORKTREE_PATH_ALREADY_EXISTS

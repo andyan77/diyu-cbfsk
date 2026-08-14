@@ -7,6 +7,11 @@
 
 能力维度是否适用某个任务类型，读七张纵向卡自己的声明；边界族是否存在，读注册表；
 品类枚举读 M1 交接面。校准集自述的任何计数都不作为判定依据。
+
+第二件事（EP05-CORRECTION C-1）：每一例还必须挂一个候选输出。只有题干没有被评对象，
+评审员判的是空气，测出来的一致率没有指涉。候选被构造时落在边界哪一侧，记在
+founder_boundary_anchor_truth.v0.1.yaml——本判据现算格子覆盖与分配规则，
+并核对那份标签一个字也没有留在校准集里。
 """
 
 from __future__ import annotations
@@ -16,6 +21,7 @@ from _common import ROOT, cli, load_yaml
 LABEL = "check_m2_calibration_set"
 
 CAL = "03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml"
+ANCHOR_TRUTH = "03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml"
 REGISTRY = "03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml"
 MATRIX = "03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml"
 HANDOFF = "01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml"
@@ -26,6 +32,11 @@ EXPECTED_CELLS = 45
 EXPECTED_PER_CELL = 2
 TASK_CLASSES = ("constraint_correctness", "mechanism_correctness", "open_decision")
 RISK_TIERS = ("high", "medium", "low")
+TRACE_REQUIRED_CLASSES = ("mechanism_correctness", "open_decision")
+BOUNDARY_POSITIONS = ("inside", "outside", "boundary_high_value")
+CONSTRUCTED_JUDGMENTS = ("ACCEPT", "REJECT")
+# 标签只许住在锚点真源里。它出现在校准集，就会跟着派生进分发包。
+ANCHOR_LABEL_KEYS = ("boundary_position", "constructed_judgment", "expected_judgment")
 
 
 def _validate_case(case: dict, ctx: dict, errors: list[str]) -> None:
@@ -91,6 +102,105 @@ def _validate_case(case: dict, ctx: dict, errors: list[str]) -> None:
             errors.append(f"SOLUTION_FAMILY_INSUFFICIENT: {cid} lists {len(families)} legal solution family/families")
         if not (case.get("acceptance_boundary") or "").strip():
             errors.append(f"SOLUTION_FAMILY_INSUFFICIENT: {cid} has no acceptance_boundary")
+
+
+def _validate_candidates(cases: list[dict], errors: list[str]) -> None:
+    """每个评审单元都要有被评对象；机制题与开放题还要有决策轨迹。"""
+    for case in cases:
+        cid = case.get("case_id", "<no id>")
+        cand = case.get("candidate")
+        if not isinstance(cand, dict):
+            errors.append(f"CANDIDATE_MISSING: {cid} carries no candidate block")
+            continue
+        if cand.get("candidate_id") != f"CAND-{cid}":
+            errors.append(
+                f"CANDIDATE_MISSING: {cid} carries candidate_id {cand.get('candidate_id')!r}, expected CAND-{cid}"
+            )
+        if not (cand.get("candidate_output") or "").strip():
+            errors.append(f"CANDIDATE_MISSING: {cid} has an empty candidate_output")
+        if cand.get("non_candidate_knowledge") is not True:
+            errors.append(f"CANDIDATE_NOT_MARKED_NON_KNOWLEDGE: {cid} does not mark its candidate as non-knowledge")
+        if case.get("evaluation_task_class") in TRACE_REQUIRED_CLASSES:
+            if not (cand.get("candidate_decision_trace") or "").strip():
+                errors.append(f"CANDIDATE_DECISION_TRACE_MISSING: {cid} is {case.get('evaluation_task_class')} with no trace")
+        for key in ANCHOR_LABEL_KEYS:
+            if key in cand or key in case:
+                errors.append(f"EXPECTED_LABEL_IN_CASE_FILE: {cid} carries {key!r}, which belongs only in the anchor truth")
+
+
+def _validate_anchors(cases: list[dict], payload: dict, errors: list[str]) -> None:
+    """锚点真源：覆盖、格内两侧、分配规则、自述计数，四项都现算。"""
+    anchors = payload.get("anchors") or []
+    by_case = {a.get("case_id"): a for a in anchors}
+    case_ids = [c.get("case_id") for c in cases]
+
+    for cid in case_ids:
+        if cid not in by_case:
+            errors.append(f"ANCHOR_COVERAGE_INCOMPLETE: no anchor for {cid}")
+    for cid in by_case:
+        if cid not in case_ids:
+            errors.append(f"ANCHOR_COVERAGE_INCOMPLETE: anchor names {cid!r}, which is not a case in the set")
+    if len(anchors) != len(by_case):
+        errors.append(f"ANCHOR_COVERAGE_INCOMPLETE: {len(anchors)} anchors collapse to {len(by_case)} case ids")
+
+    for a in anchors:
+        cid = a.get("case_id", "<no id>")
+        if a.get("boundary_position") not in BOUNDARY_POSITIONS:
+            errors.append(f"ANCHOR_JUDGMENT_INVALID: {cid} has boundary_position {a.get('boundary_position')!r}")
+        if a.get("constructed_judgment") not in CONSTRUCTED_JUDGMENTS:
+            errors.append(f"ANCHOR_JUDGMENT_INVALID: {cid} has constructed_judgment {a.get('constructed_judgment')!r}")
+        if a.get("candidate_id") != f"CAND-{cid}":
+            errors.append(f"ANCHOR_JUDGMENT_INVALID: {cid} anchors candidate {a.get('candidate_id')!r}")
+        if a.get("boundary_position") == "inside" and a.get("constructed_judgment") != "ACCEPT":
+            errors.append(f"ANCHOR_JUDGMENT_INVALID: {cid} is inside the boundary but constructed as REJECT")
+        if a.get("boundary_position") == "outside" and a.get("constructed_judgment") != "REJECT":
+            errors.append(f"ANCHOR_JUDGMENT_INVALID: {cid} is outside the boundary but constructed as ACCEPT")
+
+    # 格子按首次出现排序；偶数格第一例为 inside，奇数格第二例为 inside。
+    order: list[tuple] = []
+    cells: dict[tuple, list[str]] = {}
+    for case in cases:
+        key = (case.get("category_id"), case.get("evaluation_task_class"), case.get("risk_tier"))
+        if key not in cells:
+            cells[key] = []
+            order.append(key)
+        cells[key].append(case.get("case_id"))
+
+    for index, key in enumerate(order):
+        ids = cells[key]
+        judgments = [(by_case.get(i) or {}).get("constructed_judgment") for i in ids]
+        if sorted(j for j in judgments if j) != ["ACCEPT", "REJECT"]:
+            errors.append(
+                f"ANCHOR_CELL_COVERAGE_BROKEN: cell {key} holds constructed judgments {judgments!r}, "
+                "each cell needs exactly one ACCEPT and one REJECT"
+            )
+            continue
+        if len(ids) != EXPECTED_PER_CELL:
+            continue
+        expected_accept = ids[0] if index % 2 == 0 else ids[1]
+        actual_accept = [i for i in ids if (by_case.get(i) or {}).get("constructed_judgment") == "ACCEPT"]
+        if actual_accept != [expected_accept]:
+            errors.append(
+                f"ANCHOR_ASSIGNMENT_RULE_VIOLATED: cell index {index} puts ACCEPT on {actual_accept!r}, "
+                f"the declared rule puts it on {expected_accept!r}"
+            )
+
+    declared = payload.get("declared_anchor_counts") or {}
+    actual = {
+        "anchors": len(anchors),
+        "inside": sum(1 for a in anchors if a.get("boundary_position") == "inside"),
+        "outside": sum(1 for a in anchors if a.get("boundary_position") == "outside"),
+        "boundary_high_value": sum(1 for a in anchors if a.get("boundary_position") == "boundary_high_value"),
+        "constructed_accept": sum(1 for a in anchors if a.get("constructed_judgment") == "ACCEPT"),
+        "constructed_reject": sum(1 for a in anchors if a.get("constructed_judgment") == "REJECT"),
+    }
+    for field, value in actual.items():
+        if declared.get(field) != value:
+            errors.append(
+                f"ANCHOR_COUNT_MISSTATED: anchor truth declares {field}={declared.get(field)!r}, holds {value}"
+            )
+    if payload.get("anchor_distributed_to_reviewers") is not False:
+        errors.append("ANCHOR_COUNT_MISSTATED: the anchor truth does not declare itself undistributed")
 
 
 def validate(payload: dict) -> list[str]:
@@ -159,6 +269,9 @@ def validate(payload: dict) -> list[str]:
     for missing in payload.get("families_without_out_of_boundary") or []:
         errors.append(f"BOUNDARY_FAMILY_INCOMPLETE: {missing} has no out_of_boundary")
 
+    _validate_candidates(cases, errors)
+    _validate_anchors(cases, payload, errors)
+
     return errors
 
 
@@ -196,9 +309,13 @@ def collect() -> dict:
     ]
 
     consumer = load_yaml("03_m2_evaluation_foundation/evaluation_governance/reviewer_calibration_contract.v0.1.yaml")
+    anchor_truth = load_yaml(ANCHOR_TRUTH)
 
     return {
         "cases": data["cases"],
+        "anchors": anchor_truth["anchors"],
+        "declared_anchor_counts": anchor_truth["counts"],
+        "anchor_distributed_to_reviewers": anchor_truth["distribution"]["distributed_to_reviewers"],
         "declared_grid": data["grid"],
         "declared_anchor_item_count": data["anchor_item_binding"]["anchor_item_count"],
         "consumer_anchor_item_count": consumer["machine_checkable_fields"]["anchor_item_count"]["current_value"],

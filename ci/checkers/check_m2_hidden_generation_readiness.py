@@ -15,7 +15,10 @@ m2_hidden_assets_status 问的是「资产到哪一步了」。绑在一起就�
 
 from __future__ import annotations
 
-from _common import ROOT, cli, load_yaml, sha256_file
+import hashlib
+import re
+
+from _common import ROOT, cli, founder_ruling_evidence, is_full_commit_hash, load_yaml, sha256_file
 
 LABEL = "check_m2_hidden_generation_readiness"
 
@@ -29,12 +32,19 @@ LEDGER = "governance/conditions/conditional_decision_ledger.yaml"
 REQUIRED_CATEGORIES = (
     "交付覆盖映射", "能力矩阵", "未见品牌切分", "未见品类边缘任务", "抽样设计",
     "任务类型合同", "三张横向评分卡", "七类纵向评分合同", "可接受决策边界注册表",
-    "隐藏资产生成合同", "硬门定义", "Steward 执行 Prompt",
+    "隐藏资产生成合同", "硬门定义", "Steward 执行 Prompt", "时序门合同",
 )
 # 状态只能在其前置被核验后推进；STORAGE_READY 的前置是 COND-011 关闭。
 STATUS_REQUIRING_COND_011_CLOSED = (
     "STORAGE_READY", "GENERATED", "PRIVATE_REVIEWED", "PRIVATE_FROZEN", "PUBLIC_MANIFEST_IMPORTED",
 )
+
+
+def _content_digest(files: list[dict]) -> str:
+    """摘要覆盖的是「路径→哈希」清单，不覆盖输入包自身——单一实现在 ci/tools/refresh_hidden_bundle.py，
+    这里现算一遍作比对，比对的是同一个定义。"""
+    lines = sorted(f"{row['path']}\t{row['sha256']}" for row in files)
+    return hashlib.sha256(("\n".join(lines) + "\n").encode("utf-8")).hexdigest()
 
 
 def _validate_bundle(payload: dict, errors: list[str]) -> None:
@@ -69,6 +79,12 @@ def _validate_bundle(payload: dict, errors: list[str]) -> None:
     for category in REQUIRED_CATEGORIES:
         if category not in declared:
             errors.append(f"REQUIRED_CATEGORY_MISSING: the bundle covers no {category!r}")
+
+    if payload.get("declared_content_digest") != payload.get("actual_content_digest"):
+        errors.append(
+            f"BUNDLE_CONTENT_DIGEST_STALE: the bundle records digest {payload.get('declared_content_digest')!r}, "
+            f"recomputing over its file list gives {payload.get('actual_content_digest')!r}"
+        )
 
     prompt = payload.get("steward_prompt") or {}
     if not prompt.get("exists"):
@@ -137,8 +153,74 @@ def _validate_semantics(payload: dict, errors: list[str]) -> None:
             errors.append(f"STOP_TYPE_UNKNOWN: {stop.get('stop_id')} declares no STOP type at all")
 
 
+def _validate_founder_confirmation(gate: dict, errors: list[str]) -> None:
+    """C-5／BLOCK-M2E5-01：确认不得是裸布尔值。
+
+    一个 false 改成 true 只要一次键盘操作，事后看不出是谁在哪个版本上确认的。
+    因此置 true 时必须同时给出签署人、时点、完整 40 位基线 Commit，
+    以及一份存在且条款路径解析得出来的具名裁决——四项缺一即不算确认。
+    """
+    fc = gate.get("founder_confirmation") or {}
+    if gate.get("state") is True and fc.get("confirmed") is not True:
+        errors.append(
+            "EXECUTION_SIDE_FLIPPED_TIMING_GATE: the gate is open without a recorded Founder confirmation"
+        )
+    if fc.get("confirmed") is not True:
+        return
+    for field in ("confirmed_by", "confirmed_at", "ruling_ref", "ruling_clause_path"):
+        if not (fc.get(field) or "").strip():
+            errors.append(f"FOUNDER_CONFIRMATION_UNBOUND: confirmation carries no {field}")
+    if fc.get("commit_is_full_hash") is not True:
+        errors.append(
+            f"FOUNDER_CONFIRMATION_UNBOUND: confirmed_at_commit {fc.get('confirmed_at_commit')!r} "
+            "is not a full 40-hex commit"
+        )
+    if fc.get("ruling_file_exists") is not True:
+        errors.append(f"FOUNDER_CONFIRMATION_UNBOUND: ruling {fc.get('ruling_ref')!r} has no file on disk")
+    elif fc.get("ruling_clause_resolves") is not True:
+        errors.append(
+            f"FOUNDER_CONFIRMATION_UNBOUND: clause {fc.get('ruling_clause_path')!r} does not resolve "
+            f"inside {fc.get('ruling_ref')!r}"
+        )
+
+
+def _validate_store_a(payload: dict, gate: dict, errors: list[str]) -> None:
+    """C-6：证据是那两份文件，不是台账对那两份文件的转述。"""
+    ev = gate.get("store_a_evidence") or {}
+
+    if ev.get("declared_status") != ev.get("derived_status"):
+        errors.append(
+            f"STORE_A_LEDGER_SELF_REPORT: the ledger records status {ev.get('declared_status')!r}, "
+            f"reading the evidence files derives {ev.get('derived_status')!r}"
+        )
+    for leak in ev.get("leaks") or []:
+        errors.append(f"STORE_A_EVIDENCE_LEAKS_LOCATOR: {leak}")
+
+    if ev.get("derived_status") == "RECEIVED":
+        for missing in sorted(set(ev.get("required_fields") or []) - set(ev.get("received_fields") or [])):
+            errors.append(f"STORE_A_EVIDENCE_INCOMPLETE: STORE-A evidence lacks {missing!r}")
+        actual_values = ev.get("actual_values") or {}
+        for field, expected in (ev.get("required_values") or {}).items():
+            if actual_values.get(field) != expected:
+                errors.append(
+                    f"STORE_A_EVIDENCE_INCOMPLETE: {field} is {actual_values.get(field)!r}, must be {expected!r}"
+                )
+        actual_access = ev.get("actual_access") or {}
+        for role, expected in (ev.get("required_access") or {}).items():
+            if actual_access.get(role) != expected:
+                errors.append(
+                    f"STORE_A_EVIDENCE_INCOMPLETE: access[{role}] is {actual_access.get(role)!r}, "
+                    f"must be {expected!r}"
+                )
+
+    if payload.get("cond_011_status") == "CLOSED" and ev.get("cond_011_may_close") is not True:
+        errors.append(
+            "STORE_A_EVIDENCE_INCOMPLETE: COND-011 is closed while the evidence files do not support closing it"
+        )
+
+
 def _validate_timing_gate(payload: dict, errors: list[str]) -> None:
-    """EP05 第七节：正式批必须等蓝图稳定，试产批不得混进正式数。"""
+    """EP05 第七节 ＋ CORRECTION C-5／C-6：正式批必须等阈值冻结，试产批不得混进正式数。"""
     gate = payload.get("timing_gate") or {}
 
     for item in gate.get("preconditions") or []:
@@ -149,15 +231,20 @@ def _validate_timing_gate(payload: dict, errors: list[str]) -> None:
                 f"its evidence source gives {recomputed!r}"
             )
 
+    declared_count = len(gate.get("preconditions") or [])
+    expected_count = gate.get("declared_precondition_count")
+    if expected_count is not None and declared_count != expected_count:
+        errors.append(
+            f"TIMING_GATE_PRECONDITION_MISSTATED: the gate declares {expected_count!r} preconditions, "
+            f"lists {declared_count}"
+        )
+
     satisfied = all(item.get("declared") is True for item in gate.get("preconditions") or [])
     if gate.get("state") is True and not satisfied:
         errors.append(
             "TIMING_GATE_OPEN_WITHOUT_PRECONDITIONS: the gate is open while some precondition is unmet"
         )
-    if gate.get("state") is True and gate.get("founder_confirmed") is not True:
-        errors.append(
-            "EXECUTION_SIDE_FLIPPED_TIMING_GATE: the gate is open without a recorded Founder confirmation"
-        )
+    _validate_founder_confirmation(gate, errors)
 
     if gate.get("formal_batch_started") is True and gate.get("state") is not True:
         errors.append(
@@ -176,18 +263,7 @@ def _validate_timing_gate(payload: dict, errors: list[str]) -> None:
             "PILOT_COUNTED_IN_BRAND_COUNT: brands are counted while only a pilot batch is authorised"
         )
 
-    evidence = gate.get("store_a_evidence") or {}
-    if evidence.get("status") == "RECEIVED":
-        for missing in sorted(set(evidence.get("required_fields") or []) - set(evidence.get("received_fields") or [])):
-            errors.append(f"STORE_A_EVIDENCE_INCOMPLETE: STORE-A evidence lacks {missing!r}")
-        if evidence.get("locator_present") is True:
-            errors.append(
-                "STORE_A_EVIDENCE_LEAKS_LOCATOR: the purified evidence carries a repository URL, token or deploy key"
-            )
-    if payload.get("cond_011_status") == "CLOSED" and evidence.get("status") != "RECEIVED":
-        errors.append(
-            "STORE_A_EVIDENCE_INCOMPLETE: COND-011 is closed while the STORE-A evidence has not been received"
-        )
+    _validate_store_a(payload, gate, errors)
     if payload.get("hidden_assets_status") in STATUS_REQUIRING_COND_011_CLOSED \
             and gate.get("boundary_recheck_performed") is not True:
         errors.append(
@@ -201,6 +277,77 @@ def validate(payload: dict) -> list[str]:
     _validate_semantics(payload, errors)
     _validate_timing_gate(payload, errors)
     return errors
+
+
+# 定位符扫描：这两份文件要证明隔离成立，不是让人找得到仓库。
+LOCATOR_PATTERNS = (
+    ("URL scheme", re.compile(r"[a-zA-Z][a-zA-Z0-9+.-]*://")),
+    ("scp 式 git 地址", re.compile(r"\b[\w.-]+@[\w.-]+:")),
+    ("代码托管仓库定位符", re.compile(r"github\.com|gitlab|bitbucket|gitee|codeberg|\.git\b", re.I)),
+    ("Token", re.compile(r"ghp_|github_pat_|gho_|glpat-|AKIA[0-9A-Z]{8}|xox[baprs]-")),
+    ("Deploy Key", re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----|ssh-(rsa|ed25519|dss)")),
+    ("本机绝对路径", re.compile(r"(^|\s)(/home/|/Users/|/root/|/mnt/|[A-Za-z]:\\\\)")),
+    ("私有主机名或内网地址", re.compile(r"\b(?:10|127|192\.168)\.\d|\.local\b|\.internal\b|\blocalhost\b", re.I)),
+    ("随机种子", re.compile(r"\bseed\b", re.I)),
+)
+
+
+def _scalars(node, path="") -> list[tuple[str, str]]:
+    if isinstance(node, dict):
+        return [pair for k, v in node.items() for pair in _scalars(v, f"{path}.{k}" if path else str(k))]
+    if isinstance(node, list):
+        return [pair for i, v in enumerate(node) for pair in _scalars(v, f"{path}[{i}]")]
+    return [(path, str(node))] if node is not None else []
+
+
+def _read_store_a_evidence(spec: dict, required_fields: list[str]) -> dict:
+    """从固定目录读两份真实 YAML。文件不在就是没收到——不读台账怎么说。"""
+    directory = spec["intake_directory"]
+    files, present, received_fields, leaks = [], [], set(), []
+    values: dict = {}
+    access: dict = {}
+    for entry in spec["files"]:
+        rel = f"{directory}{entry['name']}"
+        path = ROOT / rel
+        exists = path.exists()
+        doc = load_yaml(rel) if exists else {}
+        files.append({"name": entry["name"], "exists": exists, "sha256": sha256_file(path) if exists else None})
+        present.append(exists)
+        if not exists:
+            continue
+        received_fields |= {k for k in doc if k in required_fields}
+        if "founder_attestation" in doc:
+            received_fields.add("founder_attestation")
+        values.update({k: v for k, v in doc.items() if not isinstance(v, (dict, list))})
+        if isinstance(doc.get("access"), dict):
+            access = doc["access"]
+            received_fields.add("access")
+        for key, text in _scalars(doc):
+            for label, pattern in LOCATOR_PATTERNS:
+                if pattern.search(text):
+                    leaks.append(f"{entry['name']}:{key} looks like a {label}")
+
+    derived = "RECEIVED" if all(present) and present else "NOT_RECEIVED"
+    complete = (
+        derived == "RECEIVED"
+        and not leaks
+        and not (set(required_fields) - received_fields)
+        and all(values.get(f) == v for f, v in spec["required_values"].items())
+        and all(access.get(r) == v for r, v in spec["required_access_matrix"].items())
+    )
+    return {
+        "declared_status": spec["status"],
+        "derived_status": derived,
+        "files": files,
+        "required_fields": required_fields,
+        "received_fields": sorted(received_fields),
+        "required_values": spec["required_values"],
+        "actual_values": values,
+        "required_access": spec["required_access_matrix"],
+        "actual_access": access,
+        "leaks": leaks,
+        "cond_011_may_close": complete,
+    }
 
 
 def collect() -> dict:
@@ -230,16 +377,21 @@ def collect() -> dict:
     aggregation_doc = load_yaml(AGGREGATION)
     review_state = load_yaml(REVIEW_STATE)
 
-    # 前三项前置由判据现算，不读门自己的声明——门是被检对象。
+    # 前四项前置由判据现算，不读门自己的声明——门是被检对象。
     sides_collected = all(
         (side.get("record_count") or 0) >= (side.get("expected_record_count") or 0) > 0
         for side in review_state["sides"]
+    )
+    thresholds_frozen = bool(threshold["items"]) and all(
+        item.get("founder_decision") is not None and is_full_commit_hash(item.get("founder_decision_commit"))
+        for item in threshold["items"]
     )
     recomputed = {
         "TG-01": sides_collected,
         "TG-02": bool((aggregation_doc.get("disagreement_statistics") or {}).get("computed")),
         "TG-03": threshold["counts"]["recommendation_absent"] == 0,
-        "TG-04": None,
+        "TG-04": thresholds_frozen and conditions["COND-007"]["status"] == "CLOSED",
+        "TG-05": None,
     }
     preconditions = [
         {
@@ -252,6 +404,12 @@ def collect() -> dict:
     evidence = gate["store_a_evidence"]
     required_fields = sorted(
         {field for spec in evidence["files"] for field in spec["minimum_fields"]}
+    )
+    store_a = _read_store_a_evidence(evidence, required_fields)
+
+    confirmation = gate["founder_confirmation"]
+    ruling_evidence = founder_ruling_evidence(
+        confirmation.get("ruling_ref"), confirmation.get("ruling_clause_path")
     )
 
     blueprint = semantics["m2_public_blueprint_status"]
@@ -272,14 +430,23 @@ def collect() -> dict:
                 for a in gate["while_false"]["allowed"] if a["id"] == "AL-03"
             ),
             "boundary_recheck_performed": gate["on_main_repo_acceptance"]["boundary_recheck_performed"],
-            "store_a_evidence": {
-                "status": evidence["status"],
-                "required_fields": required_fields,
-                "received_fields": evidence["received_fields"],
-                "locator_present": False,
+            "declared_precondition_count": gate["preconditions"]["count"],
+            "founder_confirmation": {
+                "confirmed": confirmation["confirmed"],
+                "confirmed_by": confirmation["confirmed_by"],
+                "confirmed_at": confirmation["confirmed_at"],
+                "confirmed_at_commit": confirmation["confirmed_at_commit"],
+                "commit_is_full_hash": is_full_commit_hash(confirmation["confirmed_at_commit"]),
+                "ruling_ref": confirmation["ruling_ref"],
+                "ruling_clause_path": confirmation["ruling_clause_path"],
+                "ruling_file_exists": ruling_evidence["file_exists"],
+                "ruling_clause_resolves": ruling_evidence["clause_resolves"],
             },
+            "store_a_evidence": store_a,
         },
         "files": files,
+        "declared_content_digest": bundle["bundle_content_digest"],
+        "actual_content_digest": _content_digest(bundle["files"]),
         "declared_file_count": bundle["file_count"],
         "declared_categories": [c["category"] for c in bundle["required_file_categories"]],
         "input_status": bundle["current_state"]["hidden_generation_input_status"],

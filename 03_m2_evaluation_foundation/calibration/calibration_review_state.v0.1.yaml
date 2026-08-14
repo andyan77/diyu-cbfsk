@@ -3,10 +3,11 @@ contract_id: DIYU-CBFSK-M2-CALIBRATION-REVIEW-STATE
 artifact_id: calibration_review_state.v0.1
 project_id: DIYU-CBFSK-001
 milestone: M2
-execution_package: M2-EP04
+execution_package: M2-EP05-CORRECTION
 status: EVIDENCE_MISSING
 artifact_lifecycle_state: validated
 authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第三节 A-3b
+record_schema_authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c2_judgment_language
 
 failure_state: CALIBRATION_REVIEW_EVIDENCE_MISSING
 failure_state_reason: >-
@@ -28,13 +29,14 @@ why_execution_side_cannot_produce_these:
       本会话即执行侧，自己开一个窗口不构成隔离。
 
 prompt:
-  path: 03_m2_evaluation_foundation/calibration/launch_pack/review_prompt.shared.v1.0.0.md
-  sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365
-  version: 1.0.0
-  supersedes: review_prompt.shared.v0.1.md
+  path: 03_m2_evaluation_foundation/calibration/launch_pack/review_prompt.shared.v1.1.0.md
+  sha256: 3cf282afc7c007a9b48c758d7fc23e9c7747ed1a22bfd921b47d7874529d73a7
+  version: 1.1.0
+  supersedes: review_prompt.shared.v1.0.0.md
   supersedes_reason: >-
-    v0.1 正文按仓内路径引用冻结件，隔离评审员根本读不到那些路径。
-    v1.0.0 随启动包自带全部判定所需材料，可独立分发；旧版删除，避免两份正文两个哈希。
+    v1.0.0 让评审员对着题干打分，而题干上没有挂任何被评对象——评审员判的是空气。
+    v1.1.0 每个单元带一份候选输出，并把「算不算」（judgment）与「做得多完整」（score）
+    拆成两个字段；旧版删除，避免两份正文两个哈希。
   shared_by_both_sides: true
   shared_reason: >-
     正文不同会让分歧率失去意义——分不清是看法不同还是题目说的话不同。
@@ -63,15 +65,35 @@ sides:
     produced_by_main_execution_side: false
 
 record_schema:
-  required_fields: [case_id, reviewer_role, model, model_version, review_prompt_hash, score, hard_gate_result, disagreement_code, reviewed_at]
+  required_fields: [case_id, candidate_id, reviewer_role, model, model_version, review_prompt_hash, judgment, score, hard_gate_result, disagreement_code, review_note, reviewed_at]
+  field_count: 12
   field_rules:
-    case_id: 必须落在 CAL-001—CAL-090 内，且每侧每例至多一条。
+    case_id: 必须落在 CAL-001—CAL-090 内；每侧恰好 90 条，一个不多一个不少，无重复。
+    candidate_id: 必须等于该例挂载的候选 id（CAND-<case_id>）。
     reviewer_role: 必须与该 sink 所属 side 的 reviewer_role 一致。
+    model: 同一侧的全部记录必须一致——同一侧换模型中途改口径，分歧率就没有对象了。
+    model_version: 同一侧的全部记录必须一致。
     review_prompt_hash: 必须等于 prompt.sha256。
-    score: 0.0—1.0；constraint_correctness 类只允许 0.0 或 1.0。
-    hard_gate_result: 键必须取自该例的 hard_gate_refs，值取 PASS / FAIL / NOT_APPLICABLE。
+    judgment: ACCEPT / REJECT / AMBIGUOUS 三选一；这是边界成员资格判断。
+    score: 数值且在 0.0—1.0；constraint_correctness 类只允许 0.0 或 1.0，且与 judgment 绑定。
+    hard_gate_result: 键必须与该例 hard_gate_refs 精确相等（不多不少），值取 PASS / FAIL / NOT_APPLICABLE。
     disagreement_code: null 或六个允许值之一。
+    review_note: 三种情形下必须非空——disagreement_code 非空、judgment 为 AMBIGUOUS、硬门出现 FAIL 或 NOT_APPLICABLE。
   allowed_disagreement_codes: [AMBIGUOUS_SCENARIO, BOUNDARY_TOO_WIDE, BOUNDARY_TOO_NARROW, CLASS_MISASSIGNED, HARD_GATE_NOT_APPLICABLE, MISSING_INPUT_OBJECT]
+  allowed_judgments: [ACCEPT, REJECT, AMBIGUOUS]
+  allowed_hard_gate_values: [PASS, FAIL, NOT_APPLICABLE]
+  constraint_judgment_score_binding: {ACCEPT: 1.0, REJECT: 0.0, AMBIGUOUS: 0.0}
+  numeric_anchor_source: 03_m2_evaluation_foundation/calibration/numeric_scoring_anchors.v0.1.yaml
+  score_must_not_replace_judgment: true
+  score_must_not_replace_judgment_why: >-
+    用分数表达成立与否，必须先设一条及格线；而及格线正是本轮要收集证据去定的东西。
+    先用未冻结的线解释结果、再拿结果去冻结那条线，是循环定义。
+
+judgment_vs_score:
+  judgment: 算不算落在接受边界内。
+  score: 落在里面的做得多完整。
+  interpretable_only_when: judgment == ACCEPT
+  failure_state: SCORE_USED_AS_JUDGMENT
 
 isolation_rules:
   - id: ISO-1
@@ -100,6 +122,8 @@ machine_checkable_fields:
   claude_record_count: {type: integer, current_value: 0, expected_when_executed: 90}
   both_sides_executed: {type: boolean, current_value: false}
   simulated_scores_present: {type: boolean, required_value: false}
+  record_field_count: {type: integer, required_value: 12}
+  expected_records_per_side: {type: integer, required_value: 90}
 
 blocking_for:
   - COND-007 阈值冻结（无校准证据即无阈值建议依据）
@@ -122,3 +146,17 @@ failure_states:
   - CALIBRATION_REVIEW_STATE_CONTRADICTS_EVIDENCE
   - PROMPT_HASH_STALE
   - REVIEW_RECORD_SCHEMA_VIOLATION
+  - REVIEW_RECORD_CASE_COVERAGE_BROKEN
+  - REVIEW_RECORD_DUPLICATE_CASE
+  - REVIEW_RECORD_JUDGMENT_INVALID
+  - REVIEW_RECORD_SCORE_OUT_OF_RANGE
+  - REVIEW_RECORD_CONSTRAINT_SCORE_INVALID
+  - JUDGMENT_SCORE_INCONSISTENT
+  - REVIEW_RECORD_HARD_GATE_KEYS_MISMATCH
+  - REVIEW_RECORD_HARD_GATE_VALUE_INVALID
+  - REVIEW_RECORD_DISAGREEMENT_CODE_INVALID
+  - REVIEW_NOTE_REQUIRED_BUT_EMPTY
+  - REVIEW_SIDE_WORKSPACE_MISSING
+  - REVIEW_SIDE_MODEL_INCONSISTENT
+  - AGGREGATION_NOT_RECOMPUTED_FROM_RECORDS
+  - SCORE_USED_AS_JUDGMENT

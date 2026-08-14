@@ -1,0 +1,102 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-NUMERIC-SCORING-ANCHORS
+artifact_id: numeric_scoring_anchors.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP05-CORRECTION
+status: VALIDATED
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c2_judgment_language
+
+why_this_file_exists: >-
+  没有锚点的分数是私人刻度。一位评审员的 0.63 和另一位的 0.78 之间差多少，
+  在没有锚点时谁也说不出来——两个数放在一起算平均、算差距，算出来的是两把不同尺子的读数之差。
+  本文件把 ②③ 类的分数钉到可复述的行为描述上；钉不住的分数不得进入任何统计。
+
+judgment_vs_score:
+  judgment: 边界成员资格判断，取 ACCEPT / REJECT / AMBIGUOUS。
+  score: 边界内的质量或完整度。
+  score_must_not_replace_judgment: true
+  score_interpretable_only_when: judgment == ACCEPT
+  why: >-
+    「这份东西算不算数」和「算数的这份做得多好」是两个问题。
+    用一个连续分数同时回答两个问题，必然要在某处偷偷设一条及格线——
+    而那条线正是本轮还没冻结、要靠本轮证据去定的东西。
+  failure_state_if_conflated: SCORE_USED_AS_JUDGMENT
+
+constraint_correctness:
+  score_values_allowed: [0.0, 1.0]
+  continuous_score_forbidden: true
+  judgment_score_binding:
+    ACCEPT: 1.0
+    REJECT: 0.0
+    AMBIGUOUS: 0.0
+  ambiguous_scores_zero_why: >-
+    硬约束题上「说不清」不得计成通过。安全与合规类判断的默认方向是关闭，不是放行。
+    判 AMBIGUOUS 时必须同时写 review_note 说明卡在哪。
+  failure_state: JUDGMENT_SCORE_INCONSISTENT
+
+mechanism_correctness:
+  scale: 五档
+  anchors:
+    - score: 1.0
+      behaviour: 推理落在可接受区间内，且区间要求的每一步都写了出来——取出约束、给出落点、说明为什么这样成立。
+    - score: 0.75
+      behaviour: 落在区间内，但有一步只给了结论没给依据。
+    - score: 0.5
+      behaviour: 落在区间内，但只给结论，机制说明基本缺失。
+    - score: 0.25
+      behaviour: 越出区间，但仍引用了正确的约束来源。
+    - score: 0.0
+      behaviour: 越出区间，且未引用约束来源，或用该例明令禁止的推断方式得出结论。
+  intermediate_values_allowed: false
+  intermediate_values_why: >-
+    允许自由取值等于允许每人自造刻度。要表达「介于两档之间」，请取较低一档并在 review_note 写明。
+
+open_decision:
+  scale: 五档
+  anchors:
+    - score: 1.0
+      behaviour: 给出至少两个合法解族，每族都先通过该例硬约束，并说明什么条件变化会交换优先级。
+    - score: 0.75
+      behaviour: 两族齐备且都通过硬约束，但未说明优先级交换条件。
+    - score: 0.5
+      behaviour: 只给一族且该族成立；或两族齐备但其中一族缺机制说明。
+    - score: 0.25
+      behaviour: 给出多族，但其中任一族越过该例硬约束。
+    - score: 0.0
+      behaviour: 宣称唯一解，或全部解族均越过硬约束。
+  intermediate_values_allowed: false
+
+what_these_anchors_are_not:
+  items:
+    - 产品指标的阈值
+    - 及格线
+    - 可用于统计推导任何 PRD 10.2 指标应取的数值
+  why: >-
+    锚点解决的是「两个人说的 0.75 是不是同一件事」。
+    它不解决「0.75 够不够格」——那是阈值冻结要回答的问题，由 Founder 裁决，不由本文件推导。
+
+distribution:
+  shipped_with_pack: true
+  pack_file: scoring_anchors.json
+  derived_by: ci/tools/build_calibration_pack.py
+  restated_in_pack: false
+  restated_in_pack_note: 包内那份是本文件的派生物，判据重新派生比对；两处各写一份会出现两套刻度。
+
+machine_checkable_fields:
+  anchored_task_classes:
+    type: integer
+    required_value: 2
+  anchor_levels_per_class:
+    type: integer
+    required_value: 5
+  constraint_score_values:
+    type: integer
+    required_value: 2
+
+failure_states:
+  - SCORE_USED_AS_JUDGMENT
+  - JUDGMENT_SCORE_INCONSISTENT
+  - NUMERIC_ANCHOR_MISSING
+  - SCORE_OFF_ANCHOR

@@ -14,16 +14,37 @@ measurement:
   method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
   evidence_level: runtime_verified
   measured_by: ci/checkers/check_error_code_fixture_coverage.py
-  measured_at_package: M2-EP06
-  declared_codes_total: 650
-  fail_fixtures_run: 511
-  covered_codes: 503
+  measured_at_package: M2-PREMERGE-FIX
+  declared_codes_total: 697
+  fail_fixtures_run: 563
+  covered_codes: 550
   uncovered_codes: 147
 measurement_history:
   purpose: measurement 是「现在这一刻」的实测值，会随判据增加而变。 报告要引的是它当时那一刻的值——把历史报告接到 measurement 上， 报告的内容会随后续施工悄悄改变，那不是报告，是仪表盘。
   indexed_by: measured_at_package
   why_not_a_list: 历史条目原本是数组，报告按下标 entries.0 引用。再插一条历史，下标就整体位移——EP04 的报告会悄悄开始念 EP05 的数字，而两份报告都没被改过。按包名索引，加多少条都不动已有引用。
   by_package:
+    M2-SEAL:
+      measured_at_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+      declared_codes_total: 675
+      fail_fixtures_run: 536
+      covered_codes: 528
+      uncovered_codes: 147
+      evidence_level: runtime_verified
+      method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
+      measured_retroactively_at_package: M2-PREMERGE-FIX
+      measured_retroactively_how: >-
+        M2-SEAL 那一包没有更新本块——它的 measurement 到 9b60bda 时仍写着 M2-EP06 的数字。
+        本包用 `git worktree add --detach <tmp> 9b60bda` 在该提交上实跑判据取值，跑完即移除该临时工作树。
+        这是补测，不是转抄交付报告正文里的数字。
+    M2-EP06:
+      measured_at_commit: a4be75e5ee723fe552a293d40632405711920554
+      declared_codes_total: 650
+      fail_fixtures_run: 511
+      covered_codes: 503
+      uncovered_codes: 147
+      evidence_level: runtime_verified
+      method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
     M2-EP05-CORRECTION:
       measured_at_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
       declared_codes_total: 620
@@ -811,6 +832,35 @@ entries:
   status: REGISTERED_UNCOVERED
   owner: CLAUDE_EXECUTION_PLANNER
   due: M3 收口前逐步补齐
+new_in_m2_premerge_fix_zero_debt:
+  checkers:
+  - check_collect_derivation_discipline
+  uncovered_codes: 0
+  rule: 本包新增判据一律零欠账；棘轮不为新债让路。
+  also_zero_debt_this_package:
+    note: 本包给既有判据新增的错误码同样自带负例，一条不挂账。
+    codes:
+    - check_m2_suspension_seal.ABSOLUTE_UNCHANGED_CLAIM_PRESENT
+    - check_m2_suspension_seal.ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE
+    - check_m2_suspension_seal.CHANGED_FILE_LIST_MISSTATED
+    - check_m2_suspension_seal.DELIVERY_ARTIFACT_SEMANTICS_CHANGED
+    - check_m2_suspension_seal.DISPOSITION_RECORD_FIELD_MISSING
+    - check_m2_suspension_seal.DISPOSITION_RULING_DOES_NOT_NAME_BRANCH
+    - check_m2_suspension_seal.DISPOSITION_RULING_DOES_NOT_NAME_COMMIT
+    - check_m2_suspension_seal.DISPOSITION_RULING_DOES_NOT_NAME_ITEM
+    - check_m2_suspension_seal.GUARDIAN_WORKSPACE_UNATTESTED
+    - check_m2_suspension_seal.REVIEW_RECORD_FIELD_MISSING
+    - check_m2_suspension_seal.REVIEW_REPORT_DOES_NOT_NAME_ITS_CLAIM
+    - check_m2_suspension_seal.REVIEW_REPORT_HASH_STALE
+    - check_m2_suspension_seal.REVIEW_TARGET_MISMATCH
+    - check_m2_suspension_seal.REVIEW_TARGET_PLACEHOLDER_USED
+    - check_m2_suspension_seal.UNSEAL_RECORD_FIELD_MISSING
+    - check_m2_suspension_seal.UNSEAL_RULING_DOES_NOT_NAME_ITEM
+    - check_project_state.DERIVED_FIELD_HAND_ASSIGNED
+    - check_project_state.DERIVED_FIELD_MISCOMPUTED
+    - check_project_state.README_STATE_BLOCK_DRIFT
+    - check_project_state.README_STATE_BLOCK_MISSING
+
 new_in_m2_ep04_zero_debt:
   checkers:
   - check_m2_deliverable_closure

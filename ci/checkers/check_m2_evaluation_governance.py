@@ -237,7 +237,7 @@ def collect() -> dict:
         "prematurely_frozen_thresholds": prematurely_frozen,
         "canonical_high_risk_coverage": tiers["high_risk"]["founder_review_coverage"],
         "canonical_high_risk_sampling_allowed": tiers["high_risk"]["sampling_allowed"],
-        "canonical_risk_tiers": ["high", "medium", "low"],
+        "canonical_risk_tiers": tiers["tiers"],
         "canonical_calibration_name": canonical_calibration["canonical_name"],
         "sampling_high_risk_coverage": sr1.get("founder_review_coverage"),
         "sampling_high_risk_sampling_allowed": sr1.get("sampling_allowed"),

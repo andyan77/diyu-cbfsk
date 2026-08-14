@@ -73,17 +73,20 @@ payload:
       value: 考联合色彩语法
       evidence_level: execution_side_self_report
       must_be_confirmed_before_use: true
+    disposition_record: null
   - id: GAP-SQ-02
     affects:
     - CAL-072
     disposition_status: NOT_STARTED
     disposed_by: null
     disposed_at_commit: null
+    disposition_record: null
   - id: GAP-CRITERION-A
     affects: []
     disposition_status: NOT_STARTED
     disposed_by: null
     disposed_at_commit: null
+    disposition_record: null
   declared_gap_count: 3
   declared_gaps_disposed: 0
   case_ids:
@@ -170,3 +173,75 @@ payload:
   frozen_observation_entered: false
   unregistered_main_commits: []
   pr_merged: false
+  artifact_change:
+    declared_changed:
+    - ci/x.py
+    declared_changed_count: 1
+    actual_changed:
+    - ci/x.py
+    declared_delivery_artifacts: []
+    declared_delivery_count: 0
+    actual_delivery_artifacts: []
+    absolute_claim_hits: []
+  live_head: 1234567890abcdef1234567890abcdef12345678
+  ledger_commits:
+    9b60bda06f372467243de36982c16d4bd6afea8d:
+      execution_package: M2-SEAL
+  guardian_workspace_attestations: []
+  review_record_required_fields:
+  - reviewer_role
+  - reviewed_commit
+  - conclusion
+  - report_path
+  - report_sha256
+  - issued_at
+  review_rounds:
+  - round_id: R1
+    status: CONCLUDED
+    target_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+    target_commit_binding: null
+    target_is_ancestor_of_head: true
+    declared_conclusions_received: 1
+    records:
+    - reviewer_role: CLAUDE_INDEPENDENT_GUARDIAN
+      reviewed_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+      conclusion: APPROVE_WITH_CONDITIONS
+      report_path: governance/reports/r.yaml
+      report_sha256: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+      issued_at: '2026-08-14'
+      evidence_kind: founder_ruling_transcription
+      reviewer_authored_fulltext_landed: false
+      counts_as_independent_verification: false
+      workspace_attested: false
+      report_exists: true
+      report_actual_sha256: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+      claim_names_role: true
+      claim_names_conclusion: true
+      report_names_commit: true
+  - round_id: R2
+    status: AWAITING_BOTH_SIDES
+    target_commit: null
+    target_commit_binding: derived_from_git_head
+    target_is_ancestor_of_head: false
+    declared_conclusions_received: 0
+    records: []
+  disposition_required_fields:
+  - ruling_ref
+  - ruling_file
+  - clause_path
+  - signature_base_commit
+  - chosen_branch_id
+  - affected_item
+  - authorized_new_value
+  unseal_required_fields:
+  - ruling_ref
+  - ruling_file
+  - clause_path
+  - signature_base_commit
+  - chosen_branch_id
+  - affected_item
+  - authorized_new_value
+  advisor_block_override:
+    outstanding_blocking_findings: []
+    gate_2_satisfied: false
+    itemised_response: null

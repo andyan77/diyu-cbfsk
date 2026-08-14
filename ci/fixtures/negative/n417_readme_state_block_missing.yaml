@@ -1,0 +1,74 @@
+fixture_id: N417
+description: README 找不到状态块——读不到不等于没问题。（README_STATE_BLOCK_MISSING）
+checker: check_project_state
+expected: FAIL
+payload:
+  flags:
+    prd_v1_2_effective: true
+    m0_authorized: true
+    guardian_review_completed: false
+    chatgpt_remote_review_completed: false
+    founder_prd_signed: true
+    founder_m0_authorized: true
+    founder_merge_approved: true
+    main_merged: false
+    production_servable: false
+    m0_execution_started: false
+    m1_started: false
+    m2_started: false
+    knowledge_distillation_started: false
+  authorizations:
+    prd_v1_2_effective:
+      authorized: true
+      basis: founder signature
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    m0_authorized:
+      authorized: true
+      basis: founder signature
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_prd_signed:
+      authorized: true
+      basis: founder signature
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_m0_authorized:
+      authorized: true
+      basis: founder signature
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    founder_merge_approved:
+      authorized: true
+      basis: founder signature
+      signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  never_authorizable_declared:
+  - production_servable
+  - knowledge_distillation_started
+  execution_status: M0_AUTHORIZED_NOT_STARTED
+  execution_status_authorization:
+    authorized: true
+    authorized_values:
+    - EXECUTION_NOT_STARTED
+    - M0_AUTHORIZED_NOT_STARTED
+    - M0_IN_PROGRESS
+    basis: M0 签署
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []
+  canonical_state:
+    project_status: PROJECT_INITIATED
+    execution_status: M2_IN_PROGRESS
+    m2_status: SUSPENDED_BY_FOUNDER
+  readme_state: null
+  readme_state_block_found: false
+  derived_state:
+    execution_permitted: false
+  projection_states:
+    CLAUDE.md:
+      project_status: PROJECT_INITIATED
+      execution_status: M2_IN_PROGRESS
+      m2_status: SUSPENDED_BY_FOUNDER
+      execution_permitted: false
+    AGENTS.md:
+      project_status: PROJECT_INITIATED
+      execution_status: M2_IN_PROGRESS
+      m2_status: SUSPENDED_BY_FOUNDER
+      execution_permitted: false
+  hand_assigned_derived_fields: []

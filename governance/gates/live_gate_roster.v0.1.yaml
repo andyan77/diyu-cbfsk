@@ -14,7 +14,7 @@ contract:
   - 2. 本册对应条目 status 改 RETIRED，并填 retirement_authorization（裁决 ID + 完整 Commit 哈希 + 替代覆盖）
   - 3. 才可从 run_all_checks 注册表移除
   downgrade_equals_retirement: 削弱判据（放宽阈值、去掉分支、改成只警告不失败）与摘除同等对待，一律须单独授权。
-live_gate_count: 48
+live_gate_count: 49
 gates:
 - checker: check_execution_uuid
   status: LIVE
@@ -158,5 +158,8 @@ gates:
   status: LIVE
   retirement_authorization: null
 - checker: check_m2_suspension_seal
+  status: LIVE
+  retirement_authorization: null
+- checker: check_collect_derivation_discipline
   status: LIVE
   retirement_authorization: null

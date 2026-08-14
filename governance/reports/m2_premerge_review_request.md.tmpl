@@ -1,0 +1,89 @@
+# M2 并入前审查 · 转达件
+
+> 本件由执行侧**原样转达**，问题措辞由 Founder 改写，未经润色、未补充、未拆条。
+> 机器记录：`governance/reports/m2_premerge_review_request.v0.1.yaml`
+> 裁决依据：`DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001` 第三节；
+> 复审安排依据：`DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001` 第十节
+
+## 收件方
+
+{{ref:governance/reports/m2_premerge_review_request.v0.1.yaml#machine_checkable_fields.reviewer_count}} 侧各出一次结论，互不参照：
+
+- `CLAUDE_INDEPENDENT_GUARDIAN`——不同工作区、不同会话、不同任务合同，不得读规划上下文
+- `CHATGPT_CHIEF_ADVISOR`
+
+**两侧独立**：任一方在形成自己结论前，不得读取另一方的报告。
+
+## 本件已进行到哪一轮
+
+共 {{ref:governance/reports/m2_premerge_review_request.v0.1.yaml#machine_checkable_fields.round_count}} 轮。
+
+**R1（已结束）**——审查对象 `9b60bda06f372467243de36982c16d4bd6afea8d`，
+两侧共 {{ref:governance/reports/m2_premerge_review_request.v0.1.yaml#machine_checkable_fields.round_1_conclusions_received}} 份结论：
+
+| 侧 | 结论 | 阻断 |
+|---|---|---|
+| Guardian | `APPROVE_WITH_CONDITIONS` | 阻断 {{ref:governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml#machine_checkable_fields.guardian_blocking_count}} 项，条件 {{ref:governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml#machine_checkable_fields.guardian_condition_count}} 项（COND-GUARD-M2-01）|
+| 总顾问 | `BLOCK` | 阻断 {{ref:governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml#machine_checkable_fields.advisor_blocking_count}} 项（B-01 / B-02 / B-03 / B-04）|
+
+两者不冲突——各自覆盖了对方未查的对象。Founder 合并计四问答案为「会」，裁定 `DO_NOT_MERGE_AS_IS`、
+不回退、定点修复。两份结论均作为历史证据保留，不删除、不改写。
+
+**R2（本轮，待两侧出结论）**——审查对象是承载本次定点修复的那个提交。它的哈希由提交内容算出，
+写不进被提交的内容，因此机器记录里**留空并声明由 `git rev-parse HEAD` 现算**，不写占位串。
+执行侧在交付报告中报出该完整 40 位哈希。
+
+范围限于 B-01 / B-02 / B-03 / B-04 / COND-GUARD-M2-01 / NB-1 / OI-SEAL-01，**不重审已验通过部分**。
+
+## 审查问题
+
+**本候选原样并入 main，是否会在主线上造成以下任一情形——**
+
+1. **虚假状态**：任何声称完成而实际未完成的记录
+2. **越权授权**：任何未经 Founder 绑定的状态位或条件被置真
+3. **红线松动**：六位红线旗、隐藏内容入仓、知识状态链
+4. **误导性基线**：对将来从 main 起步的工作构成误导
+
+> 第 3 问的「六位」是挂起裁决原文，本件负责原样转达，不改一个字。
+> 该数字口径后由 `DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001` 第十二节更正为
+> {{ref:governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml#machine_checkable_fields.red_line_flag_count}} 位并逐条列出。
+
+## 不在本轮审查范围
+
+以下 {{ref:governance/reports/m2_premerge_review_request.v0.1.yaml#machine_checkable_fields.out_of_scope_count}} 项**已知为否，且已由机器状态如实记录，不需再确认**：
+
+- M2 能否冻结
+- 18 项是否闭环
+- 隐藏资产是否存在
+- 阈值是否已定
+
+这四件的答案都是「否」，否在哪里、否成什么样，仓内都有可复算的字段。再问一遍只会得到一份重复的否定结论，占掉本该用来找假状态与误导性基线的注意力。
+
+## 审查方需要知道的前提
+
+| 事项 | 事实 |
+|---|---|
+| 本候选是否请求合并 | **否**。合并须三门齐备后另行授权，本次不请求 |
+| M2 里程碑状态 | 已由 Founder 主动挂起（`SUSPENDED_BY_FOUNDER`），既非通过亦非失败 |
+| 自检全绿意味着什么 | {{ref:governance/gates/live_gate_roster.v0.1.yaml#live_gate_count}} 个确定性判据全绿是执行侧自检，**不代替任何一方审查** |
+| 上一轮自检也全绿 | R1 那份候选同样全绿，仍然被查出 {{ref:governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml#machine_checkable_fields.blocking_finding_count}} 项阻断。全绿从来不是通过 |
+| 三方结论现状 | R1 两侧已出；Founder 已裁定不合并、定点修复；R2 两侧均未出结论 |
+
+## 自 `a4be75e` 以来到底改了什么
+
+原先此处是一句绝对表述——**已按 B-01-1 撤销**，原话不在本件复述（复述等于让它继续流通）。
+撤销理由：绝对量词只要有一个反例就整句失效，而反例确实存在。精确事实：
+
+- `delivery_semantics_changed_since_a4be75e`：**false**
+- `existing_m2_files_byte_changed_since_a4be75e`：**true**
+- `change_nature`：`runtime_measurement_record_update`
+- 全量清单与逐条分类：`governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml`
+
+## 结论回传
+
+请各自给出一次结论。结论回传后由执行侧登记进 `m2_premerge_review_request.v0.1.yaml` 的
+`review_rounds.items[].records[]`；**执行侧不得代填**——判据 `REVIEW_CONCLUSION_SELF_FILLED` 拦的就是这一条。
+
+登记必须带齐 `reviewer_role` / `reviewed_commit` / `conclusion` / `report_path` / `report_sha256` / `issued_at`；
+判据会读取报告文件、现算 sha256，并核对报告正文确实点名了该角色、该提交与该结论。
+Guardian 一侧还须有隔离工作区见证；**没有见证的一律标 unverified，不计入通过证据**。

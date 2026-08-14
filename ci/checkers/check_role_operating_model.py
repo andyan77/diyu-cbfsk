@@ -3,7 +3,9 @@
 
 from __future__ import annotations
 
-from _common import cli, is_full_commit_hash, load_yaml, sha256_text
+import subprocess
+
+from _common import ROOT, cli, is_full_commit_hash, load_yaml, sha256_text
 
 LABEL = "check_role_operating_model"
 
@@ -133,12 +135,50 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+def _git(*args: str) -> str | None:
+    """读不到就返回 None，由 validate 判——不吞，也不假装成 0。"""
+    try:
+        return subprocess.run(
+            ["git", *args], cwd=ROOT, capture_output=True, text=True, check=True
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+
+
+def _commit_events() -> list[dict]:
+    """「提交变了却没重审」现场推导：候选 HEAD 对上最近一轮 Guardian 审过的提交。
+
+    此前这里是 []——role_separation_rules 写着「任何修复形成新 Commit 后先前结论一律失效」，
+    而检查它的那个分支永远拿不到事件（B-04-4）。现在事件由 git 与审查登记册现算：
+    只要 HEAD 不等于最近审过的那个提交，就必须存在一条已委托的复审记录，否则失败。
+    """
+    head = _git("rev-parse", "HEAD")
+    if head is None:
+        return []
+    registry = load_yaml("governance/reports/guardian_report_registry.v0.1.yaml")
+    entries = registry.get("entries") or []
+    if not entries:
+        return []
+    latest = entries[-1]
+    request = load_yaml("governance/reports/m2_premerge_review_request.v0.1.yaml")
+    pending = request.get("re_review") or {}
+    return [
+        {
+            "current_commit": head,
+            "guardian_reviewed_commit": latest.get("reviewed_commit"),
+            "re_review_requested": pending.get("commissioned") is True,
+            "re_review_authority": pending.get("authority"),
+        }
+    ]
+
+
 def collect() -> dict:
     model = load_yaml("governance/bootstrap/role_operating_model.v0.2.yaml")
     manifest = load_yaml("governance/baseline/founder_pinned_baseline.v0.1.yaml")
     cont = manifest["continuation_execution"]
     signoff = load_yaml("governance/receipts/founder_signoff_receipt.yaml")
     red_lines = model["red_lines"]
+    commit_events = _commit_events()
 
     return {
         "red_line_manifest": signoff.get("red_line_manifest"),
@@ -147,8 +187,14 @@ def collect() -> dict:
         "roles": model["roles"],
         "role_separation_rules": model["role_separation_rules"],
         "review_mode": model["review_mode"],
-        "guardian_role_id": "CLAUDE_INDEPENDENT_GUARDIAN",
-        "founder_authorized_temporary_writers": ["TEMPORARY_EXECUTION_WRITER"],
+        # B-04-4：这三项此前是 Python 字面量。谁是 Guardian、谁被 Founder 授权临时写入、
+        # 有没有「提交变了却没重审」——全都是仓内可查的事实，判据不许自己写一份。
+        "guardian_role_id": next(
+            (r["role_id"] for r in model["roles"] if r.get("formal_guardian") is True), None
+        ),
+        "founder_authorized_temporary_writers": sorted(
+            {cont["founder_designation"]} - {None}
+        ),
         "temporary_writers": [
             {
                 "role_id": cont["executor_role_id"],
@@ -157,7 +203,7 @@ def collect() -> dict:
                 "codex_default_writer_rule_changed": cont["codex_default_writer_rule_changed"],
             }
         ],
-        "commit_events": [],
+        "commit_events": commit_events,
     }
 
 

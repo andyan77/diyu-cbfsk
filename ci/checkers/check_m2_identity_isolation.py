@@ -21,6 +21,8 @@ from _common import ROOT, cli, is_full_commit_hash, load_yaml
 LABEL = "check_m2_identity_isolation"
 
 CONTRACT = "03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml"
+# B-01-4：覆盖面数字从冻结合同搬进治理测量台账——合同说规则，台账记测量。
+COVERAGE_LEDGER = "governance/gates/scan_coverage_measurement_ledger.v0.1.yaml"
 
 # 本 checker 自己的扫描用例目录。用例里**必须**能写出违规声明，否则判据无法被行使（EQ-3）；
 # 因此仓库扫描排除它，而它的内容另由 scan_cases 逐条断言命中数——不是「跳过不看」，
@@ -233,14 +235,18 @@ def _validate_scan_coverage(payload: dict, errors: list[str]) -> None:
             )
 
 
-def _scan_coverage_payload(contract: dict, actual: int) -> dict | None:
-    record = contract.get("scan_coverage_record")
-    if record is None:
+def _scan_coverage_payload(ledger: dict | None, actual: int) -> dict | None:
+    """覆盖面取自治理测量台账，不再取自冻结的产品合同（B-01-4）。
+
+    合同只留规则与指针；数字住在 governance/gates/scan_coverage_measurement_ledger.v0.1.yaml。
+    读不到台账就返回 None，由 validate 判 SCAN_COVERAGE_RECORD_MISSING——不静默跳过。
+    """
+    if ledger is None:
         return None
     return {
-        "declared_current_count": (record.get("current") or {}).get("scanned_file_count"),
+        "declared_current_count": (ledger.get("current") or {}).get("scanned_file_count"),
         "actual_current_count": actual,
-        "history": record.get("history") or [],
+        "history": ledger.get("history") or [],
     }
 
 
@@ -250,6 +256,7 @@ def collect() -> dict:
     import yaml
 
     contract = load_yaml(CONTRACT)
+    coverage_ledger = load_yaml(COVERAGE_LEDGER) if (ROOT / COVERAGE_LEDGER).exists() else None
     forbidden = [item["capability_id"] for item in contract["forbidden_capabilities"]["items"]]
     allowed = [item["capability_id"] for item in contract["allowed_capabilities"]["items"]]
 
@@ -297,7 +304,7 @@ def collect() -> dict:
         "forbidden_capabilities": forbidden,
         "forbidden_capabilities_declared_count": contract["forbidden_capabilities"]["count"],
         "allowed_capabilities": allowed,
-        "scan_coverage_record": _scan_coverage_payload(contract, len(documents)),
+        "scan_coverage_record": _scan_coverage_payload(coverage_ledger, len(documents)),
         "scanned_file_count": len(documents),
         "forbidden_capability_declarations": scan(documents, set(forbidden)),
         "current_state": contract["current_state"],

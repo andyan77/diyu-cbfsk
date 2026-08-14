@@ -1,0 +1,287 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-M2-PREMERGE-FIX-DELIVERY-RECEIPT
+project_id: DIYU-CBFSK-001
+milestone: M2
+package_id: M2-PREMERGE-FIX
+task_id: DIYU-CBFSK-M2-PREMERGE-FIX-001
+task_class: L3
+execution_run_id: 7b3d1c94-2e5a-4f08-9d61-4c8a0e37b52f
+parent_execution_run_id: 7b3e51d9-0c46-4a82-9f17-5e6a2c0b84d3
+base_candidate_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
+base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+branch: candidate/m2
+authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001
+describes_current_state: true
+
+self_reference_limitation: >-
+  本包自己的候选 Commit 在提交那一刻才产生，写不进被提交的内容。
+  本轮**不写占位串**（B-02-1 禁用 RESOLVED_AT_REPORT_TIME 之类）：相关字段一律留 null
+  并声明 candidate_commit_binding，由判据现算 `git rev-parse HEAD` 得到。
+  留空是「这里没有值，去问 git」；占位是「这里有个值，只是还没算」——后者会骗人。
+candidate_commit_binding: derived_from_git_head
+
+package_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_status: SUSPENDED_BY_FOUNDER
+  execution_permitted: false
+  execution_permitted_derivation: ci/derived_state.py execution_permitted(project_state)
+  m2_freeze_gate_open: false
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  m2_deliverables_ready: 14
+  m2_deliverables_total: 18
+  calibration_pack_distribution_status: NOT_DISTRIBUTED
+  design_gaps_disposed: 0
+  design_gaps_total: 3
+  premerge_review_round_1_conclusions_received: 2
+  premerge_review_round_2_conclusions_received: 0
+  merge_gates_satisfied: 0
+  merge_gates_total: 3
+  mainline_frozen_observation_entered: false
+  m2_hidden_assets_status: NOT_STARTED
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m2_frozen: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+  pr_3_merged: false
+  next_authorized_action: BOTH_SIDES_RETURN_ROUND_2_DELTA_CONCLUSIONS
+
+self_check:
+  live_gates: 49
+  gates_passed: 49
+  predicate_fixtures: 616
+  predicate_fixtures_behaved_as_declared: 616
+  schema_fixtures: 36
+  schema_fixtures_behaved_as_declared: 36
+  exit_code: 0
+  declared_error_codes: 697
+  covered_error_codes: 550
+  uncovered_error_codes: 147
+  uncovered_cap: 147
+  new_checker_debt: 0
+  evidence_level: runtime_verified
+  what_this_is_not: >-
+    自检不是审查。上一轮候选（9b60bda）同样全绿——48 个判据、189 条断言、远程 CI 全过——
+    仍被查出 4 项阻断。B-04 尤其说明问题：守卫自己写着 unregistered_main_commits: []，
+    于是「主线上有没有未登记提交」这条判据永远回答「没有」，而它当时被引用为合规证据。
+
+new_checkers:
+- checker: ci/checkers/check_collect_derivation_discipline.py
+  what: 全仓横扫 collect() 里写死的事实源，并让这条通则永久自动执行
+  error_codes: 5
+  negative_fixtures: 5
+  debt: 0
+  why_a_checker_and_not_a_one_off_sweep: >-
+    横扫是一次性的，通则是永久的。本轮之前仓里同时躺着十处同类缺陷，每一处都经过审查而无人发现——
+    读代码的人看到的是一个字段名和一个值，看不出这个值是查出来的还是写上去的。
+
+article_landing:
+  by_article:
+    A1:
+      title: 并入裁定
+      landed:
+      - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml
+      - governance/reports/m2_premerge_review_request.v0.1.yaml
+      - governance/receipts/m2_package_commit_ledger.yaml
+      measurement:
+        review_target: 9b60bda06f372467243de36982c16d4bd6afea8d
+        guardian_conclusion: APPROVE_WITH_CONDITIONS
+        guardian_blocking_count: 0
+        guardian_condition_count: 1
+        advisor_conclusion: BLOCK
+        advisor_blocking_count: 4
+        both_conclusions_preserved: true
+        rollback_performed: false
+    A2:
+      title: B-01 交付物改动声明失真（绝对表述已撤销）
+      landed:
+      - governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml
+      - governance/gates/scan_coverage_measurement_ledger.v0.1.yaml
+      - 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+      - 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+      measurement:
+        absolute_claims_retracted: 3
+        delivery_semantics_changed_since_a4be75e: false
+        existing_m2_files_byte_changed_since_a4be75e: true
+        changed_delivery_artifacts: 1
+        scan_count_moved_out_of_product_contract: true
+        two_readings_reconciled: true
+        guardian_reading: 757
+        advisor_reading: 790
+        reconciliation: 两方读的是不同提交——757 实测于 f71617e，790 实测于 9b60bda；两个数字各自都对。
+    A3:
+      title: B-02 审查对象两套定义
+      landed:
+      - governance/reports/m2_premerge_review_request.v0.1.yaml
+      - governance/receipts/m2_package_commit_ledger.yaml
+      - ci/checkers/check_m2_suspension_seal.py
+      measurement:
+        review_target_backfilled: true
+        placeholder_strings_banned: 5
+        four_way_equality_enforced: true
+        renamed_code_now_checks_real_target: REVIEW_TARGET_HASH_NOT_FULL_40
+    A4:
+      title: B-03 审查结论、缺口处置与解封可由自述字段伪造
+      landed:
+      - governance/reports/m2_premerge_review_request.v0.1.yaml
+      - 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml
+      - governance/conditions/m2_seal_ledger.v0.1.yaml
+      - ci/checkers/check_m2_suspension_seal.py
+      measurement:
+        review_record_required_fields: 6
+        authorization_record_required_fields: 7
+        report_hash_recomputed_by_checker: true
+        clause_must_name_the_action: true
+        guardian_workspace_attested: false
+        guardian_counts_as_independent_verification: false
+    A5:
+      title: B-04 主线冻结守卫硬编码空结果
+      landed:
+      - ci/checkers/check_m2_suspension_seal.py
+      - ci/checkers/check_collect_derivation_discipline.py
+      - governance/gates/collect_literal_registry.v0.1.yaml
+      - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml
+      measurement:
+        hardcoded_sites_found: 10
+        hardcoded_sites_repaired: 10
+        hardcoded_sites_remaining: 0
+        registered_as_expectation_constants: 0
+        git_derived_facts: 4
+    A6:
+      title: COND-GUARD-M2-01
+      landed:
+      - README.md
+      - ci/checkers/check_project_state.py
+      - governance/baseline/founder_pinned_baseline.v0.1.yaml
+      measurement:
+        readme_headline_corrected: true
+        readme_state_block_gained_m2_status: true
+        line_151_rewritten: true
+        readme_drift_guard_added: true
+        readme_mod_registered: README-MOD-17
+    A7:
+      title: NB-1 转达件数字
+      landed:
+      - governance/reports/m2_premerge_review_request.md.tmpl
+      - governance/reports/m2_premerge_review_request.md
+      - governance/gates/report_number_binding_registry.v0.1.yaml
+      measurement:
+        retracted_literal: 47
+        now_templated: true
+        registry_report_count: 13
+        glob_extended: true
+    A8:
+      title: OI-SEAL-01 裁定
+      landed:
+      - ci/derived_state.py
+      - ci/compile_role_instructions.py
+      - governance/bootstrap/role_operating_model.v0.2.yaml
+      - governance/conditions/m2_seal_ledger.v0.1.yaml
+      measurement:
+        execution_status_enum_extended: false
+        derived_field_added: execution_permitted
+        derived_field_value_now: false
+        single_implementation: ci/derived_state.py
+        hand_assignment_fails: true
+        closure: NO_ENUM_MIGRATION_WITH_DERIVED_FIELD
+    A9:
+      title: PR 正文
+      landed: []
+      measurement:
+        produces_new_commit: false
+        updated_after_commit: true
+        note: PR 正文在本包提交并推送之后更新，不产生新 Commit。
+    A10:
+      title: 复审安排
+      landed:
+      - governance/reports/m2_premerge_review_request.v0.1.yaml
+      - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml
+      measurement:
+        round_2_commissioned: true
+        scope_items: 7
+        sides_independent: true
+        block_override_rule_machine_enforced: true
+    A11:
+      title: Guardian 永久检查纪律
+      landed:
+      - governance/bootstrap/role_operating_model.v0.2.yaml
+      - governance/roles/claude_independent_guardian.md
+      measurement:
+        written_into_role_contract: true
+        projected: true
+        recorded_instance: unregistered_main_commits
+    A12:
+      title: 维持不变
+      landed: []
+      measurement:
+        not_authorized_count: 10
+        red_line_flags_held_false: 7
+        m2_status: SUSPENDED_BY_FOUNDER
+
+concurrent_window_handling:
+  what_happened: >-
+    本裁决同时被发到两个执行窗口，两者在同一 worktree 上交错写入约十三分钟
+    （本窗口 11:48–11:52，另一窗口 11:52–12:01）。发现方式：本窗口一次
+    `assert s.count(old) == 1` 当场失败——文件在读取与写入之间被改过。
+  evidence:
+  - ci/checkers/check_project_state.py（非本窗口所写）import 了本窗口十分钟前才创建的 ci/derived_state.py，函数名一字不差
+  - 两窗口独立分配了同一个裁决编号 DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001
+  - 发现时仓库为红：30+ 判据失败、2 份夹具失败、2 处 collect() 崩溃
+  action_taken: 停手并向 Founder 报告，未继续写入。
+  founder_decision: 关闭另一窗口，由本窗口接管收口。
+  what_was_kept: >-
+    另一窗口已落的产物全部保留并在其上继续——scan_coverage_measurement_ledger、
+    artifact_change_since_delivery_freeze、check_project_state 的 README 漂移守卫与派生字段判据、
+    known_design_gaps / m2_seal_ledger / m2_package_commit_ledger / m2_premerge_review_request 的数据侧改写。
+    复核属实，且与本窗口的设计一致，无需重做。
+  what_this_window_completed: 判据侧（check_m2_suspension_seal 全量重写）、B-04-4 横扫机制、夹具、登记册与报告。
+  risk_disclosed: >-
+    交错写入期间可能发生过未被察觉的丢更新。本包全量自检通过，但「自检通过」不等于
+    「没有内容在交错中丢失」——这一点如实记录，供 R2 两侧复审时留意。
+
+open_item_count: 5
+open_items:
+- id: OI-FIX-01
+  what: 四处全等中「实际 head」的读法由执行侧裁定——已结束轮次核 ancestry，待审轮次核现算 head。
+  why: 裁决原文写「全等」，而已结束那一轮的对象不可能等于修复后的新 head。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  execution_side_position: 已按该读法实现并在 review_request.four_way_equality.disclosed_reading 具名披露；如与原意不符请指正。
+- id: OI-FIX-02
+  what: 本包候选 Commit 的完整 40 位哈希由交付报告报出，并在下一包回填进 package ledger。
+  owner: TEMPORARY_EXECUTION_WRITER
+- id: OI-FIX-03
+  what: 两侧 R1 报告原文均未交到执行侧；仓内证据是 Founder 裁决的转录。Guardian 隔离工作区见证亦未登记。
+  consequence: 两条记录均标 counts_as_independent_verification=false，不计入通过证据。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+- id: OI-FIX-04
+  what: 三条已知设计缺口（GAP-SQ-01 / GAP-SQ-02 / GAP-CRITERION-A）仍未处置。
+  blocked_on: 处置只能由 Founder 做，且须按 disposition_record_contract 七字段具名
+  owner: FOUNDER_PRODUCT_AUTHORITY
+- id: OI-FIX-05
+  what: 交错写入期间是否有内容丢失，无法由判据证否。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  note: 供 R2 两侧复审留意；执行侧不宣称已排除。
+
+not_authorized_and_not_done:
+- {item: "合并 PR #3", done: false}
+- {item: 分发校准包, done: false}
+- {item: 任何隐藏批次含试产, done: false}
+- {item: 置 m2_frozen 为真, done: false}
+- {item: 置 founder_signature_eligible 为真, done: false}
+- {item: 置 downstream_consumption_allowed 为真, done: false}
+- {item: M3, done: false}
+- {item: M4, done: false}
+- {item: 知识蒸馏, done: false}
+- {item: production_servable, done: false}
+
+stop_point:
+  branch: candidate/m2
+  merged: false
+  main_untouched: true
+  what_happens_next: R2 窄范围 Delta——一次 Guardian ＋ 一次总顾问，两侧独立各出一次结论。
+  execution_side_must_not: [发起合并, 代填审查结论, 处置设计缺口, 解封任何被封项, 打标签]

@@ -189,7 +189,9 @@ def collect() -> dict:
         "forbidden_runtime_imports": forbidden,
         "declared_model_api_calls": first.get("model_api_calls"),
         "declared_network_access": first.get("network_access"),
-        "dry_run_executed": True,
+        # B-04-4：此前写死 True——骨架一个臂也没跑出来，这一位照样说「跑过了」。
+        # 现在由两次实跑各自是否产出结果对象推导。
+        "dry_run_executed": isinstance(first, dict) and isinstance(second, dict) and bool(first) and bool(second),
         "dry_run_digest_first": sha256_text(dump(first)),
         "dry_run_digest_second": sha256_text(dump(second)),
         "dry_run_arm_count": len(arms),

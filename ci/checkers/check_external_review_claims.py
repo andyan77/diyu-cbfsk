@@ -72,6 +72,51 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+# 本仓的评审员全是 AI；Founder 是人。谁是哪一类由规范源的 roles 现算，不写死。
+def _reviewer_kind(model: dict, role_id: str) -> tuple[bool, bool]:
+    for role in model["roles"]:
+        if role["role_id"] == role_id:
+            return role.get("human") is False, role.get("final_authority") is True
+    return False, False
+
+
+def _ai_review_claims() -> list[dict]:
+    """每一条已登记的审查结论，连同它被呈现成什么。
+
+    此前这里是 []——「把 AI 评审说成外部专家」是红线，而检查它的分支永远拿不到一条记录
+    （B-04-4）。现在两处审查登记现场读出：Guardian 报告登记册与并入前审查记录。
+    presented_as 缺省即 ai_review；哪天有人往记录里写 external_expert，这一分支当场触发。
+    """
+    model = load_yaml("governance/bootstrap/role_operating_model.v0.2.yaml")
+    claims: list[dict] = []
+
+    registry = load_yaml("governance/reports/guardian_report_registry.v0.1.yaml")
+    for row in registry.get("entries") or []:
+        is_ai, is_founder = _reviewer_kind(model, "CLAUDE_INDEPENDENT_GUARDIAN")
+        claims.append(
+            {
+                "claim_id": f"guardian_report_registry:{row.get('reviewed_commit')}",
+                "reviewer_is_ai": is_ai,
+                "reviewer_is_founder": is_founder,
+                "presented_as": row.get("presented_as", "ai_review"),
+            }
+        )
+
+    request = load_yaml("governance/reports/m2_premerge_review_request.v0.1.yaml")
+    for rnd in (request.get("review_rounds") or {}).get("items") or []:
+        for record in rnd.get("records") or []:
+            is_ai, is_founder = _reviewer_kind(model, record.get("reviewer_role"))
+            claims.append(
+                {
+                    "claim_id": f"{request['request_id']}:{rnd.get('round_id')}:{record.get('reviewer_role')}",
+                    "reviewer_is_ai": is_ai,
+                    "reviewer_is_founder": is_founder,
+                    "presented_as": record.get("presented_as", "ai_review"),
+                }
+            )
+    return claims
+
+
 def collect() -> dict:
     model = load_yaml("governance/bootstrap/role_operating_model.v0.2.yaml")
     review = model["review_mode"]
@@ -106,7 +151,7 @@ def collect() -> dict:
         },
         "domain_review_type": review["domain_review_type"],
         "legal_review_type": review["legal_review_type"],
-        "ai_review_claims": [],
+        "ai_review_claims": _ai_review_claims(),
     }
 
 

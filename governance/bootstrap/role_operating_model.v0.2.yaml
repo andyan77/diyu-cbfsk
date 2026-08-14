@@ -51,10 +51,39 @@ m2_suspension:
     state_flag_authorizations.execution_status.authorized_values 里，M2_SUSPENDED 不在其中。
     执行侧往签署件的授权枚举里加一个取值，等于自己给自己扩权——那是 Founder 动作。
     因此挂起走新字段 m2_status，execution_status 维持 M2_IN_PROGRESS（M2 仍是在飞的里程碑，只是被挂起）。
-  founder_may_migrate_execution_status: >-
-    若 Founder 要 execution_status 也迁到 M2_SUSPENDED，须在签署回执的 authorized_values 里具名补上该取值
-    并绑定完整 40 位签署基线 Commit；执行侧不得代做。
+  founder_ruled_on_execution_status:
+    ruling: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_8_oi_seal_01_ruling
+    decision: 枚举不扩展，M2_SUSPENDED 不加入。
+    reason_verbatim: >-
+      execution_status 答「哪个里程碑在飞」，m2_status 答「它现在什么状态」，
+      两者正交，混用会导致 M3 挂起时再加一个值。
+    instead: 新增派生字段 execution_permitted，由 execution_status 与各里程碑 status 计算得出。
+    superseded_prior_note: >-
+      此前本块写着「若 Founder 要迁移，须在签署回执的 authorized_values 里具名补上该取值」。
+      Founder 已裁定不迁移，该假设分支就此作废——留着会让人以为迁移仍是待办。
   disclosed_as_open_item: OI-SEAL-01
+  open_item_closure: NO_ENUM_MIGRATION_WITH_DERIVED_FIELD
+
+derived_state:
+  what_this_is: >-
+    由 project_state 计算得出的字段。它们不写在 project_state 里——写进去就成了可以手工赋值的状态位，
+    而手工赋值正是本块要消灭的东西。唯一实现在 ci/derived_state.py；
+    投影（CLAUDE.md／AGENTS.md／README 状态块）由 ci/compile_role_instructions.py 生成时现算。
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_8_oi_seal_01_ruling
+  single_implementation: ci/derived_state.py
+  guarded_by: ci/checkers/check_project_state.py DERIVED_FIELD_HAND_ASSIGNED / DERIVED_FIELD_MISCOMPUTED
+  fields:
+    - name: execution_permitted
+      type: boolean
+      inputs: [execution_status, m1_status, m2_status]
+      rule: >-
+        任一在飞里程碑被挂起（对应 *_status 为 SUSPENDED_BY_FOUNDER）即为 false；
+        execution_status 为 EXECUTION_NOT_STARTED 亦为 false；其余为 true。
+      hand_assignment_forbidden: true
+      why: >-
+        此前要判断「现在还能不能继续施工」，得同时记住 execution_status 是 M2_IN_PROGRESS、
+        再记住 m2_status 是 SUSPENDED_BY_FOUNDER、再记住后者压过前者。三条隐含优先级，
+        少记一条就会得出「在飞，可以继续」。消费者只读这一个字段即可。
 
 parallel_execution:
   authorization: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
@@ -122,6 +151,14 @@ review_mode:
       - founder_sample_review_rate
       - high_risk_founder_full_review_rate
   risk_tiered_review:
+    tiers:
+      - high
+      - medium
+      - low
+    tiers_note: >-
+      风险等级枚举的唯一定义处。evaluation_sampling_design 与 benchmark_capability_matrix 的
+      values_source 都指向本块——此前它们指过来却发现这里没有列举值，判据只好在 Python 里硬编码
+      ["high","medium","low"] 当尺子。尺子必须住在它被声称住的地方（B-04-4）。
     high_risk_topics:
       - 童装安全
       - 青少年身体与年龄适当性
@@ -275,6 +312,17 @@ roles:
       - 参与产品重新设计
       - 读取规划上下文
       - 编辑候选
+    evidence_discipline:
+      authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_11_guardian_permanent_discipline
+      permanence: 永久生效
+      items:
+        - 凡用作证据的机器字段，须先确认其由 collect() 现场推导，而非硬编码常量或自述值。
+        - 确认不了的，标为 unverified，不得计入通过证据。
+      recorded_instance: >-
+        本轮 unregistered_main_commits: [] 被作为合规证据引用，即为该纪律缺失的实例，记录在案。
+      plain: >-
+        一个字段写着 []，读起来像「查过了，没有」。但它可能是「根本没查」。
+        两者在报告里长得一模一样，只有翻开 collect() 才分得清——所以先翻，再引用。
   - role_id: CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
     display_name: Cowork 规划与核验工作面
     human: false
@@ -432,6 +480,35 @@ task_classification:
       - ChatGPT 总顾问远程审查
       - Founder 具体 Commit 批准
   current_task_class: L3
+
+role_availability:
+  what_this_is: >-
+    各角色当前是否可用，以及不可用时 Founder 选了哪一支。此前这张表写在
+    ci/checkers/check_task_classification.py 的 collect() 里当 Python 字面量——
+    判据自己造出自己要检查的事实，改一个字都不会有人发现（B-04-4）。
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_5_b04_mainline_guard_hardcoded
+  items:
+    - role_id: CODEX_EXECUTION_ENGINEER
+      available: false
+      founder_decision: APPOINT_ALTERNATE_ADVISOR
+      note: Founder 依 §11.3 指派 TEMPORARY_EXECUTION_WRITER 顶替写入工作面
+      review_completed_claimed: false
+      waiver_reason: null
+      risk_accepted_by: null
+      waiver_timestamp: null
+      state_source: governance/baseline/founder_pinned_baseline.v0.1.yaml continuation_execution
+    - role_id: GPT_CHIEF_ADVISOR
+      available: true
+      review_completed_claimed: false
+      note: 可用。本轮已出 BLOCK 结论（阻断 4），登记见 governance/reports/m2_premerge_review_request.v0.1.yaml。
+    - role_id: CLAUDE_INDEPENDENT_GUARDIAN
+      available: true
+      review_completed_claimed: false
+      note: 可用。本轮已出 APPROVE_WITH_CONDITIONS 结论（阻断 0、条件 1），同上登记处。
+  review_completed_claimed_rule: >-
+    本字段只答「有没有人在这份记录里声称审查已完成」，不答「审查结论是什么」。
+    结论落在审查记录里并由判据核验报告文件；这里一律维持 false，
+    否则等于用角色表给审查发通过证。
 
 role_unavailability_fallback:
   default_action: DEFER

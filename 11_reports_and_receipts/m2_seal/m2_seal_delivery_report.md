@@ -51,8 +51,10 @@ Founder 说可以回退。**我选择在它之上扩写，不回退**——
 ## 第一节 M2 挂起
 
 `m2_status` 置 `SUSPENDED_BY_FOUNDER`，已投影进 CLAUDE.md、AGENTS.md 与四份角色合同。
-M2 冻结门维持关闭。既有产物重写 0 处、
+M2 冻结门维持关闭。既有交付物重写 1 处
+（改的是记账值，交付语义未变——全量清单与分类见 `governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml`）、
 删除 0 处。
+本句原写「既有产物重写 0 处」，属 B-01 认定的失真绝对表述，已撤销更正。
 
 **有一处我没做，因为不该由我做**：`execution_status` 仍是 `M2_IN_PROGRESS`。它的合法取值枚举钉在**已签署**的
 Founder 回执里，`M2_SUSPENDED` 不在其中；执行侧往签署件的授权枚举里加一个取值，等于自己给自己扩权——
@@ -135,4 +137,4 @@ FF-ONLY、命令行执行、禁用页面三个按钮、合并后实测 `git rev-
 10 项一律 `done: false`：
 分发校准包、任何隐藏批次含试产、置 `m2_frozen`／`founder_signature_eligible`／`downstream_consumption_allowed` 为真、
 M3、M4、知识蒸馏、`production_servable`、在本裁决之外向 main 提交任何功能性内容。
-六位状态旗维持 `false`，`main` 一个字节未动。
+7 位红线旗维持 `false`，`main` 一个字节未动（本句原写「六位」，漏计一位，已按裁决第十二节更正）。

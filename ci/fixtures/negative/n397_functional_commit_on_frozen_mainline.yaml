@@ -169,5 +169,7 @@ payload:
   tag_applied: false
   frozen_observation_entered: true
   unregistered_main_commits:
-  - '1111111111111111111111111111111111111111'
+  - commit: '1111111111111111111111111111111111111111'
+    forbidden_paths:
+    - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
   pr_merged: false

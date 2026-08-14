@@ -83,32 +83,70 @@ entries:
   guardian_decision: NOT_YET_REVIEWED
   advisor_decision: NOT_YET_REVIEWED
 - execution_package: M2-SEAL
-  candidate_commit: RESOLVED_AT_REPORT_TIME
-  candidate_commit_resolution_rule: >-
-    本包自己的候选 Commit 在提交那一刻才产生，写不进被提交的内容。
-    值由 `git rev-parse HEAD`（candidate/m2，本包提交后）取出，随交付报告一并补报——
-    裁决第三节明文要求执行侧报出该哈希，它同时是本轮并入前审查的对象。
+  candidate_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+  candidate_commit_backfilled: true
+  candidate_commit_backfill_note: >-
+    该提交提交时此处写作 RESOLVED_AT_REPORT_TIME（自引用限制）。它已成为过去，
+    此处按裁决 B-02-2 回填为确定哈希——回填由 git 可复算，不是新的声称。
   parent_commit: f71617eee44a6008d8180fe81aeea901efc54816
   carried: M2 挂起裁定、七项结扎、包哈希封存清单、三条设计缺口登记、并入前审查转达件、合并与主线封存协议
+  status: SUPERSEDED_BY_LATER_PACKAGE
+  is_premerge_review_target: true
+  premerge_review_round: R1
+  guardian_decision: APPROVE_WITH_CONDITIONS
+  guardian_blocking_count: 0
+  guardian_conditions: [COND-GUARD-M2-01]
+  advisor_decision: BLOCK
+  advisor_blocking_count: 4
+  advisor_blocking_findings: [B-01, B-02, B-03, B-04]
+  decisions_recorded_in: governance/reports/m2_premerge_review_request.v0.1.yaml review_rounds.items[0]
+  founder_decision: DO_NOT_MERGE_AS_IS
+  founder_decision_ref: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_1_merge_decision
+- execution_package: M2-PREMERGE-FIX
+  candidate_commit: null
+  candidate_commit_binding: derived_from_git_head
+  candidate_commit_binding_note: >-
+    本包自己的候选 Commit 在提交那一刻才产生，写不进被提交的内容。
+    此处**不写占位串**（B-02-1 禁用 RESOLVED_AT_REPORT_TIME 之类）：留 null 并声明推导方式，
+    由判据现算 `git rev-parse HEAD` 得到，并在下一包按同一方式回填为确定哈希。
+  parent_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+  carried: 并入前审查结论落盘、B-01~B-04 定点修复、COND-GUARD-M2-01、NB-1、OI-SEAL-01 关闭、硬编码事实源全仓横扫
   status: CURRENT_CANDIDATE
   is_premerge_review_target: true
+  premerge_review_round: R2
   guardian_decision: NOT_YET_REVIEWED
   advisor_decision: NOT_YET_REVIEWED
 
 binding_consumers:
   purpose: 「此后一切绑定、复审对象与 TG-05 均以该哈希为准」——这里写清各自绑到哪一条。
+  correction_by_b02_2:
+    authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_3_b02_two_definitions_of_review_target B-02-2
+    verbatim: "删除或更正 binding_consumers 中「审查对象尚未产生 / resolvable_now: false」的旧说明"
+    what_was_stale: >-
+      「本轮 Guardian / 总顾问 Delta 复审对象……对象尚未产生」写于分发前五步闸口径下，
+      那时复审排在第 4 步。挂起裁决第三节把审查对象改为「结扎落盘后形成的最终候选」，
+      对象随 9b60bda 产生并已被审过一轮。旧说明留着，会让读者以为审查至今启动不了。
   items:
   - consumer: TG-05 公开蓝图确认的冻结 Commit
-    binds_to: 第 3 步产出的最终分发前候选
+    binds_to: 恢复序列第 3 步产出的最终分发前候选
     resolvable_now: false
     why_not_now: >-
       TG-05 要求 Founder 在一个指定冻结 Commit 上确认公开蓝图无需修改。
-      该 Commit 是第 3 步（落盘 founder_confirmation ＋ STORE-A intake）之后的那一个，现在尚不存在。
-      钉在 EP06 头上会让 Founder 在一份还会再改一次的候选上签字。
-  - consumer: 本轮 Guardian / 总顾问 Delta 复审对象
-    binds_to: 第 3 步产出的最终分发前候选
-    resolvable_now: false
-    why_not_now: 第 4 步排在第 2、3 步之后；对象尚未产生。
+      该 Commit 在恢复序列第 3 步（落盘 founder_confirmation ＋ STORE-A intake）之后产生，
+      而恢复序列尚未启动——M2 处于挂起。这一条**仍然**未解析，且理由与从前不同：
+      不是「排在后面」，是「整条序列被挂起」。
+    blocked_by: M2 挂起（m2_status = SUSPENDED_BY_FOUNDER）
+  - consumer: 并入前审查 R1 的对象
+    binds_to: 9b60bda06f372467243de36982c16d4bd6afea8d
+    resolvable_now: true
+    resolved_note: R1 已结束，两侧结论已登记。
+  - consumer: 并入前审查 R2（窄范围 Delta）的对象
+    binds_to: 本包候选（M2-PREMERGE-FIX）
+    resolvable_now: true
+    resolution: derived_from_git_head
+    resolution_note: >-
+      对象已经产生——就是承载本次修复的那个提交。它写不进自己，因此由 `git rev-parse HEAD` 现算，
+      不写占位串。这是「已产生但写不进自己」，与从前的「尚未产生」不是同一件事。
   - consumer: 血统基线（bloodline_base_commit）
     binds_to: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
     resolvable_now: true

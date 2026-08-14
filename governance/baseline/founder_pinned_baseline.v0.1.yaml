@@ -135,7 +135,7 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 8e9ed9527e13ba42fd38737019e03eeaaffea6579d1b539c209c0431fa3b6a42
+    post_change_binary_sha256: c7dac5287843e3786a3c62f370f3923703398bd1bdeef5a2a9a68a83818a66b8
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
@@ -154,11 +154,36 @@ active_baseline_candidates:
       backfilled_in_package: M2-EP04
       guarded_by: ci/checkers/check_sequential_registration.py LANDED_COMMIT_BLOB_MISMATCH
     authorized_modification_history:
+      - change_id: README-MOD-17
+        authorization_ref: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_6_cond_guard_m2_01（Guardian 条件 COND-GUARD-M2-01）
+        binary_sha256: c7dac5287843e3786a3c62f370f3923703398bd1bdeef5a2a9a68a83818a66b8
+        landed_in_commit: null
+        self_referential: true
+        self_reference_limitation: >-
+          本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
+          landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，
+          且要求必须声明本字段（SELF_REFERENCE_UNDECLARED）。收口后可由 Founder 回填。
+        content: >-
+          抬头由「M2 BLOCK（交付未闭环，收口修复中）」改为如实表述——已由 Founder 主动挂起、
+          既非通过亦非失败、等待三项 Founder 动作、执行侧不得自行推进；状态块补 m2_status
+          与派生位 execution_permitted；第 151 行「校准评审启动包已可独立分发」改写为
+          「已具备独立分发所需的结构，但分发是当前明令禁止的动作」并列出三项禁止依据；
+          Checker 计数 46→49 并接上现役门禁册双向比对。
+        linked_registration_note: >-
+          依 OI-06 口径，「允许更新 README」自动包含本仓机制强制要求的联动登记项
+          （本条目 + post_change_binary_sha256），无需逐次裁决，但须在交付报告列明联动项。
+        newly_guarded_by: >-
+          本轮起 README 状态块纳入漂移守卫（check_project_state README_STATE_BLOCK_DRIFT）——
+          此前 README 与规范源不一致只能靠人读出来，COND-GUARD-M2-01 正是这么被发现的。
       - change_id: README-MOD-16
         authorization_ref: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 allowed_updates（状态真源及其机械投影）
         binary_sha256: 8e9ed9527e13ba42fd38737019e03eeaaffea6579d1b539c209c0431fa3b6a42
-        landed_in_commit: null
-        self_referential: true
+        landed_in_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+        landed_in_commit_backfilled_at_package: M2-PREMERGE-FIX
+        landed_in_commit_backfill_evidence: >-
+          git show 61be9b47bd3f4c74c9db102df577c5cf6aa334d2:README.md | sha256 == binary_sha256，实测相等。
+          回填由 git 可复算，不是新的声称。
+        self_referential: false
         self_reference_limitation: >-
           本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
           landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，

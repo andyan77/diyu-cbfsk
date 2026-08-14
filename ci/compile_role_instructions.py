@@ -16,6 +16,9 @@ from pathlib import Path
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from derived_state import derived_fields  # noqa: E402  单一实现，投影不自己再算一遍
+
 ROOT = Path(__file__).resolve().parent.parent
 CANONICAL = ROOT / "governance" / "bootstrap" / "role_operating_model.v0.2.yaml"
 
@@ -70,9 +73,15 @@ def yes_no(value) -> str:
     return str(value)
 
 
+def _state_line(key, value) -> str:
+    return f"{key}: {str(value).lower() if isinstance(value, bool) else value}"
+
+
 def state_block(model: dict) -> str:
+    """状态块 = 登记位 + 派生位。派生位现算，规范源里没有它们，因此没法被手填。"""
     state = model["project_state"]
-    lines = [f"{key}: {str(value).lower() if isinstance(value, bool) else value}" for key, value in state.items()]
+    lines = [_state_line(key, value) for key, value in state.items()]
+    lines += [_state_line(key, value) for key, value in derived_fields(state).items()]
     return "```yaml\n" + "\n".join(lines) + "\n```"
 
 
@@ -120,6 +129,20 @@ def render_role_doc(model: dict, role_id: str) -> str:
         parts += ["", "## 禁止", "", bullets(role["forbidden"])]
     if role.get("notes"):
         parts += ["", "## 说明", "", bullets(role["notes"])]
+    discipline = role.get("evidence_discipline")
+    if discipline:
+        parts += [
+            "",
+            f"## 证据纪律（{discipline['permanence']}）",
+            "",
+            f"依据 `{discipline['authority']}`。",
+            "",
+            bullets(discipline["items"]),
+            "",
+            f"记录在案的实例：{discipline['recorded_instance']}",
+            "",
+            f"大白话：{discipline['plain']}",
+        ]
     if role.get("downstream_flow"):
         parts += ["", "## 下游流向", "", f"`{role['downstream_flow']}`"]
     if role.get("vote_scope_note"):

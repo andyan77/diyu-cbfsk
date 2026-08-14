@@ -12,7 +12,12 @@ delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
 base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 branch: candidate/m2
 authority: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001
-describes_current_state: true
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml
+superseded_why: >-
+  本回执描述的是 9b60bda 的结束状态。并入前审查在该提交上给出 DO_NOT_MERGE_AS_IS，
+  M2-PREMERGE-FIX 据此定点修复并形成新候选；当前态改由该包回执承载。
+  本件作为历史证据保留，不删除、不改写（除按 B-01-1 更正两处失真计数外）。
 self_reference_limitation: 本回执随本包内容同处一个提交，无法记录自身所在的候选 Commit——写进来就会改变文件内容，从而改变那个哈希。
 candidate_commit_binding:
   value: null
@@ -97,8 +102,17 @@ article_landing:
       measurement:
         m2_status: SUSPENDED_BY_FOUNDER
         freeze_gate_open: false
-        artifacts_rewritten: 0
+        artifacts_rewritten: 1
         artifacts_deleted: 0
+        artifacts_rewritten_retracted_value: 0
+        artifacts_rewritten_correction: >-
+          本值原写 0，失真。自交付态冻结点 a4be75e 起，
+          03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+          的字节确实被改过（scan_coverage_record 记账值）。改的是记账，不是语义——
+          但「0 处」这句话本身不成立。
+        delivery_semantics_changed: false
+        corrected_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_2_b01_zero_byte_claim_false B-01-1
+        full_list: governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml
     A2:
       title: 未落盘部分结扎
       landed:
@@ -152,7 +166,21 @@ article_landing:
       landed: [governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001.yaml]
       measurement:
         not_authorized_count: 10
-        state_flags_held_false: 6
+        state_flags_held_false: 7
+        state_flags_held_false_retracted_value: 6
+        state_flags_held_false_correction: >-
+          本值原写 6，漏计。裁决 DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 第十二节把口径钉死为七位并逐条列出：
+          m2_frozen／founder_signature_eligible／downstream_consumption_allowed／
+          m3_started／m4_started／knowledge_distillation_started／production_servable。
+        state_flags_held_false_items:
+        - m2_frozen
+        - founder_signature_eligible
+        - downstream_consumption_allowed
+        - m3_started
+        - m4_started
+        - knowledge_distillation_started
+        - production_servable
+        corrected_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_12_unchanged
 
 structural_fixes_beyond_the_ruling:
 - id: SF-SEAL-01

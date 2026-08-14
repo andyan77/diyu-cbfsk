@@ -1,0 +1,109 @@
+schema_version: '0.1'
+ledger_id: DIYU-CBFSK-SCAN-COVERAGE-MEASUREMENT-LEDGER
+artifact_id: scan_coverage_measurement_ledger.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_2_b01_zero_byte_claim_false B-01-4
+established_at_package: M2-PREMERGE-FIX
+measures: 身份能力隔离扫描（ci/checkers/check_m2_identity_isolation.py）的覆盖面
+enforced_by: ci/checkers/check_m2_identity_isolation.py
+
+why_this_file_exists:
+  finding: B-01-4
+  verbatim: >-
+    将 scan_coverage_record.current 从产品合同移出，另立治理测量台账。
+    冻结合同不得随仓库新增文件而必须改数字——那不是合同，是伪装成合同的实时仪表盘
+  what_went_wrong: >-
+    覆盖面数字原先住在 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+    的 scan_coverage_record.current 里。那份文件是**冻结的产品合同**：它规定「哪五项能力永不建设、
+    扫描扫什么面、不扫什么面」。而覆盖面数字每加一个文件就要改一次——本包施工期间它从 790 一路往上走。
+    结果是每次施工都得改一次冻结合同，改的还是与合同语义完全无关的一个计数。
+  the_distinction: >-
+    合同说的是「规则是什么」，台账记的是「上次量出来多少」。前者变了要走治理流程，后者变了是正常的。
+    把后者塞进前者，等于让每一次例行测量都表现为一次合同修订——久而久之，真正的合同修订就淹没在噪音里。
+  what_stayed_in_the_contract: 规则本身、扫什么面不扫什么面、以及一个指向本册的指针。
+
+rule:
+  statement: 覆盖面数字一律是记录值，不是文中随手写的数。
+  current_value_rule: 当前值由判据 collect() 现算比对；台账里的 declared 与现算不等即 SCAN_COVERAGE_COUNT_MISSTATED。
+  history_rule: 历史值绑定它被测出来的那个完整 40 位提交，且必须标 evidence_level=runtime_verified。
+  who_may_change: 执行侧可随施工更新本册 current；合同本身的修订仍是治理动作。
+
+current:
+  scanned_file_count: 824
+  measured_at_package: M2-PREMERGE-FIX
+  measured_at_commit: null
+  measured_at_commit_note: >-
+    封条提交的哈希写不进它自己包含的文件（自引用）。本值实测于提交前的工作区，
+    与该提交的内容一致；复算用 `python3 ci/checkers/check_m2_identity_isolation.py`。
+  evidence_level: runtime_verified
+  method: check_m2_identity_isolation.collect() 的 scanned_file_count
+
+two_readings_discrepancy:
+  finding: B-01-3
+  verbatim_requirement: >-
+    两个审查方对同一字段实测值不同（Guardian 757、总顾问 790）——执行侧须现场复算并如实登记实测值，
+    同时记录「两方读数不同」这一事实及其成因（很可能是两方读的提交不同）
+  readings:
+  - reader: CLAUDE_INDEPENDENT_GUARDIAN
+    value: 757
+    matches_commit: f71617eee44a6008d8180fe81aeea901efc54816
+    package: M2-SEAL（doc-only 封条那一版）
+  - reader: CHATGPT_CHIEF_ADVISOR
+    value: 790
+    matches_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+    package: M2-SEAL
+  cause: 两方读的不是同一个提交。
+  cause_evidence_level: runtime_verified
+  cause_method: >-
+    本册 history 里 757 与 790 各自绑定的提交都可复算：
+    `git show f71617e:03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml`
+    给出 757，`git show 9b60bda:...` 给出 790。两个数字各自对它所属的提交都是对的。
+  neither_reading_was_wrong: true
+  what_was_wrong: >-
+    错的不是任一方的读数，是这个字段**住错了地方**。它住在一份被当作「冻结合同」引用的文件里，
+    于是两个审查方各自在不同时点打开同一个「冻结」文件，读到了不同的数——
+    而「冻结」这个词让双方都没想到需要先对齐提交。
+  structural_fix: 本册即结构性修复：数字搬进治理测量台账，每一条都绑定它被测出来的提交。
+
+history:
+- measured_at_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+  package: M2-SEAL
+  scanned_file_count: 790
+  evidence_level: runtime_verified
+  method: check_m2_identity_isolation.collect() 的 scanned_file_count
+  note: >-
+    总顾问读到的就是这个值。M2-SEAL 按挂起裁决第二节补齐七项结扎——挂起裁决、包哈希封存清单、
+    缺口登记、转达件、合并协议、新判据与 26 份夹具、回执与模板报告——扫描面由 757 增至 790。
+- measured_at_commit: f71617eee44a6008d8180fe81aeea901efc54816
+  package: M2-SEAL（doc-only 封条那一版）
+  scanned_file_count: 757
+  evidence_level: runtime_verified
+  method: check_m2_identity_isolation.collect() 的 scanned_file_count
+  note: >-
+    Guardian 读到的就是这个值。另一执行窗口的 doc-only 封口台账使扫描面由 756 增至 757。
+- measured_at_commit: a4be75e5ee723fe552a293d40632405711920554
+  package: M2-EP06
+  scanned_file_count: 756
+  evidence_level: runtime_verified
+  method: check_m2_identity_isolation.collect() 的 scanned_file_count
+  note: >-
+    EP06 交付态的实测值。封存提交新增 governance/conditions/m2_seal_ledger.v0.1.yaml 一份文件，
+    扫描面 756 → 757；增量为 1，与新增文件数一致，不是漏扫或多扫。
+- measured_at_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+  package: M2-EP05-CORRECTION
+  scanned_file_count: 714
+  evidence_level: runtime_verified
+  method: check_m2_identity_isolation.collect() 的 scanned_file_count
+  note: EP05-CORRECTION 交付态的实测值；EP06 新增审阅队列、序列与工作表合同、候选 Commit 台账与 34 份夹具后扫描面自然增大。
+- measured_at_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+  package: M2-EP05
+  scanned_file_count: 664
+  evidence_level: runtime_verified
+  method: check_m2_identity_isolation.collect() 的 scanned_file_count
+  note: EP05 交付态的实测值；EP05-CORRECTION 新增候选输出、锚点真源、评分锚点与 40 份夹具后扫描面自然增大。
+
+failure_states:
+- SCAN_COVERAGE_COUNT_MISSTATED
+- SCAN_COVERAGE_RECORD_MISSING
+- SCAN_COVERAGE_HISTORY_UNBOUND
+- SCAN_COVERAGE_HISTORY_UNMEASURED

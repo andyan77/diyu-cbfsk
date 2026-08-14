@@ -1,0 +1,79 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-M2-PREMERGE-FIX-001
+covers_milestone: M2
+covers_packages: [M2-PREMERGE-FIX]
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+created_by_finding: NB-M2-05
+
+scope_note: >-
+  按里程碑维护的工作面见证分册。判据自动发现本目录下全部见证文件，
+  新增一个执行包＝加一份文件，不改 checker。
+
+records:
+  - workspace_id: diyu-cbfsk-m2-repair
+    workspace_path: /home/faye/diyu-cbfsk-m2
+    conversation_or_session_id: null
+    session_id_available: false
+    session_id_unavailable_reason: >-
+      本执行面无法读取自身会话标识；执行侧不得代为构造一个标识填进去。
+    session_started_at: "2026-08-14T11:45:00-07:00"
+    base_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: PREMERGE_REVIEW_CONCLUSION_LANDING_AND_TARGETED_PATCH
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001（第二至第十一节定点修复）
+    founder_manual_attestation_required: true
+
+concurrent_window_incident:
+  what_happened: >-
+    本裁决同时被发到两个执行窗口，两者在同一 worktree 上交错写入约十三分钟。
+    本窗口写入区间 11:48–11:52，另一窗口 11:52–12:01。
+  how_it_surfaced: >-
+    本窗口一次 `assert s.count(old) == 1` 当场失败——目标文件在读取与写入之间被改过。
+    这不是手滑，是丢更新的现场。
+  hard_evidence:
+  - ci/checkers/check_project_state.py（非本窗口所写）import 了本窗口 11:49:12 才创建的 ci/derived_state.py，函数名一字不差
+  - 两窗口各自独立分配了同一个裁决编号 DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001，全仓 32 处引用
+  - 另一窗口新建 governance/gates/scan_coverage_measurement_ledger.v0.1.yaml 与 artifact_change_since_delivery_freeze.v0.1.yaml
+  - 发现时仓库为红：30+ 判据失败、2 份夹具失败、2 处 collect() 崩溃；两边都提交不了
+  action_taken: 停止写入并向 Founder 报告，未在未澄清归属前继续。
+  founder_decision: 关闭另一执行窗口，由本窗口接管收口。
+  handling: >-
+    保留另一窗口全部已落产物并在其上继续——复核属实且与本窗口设计一致，无需重做。
+    与上一轮 f71617e 的处理口径相同：不重写、不回退、不删除。
+  two_windows_same_worktree: true
+  risk_acknowledged: >-
+    交错写入期间可能发生过未被察觉的丢更新。本包全量自检通过，但自检通过不等于
+    「没有内容在交错中丢失」——`git` 只看得见最后一次写入。该风险如实记录为 OI-FIX-05，
+    执行侧不宣称已排除，供 R2 两侧复审留意。
+  precedent_note: >-
+    这是同一 worktree 并发写入第二次造成问题（第一次是 f71617e）。
+    根因不在任一窗口，在派发：同一份裁决被发到两个执行面。
+
+guardian_record_absent:
+  reason: 本执行包（M2-PREMERGE-FIX）的 Guardian 审查尚未进行——这是尚未发生的事件，不是待填字段。
+  round_2_commissioned: true
+  round_2_note: >-
+    裁决第十节委托了一次窄范围 Delta，对象是本包提交后形成的候选（由 git rev-parse HEAD 现算）。
+    转达件已备好（governance/reports/m2_premerge_review_request.md），结论未回；执行侧不得代填结论。
+  must_not_be_read_as: 本包已通过 Guardian 审查
+
+round_1_guardian_workspace_not_attested:
+  fact: >-
+    R1 那一轮 Guardian 在独立工作区完成审查，但该工作区的见证记录未交到执行侧：
+    本目录下没有 role=CLAUDE_INDEPENDENT_GUARDIAN 且 base_commit=9b60bda 的条目。
+  consequence: >-
+    依裁决第十一节纪律，确认不了的标 unverified，不得计入通过证据。
+    该记录已置 counts_as_independent_verification=false，并由 check_m2_suspension_seal
+    的 GUARDIAN_WORKSPACE_UNATTESTED 现场比对自述与实测，不一致即失败。
+  open_item: OI-FIX-03
+
+founder_workspace_attestation:
+  status: NOT_YET_ATTESTED
+  attested_by: null
+  attested_at: null
+  note: 见证由 Founder 手工补签；执行侧不得代填。

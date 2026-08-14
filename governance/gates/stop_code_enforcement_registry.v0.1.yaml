@@ -59,8 +59,8 @@ retired_codes:
   replacement_naming_rule: 替代码不得含错误编号；边界由 PRD v1.2 正文分层视觉推断条款现场解析。
   must_not_appear_at_any_stop_site: true
 counts:
-  total_codes: 165
-  machine_checked: 74
+  total_codes: 168
+  machine_checked: 77
   human_judgement: 36
   future_runtime: 55
 scan_scope:
@@ -92,6 +92,12 @@ entries:
   enforcement: future_runtime
   detectors: []
   detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE
+  sites:
+  - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: AGE_CONTEXT_INSUFFICIENT
   sites:
   - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml#failure_state
@@ -376,6 +382,12 @@ entries:
   enforcement: human_judgement
   detectors: []
   judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: DELIVERY_ARTIFACT_SEMANTICS_CHANGED
+  sites:
+  - governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: DEPENDENCY_VIOLATED
   sites:
   - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
@@ -912,6 +924,12 @@ entries:
   enforcement: machine_checked
   detectors:
   - check_m2_predistribution_sequence
+- code: REVIEW_TARGET_MISMATCH
+  sites:
+  - governance/reports/m2_premerge_review_request.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
 - code: ROLE_SILENTLY_BYPASSED
   sites:
   - 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml#failure_state

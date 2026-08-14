@@ -32,6 +32,37 @@ disposition_authority:
     三条缺口的每个分支都改变题目考什么。执行侧替 Founder 选一支，等于自己改自己出的题，
     再拿改过的题去测评审员——测出来的一致率没有指涉对象。
 
+disposition_record_contract:
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_4_b03_self_reported_fields_forgeable B-03-2
+  what_was_wrong: >-
+    处置记录此前只有 disposition_status / disposed_by / disposed_at_commit 三个字段。
+    执行侧写上 disposed_by: FOUNDER_PRODUCT_AUTHORITY 加一个真实存在的提交哈希，判据就放行——
+    「谁处置的」是自述的，「依据哪一条」根本没问。
+  required_fields:
+  - ruling_ref
+  - ruling_file
+  - clause_path
+  - signature_base_commit
+  - chosen_branch_id
+  - affected_item
+  - authorized_new_value
+  checker_duty_verbatim: >-
+    判据除核验条款存在外，还须核验条款内容点名：该缺口 ID 或封存项 ID ＋ 所选分支或新值 ＋ 生效 Commit
+  general_rule:
+    permanence: 永久生效
+    verbatim: >-
+      「有一份 Founder 裁决」不等于「这份裁决授权了眼前这件事」。
+      凡引用裁决作为授权依据者，须证明该条款点名了本次动作
+    plain: >-
+      指得出一份裁决文件、那份文件里也确实有这么一条——这两件事都成立，
+      仍然不等于那一条说的是眼前这件事。判据现在要在条款正文里找到缺口 ID、
+      找到被选中的分支、找到生效提交；找不到就是没授权。
+  failure_states:
+  - DISPOSITION_RECORD_FIELD_MISSING
+  - DISPOSITION_RULING_DOES_NOT_NAME_ITEM
+  - DISPOSITION_RULING_DOES_NOT_NAME_BRANCH
+  - DISPOSITION_RULING_DOES_NOT_NAME_COMMIT
+
 gap_count: 3
 gaps:
 - id: GAP-SQ-01
@@ -70,6 +101,8 @@ gaps:
   disposition_status: NOT_STARTED
   disposed_by: null
   disposed_at_commit: null
+  disposition_record: null
+  disposition_record_note: 未处置时本字段为 null；处置时必须按 disposition_record_contract.required_fields 逐项填齐。
 
 - id: GAP-SQ-02
   affects: [CAL-072]
@@ -92,6 +125,8 @@ gaps:
   disposition_status: NOT_STARTED
   disposed_by: null
   disposed_at_commit: null
+  disposition_record: null
+  disposition_record_note: 未处置时本字段为 null；处置时必须按 disposition_record_contract.required_fields 逐项填齐。
 
 - id: GAP-CRITERION-A
   affects: []
@@ -116,8 +151,11 @@ gaps:
   disposition_status: NOT_STARTED
   disposed_by: null
   disposed_at_commit: null
+  disposition_record: null
+  disposition_record_note: 未处置时本字段为 null；处置时必须按 disposition_record_contract.required_fields 逐项填齐。
 
 machine_checkable_fields:
+  disposition_record_required_field_count: 7
   gap_count: 3
   gaps_disposed: 0
   affected_review_units: 5
@@ -130,3 +168,7 @@ failure_states:
 - DESIGN_GAP_COUNT_MISSTATED
 - DESIGN_GAP_AFFECTS_UNRESOLVED
 - DESIGN_GAP_INTENT_CLAIMED_AS_FOUNDER_TRUTH
+- DISPOSITION_RECORD_FIELD_MISSING
+- DISPOSITION_RULING_DOES_NOT_NAME_ITEM
+- DISPOSITION_RULING_DOES_NOT_NAME_BRANCH
+- DISPOSITION_RULING_DOES_NOT_NAME_COMMIT

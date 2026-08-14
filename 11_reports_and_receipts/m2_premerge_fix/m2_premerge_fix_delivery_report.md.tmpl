@@ -1,0 +1,140 @@
+# M2-PREMERGE-FIX 交付报告 · 并入前审查结论落盘与定点修复
+
+> 机器记录：`11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml`
+> 裁决依据：`DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001`（十二节）
+> 本报告的计数数字一律由模板引用回执字段，生成时现读；判据重渲染后逐字节比对。
+
+## 一句话
+
+上一份候选 `9b60bda06f372467243de36982c16d4bd6afea8d` 自检全绿，仍被查出
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A1.measurement.advisor_blocking_count}} 项阻断。
+本包按裁决逐项修复，未回退任何东西，`main` 一个字节未动。
+
+## 两份结论怎么读
+
+| 侧 | 结论 | 阻断 | 条件 |
+|---|---|---|---|
+| Guardian | `APPROVE_WITH_CONDITIONS` | {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A1.measurement.guardian_blocking_count}} | {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A1.measurement.guardian_condition_count}}（COND-GUARD-M2-01）|
+| 总顾问 | `BLOCK` | {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A1.measurement.advisor_blocking_count}} | — |
+
+两者不冲突——各自覆盖了对方未查的对象。合并计四问答案为「会」，Founder 裁定 `DO_NOT_MERGE_AS_IS`、
+不回退、定点修复。两份结论作为历史证据保留，不删除、不改写。
+
+## B-01 交付物改动声明失真
+
+撤销了 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A2.measurement.absolute_claims_retracted}} 处该类绝对表述，换成可复算的分类：
+
+- `delivery_semantics_changed_since_a4be75e`：**false**
+- `existing_m2_files_byte_changed_since_a4be75e`：**true**
+- 被改的交付物：{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A2.measurement.changed_delivery_artifacts}} 份，逐条写明改的是什么、为什么不是语义变更
+
+绝对量词只要有一个反例就整句失效。执行侧当时想说的是「交付语义没变」——那句是对的；
+写出来的却是一句绝对量词（原话不在本报告复述），那句是错的。审查方按写出来的那句去核，
+核出不符，整份声明的可信度一起塌。
+
+**两方读数不同已对账**：Guardian 读 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A2.measurement.guardian_reading}}、总顾问读 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A2.measurement.advisor_reading}}。
+两个数字各自都对——读的是不同提交。扫描面计数已整体移出冻结合同，另立治理测量台账：
+冻结合同不该随仓库新增文件而必须改数字，那不是合同，是伪装成合同的实时仪表盘。
+
+## B-02 审查对象两套定义
+
+`review_target.commit` 回填为真实对象 `9b60bda06f372467243de36982c16d4bd6afea8d`。
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A3.measurement.placeholder_strings_banned}} 类占位串（`RESOLVED_AT_REPORT_TIME`、`PENDING` 等）一律拒收。
+
+原缺陷不是抄错：文件里写着「待定」，而判据 `REVIEW_TARGET_HASH_NOT_FULL_40` 核的是另一个字段
+（`delivery_state_frozen_at`），**且核得通过**。名实不符的判据比没有判据更坏——它让人以为这件事已经被守住了。
+
+写不进自己的哈希改为**留空 ＋ 声明推导方式**，由 `git rev-parse HEAD` 现算。
+留空是「这里没有值，去问 git」；占位是「这里有个值，只是还没算」——后者会骗人。
+
+## B-03 自述字段可伪造
+
+审查记录必须带 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A4.measurement.review_record_required_fields}} 个字段，
+处置与解封记录必须带 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A4.measurement.authorization_record_required_fields}} 个。
+判据读真实报告文件、现算 sha256，并核对报告正文确实点名了该角色、该提交、该结论。
+
+**通则（永久生效）**：有一份 Founder 裁决 ≠ 那份裁决授权了眼前这件事。
+判据现在要在条款正文里找到缺口 ID、找到被选中的分支、找到生效提交；找不到就是没授权。
+
+**两处如实标为未核实**：R1 两侧报告原文均未交到执行侧，仓内证据是 Founder 裁决的转录；
+Guardian 隔离工作区见证亦未登记。两条记录都置 `counts_as_independent_verification: false`。
+
+## B-04 守卫硬编码空结果
+
+`unregistered_main_commits: []` 是一个写死的空列表，于是「主线上有没有未登记提交」这条判据永远回答「没有」——
+而它当时被引用为合规证据。合并是否发生、标签是否已打、主线提交清单，现在一律由 git 现算。
+
+全仓横扫同类，找到 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A5.measurement.hardcoded_sites_found}} 处，
+整改 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A5.measurement.hardcoded_sites_repaired}} 处，
+剩余 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A5.measurement.hardcoded_sites_remaining}} 处，
+以「尺子」名义留下的 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A5.measurement.registered_as_expectation_constants}} 处。
+
+**横扫是一次性的，通则是永久的**：新增判据 `check_collect_derivation_discipline` 用 AST 解析每个 checker 的
+`collect()`，凡赋一次字面量之后再没被碰过的字段一律拦下。累加器（`hits = []` 后面 append）不算——
+那是派生，字面量只是初值。
+
+## COND-GUARD-M2-01（Guardian 条件）
+
+README 抬头由「M2 `BLOCK`（交付未闭环，收口修复中）」改为如实表述；状态块补 `m2_status` 与派生位；
+第 151 行「已可独立分发」改写为「已具备独立分发所需的结构，但分发是当前明令禁止的动作」。
+
+**新增判据**：README 状态块与规范源 `project_state` 现场比对。此前 README 与规范源不一致只能靠人读出来——
+COND-GUARD-M2-01 正是这么被发现的。
+
+## OI-SEAL-01 关闭
+
+`execution_status` 枚举**不扩展**。改加派生字段 `execution_permitted`，当前值
+`{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A8.measurement.derived_field_value_now}}`，
+唯一实现在 `ci/derived_state.py`，投影生成时现算。规范源里没有这个键，因此没法被手填；手填即 FAIL。
+
+此前要判断「现在还能不能继续施工」，得同时记住三条隐含优先级，少记一条就会得出「在飞，可以继续」。
+
+## 自检
+
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.gates_passed}}／{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.live_gates}} 判据通过，
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.predicate_fixtures_behaved_as_declared}}／{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.predicate_fixtures}} 判据层夹具、
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.schema_fixtures_behaved_as_declared}}／{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.schema_fixtures}} 结构层夹具如声明行为，
+退出码 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.exit_code}}。
+
+错误码声明 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.declared_error_codes}} 条，
+有负例行使 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.covered_error_codes}} 条，
+挂账 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.uncovered_error_codes}} 条（上限
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.uncovered_cap}} 未动），
+新增判据欠账 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#self_check.new_checker_debt}}。
+
+**全绿不是审查。** 上一轮候选同样全绿，仍被查出四项阻断。
+
+## 并发窗口
+
+本裁决同时被发到两个执行窗口，两者在同一 worktree 上交错写入约十三分钟。
+发现方式是一次 `assert` 当场失败——文件在读取与写入之间被改过。执行侧停手报告，
+Founder 关闭另一窗口后由本窗口接管；另一窗口已落产物全部保留并在其上继续。
+
+**风险如实记录（OI-FIX-05）**：交错期间是否有内容丢失，判据证否不了。`git` 只看得见最后一次写入。
+
+## 未决项
+
+| 编号 | 事项 | 归属 |
+|---|---|---|
+| OI-FIX-01 | 四处全等中「实际 head」的读法由执行侧裁定——已结束轮次核 ancestry，待审轮次核现算 head；裁决原文写「全等」，而已结束那一轮不可能等于修复后的新 head。已具名披露，如与原意不符请指正 | Founder |
+| OI-FIX-02 | 本包候选 Commit 的完整 40 位哈希由交付报告报出，下一包回填进 package ledger | 执行侧 |
+| OI-FIX-03 | R1 两侧报告原文均未交到执行侧，仓内证据是裁决转录；Guardian 隔离工作区见证亦未登记。两条记录均不计入通过证据 | Founder |
+| OI-FIX-04 | 三条已知设计缺口仍未处置，处置只能由 Founder 做且须按七字段具名 | Founder |
+| OI-FIX-05 | 交错写入期间是否有内容丢失，判据证否不了 | Founder |
+
+## 未做且未授权
+
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A12.measurement.not_authorized_count}} 项一律未做：
+合并 PR #3、分发校准包、任何隐藏批次含试产、置 `m2_frozen`／`founder_signature_eligible`／`downstream_consumption_allowed` 为真、
+M3、M4、知识蒸馏、`production_servable`。
+
+{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#article_landing.by_article.A12.measurement.red_line_flags_held_false}} 位红线旗维持 `false`，
+三门满足 {{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#package_end_state.merge_gates_satisfied}}／{{ref:11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml#package_end_state.merge_gates_total}}，
+`main` 未动。
+
+## 下一步
+
+R2 窄范围 Delta——一次 Guardian ＋ 一次总顾问，两侧独立各出一次结论，范围限于
+B-01～B-04、COND-GUARD-M2-01、NB-1、OI-SEAL-01，不重审已验通过部分。
+
+执行侧不得发起合并、不得代填审查结论、不得处置设计缺口、不得解封任何被封项、不得打标签。

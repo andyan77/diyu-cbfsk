@@ -81,28 +81,9 @@ def collect() -> dict:
             "required_class": "L3",
             "touched_scope": ["角色", "状态", "合规", "CI", "隐藏评测", "风险"],
         },
-        "role_availability": [
-            {
-                "role_id": "CODEX_EXECUTION_ENGINEER",
-                "available": False,
-                "founder_decision": "APPOINT_ALTERNATE_ADVISOR",
-                "note": "Founder 依 §11.3 指派 TEMPORARY_EXECUTION_WRITER 顶替写入工作面",
-                "review_completed_claimed": False,
-                "waiver_reason": None,
-                "risk_accepted_by": None,
-                "waiver_timestamp": None,
-            },
-            {
-                "role_id": "GPT_CHIEF_ADVISOR",
-                "available": True,
-                "review_completed_claimed": False,
-            },
-            {
-                "role_id": "CLAUDE_INDEPENDENT_GUARDIAN",
-                "available": True,
-                "review_completed_claimed": False,
-            },
-        ],
+        # B-04-4：这张表此前是 collect() 里的 Python 字面量——判据自己造出自己要检查的事实。
+        # 现已搬进规范源 role_operating_model.v0.2.yaml role_availability，这里只负责读。
+        "role_availability": model["role_availability"]["items"],
     }
 
 

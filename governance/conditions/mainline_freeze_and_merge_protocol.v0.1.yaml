@@ -3,16 +3,27 @@ contract_id: DIYU-CBFSK-MAINLINE-FREEZE-AND-MERGE-PROTOCOL
 artifact_id: mainline_freeze_and_merge_protocol.v0.1
 project_id: DIYU-CBFSK-001
 milestone: M2
-execution_package: M2-SEAL
+execution_package: M2-PREMERGE-FIX
 status: CONTRACT_LANDED_NOT_EXECUTED
 artifact_lifecycle_state: validated
 established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_4_merge_and_mainline_seal
+amended_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_5_b04_mainline_guard_hardcoded
 
 what_this_file_is:
   is: 合并与主线封存的执行口径合同。
   is_not: 合并授权。
   merge_authorized_now: false
-  why_not_now: 三门未齐备——Guardian 与总顾问均未出结论，Founder 的合并授权也在本裁决之后另行给出。
+  why_not_now: 三门未齐备——Guardian 与总顾问的窄范围 Delta 未出结论，Founder 的合并授权也在裁决之后另行给出。
+
+b04_amendment:
+  finding: B-04
+  what_was_wrong: >-
+    本合同此前自述三个事实位：pr_merged、tag_applied、frozen_observation_entered，
+    而判据 check_m2_suspension_seal 直接读这三个自述值，另加一个写死的 unregistered_main_commits: []。
+    于是「主线上有没有出现未登记的功能性提交」这条判据，答案是从常量里拿的——
+    main 上真出现十个提交，它也照样说没有。声明式字段永远与自己一致，因此永远为绿。
+  what_changed: 三个事实位与主线提交清单一律改为 Git 现场推导；本合同只保留规则与分类口径，不再存事实值。
+  verbatim: pr_merged ／ tag_applied ／ frozen_observation_entered 一律由 Git 现场推导，不得读台账自述
 
 three_gates:
   count: 3
@@ -22,17 +33,33 @@ three_gates:
     what: Guardian 无阻断
     satisfied: false
     evidence: null
+    current_state: >-
+      R1 已出 APPROVE_WITH_CONDITIONS（阻断 0、条件 1）。条件 COND-GUARD-M2-01 由本包处置，
+      须经 R2 窄范围 Delta 确认；条件未被确认关闭前本门不满足。
   - id: GATE-2
     what: 总顾问意见
     satisfied: false
     evidence: null
+    current_state: R1 已出 BLOCK（阻断 4）。四项阻断由本包修复，须经 R2 窄范围 Delta 确认。
   - id: GATE-3
     what: 本 Founder 裁决之后的合并授权
     satisfied: false
     evidence: null
-    note: 本裁决本身不构成合并授权——「本裁决之后」是原文措辞。
+    note: 裁决本身不构成合并授权——「本裁决之后」是原文措辞。
   satisfied_count: 0
   failure_state: MERGE_BEFORE_THREE_GATES
+
+advisor_block_override:
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_10_re_review_arrangement RR-3
+  permanence: 永久生效
+  verbatim: >-
+    总顾问结论为 BLOCK 时，Founder 若要推翻，必须逐条具名回应每一项阻断发现；
+    不得以「已收到顾问意见，故三门齐备」带过
+  machine_rule: >-
+    GATE-2 在存在未撤销的 BLOCK 结论时置 satisfied=true，必须同时给出逐条具名回应，
+    条数等于该 BLOCK 的阻断数，且每条点名对应发现 ID。缺一即 FAIL。
+  itemised_response: null
+  failure_state: ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE
 
 merge_method:
   inherits: M1 口径
@@ -51,14 +78,15 @@ merge_method:
 
 tag:
   what: 对合并后的该 Commit 打标签作为「M2 挂起点」
-  tag_applied: false
-  tag_name: null
+  tag_name_pattern: m2-suspension-point
   recorded_in: governance/conditions/m2_seal_ledger.v0.1.yaml
   rule: 标签在合并完成且哈希核验通过之后才打；提前打等于给一个还没到位的状态发凭证。
+  state_derivation: git tag --list
+  state_stored_here: false
+  why_not_stored: B-04-3——标签在不在是 Git 说了算，不是台账说了算。
 
 mainline_state_after_merge:
   state: 冻结观察态
-  entered: false
   accepts:
   - 治理登记
   - 裁决落盘
@@ -67,6 +95,23 @@ mainline_state_after_merge:
   plain: >-
     合并之后 main 不再接受功能性提交。能进去的只有两类：把已经发生的事登记下来，
     以及把 Founder 的裁决落成文件。要写新功能，等 Founder 就新支线出裁决。
+  state_derivation: >-
+    「是否已进入冻结观察态」等价于「合并是否已发生」，由 ancestry 实测：
+    候选 HEAD 是 origin/main 的祖先或与之相等即为已合并。
+  state_stored_here: false
+  failure_state: FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
+
+frozen_mainline_classification:
+  purpose: 冻结后 main 上每一个新提交，都要能归到「治理登记」或「裁决落盘」，否则就是功能性提交。
+  freeze_point_derivation: 合并落地的那个提交即冻结点；未合并时冻结尚未开始，本分类不适用。
+  allowed_paths:
+  - governance/
+  - 11_reports_and_receipts/
+  - ci/fixtures/
+  allowed_paths_rationale: >-
+    治理登记与裁决落盘只会碰这三处。判据按**路径**分类而不按提交信息分类——
+    提交信息是写的人说了算，路径是改动本身说了算。
+  forbidden_paths_are_everything_else: true
   failure_state: FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
 
 machine_checkable_fields:
@@ -74,11 +119,14 @@ machine_checkable_fields:
   gates_satisfied: 0
   merge_authorized_now_lives_in: what_this_file_is.merge_authorized_now
   merge_authorized_now_single_definition_note: 同一个值在一份文件里写两处，改一处漏一处；判据读的是 what_this_file_is 那一处。
-  tag_applied: false
-  frozen_observation_entered: false
+  pr_merged_derivation: git merge-base --is-ancestor <candidate head> origin/main
+  tag_applied_derivation: git tag --list
+  frozen_observation_entered_derivation: 同 pr_merged——合并发生即进入冻结观察态
+  no_self_reported_facts_here: true
 
 failure_states:
 - MERGE_BEFORE_THREE_GATES
 - MERGE_METHOD_VIOLATED
 - FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
 - TAG_APPLIED_BEFORE_MERGE_VERIFIED
+- ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE

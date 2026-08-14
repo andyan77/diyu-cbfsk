@@ -38,9 +38,80 @@ discovery:
   globs:
   - 11_reports_and_receipts/*_delivery_report.md
   - 11_reports_and_receipts/*/*_delivery_report.md
+  - governance/reports/*_review_request.md
   note: 判据按本 glob 自动发现交付报告；发现了却没登记即 REPORT_NOT_REGISTERED，新报告不能悄悄绕开本册。
-report_count: 12
+  glob_extension_nb1:
+    authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_7_nb1_transmittal_number
+    verbatim: 转达件「47 个判据」更正为实测值；转达件 .md 纳入 report_number_binding_registry 覆盖面
+    what_was_wrong: >-
+      转达件写着「47 个确定性判据全绿」，而当时实测 48 个。它是发给两侧评审的文件——
+      转达件里的数字与交付报告里的数字，可信度要求没有区别，此前却只有后者被本册覆盖。
+      加 glob 而不是只加一条登记：下一份转达件才不会再次绕过。
+report_count: 14
 reports:
+- report: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_report.md
+  template: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_report.md.tmpl
+  status: templated
+  literal_allowlist:
+  - number: 1
+    context_substring: 一句话
+    why: 章节标题里的中文行文，不是计数。
+  - number: 151
+    context_substring: 第 151 行
+    why: 裁决点名的 README 行号，不是计数。
+  - number: 1
+    context_substring: B-01
+    why: 发现编号，不是计数。
+  - number: 2
+    context_substring: B-02
+    why: 发现编号，不是计数。
+  - number: 3
+    context_substring: B-03
+    why: 发现编号，不是计数。
+  - number: 4
+    context_substring: B-04
+    why: 发现编号，不是计数。
+  - number: 2
+    context_substring: R2 窄范围 Delta
+    why: 审查轮次编号，不是计数。
+  - number: 1
+    context_substring: R1
+    why: 审查轮次编号，不是计数。
+  - number: 3
+    context_substring: PR #3
+    why: PR 编号，不是计数。
+- report: governance/reports/m2_premerge_review_request.md
+  template: governance/reports/m2_premerge_review_request.md.tmpl
+  status: templated
+  registered_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_7_nb1_transmittal_number
+  literal_allowlist:
+  - number: 3
+    context_substring: 第三节
+    why: 裁决条款号，不是计数。
+  - number: 10
+    context_substring: 第十节
+    why: 裁决条款号，不是计数。
+  - number: 12
+    context_substring: 第十二节
+    why: 裁决条款号，不是计数。
+  - number: 3
+    context_substring: 第 3 问
+    why: 问题序号，不是计数。
+  - number: 18
+    context_substring: 18 项是否闭环
+    why: 挂起裁决第三节「不在范围」四项的原文，逐字转达不得改写。
+  - number: 40
+    context_substring: 完整 40 位哈希
+    why: 哈希位宽，不是计数。
+  - number: 1
+    context_substring: B-01
+    why: 发现编号，不是计数。
+  - number: 2
+    context_substring: B-02
+    why: 发现编号，不是计数。
+  - number: 4
+    context_substring: B-04
+    why: 发现编号，不是计数。
 - report: 11_reports_and_receipts/m2_seal/m2_seal_delivery_report.md
   template: 11_reports_and_receipts/m2_seal/m2_seal_delivery_report.md.tmpl
   status: templated

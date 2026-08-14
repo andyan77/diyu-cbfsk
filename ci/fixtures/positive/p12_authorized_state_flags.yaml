@@ -1,6 +1,5 @@
 fixture_id: P12-authorized-state-flags
-description: >-
-  签署后的合法状态：五个状态位为 true 且各自有绑定完整 Commit 哈希的授权记录；红线位与被豁免的顾问位保持 false。
+description: 签署后的合法状态：五个状态位为 true 且各自有绑定完整 Commit 哈希的授权记录；红线位与被豁免的顾问位保持 false。
 checker: check_project_state
 expected: PASS
 payload:
@@ -53,3 +52,26 @@ payload:
     signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
   candidate_marked_as_effective_truth: false
   forbidden_claim_hits: []
+  canonical_state:
+    project_status: PROJECT_INITIATED
+    execution_status: M2_IN_PROGRESS
+    m2_status: SUSPENDED_BY_FOUNDER
+  readme_state:
+    project_status: PROJECT_INITIATED
+    execution_status: M2_IN_PROGRESS
+    m2_status: SUSPENDED_BY_FOUNDER
+  readme_state_block_found: true
+  derived_state:
+    execution_permitted: false
+  projection_states:
+    CLAUDE.md:
+      project_status: PROJECT_INITIATED
+      execution_status: M2_IN_PROGRESS
+      m2_status: SUSPENDED_BY_FOUNDER
+      execution_permitted: false
+    AGENTS.md:
+      project_status: PROJECT_INITIATED
+      execution_status: M2_IN_PROGRESS
+      m2_status: SUSPENDED_BY_FOUNDER
+      execution_permitted: false
+  hand_assigned_derived_fields: []

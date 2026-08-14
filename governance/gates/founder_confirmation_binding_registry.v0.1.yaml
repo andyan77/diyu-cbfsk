@@ -67,7 +67,7 @@ binding_required_when:
   commit_must_be_full_40_hex: true
   resolver: ci/checkers/_common.py clause_resolves（单一实现，裁决引用与本判据共用）
 counts:
-  sites: 87
+  sites: 92
   kind_capability: 1
   kind_derived_state: 5
   kind_discipline_acknowledgement: 1
@@ -356,6 +356,48 @@ sites:
   claim_kind: eligibility
   binding: null
   why_no_binding: 同一裁决的机器可核字段投影，值与上一条同源。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml
+  key_path: machine_checkable_fields.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同上——转录裁决第十二节维持不变的七位红线旗，说的是够不够格，不是已经签了。
+- file: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml
+  key_path: package_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml
+  key_path: article_landing.by_article.A4.measurement.guardian_workspace_attested
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: >-
+    本值为 false，记的是「见证不存在」。它是 B-03 的落地记录本身：
+    Guardian 隔离工作区见证未交到执行侧，因此该轮结论不计入独立核验证据。
+    置 true 才需要绑定，绑定物是 governance/workspaces/ 下的对应见证条目，由判据现场比对。
+  open_item: OI-FIX-03
+- file: governance/workspaces/workspace_attestation.M2-PREMERGE-FIX.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: >-
+    说的是「这份见证还需要 Founder 手工补签」，是一项待办要求，不是「Founder 已签」。
+    真正的已签位是同文件的 founder_workspace_attestation.status，当前为 NOT_YET_ATTESTED。
+- file: governance/reports/m2_premerge_review_request.v0.1.yaml
+  key_path: review_rounds.items[0].records[0].workspace_attested
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: >-
+    本字段为 false，记的是「见证**不存在**」，不是「Founder 已见证」。
+    它恰恰是本册要保的那一侧：Guardian 在独立工作区审的这一轮，见证未交到执行侧，
+    因此判据把该记录标为不计入独立核验证据（counts_as_independent_verification: false）。
+    置 true 才需要绑定——绑定物是 governance/workspaces/ 下 role=CLAUDE_INDEPENDENT_GUARDIAN
+    且 base_commit 等于被审提交的那条见证，由 check_m2_suspension_seal 现场比对，不是自述。
+  open_item: OI-FIX-03
 - file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001.yaml
   key_path: machine_checkable_fields.founder_signature_eligible
   value_when_registered: false

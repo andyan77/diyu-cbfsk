@@ -68,4 +68,5 @@ m2_status: SUSPENDED_BY_FOUNDER
 knowledge_distillation_started: false
 production_servable: false
 main_merged: true
+execution_permitted: false
 ```

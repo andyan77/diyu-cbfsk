@@ -68,3 +68,37 @@ payload:
   - PACKAGE_BLOCK
   - SUBSYSTEM_BLOCK
   - DEPENDENCY_WAIT
+  timing_gate:
+    state: false
+    preconditions:
+    - id: TG-01
+      declared: false
+      recomputed: false
+    - id: TG-02
+      declared: false
+      recomputed: false
+    - id: TG-03
+      declared: false
+      recomputed: false
+    - id: TG-04
+      declared: false
+      recomputed: null
+    founder_confirmed: false
+    formal_batch_started: false
+    pilot_brand_count: 0
+    counted_brand_count: 0
+    pilot_brand_limit: 2
+    pilot_counted_in_brand_count: false
+    boundary_recheck_performed: false
+    store_a_evidence:
+      status: NOT_RECEIVED
+      required_fields:
+      - access
+      - created_from_scratch
+      - fork_of_main
+      - founder_attestation
+      - repository_visibility
+      - shares_main_history
+      - store_id
+      received_fields: []
+      locator_present: false

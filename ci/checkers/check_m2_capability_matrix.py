@@ -10,14 +10,16 @@
 
 from __future__ import annotations
 
+import re
 from zipfile import ZipFile
 from xml.etree import ElementTree
 
-from _common import ROOT, W_NS, cli, load_yaml
+from _common import ROOT, W_NS, cli, docx_all_text, load_yaml
 
 LABEL = "check_m2_capability_matrix"
 
 MATRIX = "03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml"
+MULTIMODAL_CARD = "03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml"
 GATE_MAP = "03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml"
 UPSTREAM_GATES = "01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml"
 PRD = "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx"
@@ -26,6 +28,14 @@ EXPECTED_CAPABILITY_COUNT = 7
 EXPECTED_CATEGORY_COUNT = 5
 EXPECTED_RISK_TIER_COUNT = 3
 TASK_CLASSES = ("constraint_correctness", "mechanism_correctness", "open_decision")
+
+# 多模态范围边界：地面真值现场解析 PRD v1.2 3.2 非目标那一条，不读卡片自述。
+# 这三条判据是 MULTIMODAL_SCOPE_CONFLICT_WITH_D10 的替代实现——那条码是派发件杜撰的，
+# 无实现无夹具，且码名里嵌着一个错误的裁决编号；边界本身仍要守，所以改成现场解析正文。
+PRD_EVIDENCE_ORDER_RE = re.compile(r"（(authoritative[^）]*model_inferred)）")
+PRD_FORBIDDEN_RE = re.compile(r"不得推断([^。]+)")
+RETIRED_MULTIMODAL_STOP_CODE = "MULTIMODAL_SCOPE_CONFLICT_WITH_D10"
+ERRONEOUS_MULTIMODAL_ANCHOR = "D-10"
 
 
 def _prd_metric_rows() -> list[tuple[str, str]]:
@@ -136,6 +146,55 @@ def _validate_gate_mapping(payload: dict, errors: list[str]) -> None:
                 errors.append(f"HARD_GATE_ID_DRIFT: capability {cap_code} points at unknown hard gate {gate!r}")
 
 
+def _validate_multimodal_scope(payload: dict, errors: list[str]) -> None:
+    scope = payload.get("multimodal_scope") or {}
+
+    if not scope.get("anchor_verbatim_found_in_prd"):
+        errors.append(
+            "MULTIMODAL_SCOPE_ANCHOR_NOT_IN_PRD: the card quotes a PRD 3.2 non-goal sentence that the PRD "
+            "does not contain — 边界必须引得回正文，不能只在卡里成立"
+        )
+
+    prd_order = scope.get("prd_evidence_order") or []
+    if scope.get("card_evidence_order") != prd_order:
+        errors.append(
+            f"MULTIMODAL_EVIDENCE_ORDER_DRIFT: card records {scope.get('card_evidence_order')!r}, "
+            f"PRD 3.2 states {prd_order!r}"
+        )
+
+    prd_forbidden = set(scope.get("prd_forbidden_attributes") or [])
+    card_forbidden = set(scope.get("card_forbidden_attributes") or [])
+    for missing in sorted(prd_forbidden - card_forbidden):
+        errors.append(
+            f"MULTIMODAL_SCOPE_EXCEEDS_AUTHORITATIVE_FACT_BOUNDARY: PRD forbids inferring {missing!r}, "
+            f"the card does not carry it in forbidden_image_only_assertions"
+        )
+    if scope.get("inference_may_override_authoritative") is not False:
+        errors.append(
+            "MULTIMODAL_SCOPE_EXCEEDS_AUTHORITATIVE_FACT_BOUNDARY: the card permits visual inference to override "
+            "authoritative facts"
+        )
+
+    for tested in scope.get("tested_items") or []:
+        for attribute in sorted(prd_forbidden):
+            if attribute in tested and "不" not in tested and "禁" not in tested:
+                errors.append(
+                    f"MULTIMODAL_FORBIDDEN_ATTRIBUTE_IN_SCOPE: the card tests {attribute!r} inference in "
+                    f"{tested[:40]!r}"
+                )
+
+    if ERRONEOUS_MULTIMODAL_ANCHOR in (scope.get("ruling_anchors") or []):
+        errors.append(
+            f"MULTIMODAL_ERRONEOUS_ANCHOR_REUSED: {ERRONEOUS_MULTIMODAL_ANCHOR} is a Founder-side numbering slip "
+            "and must not be used as a live anchor"
+        )
+    if scope.get("retired_stop_code_status") != "RETIRED":
+        errors.append(
+            f"MULTIMODAL_ERRONEOUS_ANCHOR_REUSED: {RETIRED_MULTIMODAL_STOP_CODE} is recorded as "
+            f"{scope.get('retired_stop_code_status')!r}, it must be RETIRED"
+        )
+
+
 def validate(payload: dict) -> list[str]:
     errors: list[str] = []
 
@@ -163,7 +222,34 @@ def validate(payload: dict) -> list[str]:
 
     _validate_metrics(payload, errors)
     _validate_gate_mapping(payload, errors)
+    _validate_multimodal_scope(payload, errors)
     return errors
+
+
+def _multimodal_scope() -> dict:
+    card = load_yaml(MULTIMODAL_CARD)
+    scope = card["scope_boundary"]
+    prd_text = docx_all_text(ROOT / PRD)
+
+    order_match = PRD_EVIDENCE_ORDER_RE.search(prd_text)
+    prd_order = [p.strip() for p in order_match.group(1).split(">")] if order_match else []
+    forbidden_match = PRD_FORBIDDEN_RE.search(prd_text)
+    prd_forbidden = (
+        [p for p in re.split(r"[、与，,]", forbidden_match.group(1)) if p.strip()]
+        if forbidden_match else []
+    )
+
+    return {
+        "anchor_verbatim_found_in_prd": scope["prd_anchor"]["verbatim"] in prd_text,
+        "prd_evidence_order": prd_order,
+        "card_evidence_order": scope["evidence_order"],
+        "prd_forbidden_attributes": prd_forbidden,
+        "card_forbidden_attributes": scope["forbidden_image_only_assertions"],
+        "inference_may_override_authoritative": scope["inference_may_override_authoritative"],
+        "tested_items": scope["what_this_benchmark_tests"],
+        "ruling_anchors": card["ruling_anchors"],
+        "retired_stop_code_status": scope["retired_stop_code"]["status"],
+    }
 
 
 def collect() -> dict:
@@ -213,6 +299,7 @@ def collect() -> dict:
         "declared_release_gate_count": gate_map["counts"]["release_gate_count"],
         "upstream_hard_gate_ids": [i["id"] for i in upstream["hard_gates"]["items"]],
         "upstream_release_gate_ids": [i["id"] for i in upstream["commercial_release_gates"]["items"]],
+        "multimodal_scope": _multimodal_scope(),
     }
 
 

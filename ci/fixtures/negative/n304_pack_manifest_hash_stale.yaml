@@ -1,0 +1,32 @@
+fixture_id: N304
+description: 文件内容变了而 Manifest 里的哈希没跟着变。（PACK_MANIFEST_HASH_STALE）
+checker: check_calibration_launch_pack
+expected: FAIL
+payload:
+  missing_files: []
+  derivation_drift: []
+  hash_drift:
+  - path: review_prompt.shared.v1.0.0.md
+    declared: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    actual: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+  declared_case_count: 4
+  declared_batch_count: 2
+  declared_batch_size: 2
+  source_case_ids:
+  - CAL-001
+  - CAL-002
+  - CAL-003
+  - CAL-004
+  pack_case_ids:
+  - CAL-001
+  - CAL-002
+  - CAL-003
+  - CAL-004
+  batch_case_ids:
+  - - CAL-001
+    - CAL-002
+  - - CAL-003
+    - CAL-004
+  forbidden_hits: []
+  manifest_prompt_sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365
+  state_prompt_sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365

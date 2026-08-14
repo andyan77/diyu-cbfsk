@@ -69,7 +69,7 @@
 | 编号 | 处置 | 关键证据 |
 |---|---|---|
 | `NB-M2-01` | 受控位授权与 main 追认引用的裁决，现场解析文件与具名条款路径 | 捏造裁决 ID 的 6 条负例已落盘；执行时当场发现 `EXEC-REQ-M0-003` 是执行申请非裁决，按来源类型分流而非开豁免 |
-| `NB-M2-02` | 合规台账下限由 payload 改为模块常量（夹具再也压不低），补 11 条负例；全仓横扫 | 实跑：**500 条声明错误码，350 条有夹具行使，149 条挂账**，装棘轮：上限只降不升，新增 checker 零欠账 |
+| `NB-M2-02` | 合规台账下限由 payload 改为模块常量（夹具再也压不低），补 11 条负例；全仓横扫 | 实跑：**523 条声明错误码，376 条有夹具行使，147 条挂账**，装棘轮：上限只降不升，新增 checker 零欠账 |
 | `NB-M2-03` | 覆盖面数字改实测值 | EP01 报告 **235 → 270**，里程碑报告 **255 → 419**；在各自提交上建临时 worktree 跑该提交自带的 checker 实测 |
 | `NB-M2-04` | 12 条符号名回填真实完整哈希 | 用各条已登记的 `binary_sha256` 反查 README 历史 blob，12 条全部命中且互不冲突；末条自指按 `self_reference_limitation` 处理 |
 | `NB-M2-05` | 工作面见证改自动发现 | 目录扫描替代硬编码单一文件；新增 `M2-EP04` 分册，其中**不伪造** Guardian 记录 |
@@ -118,7 +118,14 @@
    核对真源后：`D-10` 的标题是「运行时模型合同」，所引实质内容逐字对应 **`D-12`「商品属性来源」**，
    而 `D-12` 已被 `D-23` 在 PRD v1.2 中部分改判为「分层引入视觉推断」。
    执行侧**未放宽也未改写任何裁决**，按 `D-12` 与 `D-23` 的**交集**定义多模态评测范围，
-   因此 **`STOP: MULTIMODAL_SCOPE_CONFLICT_WITH_D10` 未触发**。编号更正与边界定义均待 Founder 确认。
+   编号更正与边界定义均待 Founder 确认。
+
+   > **EP05 更正（追加，不改写原判断）**：本段原有一句，把停止码
+   > `MULTIMODAL_SCOPE_CONFLICT_WITH_D10` 当成实测结论写了出来。
+   > EP05 裁决第二节认定该停止码系派发件杜撰——无实现、无夹具，且码名内嵌错误编号，予以作废删除。
+   > 按同节通则「无检测器的码一律不得表述为未触发」，该表述在此撤回；
+   > 它原本想守的边界改由三条现场解析 PRD 正文的机器判据承接，
+   > 见 `03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml` `scope_boundary`。
 
 2. **`D-09` 不是假锚点。** 任务 A-6 称其为「假锚点」；核对后 `D-09` 是 PRD v1.1 Delta 第二部分的真实编号
    「M2 评测治理三件套」。执行侧仍按裁决把活合同与机器引用改指 Brief 项号与三个合同 ID——
@@ -133,7 +140,7 @@
 见本报告末尾自动生成的披露节；判据 `check_disclosure_discipline` 保证回执里每一个编号都能在此被找到。
 
 **首要待裁**：`OI-M2-HIDDEN`（需 STORE-A 标识与访问矩阵）与 `OI-M2-CALIBRATION`（需启动两侧隔离评审）。
-这两项不解，最终资产存在门 12 条里有 11 条无法满足。
+这两项不解，最终资产存在门 12 条里只有 1 条满足。
 
 ## 八、边界声明
 
@@ -156,7 +163,7 @@
 | `OI-M2-ANCHOR` | D-10 编号更正与多模态评测边界待 Founder 确认 | AWAITING_FOUNDER |
 | `OI-M2-METRIC-GROUPING` | Brief 第 5 节「人设四项／语感六项／多模态六项」与 PRD 10.2 逐行条数不符 | REGISTERED |
 | `OI-M2-NAMING` | FR-* 五份 Founder 裁决文件不带 FOUNDER- 前缀 | AWAITING_FOUNDER |
-| `OI-M2-FIXTURE-DEBT` | 149 条已声明错误码尚无 expected=FAIL 夹具行使 | REGISTERED_WITH_RATCHET |
+| `OI-M2-FIXTURE-DEBT` | 147 条已声明错误码尚无 expected=FAIL 夹具行使 | REGISTERED_WITH_RATCHET |
 | `COND-007` | 阈值冻结 | OPEN |
 | `COND-011` | 隐藏存储 provision | EVIDENCE_SUBMITTED |
 | `OD-M2-01` | 真实基线锦标赛运行 | DEFERRED_BY_FOUNDER |

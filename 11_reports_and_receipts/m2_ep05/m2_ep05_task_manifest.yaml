@@ -1,0 +1,52 @@
+schema_version: "0.1"
+manifest_id: DIYU-CBFSK-M2-EP05-TASK-MANIFEST
+project_id: DIYU-CBFSK-001
+
+control_header:
+  task_id: DIYU-CBFSK-M2-EP05-INTEGRATION-001
+  task_id_assigned_by: EXECUTION_SIDE
+  task_id_assigned_by_note: >-
+    本轮派发件未给出任务 ID。执行侧自建一个并如实标注签发方，不冒充 Founder 指派；
+    登记见 governance/identifiers/identifier_registry.v0.1.yaml。
+  task_class: L3_CRITICAL_EVALUATION_CLOSEOUT
+  milestone: M2
+  execution_package: M2-EP05
+  execution_run_id: 6220d220-6756-466f-85ab-1d1a2ba19caa
+  parent_execution_run_id: fe461abf-c4cc-46a3-9780-c4eca9a7f9c1
+  resume_candidate_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+  branch: candidate/m2
+  base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+
+authority: DIYU-CBFSK-FOUNDER-M2-EP05-001（M2-EP05 整合与并行启动）
+
+frozen_paths:
+  - 00_charter/**
+  - 01_contracts_and_schemas/m1_object_model/**
+  - 01_contracts_and_schemas/category_adapter_contracts/**
+  - 11_reports_and_receipts/m1_delivery_receipt.yaml
+  - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml
+  - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+
+allowed_updates:
+  - 03_m2_evaluation_foundation/**
+  - 11_reports_and_receipts/**
+  - ci/**
+  - governance/conditions/**
+  - governance/gates/**
+  - governance/identifiers/**
+  - governance/reports/**
+  - governance/receipts/**（仅补 enforcement 标注，不改原判定文字）
+  - governance/workspaces/**
+  - governance/founder_rulings/（仅新增本轮裁决落盘文件）
+  - governance/baseline/founder_pinned_baseline.v0.1.yaml（机械投影联动登记）
+  - README.md（机械投影）
+
+forbidden:
+  - hidden_content_in_main
+  - m2_frozen_true
+  - m3_started
+  - m4_started
+  - knowledge_distillation_started
+  - production_servable
+  - 合并 PR #3
+  - 40 品牌正式批（时序门开启前）

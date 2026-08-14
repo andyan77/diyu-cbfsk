@@ -1,0 +1,135 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-HIDDEN-GENERATION-TIMING-GATE
+artifact_id: hidden_generation_timing_gate.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP05
+established_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate
+
+purpose: >-
+  避免整批返工。能力矩阵、评分卡与可接受边界都还可能被校准结果改动；
+  现在按它们出 40 个品牌的正式批，改一条边界就得整批重来。
+  这道门把「什么时候可以开始正式生产」变成一个可机器判定的状态，而不是一次口头判断。
+
+state:
+  field: public_blueprint_stable_for_hidden_generation
+  current_value: false
+  value_rule: 四项前置全部为真才可置 true；任一为假即为 false。
+  execution_side_may_flip: false
+  execution_side_may_flip_note: >-
+    第四项前置是 Founder 的确认动作，执行侧不得代填。前三项由判据现算，
+    第四项到齐后由 Founder 置 true。
+
+preconditions:
+  count: 4
+  items:
+    - id: TG-01
+      condition: 两侧校准评审结果均已回收
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml sides[].record_count
+      recomputed_by_checker: true
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-02
+      condition: 分歧统计完成
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml disagreement_statistics.computed
+      recomputed_by_checker: true
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-03
+      condition: 阈值建议形成
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml counts.recommendation_absent
+      recomputed_by_checker: true
+      criterion: 每一条 M2_FREEZE_REQUIRED 指标都有 threshold_recommendation（recommendation_absent 归零）
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-04
+      condition: Founder 确认能力矩阵、评分卡与可接受边界无需修改
+      current: false
+      evidence_source: 本文件 founder_confirmation
+      recomputed_by_checker: false
+      owner: FOUNDER_PRODUCT_AUTHORITY
+
+founder_confirmation:
+  confirmed: false
+  confirmed_by: null
+  confirmed_at: null
+  confirmed_at_commit: null
+  scope_when_confirmed: [能力矩阵, 三张横向评分卡与七类纵向能力卡, 可接受决策边界注册表]
+  execution_side_must_not_fill: true
+
+while_false:
+  allowed:
+    - id: AL-01
+      action: STORE-A provision 与证据回传
+    - id: AL-02
+      action: 私有工具链建设（Schema／生成器／检查器／密封 Runner／测试工具）
+    - id: AL-03
+      action: 2 个品牌的试产批
+      constraints:
+        pilot_flag_required: true
+        pilot_brand_limit: 2
+        counted_in_brand_count: false
+        formal_batch_must_regenerate: true
+        why: >-
+          试产批的用途是验工具链，不是攒产量。蓝图还可能改，
+          现在生成的内容一旦被计入正式数，后面改边界时就会有人舍不得重做。
+  forbidden:
+    - id: FB-01
+      action: 40 品牌正式批生成
+      failure_state: FORMAL_BATCH_BEFORE_TIMING_GATE
+
+current_generation_state:
+  formal_batch_started: false
+  pilot_batch_started: false
+  pilot_brand_count: 0
+  counted_brand_count: 0
+
+store_a_evidence:
+  status: NOT_RECEIVED
+  purified_file_count: 2
+  files:
+    - name: store_identity.yaml
+      minimum_fields: [store_id, repository_visibility, created_from_scratch, fork_of_main, shares_main_history, founder_attestation]
+    - name: access_matrix.yaml
+      minimum_fields: [access]
+  required_values:
+    repository_visibility: private
+    created_from_scratch: true
+    fork_of_main: false
+    shares_main_history: false
+  required_access_matrix:
+    founder: admin
+    hidden_steward: read_write
+    main_codex: none
+    claude_planner: none
+    guardian: none
+    chief_advisor: none
+    m3_m4_elicitation: none
+  founder_attestation_fields: [signed_by, signed_at]
+  must_not_contain: [私仓 URL, Token, Deploy Key, 任何隐藏内容]
+  must_not_contain_why: >-
+    这两份文件的用途是证明隔离成立，不是让人找得到仓库。
+    写上地址，等于为了证明门锁着而把钥匙挂在门上。
+  received_fields: []
+  failure_states: [STORE_A_EVIDENCE_INCOMPLETE, STORE_A_EVIDENCE_LEAKS_LOCATOR]
+
+on_main_repo_acceptance:
+  precondition: 主仓收到净化包并通过隐藏边界复检（check_hidden_benchmark_boundary）
+  boundary_recheck_performed: false
+  order_is_fixed: true
+  order_note: 先复检后入库，不可对调——先收进来再检查，一旦命中，Git 历史里已经有副本了。
+  then:
+    cond_011: CLOSED
+    m2_hidden_assets_status: STORAGE_READY
+  failure_state: BOUNDARY_RECHECK_SKIPPED_ON_INTAKE
+
+failure_states:
+  - TIMING_GATE_OPEN_WITHOUT_PRECONDITIONS
+  - TIMING_GATE_PRECONDITION_MISSTATED
+  - FORMAL_BATCH_BEFORE_TIMING_GATE
+  - PILOT_COUNTED_IN_BRAND_COUNT
+  - PILOT_BATCH_EXCEEDS_LIMIT
+  - STORE_A_EVIDENCE_INCOMPLETE
+  - STORE_A_EVIDENCE_LEAKS_LOCATOR
+  - BOUNDARY_RECHECK_SKIPPED_ON_INTAKE
+  - EXECUTION_SIDE_FLIPPED_TIMING_GATE

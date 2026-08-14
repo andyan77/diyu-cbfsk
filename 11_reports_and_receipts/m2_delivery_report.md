@@ -1,3 +1,18 @@
+> # ⚠️ SUPERSEDED · 本文件不代表当前现状
+>
+> 本报告写于 M2-EP03 收口时点，描述的是当时的候选状态。此后 **M2-EP04**（收口修复）
+> 与 **M2-EP05**（整合与并行启动）都改变了现状，本文件**未**随之更新。
+>
+> **当前现状以这两份为准**：
+>
+> - [`11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml`](m2_ep05/m2_ep05_delivery_receipt.yaml)（最新回执）
+> - [`11_reports_and_receipts/m2_ep05/m2_ep05_delivery_report.md`](m2_ep05/m2_ep05_delivery_report.md)（最新报告）
+>
+> 保留本文件而不改写，是因为它是 EP03 时点的现场记录；
+> 用今天的口径回改昨天的报告，等于把「当时怎么判的」这件事永久抹掉。
+> 但仓里**不得长期存在两份讲不同现状的总报告**——因此本文件在此显式降级为历史记录，
+> 不再是「M2 总报告」。
+
 # M2 里程碑交付报告（EP01 ＋ EP02 ＋ EP03）
 
 > 里程碑 M2｜计划 `MILESTONE_PLAN_M2 v1.1.0`｜分支 `candidate/m2`

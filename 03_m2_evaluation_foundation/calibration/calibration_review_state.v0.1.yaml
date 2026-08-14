@@ -28,8 +28,13 @@ why_execution_side_cannot_produce_these:
       本会话即执行侧，自己开一个窗口不构成隔离。
 
 prompt:
-  path: 03_m2_evaluation_foundation/calibration/review_prompt.shared.v0.1.md
-  sha256: 5a883e7b2eb642742cc57b31b880a2892fda37e7a2fcb6ed05f39be8cab511a1
+  path: 03_m2_evaluation_foundation/calibration/launch_pack/review_prompt.shared.v1.0.0.md
+  sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365
+  version: 1.0.0
+  supersedes: review_prompt.shared.v0.1.md
+  supersedes_reason: >-
+    v0.1 正文按仓内路径引用冻结件，隔离评审员根本读不到那些路径。
+    v1.0.0 随启动包自带全部判定所需材料，可独立分发；旧版删除，避免两份正文两个哈希。
   shared_by_both_sides: true
   shared_reason: >-
     正文不同会让分歧率失去意义——分不清是看法不同还是题目说的话不同。

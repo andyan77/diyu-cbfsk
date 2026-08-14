@@ -257,3 +257,33 @@ payload:
   - RG-06
   - RG-07
   - RG-08
+  multimodal_scope:
+    anchor_verbatim_found_in_prd: true
+    prd_evidence_order:
+    - authoritative
+    - human_confirmed
+    - model_inferred
+    card_evidence_order:
+    - authoritative
+    - human_confirmed
+    - model_inferred
+    prd_forbidden_attributes:
+    - 成分
+    - 性能
+    - 库存
+    - 安全认证
+    card_forbidden_attributes:
+    - 成分
+    - 性能
+    - 库存
+    - 价格
+    - 安全认证
+    inference_may_override_authoritative: false
+    tested_items:
+    - 证据等级标记是否正确（model_inferred 不得伪装成 authoritative）
+    - 视觉推断与权威事实冲突时是否以权威事实为准
+    - 低质量图像是否走 fail-closed
+    ruling_anchors:
+    - D-23
+    - D-12
+    retired_stop_code_status: RETIRED

@@ -1,0 +1,190 @@
+schema_version: "0.1"
+registry_id: DIYU-CBFSK-IDENTIFIER-REGISTRY
+artifact_id: identifier_registry.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_1_identifier_anchor_repair
+established_at_package: M2-EP05
+finding: NB-M2E4-01
+
+purpose: >-
+  仓内出现的每一个 DIYU-CBFSK-* 编号，都要能说清它是哪一类对象、落在哪个文件、由谁签发。
+  此前只有「裁决」一类编号被现场核验存在性，任务 ID、Prompt ID、回执 ID 一律不管——
+  于是 DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 被引用 31 次却查无此文件，
+  而判据认为一切正常，因为它只看 basis 与 ruling 两个键。
+
+core_distinction:
+  statement: 任务 ID 不是裁决 ID，二者不得互相改名。
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_2_naming
+  plain_language: >-
+    「任务 ID」是 Founder 派工时给这件活起的名字；「裁决 ID」是那份签署文件本身的名字。
+    一件活可以引用一份裁决，但它们是两个东西——把任务改名成裁决名，等于让派工单冒充签署件；
+    把裁决改名成任务名，等于让签署件失去可寻址的落点。
+  consequences:
+    - 任务 ID 维持 Founder 派发时的原值，不因裁决文件命名规范而改名。
+    - 裁决文件维持 FOUNDER- 前缀名（本裁决之后新建者），不因任务 ID 而改名。
+    - 任务 ID 通过 dispatched_by 指向真实存在的裁决文件而可解析，不靠自身有同名文件。
+
+kinds:
+  - id: founder_ruling
+    resolves_to: governance/founder_rulings/<id>.yaml
+    file_required: true
+  - id: execution_request
+    resolves_to: Founder 签署的执行申请文件（DOCX）
+    file_required: true
+  - id: task_id
+    resolves_to: 由 dispatched_by 指向的裁决或执行申请
+    file_required: false
+  - id: receipt_id
+    resolves_to: 仓内回执文件自声明
+    file_required: false
+  - id: record_id
+    resolves_to: 仓内记录/清单/策略文件自声明
+    file_required: false
+  - id: prompt_id
+    resolves_to: 仓内 Prompt 文件自声明
+    file_required: false
+  - id: superseded_identifier
+    resolves_to: 已被改名取代的旧编号，只允许作为历史记录出现
+    file_required: false
+  - id: fabricated_for_negative_fixture
+    resolves_to: 无（故意捏造，用于行使「引用不存在裁决」判据）
+    file_required: false
+    confined_to_path_prefixes:
+      - ci/fixtures/
+      - ci/checkers/
+      - governance/identifiers/
+    confinement_note: >-
+      捏造编号只允许出现在三处：行使判据的夹具、说明该判据为何存在的判据源码注释、
+      以及本注册表自身。出现在任何治理正文里即为真把它当成了一份裁决。
+
+covered_reference_keys:
+  rationale: >-
+    NB-M2E4-01 的射程要求：裁决存在性核验须覆盖全部引用位，不止 basis／ruling。
+    本清单是判据必须扫到的键名下限；判据实测覆盖键名少于本清单即 FAIL。
+  keys:
+    - basis
+    - ruling
+    - ruling_id
+    - authority
+    - established_by
+    - finding
+    - authorization_ref
+    - authorized_by
+    - source_decision_id
+    - founder_designation_basis
+    - supersedes
+    - corrects
+    - dispatched_by
+
+scan_scope:
+  scanned_top_level_dirs:
+    - 00_charter
+    - 01_contracts_and_schemas
+    - 02_benchmark_manifests
+    - 03_m2_evaluation_foundation
+    - 11_reports_and_receipts
+    - ci
+    - governance
+    - 工具
+  scanned_root_files: [README.md, CLAUDE.md, AGENTS.md, PRD_v1.2_change_map.yaml]
+  excluded:
+    - {path: 归档_v1.0, reason: 已归档历史文档，其编号空间已冻结，不得被现行判据反向改写}
+    - {path: 归档_v1.1, reason: 同上}
+    - {path: .git, reason: 版本库内部对象}
+    - {suffix: .docx, reason: 二进制文档由 docx 哈希判据另行守}
+  narrowing_rule: 缩小扫描范围等同于降级门禁，须单独授权；判据比对本字段，少扫即 FAIL。
+
+naming_corrections:
+  - renamed_from: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001
+    renamed_to: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001
+    object_kind: founder_ruling
+    content_unchanged: true
+    authorized_by: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 article_2_confirmations_and_discipline.discipline_2
+    performed_at_package: M2-EP04
+    note: 执行侧在 M2-EP02 建该文件时漏了 FOUNDER- 前缀；重命名只改文件名与引用，正文一字未动。
+  - renamed_from: null
+    renamed_to: null
+    object_kind: task_id
+    subject: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001
+    content_unchanged: true
+    authorized_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_1_identifier_anchor_repair
+    performed_at_package: M2-EP05
+    note: >-
+      本条记录的是「未改名」这一处置本身：Guardian NB-M2E4-01 发现该编号被引用 31 次而无同名文件，
+      裁决处置为保留两个对象并明确区分——任务 ID 不改名，裁决文件不改名，
+      改的是判据：任务 ID 通过 dispatched_by 指向 DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 而可解析。
+    is_rename: false
+    is_rename_note: renamed_from/renamed_to 为 null 表示本条不是一次改名，而是一次「明确不改名」的裁定留痕。
+
+entry_count: 48
+entries:
+  - {id: DIYU-CBFSK-FOUNDER-M0-DECISION-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M1-GATE-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M1-PASS-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M2-CHARTER-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M2-EP05-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FOUNDER-RD-M1-01, kind: founder_ruling}
+  - {id: DIYU-CBFSK-FR-CALIBRATION-004, kind: founder_ruling, naming_note: 历史合法命名，按 anchor_2 保留不改名}
+  - {id: DIYU-CBFSK-FR-EVAL-003, kind: founder_ruling, naming_note: 历史合法命名，按 anchor_2 保留不改名}
+  - {id: DIYU-CBFSK-FR-GRANULARITY-005, kind: founder_ruling, naming_note: 历史合法命名，按 anchor_2 保留不改名}
+  - {id: DIYU-CBFSK-FR-ORG-002, kind: founder_ruling, naming_note: 历史合法命名，按 anchor_2 保留不改名}
+  - {id: DIYU-CBFSK-FR-PROCESS-006, kind: founder_ruling, naming_note: 历史合法命名，按 anchor_2 保留不改名}
+  - {id: DIYU-CBFSK-EXEC-REQ-M0-003, kind: execution_request, file: 笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx}
+  - {id: DIYU-CBFSK-EXEC-REQ-M0-002, kind: superseded_identifier, superseded_by: DIYU-CBFSK-EXEC-REQ-M0-003, note: M0 执行申请 v1.1 的编号，只在生成脚本的替换记录里作为历史出现}
+  - {id: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001, kind: superseded_identifier, superseded_by: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001}
+  - {id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-001, kind: superseded_identifier, superseded_by: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002}
+  - {id: DIYU-CBFSK-FR-ORG-001-SUPP-01, kind: superseded_identifier, superseded_by: DIYU-CBFSK-FR-ORG-002, note: 以 -DRAFT 后缀形态出现在角色模型的前身清单里}
+  - {id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002, kind: task_id, dispatched_by: DIYU-CBFSK-FR-ORG-002}
+  - {id: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002-SUPP-01, kind: task_id, dispatched_by: DIYU-CBFSK-FR-EVAL-003}
+  - {id: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001, assigned_by: FOUNDER_PRODUCT_AUTHORITY, file_with_this_name_exists: false, resolvable_via: dispatched_by}
+  - {id: DIYU-CBFSK-M2-EP05-INTEGRATION-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-EP05-001, assigned_by: EXECUTION_SIDE, assigned_by_note: 本轮派发件未给出任务 ID，执行侧自建一个并如实标注签发方，不冒充 Founder 指派}
+  - {id: DIYU-CBFSK-M2-EP01-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-CHARTER-001}
+  - {id: DIYU-CBFSK-M2-EP02-001, kind: task_id, dispatched_by: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001}
+  - {id: DIYU-CBFSK-DOC-TYPO-FIX-001, kind: task_id, dispatched_by: null, fixture_only: true, note: L1 轻量任务分级判据的正例样本，不是真实派工}
+  - {id: DIYU-CBFSK-WORK-EXEC-REQUEST-20260812-001, kind: task_id, dispatched_by: DIYU-CBFSK-EXEC-REQ-M0-003, note: M0 执行申请 DOCX 生成脚本内的申请编号}
+  - {id: DIYU-CBFSK-WORK-HANDOFF-20260812-001, kind: task_id, dispatched_by: DIYU-CBFSK-EXEC-REQ-M0-003, note: 同上，交接基线编号}
+  - {id: DIYU-CBFSK-FOUNDER-SIGNOFF-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-FOUNDER-M2-KICKOFF-SIGNATURE-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-BASELINE-RECONCILIATION-RECEIPT-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-CANDIDATE-FREEZE-RECEIPT-003, kind: receipt_id}
+  - {id: DIYU-CBFSK-M0-DELIVERY-RECEIPT-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-M2-DELIVERY-RECEIPT-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-M2-EP01-RECEIPT-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-M2-EP02-RECEIPT-001, kind: receipt_id}
+  - {id: DIYU-CBFSK-BASELINE-MANIFEST-001, kind: record_id}
+  - {id: DIYU-CBFSK-BASELINE-MIGRATION-RECORD-001, kind: record_id}
+  - {id: DIYU-CBFSK-M2-EP01-MANIFEST-001, kind: record_id}
+  - {id: DIYU-CBFSK-M2-COMMERCIAL-DECISION-RECORD-001, kind: record_id}
+  - {id: DIYU-CBFSK-M2-COMPETITIVE-EVIDENCE-POLICY-001, kind: record_id}
+  - {id: DIYU-CBFSK-M2-FREEZE-CANDIDATE-001, kind: record_id}
+  - {id: DIYU-CBFSK-M2-HIDDEN-ASSET-STOP-001, kind: record_id}
+  - {id: DIYU-CBFSK-GUARDIAN-HANDOFF-002, kind: record_id}
+  - {id: DIYU-CBFSK-M2-HIDDEN-STOREA-001, kind: prompt_id}
+  - {id: DIYU-CBFSK-M2-CALIBRATION-REVIEW-PROMPT-001, kind: prompt_id}
+  - id: DIYU-CBFSK-FIXTURE-UNREGISTERED-SAMPLE-001
+    kind: fabricated_for_negative_fixture
+    confined_to_path_prefixes: [ci/fixtures/, governance/identifiers/]
+    note: >-
+      行使「编号出现在仓里却没登记」判据的样本。它登记在此，是为了让本注册表自身自洽；
+      夹具 payload 里它不出现在 entries 中，因而在 validate() 眼里仍是未登记编号。
+  - id: DIYU-CBFSK-FOUNDER-M9-IMAGINARY-001
+    kind: fabricated_for_negative_fixture
+    confined_to_path_prefixes: [ci/fixtures/, ci/checkers/, governance/identifiers/]
+    note: 行使「引用不存在的裁决」判据；只允许出现在夹具、判据源码注释与本注册表内。
+
+failure_states:
+  - IDENTIFIER_NOT_REGISTERED
+  - IDENTIFIER_KIND_INVALID
+  - IDENTIFIER_DUPLICATE_KIND
+  - RULING_FILE_NOT_FOUND
+  - TASK_ID_WITHOUT_DISPATCHING_RULING
+  - TASK_ID_RENAMED_TO_RULING_ID
+  - RULING_REFERENCE_UNRESOLVED
+  - REFERENCE_SITE_KEY_NOT_COVERED
+  - NAMING_CORRECTION_INCOMPLETE
+  - FABRICATED_ID_OUTSIDE_FIXTURES
+  - IDENTIFIER_REGISTRY_COUNT_MISSTATED
+  - IDENTIFIER_SCAN_SCOPE_NARROWED

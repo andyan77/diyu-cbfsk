@@ -4,13 +4,14 @@ artifact_id: multimodal_attribute_benchmark.v0.1
 project_id: DIYU-CBFSK-001
 milestone: M2
 execution_package: M2-EP04
-status: M2_EP04_DELIVERED_PENDING_FOUNDER_APPROVAL
-artifact_lifecycle_state: draft
+status: M2_EP05_SCOPE_ANCHORED
+artifact_lifecycle_state: validated
 card_axis: vertical_capability
 capability_dimension: multimodal_attribute
 capability_dimension_cn: 多模态属性 Benchmark
 brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 14 项
 ruling_anchors: [D-23, D-12]
+ruling_anchors_note: D-10 曾被派发件误引，EP05 裁决第零节自认为笔误；本卡按 D-12 与 D-23 定锚，不沿用错误编号。
 prd_anchors: [PRD-10.2, PRD-3.2, PRD-5.6, PRD-6-证据优先级, PRD-10.1-HG-10]
 consumes_via_profile: m2_evaluation_profile
 consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
@@ -18,29 +19,48 @@ consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile �
 founder_approval:
   required: true
   required_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第二节「定义结果标记为待 Founder 收口批准」
-  status: PENDING
+  status: ANCHORED_BY_RULING
+  anchored_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_1_multimodal_boundary
+  what_the_ruling_settled: 多模态评测的范围边界与证据优先级
+  what_the_ruling_did_not_settle: 本卡六项指标的具体阈值——阈值仍属 COND-007，须公开校准后由 Founder 冻结
   approved_at_commit: null
+  approved_at_commit_note: 裁决以 Founder 派发原文形式给出，未绑定主仓 Commit；执行侧不代填一个哈希。
 
-scope_boundary_check:
-  stop_condition_evaluated: MULTIMODAL_SCOPE_CONFLICT_WITH_D10
-  triggered: false
-  evidence_level: runtime_verified
-  anchor_discrepancy:
-    task_prompt_cites: D-10「V1.0 商品属性来源于品牌专属数据库、不做图像识别提取」
-    repository_truth:
-      - fact: PRD v1.2 正文与 v1.1 Delta 中，D-10 的标题是「运行时模型合同」（模型无关、Founder 供 API），不是商品属性来源。
-        source: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx 第三部分 D-10
-      - fact: 任务 Prompt 所引的那段实质内容，逐字对应的是 D-12「商品属性来源」。
-        source: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx 第三部分 D-12
-        verbatim: 商品与货盘属性以品牌专属数据库（品牌真源 / PIM / ERP 等）为唯一来源；V1.0 不立项图像识别属性提取工程线。
-      - fact: D-12 在 PRD v1.2 中被 D-23 部分改判，现行非目标条文为分层引入视觉推断。
-        source: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx 3.2 非目标
-        verbatim: 品牌专属数据库仍为权威事实来源；多模态视觉推断按 D-23 分层引入（authoritative > human_confirmed > model_inferred），推断不得覆盖权威事实，不得推断成分、性能、库存与安全认证。
-    handling: >-
-      执行侧既未放宽也未改写任何裁决，只是按编号核对了真源。本卡的边界取 D-12 与 D-23 的**交集**：
-      属性来源仍唯一是品牌专属数据库（D-12 未被推翻的部分），视觉推断只能作为带证据等级的下层信息存在
-      （D-23 改判后的部分）。两条同时成立时可评的东西是清楚的，因此不触发 STOP。
-    founder_action_requested: 确认编号更正（D-10 → D-12）并批准本卡边界；如 Founder 另有口径，以 Founder 为准。
+scope_boundary:
+  anchored_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_1_multimodal_boundary
+  anchor_statement_verbatim: >-
+    品牌专属数据库/PIM/ERP 结构化事实为权威，人工确认视觉属性次之，
+    多模态视觉推断可作为有来源、有置信度的补充证据；推断不得覆盖权威事实，
+    不得仅凭图片断言成分、性能、库存、价格与安全认证。
+  evidence_order: [authoritative, human_confirmed, model_inferred]
+  inference_may_override_authoritative: false
+  forbidden_image_only_assertions: [成分, 性能, 库存, 价格, 安全认证]
+  prd_anchor:
+    document: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    section: 3.2 非目标
+    verbatim: 品牌专属数据库仍为权威事实来源；多模态视觉推断按 D-23 分层引入（authoritative > human_confirmed > model_inferred），推断不得覆盖权威事实，不得推断成分、性能、库存与安全认证。
+    parsed_at_check_time: true
+    parsed_by: ci/checkers/check_m2_capability_matrix.py
+  number_correction:
+    erroneous_number: D-10
+    erroneous_number_source: Founder 侧派发件编号笔误（EP05 裁决第零节自认）
+    historical_clause_true_number: D-12
+    historical_clause_title: 商品属性来源
+    current_controlling_clause_true_number: D-23
+    current_controlling_clause_effect: 在 D-12 基础上分层引入视觉推断，权威事实仍不可被推断覆盖
+    erroneous_number_must_not_be_reused: true
+  retired_stop_code:
+    code: MULTIMODAL_SCOPE_CONFLICT_WITH_D10
+    status: RETIRED
+    reason: 无实现、无夹具，且码名内嵌错误编号；按 EP05 裁决第二节作废删除。
+    replaced_by_machine_predicates:
+      - MULTIMODAL_SCOPE_EXCEEDS_AUTHORITATIVE_FACT_BOUNDARY
+      - MULTIMODAL_EVIDENCE_ORDER_DRIFT
+      - MULTIMODAL_FORBIDDEN_ATTRIBUTE_IN_SCOPE
+    replacement_is_machine_checked: true
+    why_not_just_delete_the_claim: >-
+      作废一条杜撰的停止码不等于放弃那份保护。原本想守的事是「多模态评测别越界去当属性来源」——
+      这件事现在由三条现场解析 PRD 正文的判据守，边界从裁决正文来，不从码名来。
   what_this_benchmark_does_not_test:
     - 把图像识别当作商品属性来源的准确率（D-12：V1.0 不立项该工程线）
     - 成分、性能、库存与安全认证的视觉推断（D-23 明文禁止推断）

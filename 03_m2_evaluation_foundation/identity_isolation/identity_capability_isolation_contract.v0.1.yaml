@@ -97,11 +97,17 @@ scan_coverage_record:
     覆盖面数字一律是记录值，不是文中随手写的数。当前值由判据现算比对，历史值绑定它被测出来的那个提交。
   guarded_by: ci/checkers/check_m2_identity_isolation.py SCAN_COVERAGE_COUNT_MISSTATED
   current:
-    scanned_file_count: 594
-    measured_at_package: M2-EP04
+    scanned_file_count: 664
+    measured_at_package: M2-EP05
     evidence_level: runtime_verified
     method: check_m2_identity_isolation.collect() 的 scanned_file_count
   history:
+    - measured_at_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+      package: M2-EP04
+      scanned_file_count: 594
+      evidence_level: runtime_verified
+      method: check_m2_identity_isolation.collect() 的 scanned_file_count
+      note: EP04 交付态的实测值；EP05 新增判据、夹具与启动包后扫描面自然增大。
     - measured_at_commit: 43251b21a32fc9a3fee375675a611577babca570
       package: M2-EP01
       scanned_file_count: 270

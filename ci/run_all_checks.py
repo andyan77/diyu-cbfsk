@@ -56,6 +56,10 @@ CHECKERS = [
     "check_disclosure_discipline",
     "check_guardian_report_binding",
     "check_m2_hidden_generation_readiness",
+    "check_identifier_resolution",
+    "check_stop_code_enforcement",
+    "check_report_number_traceability",
+    "check_calibration_launch_pack",
 ]
 
 

@@ -14,10 +14,24 @@ measurement:
   method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
   evidence_level: runtime_verified
   measured_by: ci/checkers/check_error_code_fixture_coverage.py
-  declared_codes_total: 523
-  fail_fixtures_run: 385
-  covered_codes: 376
+  measured_at_package: M2-EP05
+  declared_codes_total: 573
+  fail_fixtures_run: 440
+  covered_codes: 426
   uncovered_codes: 147
+measurement_history:
+  purpose: >-
+    measurement 是「现在这一刻」的实测值，会随判据增加而变。
+    报告要引的是它当时那一刻的值——把历史报告接到 measurement 上，
+    报告的内容会随后续施工悄悄改变，那不是报告，是仪表盘。
+  entries:
+    - measured_at_package: M2-EP04
+      measured_at_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+      evidence_level: runtime_verified
+      declared_codes_total: 523
+      fail_fixtures_run: 385
+      covered_codes: 376
+      uncovered_codes: 147
 per_checker_counts:
   check_active_product_truth: 6
   check_baseline_hashes: 9

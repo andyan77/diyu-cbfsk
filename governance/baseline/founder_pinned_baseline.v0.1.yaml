@@ -135,7 +135,7 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: fc639ef516540a707acdbacfb54e6105e197f2e0575e104f3c88bca19b302e14
+    post_change_binary_sha256: 870c3a8f2ade67cdb2be50c08471085941bc92e84189ef4fd692a8b0898d0ce1
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
@@ -154,11 +154,33 @@ active_baseline_candidates:
       backfilled_in_package: M2-EP04
       guarded_by: ci/checkers/check_sequential_registration.py LANDED_COMMIT_BLOB_MISMATCH
     authorized_modification_history:
+      - change_id: README-MOD-15
+        authorization_ref: DIYU-CBFSK-FOUNDER-M2-EP05-001 allowed_updates（状态真源及其机械投影）
+        binary_sha256: 870c3a8f2ade67cdb2be50c08471085941bc92e84189ef4fd692a8b0898d0ce1
+        landed_in_commit: null
+        self_referential: true
+        self_reference_limitation: >-
+          本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
+          landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，
+          且要求必须声明本字段（SELF_REFERENCE_UNDECLARED）。收口后可由 Founder 回填。
+        content: >-
+          状态块补 m2_ep05_status 与 public_blueprint_stable_for_hidden_generation；
+          M2 段新增 EP05 整合与并行启动一节（四项定锚、STOP enforcement 三分类、报告数字结构化、
+          校准启动包、隐藏生成时序门）；隐藏资产段的 Steward Prompt 由 v1.0.0 改 v1.1.0（十二阶段）；
+          M2 现状指针改指 m2_ep05/ 并说明 m2_delivery_report 已标 SUPERSEDED；
+          Checker 计数 41→45 并新增 ci/tools 条目。
+        linked_registration_note: >-
+          依 OI-06 口径，「允许更新 README」自动包含本仓机制强制要求的联动登记项
+          （本条目 + post_change_binary_sha256），无需逐次裁决，但须在交付报告列明联动项。
       - change_id: README-MOD-14
         authorization_ref: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 allowed_updates（状态真源及其机械投影）
         binary_sha256: fc639ef516540a707acdbacfb54e6105e197f2e0575e104f3c88bca19b302e14
-        landed_in_commit: null
-        self_referential: true
+        landed_in_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+        landed_in_commit_backfilled_at_package: M2-EP05
+        landed_in_commit_backfill_evidence: >-
+          git show cffa6ccba2abf3c67b06e358dc33aa5d051e7868:README.md 的 blob 哈希现算等于本条
+          binary_sha256；自指限制在该提交落地后即告解除，因此回填而非继续留 null。
+        self_referential: false
         self_reference_limitation: >-
           本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
           landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，

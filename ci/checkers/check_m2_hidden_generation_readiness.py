@@ -19,7 +19,10 @@ from _common import ROOT, cli, load_yaml, sha256_file
 
 LABEL = "check_m2_hidden_generation_readiness"
 
-BUNDLE = "03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.0.0.yaml"
+BUNDLE = "03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml"
+TIMING_GATE = "governance/conditions/hidden_generation_timing_gate.v0.1.yaml"
+AGGREGATION = "03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml"
+REVIEW_STATE = "03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml"
 SEMANTICS = "governance/conditions/m2_condition_state_semantics.v0.1.yaml"
 LEDGER = "governance/conditions/conditional_decision_ledger.yaml"
 
@@ -134,10 +137,69 @@ def _validate_semantics(payload: dict, errors: list[str]) -> None:
             errors.append(f"STOP_TYPE_UNKNOWN: {stop.get('stop_id')} declares no STOP type at all")
 
 
+def _validate_timing_gate(payload: dict, errors: list[str]) -> None:
+    """EP05 第七节：正式批必须等蓝图稳定，试产批不得混进正式数。"""
+    gate = payload.get("timing_gate") or {}
+
+    for item in gate.get("preconditions") or []:
+        recomputed = item.get("recomputed")
+        if recomputed is not None and item.get("declared") != recomputed:
+            errors.append(
+                f"TIMING_GATE_PRECONDITION_MISSTATED: {item.get('id')} declares {item.get('declared')!r}, "
+                f"its evidence source gives {recomputed!r}"
+            )
+
+    satisfied = all(item.get("declared") is True for item in gate.get("preconditions") or [])
+    if gate.get("state") is True and not satisfied:
+        errors.append(
+            "TIMING_GATE_OPEN_WITHOUT_PRECONDITIONS: the gate is open while some precondition is unmet"
+        )
+    if gate.get("state") is True and gate.get("founder_confirmed") is not True:
+        errors.append(
+            "EXECUTION_SIDE_FLIPPED_TIMING_GATE: the gate is open without a recorded Founder confirmation"
+        )
+
+    if gate.get("formal_batch_started") is True and gate.get("state") is not True:
+        errors.append(
+            "FORMAL_BATCH_BEFORE_TIMING_GATE: the 40-brand formal batch started while the gate is closed"
+        )
+    limit = gate.get("pilot_brand_limit")
+    if isinstance(limit, int) and (gate.get("pilot_brand_count") or 0) > limit:
+        errors.append(
+            f"PILOT_BATCH_EXCEEDS_LIMIT: {gate.get('pilot_brand_count')} pilot brands exceed the limit of {limit}"
+        )
+    if gate.get("pilot_counted_in_brand_count") is True:
+        errors.append("PILOT_COUNTED_IN_BRAND_COUNT: pilot brands must not be counted in brand_count")
+    if (gate.get("pilot_brand_count") or 0) > 0 and (gate.get("counted_brand_count") or 0) > 0 \
+            and gate.get("state") is not True:
+        errors.append(
+            "PILOT_COUNTED_IN_BRAND_COUNT: brands are counted while only a pilot batch is authorised"
+        )
+
+    evidence = gate.get("store_a_evidence") or {}
+    if evidence.get("status") == "RECEIVED":
+        for missing in sorted(set(evidence.get("required_fields") or []) - set(evidence.get("received_fields") or [])):
+            errors.append(f"STORE_A_EVIDENCE_INCOMPLETE: STORE-A evidence lacks {missing!r}")
+        if evidence.get("locator_present") is True:
+            errors.append(
+                "STORE_A_EVIDENCE_LEAKS_LOCATOR: the purified evidence carries a repository URL, token or deploy key"
+            )
+    if payload.get("cond_011_status") == "CLOSED" and evidence.get("status") != "RECEIVED":
+        errors.append(
+            "STORE_A_EVIDENCE_INCOMPLETE: COND-011 is closed while the STORE-A evidence has not been received"
+        )
+    if payload.get("hidden_assets_status") in STATUS_REQUIRING_COND_011_CLOSED \
+            and gate.get("boundary_recheck_performed") is not True:
+        errors.append(
+            "BOUNDARY_RECHECK_SKIPPED_ON_INTAKE: hidden asset status advanced without the boundary recheck"
+        )
+
+
 def validate(payload: dict) -> list[str]:
     errors: list[str] = []
     _validate_bundle(payload, errors)
     _validate_semantics(payload, errors)
+    _validate_timing_gate(payload, errors)
     return errors
 
 
@@ -164,8 +226,59 @@ def collect() -> dict:
             }
         )
 
+    gate = load_yaml(TIMING_GATE)
+    aggregation_doc = load_yaml(AGGREGATION)
+    review_state = load_yaml(REVIEW_STATE)
+
+    # 前三项前置由判据现算，不读门自己的声明——门是被检对象。
+    sides_collected = all(
+        (side.get("record_count") or 0) >= (side.get("expected_record_count") or 0) > 0
+        for side in review_state["sides"]
+    )
+    recomputed = {
+        "TG-01": sides_collected,
+        "TG-02": bool((aggregation_doc.get("disagreement_statistics") or {}).get("computed")),
+        "TG-03": threshold["counts"]["recommendation_absent"] == 0,
+        "TG-04": None,
+    }
+    preconditions = [
+        {
+            "id": item["id"],
+            "declared": item["current"],
+            "recomputed": recomputed.get(item["id"]),
+        }
+        for item in gate["preconditions"]["items"]
+    ]
+    evidence = gate["store_a_evidence"]
+    required_fields = sorted(
+        {field for spec in evidence["files"] for field in spec["minimum_fields"]}
+    )
+
     blueprint = semantics["m2_public_blueprint_status"]
     return {
+        "timing_gate": {
+            "state": gate["state"]["current_value"],
+            "preconditions": preconditions,
+            "founder_confirmed": gate["founder_confirmation"]["confirmed"],
+            "formal_batch_started": gate["current_generation_state"]["formal_batch_started"],
+            "pilot_brand_count": gate["current_generation_state"]["pilot_brand_count"],
+            "counted_brand_count": gate["current_generation_state"]["counted_brand_count"],
+            "pilot_brand_limit": next(
+                a["constraints"]["pilot_brand_limit"]
+                for a in gate["while_false"]["allowed"] if a["id"] == "AL-03"
+            ),
+            "pilot_counted_in_brand_count": next(
+                a["constraints"]["counted_in_brand_count"]
+                for a in gate["while_false"]["allowed"] if a["id"] == "AL-03"
+            ),
+            "boundary_recheck_performed": gate["on_main_repo_acceptance"]["boundary_recheck_performed"],
+            "store_a_evidence": {
+                "status": evidence["status"],
+                "required_fields": required_fields,
+                "received_fields": evidence["received_fields"],
+                "locator_present": False,
+            },
+        },
         "files": files,
         "declared_file_count": bundle["file_count"],
         "declared_categories": [c["category"] for c in bundle["required_file_categories"]],

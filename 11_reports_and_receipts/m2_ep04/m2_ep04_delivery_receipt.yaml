@@ -12,8 +12,12 @@ base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 branch: candidate/m2
 authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 ＋ 同批派发的 M2 收口裁决
 
-describes_current_state: true
-superseded_by: null
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml
+superseded_at_package: M2-EP05
+superseded_note: >-
+  本回执记的是 EP04 交付时点的现状，仍然有效地描述那一刻；
+  「当前现状」这一身份由 EP05 回执接手。两份回执同时自称当前，读者就无从知道该信哪份。
 self_reference_limitation: >-
   本回执无法记录包含它自身的那个提交的哈希——回执与提交无法互相先于对方。
   最终候选哈希在交付报告中以命令行实测值给出，本字段声明该限制而不用占位符冒充。
@@ -121,7 +125,12 @@ open_items:
     status: AWAITING_FOUNDER
     execution_side_action: 只重命名执行侧自己建的那一份，不擅改 Founder 既有裁决文件名
   - id: OI-M2-FIXTURE-DEBT
-    item: 149 条已声明错误码尚无 expected=FAIL 夹具行使
+    item: 147 条已声明错误码尚无 expected=FAIL 夹具行使
+    item_count_corrected_at_package: M2-EP05
+    item_count_correction_note: >-
+      本条原写 149，与同一份回执 self_check.error_code_fixture_coverage.uncovered_registered=147
+      自相矛盾；149 是 NB-M2-02 中途一轮的旧测量值。按 EP05 裁决第三节同类计数一并纠正，
+      改的是这一处笔误，不改当时的结论。
     status: REGISTERED_WITH_RATCHET
     mechanism: governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml（上限只降不升，新增 checker 零欠账）
   - id: COND-007

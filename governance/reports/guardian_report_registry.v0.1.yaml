@@ -20,6 +20,21 @@ rules:
   failure_state: GUARDIAN_REVIEW_COMMIT_UNBOUND
 transcription_discipline: 凡 conclusion_source=FOUNDER_PARAPHRASE_IN_TASK_PROMPT 的条目，其 decision 是转述值，不得表述为「已取得 Guardian
   报告」。
+ep05_ruling:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_3_guardian_report
+  verbatim: >-
+    旧 Guardian 结论已依 §14 失效，其占位记录保留、且不得被表述为已落盘原文；
+    不再作为 M2 收口阻断项。最终 Head 必须取得完整、可哈希、可落盘的 Guardian 报告原文。
+  effects:
+    prior_conclusions_expired_under_section_14: true
+    placeholder_records_retained: true
+    placeholder_must_not_be_called_fulltext: true
+    blocking_for_m2_closeout: false
+    final_head_requires_fulltext: true
+  what_this_does_not_change: >-
+    GR-3 仍然生效：占位文件不得被登记为报告本身。裁决免掉的是「因它而阻断收口」，
+    不是「可以把占位当全文」——这两件事混起来，就等于用一句「不阻断」把没有的东西说成有。
+
 counts:
   total: 5
   landed: 3

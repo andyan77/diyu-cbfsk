@@ -116,9 +116,15 @@ stop_taxonomy:
       record: 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml
     - stop_id: GUARDIAN_REPORT_FULLTEXT_NOT_PROVIDED
       types: [DEPENDENCY_WAIT]
-      waiting_for: Founder 提供 3008f56b 与 2df1101 两轮 Guardian 报告全文
-      allowed_to_continue: 六条非阻塞发现的处置（已完成）
+      waiting_for: 最终 Head 的 Guardian 报告全文
+      allowed_to_continue: 六条非阻塞发现的处置（已完成）＋ M2 收口其余全部工作
       record: governance/reports/guardian_report_registry.v0.1.yaml
+      blocking_for_m2_closeout: false
+      blocking_for_m2_closeout_authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_3_guardian_report
+      ruling_effect: >-
+        旧 Guardian 结论已依 §14 失效，占位记录保留且不得被表述为已落盘原文；
+        该项不再作为 M2 收口阻断项。最终 Head 仍必须取得完整、可哈希、可落盘的报告原文——
+        「不阻断收口」与「可以没有」是两件事。
 
 candidate_status:
   value: M2_PARTIAL_DELIVERY_BLOCKED
@@ -159,6 +165,37 @@ final_asset_existence_gate:
   total_count: 12
   gate_open: false
 
+hidden_generation_timing_gate:
+  contract: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  state_field: public_blueprint_stable_for_hidden_generation
+  current_value: false
+  relation_to_blueprint_status: >-
+    m2_public_blueprint_status 说的是「输入包可用了」，时序门说的是「可以开始正式生产了」。
+    前者为真而后者为假，正是当前状态：Steward 可以建工具链、可以做 2 个品牌的试产批，
+    但不得开 40 品牌正式批——蓝图还可能被校准结果改动。
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate
+
+anchor_closures:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors
+  items:
+    - open_item: OI-M2-ANCHOR
+      closed_by: ANCHOR-1
+      how: 多模态边界以 PRD v1.2 分层视觉推断条款定锚；D-10 认定为 Founder 侧编号笔误，真实编号 D-12／D-23 已绑定并登记。
+      status: CLOSED
+    - open_item: OI-M2-NAMING
+      closed_by: ANCHOR-2
+      how: 现存 FR-* 保留为历史合法命名，不批量重命名；FOUNDER- 前缀规则对本裁决之后新建文件生效。
+      status: CLOSED
+    - open_item: OI-M2-GUARDIAN-REPORT
+      closed_by: ANCHOR-3
+      how: 旧结论依 §14 失效、占位记录保留、不再作为 M2 收口阻断项；最终 Head 仍须取得全文。
+      status: CLOSED_AS_NON_BLOCKING
+      residual_obligation: 最终 Head 的 Guardian 报告全文
+    - open_item: OI-M2-METRIC-GROUPING
+      closed_by: ANCHOR-4
+      how: PRD 10.2 逐项 metric ID 为机器真源；Brief 分组说法不具覆盖数量真源地位。
+      status: CLOSED
+
 m2_public_blueprint_status:
   value: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
   authorized_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第八节第 1 项
@@ -169,7 +206,7 @@ m2_public_blueprint_status:
   is_not_execution_status_note: >-
     本状态不进 execution_status 枚举。execution_status 仍为 M2_IN_PROGRESS——
     往那个枚举里加值需要单独的状态位授权，本裁决授权的是一个新状态字段，不是改那条枚举。
-  bundle: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.0.0.yaml
+  bundle: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
   preconditions_met:
     - 18 项交付覆盖矩阵已生成且逐项有证据哈希
     - 能力矩阵四轴可寻址

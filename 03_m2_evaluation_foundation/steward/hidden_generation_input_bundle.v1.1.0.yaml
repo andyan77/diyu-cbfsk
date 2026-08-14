@@ -1,21 +1,23 @@
 schema_version: '0.1'
 bundle_id: DIYU-CBFSK-M2-HIDDEN-GENERATION-INPUT-BUNDLE
-bundle_version: 1.0.0
-artifact_id: hidden_generation_input_bundle.v1.0.0
+bundle_version: 1.1.0
+artifact_id: hidden_generation_input_bundle.v1.1.0
 project_id: DIYU-CBFSK-001
 milestone: M2
-execution_package: M2-EP04
-authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第八节 A-8
-source_main_candidate_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+execution_package: M2-EP05
+authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_4_steward_prompt_v1_1_0
+source_main_candidate_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
 source_main_candidate_commit_note: 本包在该提交之上继续施工；输入包的文件哈希取自**本包交付态**，不是该提交当时的状态。source_main_candidate_commit 记的是血缘起点，files[].sha256
   记的是实际交付内容——两者不是同一件事，不得混用。
 consumer_role: FOUNDER_HIDDEN_BENCHMARK_STEWARD
 consumer_storage: STORE-A
 steward_prompt:
   prompt_id: DIYU-CBFSK-M2-HIDDEN-STOREA-001
-  version: 1.0.0
-  path: 03_m2_evaluation_foundation/steward/hidden_asset_steward_prompt.v1.0.0.md
-  sha256: 969d771fda47e11324e6655b9169b422996b56732360691d380823e84cb21ed9
+  version: 1.1.0
+  path: 03_m2_evaluation_foundation/steward/hidden_asset_steward_prompt.v1.1.0.md
+  sha256: db3ef014673d732bfa2debeabf7a13374358779865b4715e107ebce585d3de9e
+  sha256_sidecar: 03_m2_evaluation_foundation/steward/steward_prompt.sha256
+  phase_count: 12
   summary_does_not_substitute_full_file: true
   summary_note: 任务 Prompt 里的摘要不得替代该完整文件；Steward 必须读全文。
 required_file_categories:
@@ -73,6 +75,9 @@ machine_checkable_fields:
   generation_started:
     type: boolean
     current_value: false
+  steward_prompt_phase_count:
+    type: integer
+    required_value: 12
 failure_states:
 - HIDDEN_INPUT_BUNDLE_STALE
 - STALE_BUNDLE_USED_FOR_GENERATION
@@ -82,7 +87,7 @@ failure_states:
 - BUNDLE_FILE_COUNT_MISSTATED
 files:
 - path: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
-  sha256: 10b8ec27562b613655256fb577cff224d294c86c3b6338eb572cfaa5c58f0a91
+  sha256: d49c63ca0fa1e1e3534008d79340cf04c408851228ca0aa93c3ac69ebd19804f
   category: 交付覆盖映射
 - path: 03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml
   sha256: 2e849acd69a902c8a8e1202f47537cad5a4bc58b004eca3b4eab8f619bfbb727
@@ -121,7 +126,7 @@ files:
   sha256: 7d10781d2a9249ee068f7a601117f38ada3cb503b30949589aad41321b516ec0
   category: 七类纵向评分合同
 - path: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
-  sha256: a8a6fb984488c7cf5c92b627ab8e621b70818b71515182c205622d3968856344
+  sha256: 7c3ed5293064a139e5c9732343d0654243adc451b3c660d3073cedf543a6313b
   category: 七类纵向评分合同
 - path: 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml
   sha256: d069229332edc1bb61342ca1cc96ec80517cfd5d474efb058eb376b36ce55a2a
@@ -138,6 +143,20 @@ files:
 - path: 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml
   sha256: 7416f5de65859f9e53a897860443ea16256585e57204ea79cf9ac78d7d9e410f
   category: 硬门定义
-- path: 03_m2_evaluation_foundation/steward/hidden_asset_steward_prompt.v1.0.0.md
-  sha256: 969d771fda47e11324e6655b9169b422996b56732360691d380823e84cb21ed9
+- path: 03_m2_evaluation_foundation/steward/hidden_asset_steward_prompt.v1.1.0.md
+  sha256: db3ef014673d732bfa2debeabf7a13374358779865b4715e107ebce585d3de9e
   category: Steward 执行 Prompt
+supersedes:
+  bundle_version: 1.0.0
+  reason: Steward Prompt 升至 v1.1.0（补齐十二阶段），输入包哈希随之全量重算。
+  old_file_deleted: true
+  old_file_deleted_reason: 同一份输入包留两个版本会产生两套哈希口径，改一处漏一处（EQ-1）。历史版本在 Git 历史里可取。
+timing_gate:
+  state_field: public_blueprint_stable_for_hidden_generation
+  state_source: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  current_value: false
+  formal_batch_allowed: false
+  pilot_batch_allowed: true
+  pilot_brand_limit: 2
+  pilot_not_counted_in_brand_count: true
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate

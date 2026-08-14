@@ -278,7 +278,7 @@ items:
   - 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
   status: READY
   evidence_hashes:
-    03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml: a8a6fb984488c7cf5c92b627ab8e621b70818b71515182c205622d3968856344
+    03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml: 7c3ed5293064a139e5c9732343d0654243adc451b3c660d3073cedf543a6313b
   blockers: []
   founder_supersession_ruling: null
   assessment_note: 边界核对已完成（D-12 与 D-23 交集），六条指标与 HG-10 绑定齐备；待 Founder 收口批准边界。

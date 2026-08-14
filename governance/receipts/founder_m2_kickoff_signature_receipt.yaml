@@ -72,10 +72,21 @@ baseline_binding_precheck:
       condition: /home/faye/diyu-cbfsk-m2 不存在
       result: PASS
       stop_condition_not_triggered: WORKTREE_PATH_ALREADY_EXISTS
+      enforcement: human_judgement
+      verified_by: 执行侧在 M2-EP01 Phase 0 现场核对路径存在性
+      enforcement_annotation_added_at_package: M2-EP05
+      enforcement_annotation_note: >-
+        本码无 CI 检测器：它判的是「动作发生前那一刻路径存不存在」，事后不可复检。
+        按 EP05 裁决第二节补标注，原判定文字未改。
     - id: PRE-03
       condition: 分支 candidate/m2 不存在
       result: PASS
       stop_condition_not_triggered: CANDIDATE_M2_BRANCH_ALREADY_EXISTS
+      enforcement: human_judgement
+      verified_by: 执行侧在 M2-EP01 Phase 0 现场核对分支引用
+      enforcement_annotation_added_at_package: M2-EP05
+      enforcement_annotation_note: >-
+        同 PRE-02：判的是执行前既存的他方分支，动作发生后该分支必然存在，无法用 CI 复检。
   worktree_creation_note: >-
     首次 git worktree add 因执行环境沙箱对仓库外路径只读而失败，但 git 已先行创建 candidate/m2 分支引用；
     执行侧确认该引用为本次失败动作的残留（reflog 仅一条 "branch: Created from 6499431…"、零提交、指向基线），

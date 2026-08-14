@@ -1,0 +1,250 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M2-EP05-001
+project_id: DIYU-CBFSK-001
+title: M2-EP05 整合与并行启动 —— 四项定锚裁决与九节处置
+ruling_date: "2026-08-14"
+issued_by: FOUNDER_PRODUCT_AUTHORITY
+milestone: M2
+landed_at_package: M2-EP05
+supersedes_partially:
+  - ruling: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001
+    clause: article_4_hidden_scale_adoption.multimodal_scope
+    superseded_by: article_0_anchors.anchor_1_multimodal_boundary
+    what_changed: >-
+      收口裁决把多模态边界系在「D-10」上并挂 founder_approval_status: PENDING。
+      本裁决直接以 PRD v1.2 正文分层视觉推断条款定锚，并认定「D-10」为 Founder 侧编号笔误，
+      PENDING 状态由此关闭。
+  - ruling: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001
+    clause: article_2_confirmations_and_discipline.discipline_2
+    superseded_by: article_0_anchors.anchor_2_naming
+    what_changed: >-
+      收口裁决要求「凡 Founder 裁决文件一律带 FOUNDER- 前缀」。本裁决明确该规则**不溯及既往**：
+      现存 FR-* 文件作为历史合法命名保留，不作批量重命名；规则对本裁决之后新建的文件生效。
+
+transcription_note: >-
+  本文件由执行侧转录 Founder 粘贴的《M2-EP05 整合与并行启动》裁决原文，以 Founder 原文为准。
+  转录范围＝零至九节全部条款；执行侧未增删裁决内容，只补落盘所需的机器可检字段与落点路径。
+
+article_0_anchors:
+  count: 4
+  anchor_1_multimodal_boundary:
+    id: ANCHOR-1
+    subject: 多模态边界定锚
+    verbatim: >-
+      以 PRD v1.2 正文的分层视觉推断条款为准——品牌专属数据库/PIM/ERP 结构化事实为权威，
+      人工确认视觉属性次之，多模态视觉推断可作为有来源、有置信度的补充证据；推断不得覆盖权威事实，
+      不得仅凭图片断言成分、性能、库存、价格与安全认证。此前派发件中出现的「D-10」引用为 Founder 侧编号笔误，
+      历史条款与现行控制条款的真实编号由执行侧从 PRD 与裁决索引核定后绑定，并在覆盖矩阵登记；不得沿用错误编号。
+    evidence_order: [authoritative, human_confirmed, model_inferred]
+    inference_must_not_override_authoritative: true
+    forbidden_image_only_assertions: [成分, 性能, 库存, 价格, 安全认证]
+    execution_side_binding:
+      erroneous_number: D-10
+      historical_clause_true_number: D-12
+      current_controlling_clause_true_number: D-23
+      binding_method: 由执行侧从 PRD v1.2 正文与 v1.1 Delta 逐条核定后绑定
+      landed_at: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml scope_boundary
+      registered_at: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml anchor_number_corrections
+      erroneous_number_may_be_reused: false
+  anchor_2_naming:
+    id: ANCHOR-2
+    subject: 命名裁决
+    verbatim: >-
+      现存 FR-* 文件作为历史合法命名予以保留，不作批量重命名；本裁决之后新建的 Founder 裁决文件
+      一律使用 FOUNDER- 前缀。任务 ID 不是裁决 ID，二者不得互相改名。
+    retroactive: false
+    existing_fr_files_preserved: true
+    task_id_is_not_ruling_id: true
+    closes_open_item: OI-M2-NAMING
+  anchor_3_guardian_report:
+    id: ANCHOR-3
+    subject: Guardian 报告裁决
+    verbatim: >-
+      旧 Guardian 结论已依 §14 失效，其占位记录保留、且不得被表述为已落盘原文；
+      不再作为 M2 收口阻断项。最终 Head 必须取得完整、可哈希、可落盘的 Guardian 报告原文。
+    prior_conclusions_expired_under_section_14: true
+    placeholder_records_retained: true
+    placeholder_must_not_be_called_fulltext: true
+    blocking_for_m2_closeout: false
+    final_head_requires_fulltext: true
+    closes_open_item: OI-M2-GUARDIAN-REPORT
+  anchor_4_metric_grouping:
+    id: ANCHOR-4
+    subject: 指标分组裁决
+    verbatim: >-
+      PRD 10.2 逐项 metric ID 为机器真源；Brief 中「人设四项／语感六项／多模态六项」等分组
+      仅作说明，不具覆盖数量真源地位。
+    machine_source_of_truth: PRD v1.2 §10.2 metric ID 逐项
+    brief_groupings_are_illustrative_only: true
+    closes_open_item: OI-M2-METRIC-GROUPING
+
+article_1_identifier_anchor_repair:
+  finding: NB-M2E4-01
+  observed:
+    referenced_id: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001
+    reference_count: 31
+    file_count: 24
+    file_with_that_name_exists: false
+    landed_ruling_file: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001.yaml
+    rename_record_present_at_finding_time: false
+  disposition_verbatim: >-
+    保留两个对象并明确区分——任务 ID 维持 Founder 派发时的原值，裁决文件维持 FOUNDER- 前缀名；
+    补一份 naming_correction 记录（renamed_from/renamed_to/content_unchanged/authorized_by），
+    使 31 处引用可解析。
+  checker_scope_extension_verbatim: >-
+    裁决存在性核验须覆盖 established_by／finding／authorization_ref 等全部引用位，
+    不止 basis／ruling；配负例夹具。
+  landed_at:
+    registry: governance/identifiers/identifier_registry.v0.1.yaml
+    checker: ci/checkers/check_identifier_resolution.py
+
+article_2_phantom_stop_code:
+  finding: NB-M2E4-02
+  verbatim_1: >-
+    MULTIMODAL_SCOPE_CONFLICT_WITH_D10 系 Founder 侧派发件杜撰，无实现、无夹具，作废删除；
+    如需保留同等保护，改为对应的机器判据并配负例夹具，命名不得含错误编号。
+  verbatim_2: >-
+    全仓自查：凡出现在 stop_conditions / not_triggered 清单中的码，
+    必须逐条标注 enforcement: machine_checked | human_judgement | future_runtime。
+  verbatim_3: >-
+    报告与回执中的 STOP 表格必须按上述三类分栏呈现，
+    禁止把「人工判断为真」与「判据实测为真」混在同一张表里。
+  general_rule_permanent_verbatim: >-
+    任何声明为 STOP 的错误码，若无检测器实现，一律不得表述为「未触发」。
+  retired_code: MULTIMODAL_SCOPE_CONFLICT_WITH_D10
+  replacement_code_must_not_contain_erroneous_number: true
+  enforcement_classes: [machine_checked, human_judgement, future_runtime]
+  landed_at:
+    registry: governance/gates/stop_code_enforcement_registry.v0.1.yaml
+    checker: ci/checkers/check_stop_code_enforcement.py
+    replacement_predicate_checker: ci/checkers/check_m2_capability_matrix.py
+
+article_3_numeric_reference_structuring:
+  finding: NB-M2E4-03
+  observed_verbatim: >-
+    EP04 报告的 500/350/149 与台账实测 523/376/147 不符，且自相矛盾（500−350≠149）。
+  disposition_verbatim: >-
+    修复方式不是再抄一遍正确数字：报告一律改为引用台账 measurement 字段，由生成时读取；
+    同类覆盖面/计数数字全部照此办理。
+  new_criterion_verbatim: >-
+    报告中出现的计数类数字必须能追溯到某个机器记录字段，否则 FAIL。
+  landed_at:
+    renderer: ci/tools/render_report.py
+    registry: governance/gates/report_number_binding_registry.v0.1.yaml
+    checker: ci/checkers/check_report_number_traceability.py
+
+article_4_steward_prompt_v1_1_0:
+  required_before_formal_generation: true
+  reason_verbatim: 现版本止于报告纪律，缺少施工、测试、私有审查、冻结与 Runner 阶段，不足以让另一台机器一站到底。
+  phase_count: 12
+  phases:
+    - {id: 0, title: 隔离环境、UUID 与权限预检}
+    - {id: 1, title: STORE-A 目录结构、私仓治理与 Provision 证明}
+    - {id: 2, title: 输入包 20 份文件逐项哈希校验（不符即停）}
+    - {id: 3, title: Schema、生成器、检查器、密封 Runner 与测试工具建设}
+    - {id: 4, title: 40 个完整隐藏品牌生成（按最低构成，缺一不计数）}
+    - {id: 5, title: ≥480 条商品记录与 ≥240 张实际图像生成（全合成、可复现、严禁真实品牌图像与网络抓取）}
+    - {id: 6, title: ≥480 道完整评测题生成（含跨品类/多模态/人设连续性/语感/高风险下限）}
+    - {id: 7, title: 泄漏与同质性双检查（量化，非人工判断）}
+    - {id: 8, title: Founder 私有审查队列，高风险项 100% 复核}
+    - {id: 9, title: 私有 Commit、Tag、Manifest 与 Merkle Root 冻结}
+    - {id: 10, title: 净化 public_export 及安全检查}
+    - {id: 11, title: Report、Receipt 与 COMPLETE 完成门定义}
+  synchronized_updates:
+    - hidden_asset_steward_prompt v1.1.0
+    - hidden_generation_input_bundle v1.1.0
+    - steward_prompt.sha256
+    - 重算输入包 Manifest
+
+article_5_calibration_launch_pack:
+  prepared_in_this_package: true
+  executed_by: FOUNDER_PRODUCT_AUTHORITY
+  pack_contents:
+    - 90 例 JSONL
+    - 评审 prompt（两侧同一份，仅身份行不同）
+    - 输出格式说明
+    - 分批清单（建议每批 10 例）
+  pack_must_not_contain: [项目治理上下文, 既往结论, 其他评审结果]
+  sinks:
+    - 03_m2_evaluation_foundation/calibration/reviews/gpt_calibration_review.jsonl
+    - 03_m2_evaluation_foundation/calibration/reviews/claude_calibration_review.jsonl
+  records_per_side: 90
+  record_fields: [case_id, reviewer_role, model, model_version, review_prompt_hash, score, hard_gate_result, disagreement_code, reviewed_at]
+  execution_side_scope_after_collection: [合并, 分歧统计, Founder 审查队列, 阈值建议]
+  execution_side_must_not: 自行裁决
+  missing_side_rule_verbatim: 任一侧结果缺失一律置 CALIBRATION_REVIEW_EVIDENCE_MISSING，禁止模拟填充。
+
+article_6_entry_consistency:
+  pr_number: 3
+  pr_update_must_not_create_commit: true
+  pr_title_verbatim: M2 公开评测蓝图与收口修复候选——等待校准评审及 STORE-A 隐藏资产，勿合并
+  pr_body_requirement: 正文同步为 EP04/EP05 现状与当前判据数字
+  top_level_report_options:
+    - 更新为当前统一 M2 总报告
+    - 首行加醒目 SUPERSEDED 声明并指向最新回执
+  forbidden: 不得长期存在两份讲不同现状的「总报告」
+
+article_7_hidden_generation_timing_gate:
+  new_machine_state: public_blueprint_stable_for_hidden_generation
+  true_conditions:
+    - 两侧校准评审结果均已回收
+    - 分歧统计完成
+    - 阈值建议形成
+    - Founder 确认能力矩阵、评分卡与可接受边界无需修改
+  while_false:
+    allowed:
+      - STORE-A provision 与证据回传
+      - 私有工具链建设
+      - 2 个品牌的试产批（标 pilot: true，不计入 brand_count，正式批须重新生成）
+    forbidden:
+      - 40 品牌正式批生成
+  store_a_evidence:
+    purified_file_count: 2
+    minimum_fields:
+      - store_id
+      - "repository_visibility: private"
+      - "created_from_scratch: true"
+      - "fork_of_main: false"
+      - "shares_main_history: false"
+      - "access{founder: admin, hidden_steward: read_write, main_codex: none, claude_planner: none, guardian: none, chief_advisor: none, m3_m4_elicitation: none}"
+      - "founder_attestation{signed_by, signed_at}"
+    must_not_contain: [私仓 URL, Token, Deploy Key, 任何隐藏内容]
+  on_main_repo_acceptance:
+    precondition: 主仓收到并通过边界复检
+    then:
+      cond_011: CLOSED
+      m2_hidden_assets_status: STORAGE_READY
+
+article_8_fixture_debt:
+  disposition: 维持现状处置
+  rules:
+    - 已逐条登记
+    - 上限只降不升
+    - 新 Checker 不得新增欠账
+    - M3 收口前逐步补齐
+  must_not_pause_core_asset_production_for_number_cosmetics: true
+  this_package_scope: 只修报告数字引用方式，不要求清零
+
+article_9_state_and_not_authorized:
+  candidate_state:
+    candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+    m2_frozen: false
+    founder_signature_eligible: false
+    downstream_consumption_allowed: false
+  not_authorized:
+    - 合并 PR #3
+    - 置 m2_frozen=true
+    - 40 品牌正式批（在时序门开启前）
+    - M3 正式执行
+    - M4 知识蒸馏
+    - 隐藏内容进入主仓
+    - production_servable
+  stop_point: 完成后停在 candidate/m2，不发起审查
+  section_14_still_applies: true
+
+machine_checkable_fields:
+  anchor_count: {type: integer, required_value: 4}
+  steward_phase_count: {type: integer, required_value: 12}
+  not_authorized_count: {type: integer, required_value: 7}
+  m2_frozen: {type: boolean, required_value: false}
+  erroneous_number_may_be_reused: {type: boolean, required_value: false}

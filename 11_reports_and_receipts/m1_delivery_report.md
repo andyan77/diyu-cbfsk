@@ -106,3 +106,24 @@ Guardian `NB-M0-01/02/04/05`（EP01 全关）。
 M1 候选冻结 → Guardian 里程碑收口审查 →（总顾问，可豁免）→ Founder 收口裁决。
 **M2 未开工**：`m2_started` 无授权条目，置 `true` 即判 `UNAUTHORIZED_TRUE_FLAG`。
 知识蒸馏、夹具或隐藏品牌生成、多模态识别、人设记忆生产库、Serving、真实库存接入与自动发布均未开始。
+
+
+---
+
+## 未决项全量披露（M2-EP04 追加，NB-M2-06）
+
+Guardian 非阻塞发现 NB-M2-06：本报告此前只提了回执里的部分未决项。
+**回执里有、报告里没有** 的条目，读者无从知道它存在——而读报告的人正是决定要不要往下走的人。
+现按披露纪律补齐**全部**条目，不筛选：
+
+| 编号 | 事项 | 当前状态 |
+|---|---|---|
+| `OI-M1-01` | 裁决 acceptance_gate 写 11 输出对象 vs 冻结合同 15 | CLOSED_BY_HIGHER_AUTHORITY |
+| `OI-M1-02` | EP01 Prompt 写六层事实优先级 vs 合同七级 | CLOSED_BY_HIGHER_AUTHORITY |
+| `OI-M1-03` | M3 问题系统 Brief 不存在，未新建，接口面标 INTERFACE_ONLY | ROUTED_TO_M3 |
+| `OI-M1-04` | 两个扩展端口的 8 个预留对象未建 Schema | ACCEPTED_AS_IS |
+| `OI-M1-05` | 运行时事实分离目前只判 persistence_class 一致性，行为层不可测 | ROUTED_TO_M6_M8_M9 |
+| `OI-M1-06` | 女装 4 条硬约束均未标 safety_critical | ACCEPTED_AS_IS |
+
+本节由 `ci/checkers/check_disclosure_discipline.py` 的 `OPEN_ITEM_NOT_DISCLOSED` 判据守：
+回执里出现的每一个未决项编号，都必须能在对应报告正文里被找到。

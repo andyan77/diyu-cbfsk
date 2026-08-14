@@ -1,0 +1,135 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-HARD-GATE-DEFINITIONS
+artifact_id: hard_gate_definitions.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 6 项 / 第 4 节
+prd_anchors: [PRD-10.1, PRD-10.4]
+
+purpose: >-
+  M2 冻结 Brief 第 4 节要求：10.1 的每一条硬门都能追溯到承接它的发布门，不得有硬门无承接。
+  本表是那张显式映射表。
+
+single_source:
+  hard_gate_definitions_source: 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml hard_gates
+  release_gate_definitions_source: 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml commercial_release_gates
+  restated_here: false
+  restated_here_note: >-
+    本文件只落「谁承接谁」这一层新信息。硬门条文与发布门条文各自只有一个定义处（EQ-1），
+    这里按 id 引用；判据以上游合同为准，两边对不上判 HARD_GATE_ID_DRIFT / RELEASE_GATE_ID_DRIFT。
+
+counts:
+  hard_gate_count: 11
+  release_gate_count: 8
+  count_source: 同上游合同的 hard_gates.count 与 commercial_release_gates.count
+
+mapping_rules:
+  - id: MR-1
+    statement: 每条硬门必须至少有一个 primary_release_gate 承接。
+    failure_state: HARD_GATE_WITHOUT_RELEASE_GATE
+  - id: MR-2
+    statement: primary 必须唯一；secondary 可有零到多个。
+    failure_state: HARD_GATE_MULTIPLE_PRIMARY
+  - id: MR-3
+    statement: 引用的发布门 id 必须存在于上游八道门清单内。
+    failure_state: RELEASE_GATE_ID_UNKNOWN
+  - id: MR-4
+    statement: >-
+      不要求每道发布门都承接硬门。RG-08 是 Founder 最终裁决门，按设计不承接任何 10.1 硬门——
+      把它硬凑一条会让「Founder 拍板」看起来像一条可自动判定的指标。
+    not_a_failure: RELEASE_GATE_WITHOUT_HARD_GATE
+
+mappings:
+  - hard_gate_id: HG-01
+    hard_gate_name: 库存真实性
+    metric: inventory_hallucination_rate = 0
+    primary_release_gate: RG-04
+    secondary_release_gates: []
+    rationale: RG-04 Inventory Grounding Gate 的定义即总部与门店可售性及发布前复核，库存幻觉直接由它承接。
+  - hard_gate_id: HG-02
+    hard_gate_name: 品牌硬规则
+    metric: brand_hard_rule_violation_rate = 0
+    primary_release_gate: RG-03
+    secondary_release_gates: [RG-01]
+    rationale: >-
+      品牌硬规则的真正考验是换一个没见过的品牌还守不守得住，因此由 RG-03 未见品牌迁移门主承接；
+      RG-01 承接「优先级与失败状态完整」这一侧。
+  - hard_gate_id: HG-03
+    hard_gate_name: 品类安全
+    metric: 童装、青少年、运动严重安全违规率 = 0
+    primary_release_gate: RG-07
+    secondary_release_gates: []
+    rationale: RG-07 Safety & Compliance Gate 条文首项即品类安全。
+  - hard_gate_id: HG-04
+    hard_gate_name: 事实叙事
+    metric: fabricated_real_person_or_event_rate = 0
+    primary_release_gate: RG-05
+    secondary_release_gates: []
+    rationale: RG-05 Narrative Truth Gate 条文首项即叙事真实。
+  - hard_gate_id: HG-05
+    hard_gate_name: 决策轨迹
+    metric: 正式结果 DecisionTrace 覆盖率 = 100%
+    primary_release_gate: RG-01
+    secondary_release_gates: [RG-06]
+    rationale: >-
+      DecisionTrace 是语义合同的输出对象，覆盖率属 RG-01；RG-06 承接它的可审计与版本一侧。
+  - hard_gate_id: HG-06
+    hard_gate_name: 知识状态
+    metric: 未达 production_servable 的知识不得进入正式生成
+    primary_release_gate: RG-02
+    secondary_release_gates: []
+    rationale: RG-02 Expert Knowledge Gate 条文即知识状态链、来源、专家审查与反例。
+  - hard_gate_id: HG-07
+    hard_gate_name: 评测隔离
+    metric: 隐藏品牌、隐藏品类和评分答案不得泄漏给候选生成链
+    primary_release_gate: RG-03
+    secondary_release_gates: [RG-06]
+    rationale: >-
+      泄漏一旦发生，RG-03 的「未见」二字就不成立——迁移门的结论直接失效，所以由它主承接；
+      RG-06 承接审计一侧。
+  - hard_gate_id: HG-08
+    hard_gate_name: 人设真实
+    metric: fabricated_persona_credential_rate = 0；published_persona_hard_contradiction_rate = 0
+    primary_release_gate: RG-05
+    secondary_release_gates: []
+    rationale: RG-05 条文含人设连续性。
+  - hard_gate_id: HG-09
+    hard_gate_name: 人设不覆盖真源
+    metric: brand_truth_overridden_by_persona_rate = 0
+    primary_release_gate: RG-05
+    secondary_release_gates: [RG-01]
+    rationale: >-
+      人设压过品牌真源既是叙事真实问题（RG-05），也是事实优先级问题（RG-01 证据分级与优先级）。
+  - hard_gate_id: HG-10
+    hard_gate_name: 多模态事实边界
+    metric: authoritative_fact_override_rate = 0；unverifiable_function_claim_rate = 0
+    primary_release_gate: RG-04
+    secondary_release_gates: [RG-01]
+    rationale: >-
+      RG-04 条文明写「多模态推断不得伪造库存、价格或现货事实」，是唯一点名多模态的发布门；
+      RG-01 承接证据分级与优先级一侧。
+  - hard_gate_id: HG-11
+    hard_gate_name: 发布授权
+    metric: unauthorized_auto_publish_rate = 0
+    primary_release_gate: RG-07
+    secondary_release_gates: [RG-06]
+    rationale: RG-07 条文含自动发布授权；RG-06 承接权限回滚与 Kill Switch 一侧。
+
+release_gate_without_hard_gate:
+  - release_gate_id: RG-08
+    reason: Founder 最终裁决门，按 MR-4 不承接 10.1 硬门。
+    by_design: true
+
+failure_states:
+  - HARD_GATE_WITHOUT_RELEASE_GATE
+  - HARD_GATE_MULTIPLE_PRIMARY
+  - RELEASE_GATE_ID_UNKNOWN
+  - HARD_GATE_ID_DRIFT
+  - RELEASE_GATE_ID_DRIFT
+  - HARD_GATE_COUNT_DRIFT
+
+threshold_status: NOT_A_THRESHOLD_ARTIFACT
+threshold_note: 硬门是 0 容忍指标，不在 M2 可调阈值范围内；本表不冻结任何阈值。

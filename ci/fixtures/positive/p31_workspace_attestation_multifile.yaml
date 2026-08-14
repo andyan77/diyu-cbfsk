@@ -1,0 +1,28 @@
+fixture_id: P31-workspace-attestation-multifile
+description: 两份按里程碑维护的见证文件各自完整，自动发现全部纳入。
+checker: check_workspace_attestation
+expected: PASS
+payload:
+  files:
+  - source_path: governance/workspaces/a.yaml
+    task_id: T-1
+    is_cryptographic_independence_proof: false
+    records:
+    - workspace_id: w
+      workspace_path: /w
+      conversation_or_session_id: s1
+      session_started_at: t
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: TEMPORARY_EXECUTION_WRITER
+      status: ACTIVE
+  - source_path: governance/workspaces/b.yaml
+    task_id: T-2
+    is_cryptographic_independence_proof: false
+    records:
+    - workspace_id: w2
+      workspace_path: /w
+      conversation_or_session_id: s1
+      session_started_at: t
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: TEMPORARY_EXECUTION_WRITER
+      status: ACTIVE

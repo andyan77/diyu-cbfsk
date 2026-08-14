@@ -66,6 +66,15 @@ machine_checkable_fields:
   empty_stratum_count: {type: integer, required_value: 0}
 
 current_state:
-  strata_defined: false
-  samples_drawn: 0
-  note: 本包只定义分层维度与规则；没有评测题就没有可抽的样本，先建抽样器属先建框架。
+  strata_defined: true
+  strata_defined_in_package: M2-EP04
+  strata_cells: 45
+  strata_cells_source: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+  empty_strata: 0
+  public_calibration_samples: 90
+  hidden_samples_drawn: 0
+  hidden_samples_blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED
+  note: >-
+    M2-EP01 落规则时没有可抽的样本；M2-EP04 的 90 例公开校准集把 45 个分层格子全部填上，
+    分层维度因此从「已定义规则」变成「已有实例」。隐藏侧样本仍为 0，被存储条件阻断——
+    公开侧填满不等于隐藏侧就绪，两侧分开记。

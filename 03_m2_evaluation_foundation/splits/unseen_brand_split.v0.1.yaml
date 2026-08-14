@@ -1,0 +1,111 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-UNSEEN-BRAND-SPLIT
+artifact_id: unseen_brand_split.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_STRUCTURE_ONLY
+artifact_lifecycle_state: draft
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 2 项
+prd_anchors: [PRD-10.2, PRD-10.4-RG-03, PRD-13-M2]
+
+scope_note:
+  this_package_delivers: 切分结构与切分规则
+  this_package_does_not_deliver:
+    - 任何品牌名称
+    - 任何品牌事实包
+    - 任何切分结果实例
+  why: >-
+    切分规则是公开侧的东西——它决定「怎么算未见」；切分结果是隐藏侧的东西——它一旦公开，
+    「未见」就不成立了。本文件因此只到规则为止。
+  authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第二节「本工作面只定义结构与切分规则，内容属隐藏侧」
+  content_owner: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+  content_location: STORE-A
+
+owned_metrics:
+  - metric_id: internal_review_panel_pass_rate（未见品牌）
+    prd_suggested_threshold: ≥ 80%
+    threshold_status: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_value: null
+    measured_at_milestone: M10
+    m2_obligation: 冻结口径与阈值；冻结后不得因失败降标。
+    statement_discipline: 内部评审面板结论，不得表述为外部专家通过率。
+
+unseen_definition:
+  statement: >-
+    「未见」的判定基准是候选知识生成链的输入集合，不是评测执行时刻。一个品牌只要它的事实、
+    风格坐标或案例在任何阶段进入过知识生成链，就永久不再是未见品牌——**不能靠时间顺序补救**。
+  failure_state: BRAND_SEEN_BY_GENERATION_CHAIN
+  hard_gate_ref: HG-07
+
+split_dimensions:
+  count: 3
+  items:
+    - id: UBS-1
+      dimension: style_coordinate_coverage
+      values_source: 01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml style_space_surface.dimension_ids
+      values_restated_here: false
+      dimension_count: 14
+      rule: 未见品牌集合必须覆盖全部 14 个风格维度，且在每个维度上出现高低两端，不得只落在中间区。
+      failure_state: STYLE_DIMENSION_NOT_COVERED
+    - id: UBS-2
+      dimension: category_id
+      values_source: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json#/definitions/categoryId
+      values_restated_here: false
+      rule: 五类品类每类至少有未见品牌，不得整类缺席。
+      failure_state: CATEGORY_WITHOUT_UNSEEN_BRAND
+    - id: UBS-3
+      dimension: brand_hard_rule_density
+      values: [sparse, medium, dense]
+      rule: >-
+        品牌硬规则条数须跨三档分布。只测规则稀疏的品牌，等于没测 HG-02——
+        规则越密越容易违反，只挑容易的等于自己给自己出简单题。
+      failure_state: HARD_RULE_DENSITY_NOT_SPREAD
+
+split_rules:
+  - id: SR-UB-1
+    statement: 未见品牌总数落在 30—50 之间。
+    source: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 6 节
+    lower_bound: 30
+    upper_bound: 50
+    failure_state: UNSEEN_BRAND_COUNT_OUT_OF_RANGE
+  - id: SR-UB-2
+    statement: 未见品牌全部为合成封闭品牌，禁止真实品牌、禁止 Founder 注入的真实品牌资料进入。
+    ruling_anchor: D-18
+    failure_state: FOUNDER_PACKAGE_IN_HIDDEN_SET
+  - id: SR-UB-3
+    statement: 夹具池与隐藏池不同配方、不同参数空间、不同随机种子、不同工作区；隐藏池另有专属风格坐标覆盖。
+    source: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 6 节
+    detection_owner: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml homogeneity_control
+    second_implementation_created: false
+  - id: SR-UB-4
+    statement: 切分一经冻结不得因通过率不佳而重切。
+    relation: 与 benchmark_revision_protocol 的「因失败而降标永久禁止」同源。
+    failure_state: RESPLIT_AFTER_FAILURE
+
+evaluation_task_class_coverage:
+  required: [constraint_correctness, mechanism_correctness, open_decision]
+  rule: 每个未见品牌须同时承载三类评测项，不得只出硬约束题。
+  per_brand_minimum_source: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml
+  per_brand_minimum_restated_here: false
+
+current_state:
+  split_defined: false
+  unseen_brand_count: 0
+  blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED
+  blocked_record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+  honest_state: 规则已定，实例为零；零不是待补，是尚未获授权生成。
+
+machine_checkable_fields:
+  split_dimension_count: {type: integer, required_value: 3}
+  unseen_brand_count: {type: integer, current_value: 0, required_range: [30, 50], evaluated_when: 生成后}
+  style_dimension_coverage_count: {type: integer, current_value: 0, required_value: 14, evaluated_when: 生成后}
+  real_brand_in_unseen_set: {type: boolean, required_value: false}
+
+failure_states:
+  - BRAND_SEEN_BY_GENERATION_CHAIN
+  - UNSEEN_BRAND_COUNT_OUT_OF_RANGE
+  - STYLE_DIMENSION_NOT_COVERED
+  - CATEGORY_WITHOUT_UNSEEN_BRAND
+  - HARD_RULE_DENSITY_NOT_SPREAD
+  - RESPLIT_AFTER_FAILURE

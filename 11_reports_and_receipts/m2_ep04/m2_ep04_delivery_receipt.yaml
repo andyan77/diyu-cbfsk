@@ -1,0 +1,144 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-M2-EP04-DELIVERY-RECEIPT
+project_id: DIYU-CBFSK-001
+milestone: M2
+package_id: M2-EP04
+task_id: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001
+task_class: L3_CRITICAL_EVALUATION_CLOSEOUT
+execution_run_id: fe461abf-c4cc-46a3-9780-c4eca9a7f9c1
+parent_execution_run_id: 41f5cb93-1a3f-4e77-a8e1-142d5ac9de39
+resume_candidate_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+branch: candidate/m2
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 ＋ 同批派发的 M2 收口裁决
+
+describes_current_state: true
+superseded_by: null
+self_reference_limitation: >-
+  本回执无法记录包含它自身的那个提交的哈希——回执与提交无法互相先于对方。
+  最终候选哈希在交付报告中以命令行实测值给出，本字段声明该限制而不用占位符冒充。
+
+ep04_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_ep01_status: SELF_CHECKED
+  m2_ep02_status: SELF_CHECKED
+  m2_ep03_status: SELF_CHECKED
+  m2_ep04_status: SELF_CHECKED
+  m2_milestone_decision: BLOCK_M2_FREEZE_AND_MERGE
+  m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  m2_deliverables_ready: 14
+  m2_deliverables_total: 18
+  m2_evaluation_profile_status: FINAL_BOUND
+  m2_public_blueprint_status: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
+  m2_hidden_assets_status: NOT_STARTED
+  founder_signature_eligible: false
+  m2_frozen: false
+  knowledge_distillation_started: false
+  production_servable: false
+  next_authorized_action: FOUNDER_DISPOSITION_OF_OPEN_ITEMS_THEN_GUARDIAN
+
+self_check:
+  checkers: 41
+  predicate_fixtures: 428
+  schema_fixtures: 36
+  exit_code: 0
+  evidence_level: runtime_verified
+  measured_by: python3 ci/run_all_checks.py
+  note: >-
+    全绿只表示确定性判据与夹具按声明行为，不表示 M2 已交付、不表示已通过任何一方审查。
+  error_code_fixture_coverage:
+    declared_codes: 523
+    covered_codes: 376
+    uncovered_registered: 147
+    new_checker_debt: 0
+  frozen_path_diff_vs_origin_main: 0
+  m1_artifact_hash_drift: 0
+  m1_artifact_hashes_recomputed: 33
+
+deliverable_closure:
+  coverage_map: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
+  source_of_truth: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节
+  total: 18
+  ready: 14
+  partial: 4
+  absent: 0
+  frozen: 0
+  partial_items: [D-M2-02, D-M2-03, D-M2-07, D-M2-11]
+  single_root_blocker: HIDDEN_STORAGE_NOT_PROVISIONED
+  closure_checker: ci/checkers/check_m2_deliverable_closure.py
+
+forbidden_output_compliance:
+  real_model_api_calls: 0
+  distillation_calls: 0
+  hidden_content_in_main_repository: false
+  m2_frozen_set_true: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started_set_true: false
+  production_servable_set_true: false
+  billing_developer_portal_marketplace_built: false
+  face_identity_capability_built: false
+  in_place_modification_of_m1_frozen_artifacts: false
+
+linked_registrations:
+  note: 依 OI-06 口径，「允许更新 X」自动包含仓库机制强制要求的联动登记项，须在报告列明。
+  items:
+    - README.md 改动 → founder_pinned_baseline README-MOD-14 ＋ post_change_binary_sha256
+    - 新增 9 个 checker → ci/run_all_checks.py 注册表 ＋ governance/gates/live_gate_roster.v0.1.yaml
+    - 新增判据错误码 → governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml
+    - 里程碑回执状态迁移 → m2_delivery_receipt.describes_current_state=false ＋ superseded_by
+
+open_items:
+  - id: OI-M2-HIDDEN
+    item: 隐藏评测资产未生成；COND-011 三项关闭要件只齐一项
+    status: AWAITING_FOUNDER
+    needed_from_founder: STORE-A 仓库标识与 provision 证明、访问控制矩阵
+    blocking: [M2 冻结, 18 项交付中的 4 项, 最终资产存在门 FG-06—FG-12]
+  - id: OI-M2-CALIBRATION
+    item: 两侧隔离评审未执行，阈值建议因此无证据来源
+    status: AWAITING_FOUNDER
+    needed_from_founder: GPT 侧分批中继、Claude 侧独立窗口批处理
+    blocking: [COND-007 关闭, 最终资产存在门 FG-03—FG-05]
+    execution_side_must_not: 自行扮演任一侧评审并产出模拟分数
+  - id: OI-M2-GUARDIAN-REPORT
+    item: 3008f56b 与 2df1101 两轮 Guardian 报告全文未落盘
+    status: AWAITING_FOUNDER
+    needed_from_founder: 两轮报告全文
+    why_it_matters: 转述只带结论，不带「本轮未验」段——没有那一段无法判断结论覆盖多大范围
+  - id: OI-M2-ANCHOR
+    item: D-10 编号更正与多模态评测边界待 Founder 确认
+    status: AWAITING_FOUNDER
+    finding: D-10 实为「运行时模型合同」；所引实质内容对应 D-12「商品属性来源」，且已被 D-23 部分改判
+    execution_side_action: 按 D-12 与 D-23 交集定义边界，未放宽也未改写任何裁决
+  - id: OI-M2-METRIC-GROUPING
+    item: Brief 第 5 节「人设四项／语感六项／多模态六项」与 PRD 10.2 逐行条数不符
+    status: REGISTERED
+    execution_side_action: 以 PRD 10.2 表格逐行 metric id 为准；未改写 Brief 任何字句
+  - id: OI-M2-NAMING
+    item: FR-* 五份 Founder 裁决文件不带 FOUNDER- 前缀
+    status: AWAITING_FOUNDER
+    execution_side_action: 只重命名执行侧自己建的那一份，不擅改 Founder 既有裁决文件名
+  - id: OI-M2-FIXTURE-DEBT
+    item: 149 条已声明错误码尚无 expected=FAIL 夹具行使
+    status: REGISTERED_WITH_RATCHET
+    mechanism: governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml（上限只降不升，新增 checker 零欠账）
+  - id: COND-007
+    item: 阈值冻结
+    status: OPEN
+    blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  - id: COND-011
+    item: 隐藏存储 provision
+    status: EVIDENCE_SUBMITTED
+    still_missing: [store_a_provisioning_attestation, access_matrix]
+  - id: OD-M2-01
+    item: 真实基线锦标赛运行
+    status: DEFERRED_BY_FOUNDER
+    ruling: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 ADJ-2（延后至 POC 或 M10）
+
+not_reviewed_by:
+  guardian: true
+  chief_advisor: true
+  founder: true
+  note: 全绿只是执行侧自检，不代替任何一方审查。

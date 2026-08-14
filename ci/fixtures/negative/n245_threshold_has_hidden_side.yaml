@@ -1,0 +1,70 @@
+fixture_id: N245-threshold-has-hidden-side
+description: 把 COND-007 写成存在「隐藏侧」。
+checker: check_m2_hidden_generation_readiness
+expected: FAIL
+payload:
+  files:
+  - path: a.yaml
+    exists: true
+    declared_sha256: hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+    actual_sha256: hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+  declared_file_count: 1
+  declared_categories:
+  - 交付覆盖映射
+  - 能力矩阵
+  - 未见品牌切分
+  - 未见品类边缘任务
+  - 抽样设计
+  - 任务类型合同
+  - 三张横向评分卡
+  - 七类纵向评分合同
+  - 可接受决策边界注册表
+  - 隐藏资产生成合同
+  - 硬门定义
+  - Steward 执行 Prompt
+  input_status: FRESH
+  existing_assets_status: NONE_GENERATED
+  steward_prompt:
+    path: s.md
+    exists: true
+    declared_sha256: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+    actual_sha256: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+    summary_does_not_substitute_full_file: true
+  hidden_assets_status: NOT_STARTED
+  hidden_assets_status_allowed:
+  - NOT_STARTED
+  - STORAGE_READY
+  - GENERATED
+  - PRIVATE_REVIEWED
+  - PRIVATE_FROZEN
+  - PUBLIC_MANIFEST_IMPORTED
+  cond_011_status: EVIDENCE_SUBMITTED
+  cond_007_status: OPEN
+  cond_007_has_hidden_side: true
+  cond_007_workface_b_may_close: false
+  threshold_recommendations_present: true
+  blueprint_status_value: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
+  blueprint_is_execution_status: false
+  execution_status_authorized_values:
+  - M2_IN_PROGRESS
+  final_gate:
+    items:
+    - id: FG-01
+      current: true
+    - id: FG-02
+      current: false
+      blocked_by: X
+    satisfied_count: 1
+    total_count: 2
+    gate_open: false
+  current_stops:
+  - stop_id: HIDDEN_STORAGE_NOT_PROVISIONED
+    types:
+    - SUBSYSTEM_BLOCK
+    - MILESTONE_BLOCK
+  stop_types:
+  - GLOBAL_STOP
+  - MILESTONE_BLOCK
+  - PACKAGE_BLOCK
+  - SUBSYSTEM_BLOCK
+  - DEPENDENCY_WAIT

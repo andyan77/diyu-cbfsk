@@ -14,12 +14,17 @@ recorded_by: CODEX_EXECUTION_ENGINEER
 recorded_at: '2026-08-13'
 authorization_chain:
 - DIYU-CBFSK-FOUNDER-M2-CHARTER-001（M2 章程 + EP01 派发）
-- DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001（恢复执行 + EP02/EP03 一站到底 + EP03 精确 Prompt 批准）
+- DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001（恢复执行 + EP02/EP03 一站到底 + EP03 精确 Prompt 批准）
 baseline_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
 m1_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
 branch: candidate/m2
-describes_current_state: true
+describes_current_state: false
+superseded_by: M2-EP04
+superseded_note: >-
+  本块是 M2-EP03 自检完成时的如实收尾态，**值一律保留不改写**。M2-EP04 收口修复后当前态改由
+  m2_ep04/m2_ep04_delivery_receipt.yaml 描述。改写历史块等于篡改当时的记录，
+  因此这里只标注它已被取代。
 status: FREEZE_CANDIDATE_PENDING_UNIFIED_REVIEW
 self_reference_limitation: 本回执无法记录包含它自身的那个 Commit 的哈希——回执一旦写入哈希，文件内容即改变，哈希随之失效。因此本回执只钉基线 Commit、M1 批准 Commit 与各产物的
   artifact SHA256；最终候选 Commit 完整 40 位哈希在交付答复中输出，并由 Guardian 以 live git 复核。本回执自身的 SHA256 同样不在下方清单内，原因相同；同理，m2_freeze_candidate_record
@@ -57,7 +62,7 @@ review_status:
   guardian_review: NOT_PERFORMED
   advisor_review: NOT_PERFORMED
   founder_decision: NOT_MADE
-  basis: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第六节：两包完成后统一进行一次 Guardian → 一次总顾问 → 一次 Founder 裁决。
+  basis: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第六节：两包完成后统一进行一次 Guardian → 一次总顾问 → 一次 Founder 裁决。
   merged_into_main: false
   merge_preconditions_met: false
   merge_performed_by_execution_side: false
@@ -185,3 +190,11 @@ milestone_report: 11_reports_and_receipts/m2_delivery_report.md
 package_reports:
 - 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md
 - 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_report.md
+
+execution_run_id: null
+execution_run_id_status: NOT_RECORDED_AT_EXECUTION_TIME
+execution_run_id_note: >-
+  M2 里程碑（EP01+EP02+EP03） 执行当时没有登记 execution_run_id。A-5 把 UUID 守卫改为自动发现之后这个缺口才暴露出来。
+  执行侧**不追记也不推断**一个值——追记出来的批次标识无法与任何实际运行对应，比空着更有害。
+  本字段如实置 null 并具名登记状态；check_execution_uuid 的 RUN_ID_ABSENT_WITHOUT_DECLARATION
+  判据要求这类缺口必须显式声明，不得静默留空。

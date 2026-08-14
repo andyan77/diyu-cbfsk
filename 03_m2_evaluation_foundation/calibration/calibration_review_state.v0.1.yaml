@@ -1,0 +1,119 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-CALIBRATION-REVIEW-STATE
+artifact_id: calibration_review_state.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: EVIDENCE_MISSING
+artifact_lifecycle_state: validated
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第三节 A-3b
+
+failure_state: CALIBRATION_REVIEW_EVIDENCE_MISSING
+failure_state_reason: >-
+  两侧评审均未实际执行。按 A-3b 明文规定，无真实评审结果时一律置本失败态，
+  不得用模拟分数填充——主执行侧自行扮演「隔离 GPT」与「隔离 Claude」产出两份所谓独立结果，
+  是本任务的绝对禁止项。
+
+why_execution_side_cannot_produce_these:
+  - id: R1
+    reason: >-
+      分歧率的全部意义在于两位评审互不知道对方判了什么。同一个执行侧写两份，
+      两份之间的差异是这个执行侧编出来的，测出来的不是分歧，是想象力。
+  - id: R2
+    reason: >-
+      GPT 侧不走 API，按 A-3b 由 Founder 分批中继（约 9—10 批）。执行侧没有那条通道。
+  - id: R3
+    reason: >-
+      Claude 侧要求独立窗口读 JSONL 批处理，与本执行会话必须是不同工作面；
+      本会话即执行侧，自己开一个窗口不构成隔离。
+
+prompt:
+  path: 03_m2_evaluation_foundation/calibration/review_prompt.shared.v0.1.md
+  sha256: 5a883e7b2eb642742cc57b31b880a2892fda37e7a2fcb6ed05f39be8cab511a1
+  shared_by_both_sides: true
+  shared_reason: >-
+    正文不同会让分歧率失去意义——分不清是看法不同还是题目说的话不同。
+    只有身份行（reviewer_role）不同。
+  recomputed_by_checker: true
+  recomputed_by_checker_note: 判据现算文件哈希与本字段比对；改了 Prompt 不改哈希即判 PROMPT_HASH_STALE。
+
+sides:
+  - side_id: GPT
+    reviewer_role: ISOLATED_GPT_REVIEWER
+    sink: 03_m2_evaluation_foundation/calibration/reviews/gpt_calibration_review.jsonl
+    record_count: 0
+    expected_record_count: 90
+    executed: false
+    execution_channel: Founder 分批中继（约 9—10 批），GPT 侧不走 API
+    produced_by_workspace: null
+    produced_by_main_execution_side: false
+  - side_id: CLAUDE
+    reviewer_role: ISOLATED_CLAUDE_REVIEWER
+    sink: 03_m2_evaluation_foundation/calibration/reviews/claude_calibration_review.jsonl
+    record_count: 0
+    expected_record_count: 90
+    executed: false
+    execution_channel: 独立窗口读 JSONL 批处理
+    produced_by_workspace: null
+    produced_by_main_execution_side: false
+
+record_schema:
+  required_fields: [case_id, reviewer_role, model, model_version, review_prompt_hash, score, hard_gate_result, disagreement_code, reviewed_at]
+  field_rules:
+    case_id: 必须落在 CAL-001—CAL-090 内，且每侧每例至多一条。
+    reviewer_role: 必须与该 sink 所属 side 的 reviewer_role 一致。
+    review_prompt_hash: 必须等于 prompt.sha256。
+    score: 0.0—1.0；constraint_correctness 类只允许 0.0 或 1.0。
+    hard_gate_result: 键必须取自该例的 hard_gate_refs，值取 PASS / FAIL / NOT_APPLICABLE。
+    disagreement_code: null 或六个允许值之一。
+  allowed_disagreement_codes: [AMBIGUOUS_SCENARIO, BOUNDARY_TOO_WIDE, BOUNDARY_TOO_NARROW, CLASS_MISASSIGNED, HARD_GATE_NOT_APPLICABLE, MISSING_INPUT_OBJECT]
+
+isolation_rules:
+  - id: ISO-1
+    statement: 两侧不得共享对方结果；任一侧的 sink 只能由该侧写入。
+    failure_state: CALIBRATION_REVIEW_CROSS_CONTAMINATED
+  - id: ISO-2
+    statement: 两侧的 produced_by_workspace 不得相同。
+    failure_state: CALIBRATION_REVIEW_NOT_ISOLATED
+  - id: ISO-3
+    statement: 任一侧 produced_by_main_execution_side=true 即判失败——主执行侧不得扮演任一评审。
+    failure_state: CALIBRATION_REVIEW_SELF_PLAYED
+  - id: ISO-4
+    statement: >-
+      有记录而 failure_state 仍为 CALIBRATION_REVIEW_EVIDENCE_MISSING，或无记录而 failure_state
+      已被清除，两种都是状态与证据不符。
+    failure_state: CALIBRATION_REVIEW_STATE_CONTRADICTS_EVIDENCE
+
+statement_discipline:
+  internal_panel: true
+  must_not_be_stated_as: [外部专家共识, 外部专家通过率, 独立第三方验证]
+  existing_guard: ci/checkers/check_external_review_claims.py
+  second_implementation_created: false
+
+machine_checkable_fields:
+  gpt_record_count: {type: integer, current_value: 0, expected_when_executed: 90}
+  claude_record_count: {type: integer, current_value: 0, expected_when_executed: 90}
+  both_sides_executed: {type: boolean, current_value: false}
+  simulated_scores_present: {type: boolean, required_value: false}
+
+blocking_for:
+  - COND-007 阈值冻结（无校准证据即无阈值建议依据）
+  - 最终资产存在门第「两侧评审结果均实际存在」一条
+not_blocking_for:
+  - 校准集本身的交付（90 例已落盘）
+  - 其余 A-1 至 A-8 子项
+
+founder_action_required:
+  action: 启动两侧隔离评审
+  gpt_side: Founder 分批中继本 Prompt 与 90 例，回收 JSONL
+  claude_side: Founder 在独立工作面开一个只读本校准集的会话执行批处理
+  on_completion: 回填两个 sink，把本文件 failure_state 置 null 并填 produced_by_workspace 与 record_count
+
+failure_states:
+  - CALIBRATION_REVIEW_EVIDENCE_MISSING
+  - CALIBRATION_REVIEW_CROSS_CONTAMINATED
+  - CALIBRATION_REVIEW_NOT_ISOLATED
+  - CALIBRATION_REVIEW_SELF_PLAYED
+  - CALIBRATION_REVIEW_STATE_CONTRADICTS_EVIDENCE
+  - PROMPT_HASH_STALE
+  - REVIEW_RECORD_SCHEMA_VIOLATION

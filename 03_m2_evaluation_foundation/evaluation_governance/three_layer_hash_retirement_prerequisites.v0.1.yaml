@@ -6,7 +6,7 @@ execution_package: M2-EP02
 phase: Phase 7
 status: M2_EP02_DELIVERED
 artifact_lifecycle_state: draft
-authorization: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 OI-01
+authorization: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 OI-01
 ruling_status: ADJUDICATED_NOT_IMPLEMENTED
 
 scope:
@@ -103,3 +103,17 @@ honest_assessment:
     L2/L3 保留至有等价替代为止——分层退役比整体退役风险可控得多。
   evidence_level: static_verified
   evidence_basis: 逐个 checker 读实现与 failure_states，未做退役实验（退役实验本身即越权）
+
+final_founder_adjudication:
+  ruling: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 第三节 ADJ-3
+  decision: no_retirement
+  effective: true
+  what_it_means: >-
+    本清单原本是「若要退役，先满足这些前置」的条件表。Founder 已裁定不退役，
+    因此本清单从「待办前置」转为「已用于支撑不退役这个决定的证据」。
+  which_conclusion_was_used: >-
+    清单结论「L1 可由 artifact SHA256 替代，L2/L3 无可用替代」直接支撑了 no_retirement——
+    L2（结构层）与 L3（语义层）若无替代就退役，等于 DOCX 产品真源少两层覆盖。
+  list_status: EVIDENCE_FOR_NO_RETIREMENT
+  no_longer: PENDING_PREREQUISITES
+  oi_01_status: CLOSED

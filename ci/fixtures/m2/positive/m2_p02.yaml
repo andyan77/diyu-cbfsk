@@ -1,5 +1,5 @@
 fixture_id: M2-P02
-description: 身份隔离守住：仓库零禁止能力声明、激活条件为永不、扫描用例正负都按声明落。
+description: 身份隔离守住：仓库零禁止能力声明、激活条件为永不、扫描用例正负都按声明落。（NB-M2-03 起：覆盖面数字须是记录值并现算比对）
 checker: check_m2_identity_isolation
 expected: PASS
 payload:
@@ -33,3 +33,11 @@ payload:
     any_face_recognition_dependency: false
     any_biometric_template_store: false
     scanned_at: M2-EP01
+  scan_coverage_record:
+    declared_current_count: 235
+    actual_current_count: 235
+    history:
+    - package: M2-EP01
+      measured_at_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      scanned_file_count: 270
+      evidence_level: runtime_verified

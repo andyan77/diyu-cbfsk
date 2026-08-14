@@ -350,3 +350,26 @@ describes_current_state: false
 superseded_by: M2-EP02
 supersession_note: ep01_end_state 是 M2-EP01 收尾那一刻的如实记录，不因后续推进而改写。M1 已于 c3f6ad372306cc12f139cf38624e9a5cea2cf329
   收口合入 main，execution_status 随之迁移至 M2_IN_PROGRESS，因此本块不再描述当前态——当前态见标记 describes_current_state 的那份回执。
+
+d09_anchor_correction_note:
+  finding: A-6（DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第六节）
+  corrects: open_items 中 OI-05「「D-09」无仓库锚点」的 detail 表述
+  original_text_preserved: true
+  original_text_preserved_note: 原文一字未改，本块只追加更正，不改写历史记录。
+  what_was_inaccurate: >-
+    原 detail 称「仓库内不存在该编号」。该说法不准确。
+  verified_truth:
+    statement: D-09 是真实编号，含义为「M2 评测治理三件套」。
+    source: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx 第二部分
+    verbatim_heading: D-09　M2 评测治理三件套　【已裁决】
+    covers: [rater_calibration_contract, evaluation_sampling_design, benchmark_revision_protocol]
+    evidence_level: runtime_verified
+    method: 解析该 DOCX 正文文本并定位标题行
+  why_it_was_missed: >-
+    当时只在 PRD v1.2 正文与 governance/founder_rulings/ 内检索；
+    D-01—D-16 这批编号来自已归档的 v1.1 Delta，不在检索面内。属检索面不足，非启动包写错。
+  disposition_now:
+    action: 活合同、活报告与机器引用改为指向 M2 冻结 Brief 第 2 节第 8/9/10 项与三个合同 ID
+    reason: >-
+      理由不是「D-09 是假的」，而是该编号空间属已归档文档；活判据引用它会指向一份不再是产品真源的文件。
+    historical_records: 只追加更正，不改写

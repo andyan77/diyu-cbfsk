@@ -1,0 +1,198 @@
+schema_version: "0.1"
+matrix_id: DIYU-CBFSK-M2-BENCHMARK-CAPABILITY-MATRIX
+artifact_id: benchmark_capability_matrix.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 1 项
+prd_anchors: [PRD-10.1, PRD-10.2, PRD-10.4, PRD-3.3-P-14]
+ruling_anchors: [D-28]
+
+purpose: >-
+  双轴评测的寻址表。横轴＝任务类型（按哪一类判），纵轴＝能力维度（考哪种能力）。
+  再叠上品类与风险等级，任何一道题都能被四个坐标唯一定位。
+
+axes:
+  count: 4
+  items:
+    - axis: capability_dimension
+      role: vertical
+      value_count: 7
+      values_source: 本文件 capability_dimensions（每个值对应一份纵向卡）
+    - axis: evaluation_task_class
+      role: horizontal
+      value_count: 3
+      values_source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+      values_restated_here: false
+    - axis: category_id
+      role: stratum
+      value_count: 5
+      values_source: 01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml category_constraint_surface
+      values_restated_here: false
+    - axis: risk_tier
+      role: stratum
+      value_count: 3
+      values_source: governance/bootstrap/role_operating_model.v0.2.yaml review_mode.risk_tiered_review
+      values_restated_here: false
+
+addressing:
+  cell_id_format: CM-<CAPABILITY_CODE>-<TASK_CLASS_CODE>-<CATEGORY_CODE>-<RISK_CODE>
+  capability_codes: {professional_explanation: EXP, narrative_quality: NAR, persona_continuity: PSC, social_media_native_voice: NVO, multimodal_attribute: MMA, multimodal_confidence_calibration: MMC, five_category_activation_readiness: FCR}
+  task_class_codes: {constraint_correctness: C1, mechanism_correctness: C2, open_decision: C3}
+  category_codes: {CAT-WOMENSWEAR: WW, CAT-KIDSWEAR: KW, CAT-TEEN-TREND: TT, CAT-FAMILY-TREND: FT, CAT-SPORT-TREND: SP}
+  risk_codes: {high: H, medium: M, low: L}
+  addressable_rule: 一个坐标组合可寻址，当且仅当该能力维度声明适用该任务类型。
+  example: CM-EXP-C2-KW-H
+
+capability_dimensions:
+  count: 7
+  items:
+    - code: EXP
+      capability_dimension: professional_explanation
+      card: 03_m2_evaluation_foundation/scoring/expert_scoring_rubric.v0.1.yaml
+      per_item_scored: true
+      applicable_task_classes: [constraint_correctness, mechanism_correctness, open_decision]
+      evaluation_task_class_annotated: true
+    - code: NAR
+      capability_dimension: narrative_quality
+      card: 03_m2_evaluation_foundation/scoring/narrative_scoring_rubric.v0.1.yaml
+      per_item_scored: true
+      applicable_task_classes: [mechanism_correctness, open_decision]
+      evaluation_task_class_annotated: true
+    - code: PSC
+      capability_dimension: persona_continuity
+      card: 03_m2_evaluation_foundation/scoring/persona_continuity_scoring_rubric.v0.1.yaml
+      per_item_scored: true
+      applicable_task_classes: [constraint_correctness, mechanism_correctness]
+      evaluation_task_class_annotated: true
+    - code: NVO
+      capability_dimension: social_media_native_voice
+      card: 03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml
+      per_item_scored: true
+      applicable_task_classes: [mechanism_correctness, open_decision]
+      evaluation_task_class_annotated: true
+    - code: MMA
+      capability_dimension: multimodal_attribute
+      card: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
+      per_item_scored: true
+      applicable_task_classes: [constraint_correctness, mechanism_correctness]
+      evaluation_task_class_annotated: true
+    - code: MMC
+      capability_dimension: multimodal_confidence_calibration
+      card: 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml
+      per_item_scored: true
+      applicable_task_classes: [constraint_correctness, mechanism_correctness]
+      evaluation_task_class_annotated: true
+    - code: FCR
+      capability_dimension: five_category_activation_readiness
+      card: 03_m2_evaluation_foundation/scoring/five_category_readiness_definition.v0.1.yaml
+      per_item_scored: false
+      aggregate_only: true
+      aggregate_only_reason: >-
+        就绪度是「这一类能不能开」的聚合开关，不是逐题打分的能力。把它塞进逐题矩阵，
+        会产生一堆永远没有样本的空格子——空格子会被读成「漏测」，而它本来就不该有样本。
+      applicable_task_classes: []
+      evaluation_task_class_annotated: true
+
+cell_count:
+  per_item_scored_capabilities: 6
+  applicable_task_class_slots: 13
+  applicable_task_class_slots_note: 3 + 2 + 2 + 2 + 2 + 2，逐能力取其 applicable_task_classes 长度之和。
+  category_count: 5
+  risk_tier_count: 3
+  addressable_cells: 195
+  formula: applicable_task_class_slots × category_count × risk_tier_count
+  independently_recomputed_by: ci/checkers/check_m2_capability_matrix.py
+  independently_recomputed_from: 七份纵向卡各自的 evaluation_task_class_applicability 字段（不读本文件自述）
+
+hard_gate_mapping:
+  table: 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml
+  restated_here: false
+  restated_here_note: 硬门→八道发布门的映射只有一个定义处（EQ-1），本矩阵引用不复制。
+  capability_to_hard_gate:
+    EXP: [HG-05]
+    NAR: [HG-04]
+    PSC: [HG-08, HG-09]
+    NVO: []
+    MMA: [HG-10]
+    MMC: [HG-10]
+    FCR: []
+  capability_without_hard_gate_is_allowed: true
+  capability_without_hard_gate_note: >-
+    NVO 与 FCR 不承接 10.1 硬门。语感越界由 HG-04/HG-08 在叙事与人设两卡承接；
+    就绪度是聚合门不是 0 容忍指标。给它们硬凑一条硬门等于凭空造 0 容忍要求。
+
+metric_ownership:
+  purpose: PRD 10.2 每一条指标必须且只能由一份 M2 交付物承接，双向核对。
+  ground_truth_source: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx 10.2 表格（判据从 DOCX 独立提取）
+  metric_count: 34
+  exactly_one_owner_required: true
+  failure_states: [METRIC_WITHOUT_OWNER, METRIC_OWNED_TWICE, OWNER_CLAIMS_UNKNOWN_METRIC]
+  items:
+    - {metric_id: internal_review_panel_pass_rate（未见品牌）, owner: unseen_brand_split.v0.1}
+    - {metric_id: internal_review_panel_pass_rate（未见品类/边缘任务）, owner: unseen_category_edge_cases.v0.1}
+    - {metric_id: 严重风格错位率, owner: expert_scoring_rubric.v0.1}
+    - {metric_id: 核心决策逻辑稳定率, owner: decision_logic_stability_rate.v0.1}
+    - {metric_id: 专业解释平均分, owner: expert_scoring_rubric.v0.1}
+    - {metric_id: 叙事质量平均分, owner: narrative_scoring_rubric.v0.1}
+    - {metric_id: 账号差异化通过率, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: 人工可发布率, owner: benchmark_capability_matrix.v0.1, owner_note: 无专属交付物承接；由本矩阵登记口径，实测在 M11 试点。}
+    - {metric_id: persona_identity_consistency_score, owner: persona_continuity_scoring_rubric.v0.1}
+    - {metric_id: professional_value_consistency_score, owner: persona_continuity_scoring_rubric.v0.1}
+    - {metric_id: historical_viewpoint_contradiction_rate, owner: persona_continuity_scoring_rubric.v0.1}
+    - {metric_id: series_continuity_score, owner: persona_continuity_scoring_rubric.v0.1}
+    - {metric_id: persona_drift_rate, owner: persona_continuity_scoring_rubric.v0.1}
+    - {metric_id: topic_repetition_without_new_value_rate, owner: persona_continuity_scoring_rubric.v0.1}
+    - {metric_id: self_media_native_voice_score, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: platform_native_expression_score, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: spoken_rhythm_score, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: shootability_score, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: lecture_style_penalty_rate, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: formulaic_template_rate, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: ai_generated_tone_detection_rate, owner: social_media_native_voice_scoring_rubric.v0.1}
+    - {metric_id: visual_attribute_extraction_accuracy, owner: multimodal_attribute_benchmark.v0.1}
+    - {metric_id: visual_attribute_confidence_calibration, owner: multimodal_confidence_calibration_contract.v0.1}
+    - {metric_id: structured_fact_conflict_rate, owner: multimodal_attribute_benchmark.v0.1}
+    - {metric_id: authoritative_fact_override_rate, owner: multimodal_attribute_benchmark.v0.1}
+    - {metric_id: unverifiable_attribute_claim_rate, owner: multimodal_attribute_benchmark.v0.1}
+    - {metric_id: cross_image_consistency_score, owner: multimodal_attribute_benchmark.v0.1}
+    - {metric_id: low_quality_image_failure_close_rate, owner: multimodal_attribute_benchmark.v0.1}
+    - {metric_id: five_category_activation_readiness, owner: five_category_readiness_definition.v0.1}
+    - {metric_id: unauthorized_auto_publish_rate, owner: hard_gate_definitions.v0.1, owner_note: HG-11 的指标本体，由硬门映射表承接。}
+    - {metric_id: ai_reviewer_disagreement_rate, owner: reviewer_calibration_contract.v0.1}
+    - {metric_id: founder_override_rate, owner: reviewer_calibration_contract.v0.1}
+    - {metric_id: founder_sample_review_rate, owner: reviewer_calibration_contract.v0.1}
+    - {metric_id: high_risk_founder_full_review_rate, owner: reviewer_calibration_contract.v0.1}
+
+owned_metrics:
+  - metric_id: 人工可发布率
+    prd_suggested_threshold: ≥ 75%
+    threshold_status: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_value: null
+    measured_at_milestone: M11
+    m2_obligation: 冻结口径；冻结后不得因失败降标。
+
+unseen_split_binding:
+  unseen_brand_split: 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml
+  unseen_category_edge_cases: 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml
+  restated_here: false
+  content_side: hidden
+  content_side_note: 本矩阵只寻址，不持有任何未见品牌名称或边缘任务题面。
+
+machine_checkable_fields:
+  axis_count: {type: integer, required_value: 4}
+  capability_dimension_count: {type: integer, required_value: 7}
+  addressable_cells: {type: integer, required_value: 195}
+  metric_count: {type: integer, required_value: 34}
+  every_capability_item_has_task_class: {type: boolean, required_value: true}
+
+failure_states:
+  - CAPABILITY_DIMENSION_COUNT_DRIFT
+  - CAPABILITY_ITEM_WITHOUT_TASK_CLASS
+  - ADDRESSABLE_CELL_COUNT_DRIFT
+  - METRIC_WITHOUT_OWNER
+  - METRIC_OWNED_TWICE
+  - OWNER_CLAIMS_UNKNOWN_METRIC
+  - CAPABILITY_CARD_MISSING

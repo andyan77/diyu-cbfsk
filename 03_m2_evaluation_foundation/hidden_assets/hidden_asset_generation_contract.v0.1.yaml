@@ -99,3 +99,99 @@ freeze_timing:
   before_signature: 可修订
   after_signature: 按 benchmark_revision_protocol 的唯一合法通道修订
   source: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 审查安排
+
+quantity_floor:
+  adopted_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 收口裁决第四节（Founder 全盘采纳，含图像）
+  source_section: 同一裁决 v1.1 第九节
+  single_definition_here: true
+  single_definition_note: 数量下限只有本处一个定义；Steward Prompt 与输入包 Manifest 一律引用不复制（EQ-1）。
+  brands:
+    hidden_brand_count: 40
+    hidden_brand_count_range_from_brief: [30, 50]
+    range_source: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 6 节
+  products:
+    products_per_brand_min: 12
+    products_per_brand_max: 18
+    total_product_records_min: 480
+  images:
+    actual_image_files_min: 240
+    must_cover_all_multimodal_referenced_products: true
+  evaluation_items_per_brand:
+    constraint_correctness: 4
+    mechanism_correctness: 4
+    open_decision: 4
+  evaluation_items_total:
+    total_min: 480
+    cross_category_min: 60
+    multimodal_min: 80
+    persona_continuity_min: 60
+    social_media_native_voice_min: 60
+    high_risk_min: 100
+    high_risk_founder_review_coverage: 1.0
+    high_risk_sampling_allowed: false
+
+per_brand_minimum_composition:
+  rule: 缺一即该品牌不计数。
+  counting_rule: 计数以「满足最低构成」为准；仅有名称与风格坐标的品牌不得计入 brand_count。
+  failure_state: BRAND_COUNTED_WITHOUT_MINIMUM_COMPOSITION
+  required_components:
+    - 品牌事实包
+    - 目标受众
+    - 品类
+    - 硬规则
+    - 软偏好
+    - 禁用组合
+    - 商品目录
+    - 库存快照
+    - 场景
+    - 商品图像
+    - 三类评测项
+    - 合法机制区间
+    - 合法解族
+    - 硬门引用
+
+image_rules:
+  all_synthetic: true
+  generation_must_be_reproducible: true
+  reproducibility_definition: 同输入同输出（固定配方、固定参数、固定随机种子）
+  real_brand_images_forbidden: true
+  web_scraped_images_forbidden: true
+  coverage_requirement: 图像须覆盖全部多模态题所引用的商品
+  failure_states:
+    - REAL_BRAND_IMAGE_USED
+    - WEB_SCRAPED_IMAGE_USED
+    - IMAGE_GENERATION_NOT_REPRODUCIBLE
+    - MULTIMODAL_ITEM_WITHOUT_IMAGE
+
+steward_role:
+  role_id: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+  adopted_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第十节
+  permissions:
+    main_repo_read: false
+    main_repo_write: false
+    store_a_read_write: true
+    public_export_write: true
+  forbidden:
+    - 参与 M3/M4 候选知识生成
+    - 担任 Guardian
+    - 把隐藏正文复制回主仓
+  handover_chain:
+    - step: 1
+      actor: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+      action: 在私有工作区产出 public_export/（净化包：仓库标识、清单哈希、计数、双检查摘要）
+    - step: 2
+      actor: FOUNDER_PRODUCT_AUTHORITY
+      action: 转交主仓执行侧
+    - step: 3
+      actor: MAIN_REPO_EXECUTION_SIDE
+      action: 接收时**先**对净化包跑一次隐藏边界检查
+      gate: 任何题目 / 答案 / 品牌正文命中即拒收并报告
+      checker: ci/checkers/check_hidden_benchmark_boundary.py
+      second_implementation_created: false
+      failure_state: SANITIZED_PACKAGE_REJECTED_ON_INTAKE
+    - step: 4
+      actor: MAIN_REPO_EXECUTION_SIDE
+      action: 通过后写 Manifest、更新条件台账、跑全量 CI、形成最终候选
+  intake_order_note: >-
+    边界检查必须在写 Manifest 之前跑。反过来做，等于先把内容收进来再检查它该不该进来——
+    一旦命中，Git 历史里已经有副本了。

@@ -6,7 +6,12 @@
 合并时才发现撞号——而在此之前，仓库里没有任何判据在守这套编号。
 本 checker 补上这个缺口：撞号、跳号、最新条目没排在最前，三种都判失败。
 
-判据只管编号本身，不管内容：内容是否如实由 check_baseline_hashes 的指纹机制守。
+判据只管编号本身与它指向哪个提交，不管内容改得对不对：内容是否如实由 check_baseline_hashes 守。
+
+NB-M2-04 补入 landed_in_commit：原先 12 条写的是 M1_EP03_CLOSEOUT_COMMIT 这类符号名，
+解析不到任何一个对象——「最新版」被禁的理由对它同样成立。现在要求逐条给完整 40 位哈希，
+并现场取出该提交的 README 与登记的 binary_sha256 比对；只有最新一条允许自指，
+因为它落地的那个提交在写它的时候还不存在，但必须显式声明 self_reference_limitation。
 
 只断言「最新一条排在最前」，不断言整列严格递减：既有 M0 期历史里 README-MOD-01
 夹在 05 与 04 之间（纯排版遗留，编号本身既不重复也不跳号）。为这条排版瑕疵去改写
@@ -17,7 +22,9 @@ from __future__ import annotations
 
 import re
 
-from _common import cli, load_yaml
+import subprocess
+
+from _common import ROOT, cli, is_full_commit_hash, load_yaml, sha256_text
 
 LABEL = "check_sequential_registration"
 
@@ -69,6 +76,30 @@ def validate(payload: dict) -> list[str]:
         for bad in malformed:
             errors.append(f"SEQUENTIAL_REGISTRATION_MALFORMED_ID: {name} entry {bad!r} has no numeric suffix")
 
+        for entry in registry.get("entries") or []:
+            cid = entry.get("change_id", "<no id>")
+            if entry.get("is_newest") and entry.get("self_referential"):
+                if not entry.get("self_reference_limitation"):
+                    errors.append(
+                        f"SELF_REFERENCE_UNDECLARED: {name} entry {cid} lands in the commit that creates it "
+                        "but declares no self_reference_limitation"
+                    )
+                continue
+            if not entry.get("landed_commit_is_full_hash"):
+                errors.append(
+                    f"LANDED_COMMIT_NOT_RESOLVED: {name} entry {cid} records "
+                    f"{entry.get('landed_in_commit')!r}, which is not a 40-hex commit — "
+                    "符号名和「最新版」一样解析不到唯一对象"
+                )
+                continue
+            if entry.get("landed_commit_blob_sha256") != entry.get("binary_sha256"):
+                errors.append(
+                    f"LANDED_COMMIT_BLOB_MISMATCH: {name} entry {cid} points at "
+                    f"{entry.get('landed_in_commit')}, whose {entry.get('tracked_path')} hashes to "
+                    f"{entry.get('landed_commit_blob_sha256')!r}, not the registered "
+                    f"{entry.get('binary_sha256')!r}"
+                )
+
         prefixes = set(registry.get("prefixes") or [])
         if len(prefixes) > 1:
             errors.append(
@@ -79,6 +110,18 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+def _blob_sha256(commit: str, rel: str) -> str | None:
+    """取出该提交下的文件内容现算哈希；取不到就返回 None，由 validate 判失败（fail-closed）。"""
+    try:
+        data = subprocess.run(
+            ["git", "show", f"{commit}:{rel}"],
+            cwd=ROOT, capture_output=True, check=True,
+        ).stdout
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return sha256_text(data.decode("utf-8"))
+
+
 def collect() -> dict:
     manifest = load_yaml(PINNED_BASELINE)
 
@@ -87,8 +130,9 @@ def collect() -> dict:
         history = candidate.get("authorized_modification_history")
         if not history:
             continue
-        numbers, prefixes, malformed = [], [], []
-        for entry in history:
+        tracked = candidate["repository_path"]
+        numbers, prefixes, malformed, entries = [], [], [], []
+        for position, entry in enumerate(history):
             change_id = str(entry.get("change_id", ""))
             match = CHANGE_ID_RE.match(change_id)
             if not match:
@@ -96,12 +140,29 @@ def collect() -> dict:
                 continue
             numbers.append(int(match.group("number")))
             prefixes.append(match.group("prefix"))
+
+            landed = entry.get("landed_in_commit")
+            full = is_full_commit_hash(landed)
+            entries.append(
+                {
+                    "change_id": change_id,
+                    "is_newest": position == 0,
+                    "self_referential": bool(entry.get("self_referential")),
+                    "self_reference_limitation": entry.get("self_reference_limitation"),
+                    "landed_in_commit": landed,
+                    "landed_commit_is_full_hash": full,
+                    "tracked_path": tracked,
+                    "binary_sha256": entry.get("binary_sha256"),
+                    "landed_commit_blob_sha256": _blob_sha256(landed, tracked) if full else None,
+                }
+            )
         registries.append(
             {
-                "registry": f"{PINNED_BASELINE}:{candidate['repository_path']}.authorized_modification_history",
+                "registry": f"{PINNED_BASELINE}:{tracked}.authorized_modification_history",
                 "numbers": numbers,
                 "prefixes": prefixes,
                 "malformed_ids": malformed,
+                "entries": entries,
             }
         )
 

@@ -1,0 +1,14 @@
+fixture_id: N218-open-item-not-disclosed
+description: 回执里有一条未决项，报告只字未提。
+checker: check_disclosure_discipline
+expected: FAIL
+payload:
+  pairs:
+  - receipt: r.yaml
+    report: r.md
+    open_items:
+    - id: OI-01
+      disclosed_in_report: true
+    - id: OI-02
+      disclosed_in_report: false
+    declared_open_item_count: 2

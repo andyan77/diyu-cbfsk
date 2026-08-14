@@ -21,7 +21,7 @@ from __future__ import annotations
 import re
 import subprocess
 
-from _common import ROOT, cli, is_full_commit_hash, load_yaml, read_text
+from _common import founder_ruling_evidence, ROOT, cli, is_full_commit_hash, load_yaml, read_text
 
 LABEL = "check_m2_main_state_guard"
 
@@ -69,6 +69,23 @@ def validate(payload: dict) -> list[str]:
                 errors.append(f"RATIFICATION_UNBOUND: ratified commit {cid!r} is not a full 40-hex hash")
             if not entry.get("ruling"):
                 errors.append(f"RATIFICATION_WITHOUT_RULING: {cid} names no Founder ruling")
+            else:
+                # NB-M2-01：追认引用的裁决必须真的存在，具名条款必须解析得出来。
+                evidence = entry.get("ruling_evidence") or {}
+                if not evidence.get("file_exists"):
+                    errors.append(
+                        f"RULING_FILE_NOT_FOUND: {cid} cites {entry['ruling']!r}, "
+                        f"but {evidence.get('file')!r} does not exist"
+                    )
+                elif evidence.get("clause_path") is None:
+                    errors.append(
+                        f"RULING_CLAUSE_PATH_MISSING: {cid} cites {entry['ruling']!r} without a clause path"
+                    )
+                elif not evidence.get("clause_resolves"):
+                    errors.append(
+                        f"RULING_CLAUSE_NOT_FOUND: {cid} cites {entry['ruling']!r} clause "
+                        f"{evidence.get('clause_path')!r}, which the ruling file does not contain"
+                    )
             if not entry.get("reason"):
                 errors.append(f"RATIFICATION_WITHOUT_REASON: {cid} states no reason")
             if entry.get("sets_precedent") is True:
@@ -146,6 +163,7 @@ def collect() -> dict:
         {
             "commit": item.get("commit"),
             "ruling": item.get("ruling"),
+            "ruling_evidence": founder_ruling_evidence(item.get("ruling"), item.get("ruling_clause_path")),
             "reason": item.get("reason_verbatim"),
             "sets_precedent": item.get("sets_precedent"),
         }

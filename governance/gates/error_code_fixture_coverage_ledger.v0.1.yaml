@@ -1,0 +1,797 @@
+schema_version: '0.1'
+ledger_id: DIYU-CBFSK-ERROR-CODE-FIXTURE-COVERAGE-LEDGER
+artifact_id: error_code_fixture_coverage_ledger.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第四节 NB-M2-02
+established_at_package: M2-EP04
+rule:
+  statement: EQ-3 要求每条判据都有一份 expected=FAIL 的夹具行使它。本册登记的是尚未行使的存量错误码。
+  ratchet: max_uncovered_codes 必须等于 entries 条数，且只能降不能升。
+  new_checker_rule: 新增 checker 必须自带全覆盖，不得往本册加条目——上限不为新债让路。
+  repayment_rule: 补上一条夹具就必须从本册删掉对应条目，否则判 STALE_COVERAGE_EXEMPTION。
+  why_not_all_at_once: 153 条存量分布在 27 个既有 checker 上，逐条补齐需要为每个 checker 重建完整合法 payload；本包按 Founder「逐一补齐或登记」的授权先登记挂账并装上棘轮，把「看不见的欠账」变成「看得见且只能减少的欠账」。已补齐的是本包自己新增的判据——新增部分零欠账。
+measurement:
+  method: 实跑：扫描注册表内每个 checker 源码取声明码，再把全部 expected=FAIL 夹具喂给对应 validate() 收集实际触发码，取差集。
+  evidence_level: runtime_verified
+  measured_by: ci/checkers/check_error_code_fixture_coverage.py
+  declared_codes_total: 523
+  fail_fixtures_run: 385
+  covered_codes: 376
+  uncovered_codes: 147
+per_checker_counts:
+  check_active_product_truth: 6
+  check_baseline_hashes: 9
+  check_conditional_ledger: 10
+  check_docx_canonical_hashes: 3
+  check_effort_baseline_consistency: 3
+  check_external_review_claims: 3
+  check_hidden_benchmark_boundary: 5
+  check_instruction_projection: 6
+  check_m0_contract_completeness: 7
+  check_m0_deliverable_closure: 3
+  check_m0_fourteen_items: 3
+  check_m0_zero_contact: 2
+  check_m2_envelope_contract: 11
+  check_m2_evaluation_governance: 6
+  check_m2_gate_retirement_guard: 2
+  check_m2_governance_landing: 11
+  check_m2_hidden_assets: 4
+  check_m2_identity_isolation: 3
+  check_m2_main_state_guard: 2
+  check_m2_scoring_cards: 7
+  check_m2_tournament: 5
+  check_project_state: 2
+  check_role_operating_model: 14
+  check_ruling_coverage: 4
+  check_task_classification: 9
+  check_workspace_attestation: 7
+max_uncovered_codes: 147
+entries:
+- checker: check_baseline_hashes
+  code: BASELINE_NOT_CONFIRMED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: BASELINE_NOT_EFFECTIVE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: EDITING_NOT_AUTHORIZED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: EMPTY_MANIFEST
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: MISSING_BASELINE_FILE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: PRODUCT_BASELINE_SEMANTIC_CONFLICT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: UNAUTHORIZED_BASELINE_EDIT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: UNPINNED_DELIVERED_STATE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_baseline_hashes
+  code: UNRESOLVED_BASELINE_DIFFERENCE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_docx_canonical_hashes
+  code: CANONICAL_DIFFERENT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_docx_canonical_hashes
+  code: DOCX_PACKAGE_INVALID
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_docx_canonical_hashes
+  code: MISSING_FOUNDER_CONFIRMATION_FLAG
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_active_product_truth
+  code: ACTIVE_BASELINE_MISPLACED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_active_product_truth
+  code: FORBIDDEN_TRUTH_CLAIM
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_active_product_truth
+  code: STALE_PENDING_SWITCH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_active_product_truth
+  code: UNAUTHORIZED_BASELINE_STATUS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_active_product_truth
+  code: UNBOUND_AUTHORIZATION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_active_product_truth
+  code: WRONG_ACTIVE_PRODUCT_TRUTH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: AI_HAS_FINAL_AUTHORITY
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: CALIBRATION_CONTRACT_NAME
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: EXTERNAL_HUMAN_REVIEW_CLAIMED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: EXTERNAL_LEGAL_OPINION_CLAIMED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: GUARDIAN_EDITS_CANDIDATE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: GUARDIAN_READS_PLANNING_CONTEXT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: MISSING_ROLES
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: PLANNER_GUARDIAN_SEPARATION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: RED_LINE_DIGEST_RECIPE_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: REVIEW_MODE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: STALE_ADVISOR_REVIEW_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: STALE_GUARDIAN_DECISION_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: UNAUTHORIZED_DEFAULT_WRITER
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_role_operating_model
+  code: WRITER_IS_GUARDIAN
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: MISSING_FIELD
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: MISSING_FOUNDER_ATTESTATION_FLAG
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: MISSING_FOUNDER_WITNESS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: OVERCLAIMED_EVIDENCE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: SESSION_ID_FLAG
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: UNWITNESSED_CLAIM
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_workspace_attestation
+  code: WRITER_IS_GUARDIAN
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: FALLBACK_DEFAULT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: INCOMPLETE_WAIVER
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: L1_MISCLASSIFIED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: L1_SCOPE_CONFLICT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: L1_SCOPE_TOO_WIDE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: L3_REVIEW_SKIPPABLE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: MISSING_TASK_CLASS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: SILENT_BYPASS_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_task_classification
+  code: TASK_CLASS_MISMATCH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: CLOSURE_WITHOUT_COMMIT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: CLOSURE_WITHOUT_FOUNDER_DECISION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: CONDITION_NOT_IN_LEDGER
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: DUPLICATE_CONDITION_ID
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: INVALID_STATUS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: MISSING_EVIDENCE_SPEC
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: MISSING_FIELD
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: OPEN_WITH_CLOSURE_COMMIT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: VERBAL_CLOSURE_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_conditional_ledger
+  code: WAIVER_WITHOUT_FOUNDER_DECISION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_hidden_benchmark_boundary
+  code: ALLOWED_ARTIFACT_LIST_INCOMPLETE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_hidden_benchmark_boundary
+  code: HIDDEN_ASSET_TOUCHED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_hidden_benchmark_boundary
+  code: HIDDEN_STORAGE_IN_MAIN_REPO_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_hidden_benchmark_boundary
+  code: PUBLIC_DIRECTORY_NAME
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_hidden_benchmark_boundary
+  code: STALE_DIRECTORY_NAME
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_external_review_claims
+  code: DOMAIN_REVIEW_TYPE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_external_review_claims
+  code: LEGAL_REVIEW_TYPE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_external_review_claims
+  code: MISSING_REVIEW_METRIC
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_fourteen_items
+  code: M0_ITEM_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_fourteen_items
+  code: M0_ITEM_ORDER_CHANGED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_fourteen_items
+  code: MISSING_M0_LIST
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_project_state
+  code: AUTHORIZATION_WITHOUT_BASIS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_project_state
+  code: NON_BOOLEAN_STATE_FLAG
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_effort_baseline_consistency
+  code: EFFORT_BASELINE_CHANGED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_effort_baseline_consistency
+  code: EFFORT_BASELINE_FIELD_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_effort_baseline_consistency
+  code: MISSING_EFFORT_BASELINE_SOURCE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_instruction_projection
+  code: DRIFT_TOLERANCE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_instruction_projection
+  code: MANUAL_EDIT_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_instruction_projection
+  code: MISSING_GENERATED_MARKER
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_instruction_projection
+  code: MISSING_PROJECTION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_instruction_projection
+  code: PROJECTION_SET_MISMATCH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_instruction_projection
+  code: WRONG_CANONICAL_SOURCE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_ruling_coverage
+  code: D28_ANCHOR_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_ruling_coverage
+  code: D29_ANCHOR_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_ruling_coverage
+  code: GOVERNANCE_RULING_NOT_LANDED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_ruling_coverage
+  code: METRIC_THRESHOLD_CHANGED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: CONTRACT_SET_INCOMPLETE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: CONTRACT_WITHOUT_ID
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: CONTRACT_WITHOUT_PRD_ANCHOR
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: DUPLICATE_CONTRACT_ID
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: MISSING_M0_CONTRACT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: NO_KNOWN_ROLES
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_contract_completeness
+  code: OBLIGATION_FIELD_NOT_A_LIST
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_zero_contact
+  code: CONTACT_COUNT_NOT_ZERO
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_zero_contact
+  code: ZERO_CONTACT_CONTRACT_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_deliverable_closure
+  code: M0_COUNT_NOT_DECLARED_FROZEN
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_deliverable_closure
+  code: M0_DELIVERABLE_INDEX_COLLISION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m0_deliverable_closure
+  code: M0_FIFTEENTH_ITEM_NOT_FORBIDDEN
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_gate_retirement_guard
+  code: GATE_ROSTER_EMPTY
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_gate_retirement_guard
+  code: GATE_STATUS_INVALID
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: ADR_UNEXPECTED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: COMMERCIAL_CAPABILITY_BUILT_BEFORE_RULING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: COMMERCIAL_MUST_NOT_BUILD_LIST_INCOMPLETE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: FACT_PRIORITY_CHANGE_REQUIRED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: HARD_GATE_WITHOUT_STATEMENT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: LAYER_COUNT_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: LAYER_ID_UNKNOWN
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: NON_ADR_RECORD_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: PACKAGE_END_STATE_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: RULING_NOT_LANDED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_governance_landing
+  code: SOURCE_COMMIT_NOT_FULL_HASH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: ARTIFACT_LIFECYCLE_ENUM_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: BINDING_ARTIFACT_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: ENVELOPE_REQUIRED_FIELD_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: ENVELOPE_WITHOUT_POSITIVE_FIXTURE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: MULTIPLE_ENVELOPE_SCHEMAS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: PROFILE_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: PROFILE_SCHEMA_VIOLATION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: PROVISIONAL_WITHOUT_REBIND_OBLIGATION
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: RUNTIME_VALIDITY_ENUM_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: SOURCE_COMMIT_NOT_FULL_HASH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_envelope_contract
+  code: STATE_FIELD_OWNER_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_identity_isolation
+  code: FORBIDDEN_CAPABILITY_LIST_EMPTY
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_identity_isolation
+  code: IDENTITY_SCAN_EXEMPTION_TOO_BROAD
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_identity_isolation
+  code: IDENTITY_SCAN_WITHOUT_POSITIVE_CASE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_evaluation_governance
+  code: CALIBRATION_ELEMENT_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_evaluation_governance
+  code: HIGH_RISK_COVERAGE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_evaluation_governance
+  code: HIGH_RISK_SAMPLING_ALLOWED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_evaluation_governance
+  code: REVISION_WITHOUT_FOUNDER_RULING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_evaluation_governance
+  code: RISK_TIER_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_evaluation_governance
+  code: STRATIFICATION_DIMENSION_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: CONSTRAINT_CLASS_GOLD_ANSWER_DENIED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: EVALUATION_TASK_CLASS_AMBIGUOUS
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: EVALUATION_TASK_CLASS_COUNT_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: EVALUATION_TASK_CLASS_UNEXPECTED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: OPEN_TASK_GOLD_ANSWER_RULE_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: SCORECARD_DUPLICATE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_scoring_cards
+  code: STABILITY_BASIS_UNDEFINED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_tournament
+  code: OPEN_DECISION_NOT_REGISTERED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_tournament
+  code: OPEN_DECISION_WITHOUT_TIME_ESTIMATE
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_tournament
+  code: TOURNAMENT_DIMENSION_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_tournament
+  code: TOURNAMENT_DIMENSION_OPTIONAL
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_tournament
+  code: TOURNAMENT_FIELDS_UNDEFINED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_hidden_assets
+  code: MANIFEST_HASH_COUNT_DRIFT
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_hidden_assets
+  code: STOP_RECORD_NOT_TRIGGERED
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_hidden_assets
+  code: VERIFIABILITY_PRINCIPLE_MISSING
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_hidden_assets
+  code: VERIFIABILITY_PRINCIPLE_OVERREACH
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_main_state_guard
+  code: CI_REQUIREMENTS_EMPTY
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+- checker: check_m2_main_state_guard
+  code: GUARDIAN_COVERAGE_UNBOUND
+  status: REGISTERED_UNCOVERED
+  owner: CLAUDE_EXECUTION_PLANNER
+  due: M3 收口前逐步补齐
+new_in_m2_ep04_zero_debt:
+  checkers:
+  - check_m2_deliverable_closure
+  - check_milestone_closure_coverage
+  - check_m2_capability_matrix
+  - check_m2_calibration_set
+  - check_m2_calibration_review
+  - check_error_code_fixture_coverage
+  - check_disclosure_discipline
+  - check_guardian_report_binding
+  - check_m2_hidden_generation_readiness
+  uncovered_codes: 0
+  rule: 本包新增判据一律零欠账；棘轮不为新债让路。

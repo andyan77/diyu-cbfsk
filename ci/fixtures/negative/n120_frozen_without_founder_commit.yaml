@@ -1,0 +1,304 @@
+fixture_id: M2R-N11-frozen-without-founder-commit
+description: 标成 FROZEN 却没有 Founder 冻结 Commit。
+checker: check_m2_deliverable_closure
+expected: FAIL
+payload:
+  brief_deliverables:
+  - - 1
+    - artifact_01.v0.1.yaml
+  - - 2
+    - artifact_02.v0.1.yaml
+  - - 3
+    - artifact_03.v0.1.yaml
+  - - 4
+    - artifact_04.v0.1.yaml
+  - - 5
+    - artifact_05.v0.1.yaml
+  - - 6
+    - artifact_06.v0.1.yaml
+  - - 7
+    - leakage checker / frozen manifest / receipt
+  - - 8
+    - artifact_08.v0.1.yaml
+  - - 9
+    - artifact_09.v0.1.yaml
+  - - 10
+    - artifact_10.v0.1.yaml
+  - - 11
+    - artifact_11.v0.1.yaml
+  - - 12
+    - artifact_12.v0.1.yaml
+  - - 13
+    - artifact_13.v0.1.yaml
+  - - 14
+    - artifact_14.v0.1.yaml
+  - - 15
+    - artifact_15.v0.1.yaml
+  - - 16
+    - artifact_16.v0.1.yaml
+  - - 17
+    - artifact_17.v0.1.yaml
+  - - 18
+    - artifact_18.v0.1.yaml
+  items:
+  - deliverable_id: D-M2-01
+    brief_index: 1
+    canonical_name: artifact_01.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_01.v0.1.yaml
+      exists: true
+      declared_sha256: aed4c26e37f664b18b074a8d3add6adcf5eed8298a02f4ac2d95c6b67e983b47
+      actual_sha256: aed4c26e37f664b18b074a8d3add6adcf5eed8298a02f4ac2d95c6b67e983b47
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-02
+    brief_index: 2
+    canonical_name: artifact_02.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_02.v0.1.yaml
+      exists: true
+      declared_sha256: 0c21f7dd834d1eb730f35febb9cb2afac19f2d4313b4afb0086836513cb03fa6
+      actual_sha256: 0c21f7dd834d1eb730f35febb9cb2afac19f2d4313b4afb0086836513cb03fa6
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-03
+    brief_index: 3
+    canonical_name: artifact_03.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_03.v0.1.yaml
+      exists: true
+      declared_sha256: fdf03ad78bd2c3a77132522277a31a5cc3e8a50b6c126a43062f2718664fd020
+      actual_sha256: fdf03ad78bd2c3a77132522277a31a5cc3e8a50b6c126a43062f2718664fd020
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-04
+    brief_index: 4
+    canonical_name: artifact_04.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_04.v0.1.yaml
+      exists: true
+      declared_sha256: 02bca52bbfdbd70f192afcfd8860f8078d3fe91868683f78a2306a9e6941af47
+      actual_sha256: 02bca52bbfdbd70f192afcfd8860f8078d3fe91868683f78a2306a9e6941af47
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-05
+    brief_index: 5
+    canonical_name: artifact_05.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_05.v0.1.yaml
+      exists: true
+      declared_sha256: aaa536508b9778febc8c88f46ab13ecec54f7ed8da8e810881f7ef0b45d970ef
+      actual_sha256: aaa536508b9778febc8c88f46ab13ecec54f7ed8da8e810881f7ef0b45d970ef
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-06
+    brief_index: 6
+    canonical_name: artifact_06.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_06.v0.1.yaml
+      exists: true
+      declared_sha256: f9234bfb8c0e24e2262122ef210633004eea23763965674fc3ff5c347ca40b0e
+      actual_sha256: f9234bfb8c0e24e2262122ef210633004eea23763965674fc3ff5c347ca40b0e
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-07
+    brief_index: 7
+    canonical_name: leakage checker / frozen manifest / receipt
+    canonical_name_is_filename: false
+    canonical_artifact_present: false
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/checker.py
+      exists: true
+      declared_sha256: 18bdc033ca21546bcc35ea76679e796ceed17492149119d0c11230822b4fdf3f
+      actual_sha256: 18bdc033ca21546bcc35ea76679e796ceed17492149119d0c11230822b4fdf3f
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-08
+    brief_index: 8
+    canonical_name: artifact_08.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_08.v0.1.yaml
+      exists: true
+      declared_sha256: 556f0152e79c98cb9a081fa534632b5134d732698692023cebf8dcf82dc27bf0
+      actual_sha256: 556f0152e79c98cb9a081fa534632b5134d732698692023cebf8dcf82dc27bf0
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-09
+    brief_index: 9
+    canonical_name: artifact_09.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_09.v0.1.yaml
+      exists: true
+      declared_sha256: 3bb51a524611a2facd5c4bdd07273041967da520c946e0ebd63679d97f664c54
+      actual_sha256: 3bb51a524611a2facd5c4bdd07273041967da520c946e0ebd63679d97f664c54
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-10
+    brief_index: 10
+    canonical_name: artifact_10.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_10.v0.1.yaml
+      exists: true
+      declared_sha256: 6f6cdf9ed017f1b173abc2bda9e95524db6d42ee8d1edfb5dba402229e64abfc
+      actual_sha256: 6f6cdf9ed017f1b173abc2bda9e95524db6d42ee8d1edfb5dba402229e64abfc
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-11
+    brief_index: 11
+    canonical_name: artifact_11.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: FROZEN
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_11.v0.1.yaml
+      exists: true
+      declared_sha256: e4ef53eaf5c19c20eb2a8e5b803258c11a4081c9d3b63e4707493f5b13227ad7
+      actual_sha256: e4ef53eaf5c19c20eb2a8e5b803258c11a4081c9d3b63e4707493f5b13227ad7
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-12
+    brief_index: 12
+    canonical_name: artifact_12.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_12.v0.1.yaml
+      exists: true
+      declared_sha256: f833bf9df7faf15545ff8a8dfad462149e263e9ce3ebc904e19b1a5b2d5125d7
+      actual_sha256: f833bf9df7faf15545ff8a8dfad462149e263e9ce3ebc904e19b1a5b2d5125d7
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-13
+    brief_index: 13
+    canonical_name: artifact_13.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_13.v0.1.yaml
+      exists: true
+      declared_sha256: b4606ba91f48b52ae667daa08b60b34d2a95c9894be7b335a7719c2db7c8d368
+      actual_sha256: b4606ba91f48b52ae667daa08b60b34d2a95c9894be7b335a7719c2db7c8d368
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-14
+    brief_index: 14
+    canonical_name: artifact_14.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_14.v0.1.yaml
+      exists: true
+      declared_sha256: f301e02d80277eaa410bc269ff8f32b49543c5b4fb53b23296db5e413d5b840d
+      actual_sha256: f301e02d80277eaa410bc269ff8f32b49543c5b4fb53b23296db5e413d5b840d
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-15
+    brief_index: 15
+    canonical_name: artifact_15.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_15.v0.1.yaml
+      exists: true
+      declared_sha256: 85efd8b3c3952fac991d7fda64bda1339d6ca9ae66ca1d6431a27706ab86dc7f
+      actual_sha256: 85efd8b3c3952fac991d7fda64bda1339d6ca9ae66ca1d6431a27706ab86dc7f
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-16
+    brief_index: 16
+    canonical_name: artifact_16.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_16.v0.1.yaml
+      exists: true
+      declared_sha256: 07ce404318bfb3cd13b033ed5c9e9864157d9aae9fa00bc8e103779fe55037c8
+      actual_sha256: 07ce404318bfb3cd13b033ed5c9e9864157d9aae9fa00bc8e103779fe55037c8
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-17
+    brief_index: 17
+    canonical_name: artifact_17.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_17.v0.1.yaml
+      exists: true
+      declared_sha256: 6d5feda35b48bf2de0f469b7af9d5d430583b896cc9242847ac11e68bb648b08
+      actual_sha256: 6d5feda35b48bf2de0f469b7af9d5d430583b896cc9242847ac11e68bb648b08
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  - deliverable_id: D-M2-18
+    brief_index: 18
+    canonical_name: artifact_18.v0.1.yaml
+    canonical_name_is_filename: true
+    canonical_artifact_present: true
+    status: READY
+    blockers: []
+    equivalent_artifacts:
+    - path: dir/artifact_18.v0.1.yaml
+      exists: true
+      declared_sha256: 2ba2a06920bbc91798464489a32cab0fd82bebe1a2a36e8c9a69c3da6ce78323
+      actual_sha256: 2ba2a06920bbc91798464489a32cab0fd82bebe1a2a36e8c9a69c3da6ce78323
+    founder_supersession_ruling: null
+    founder_freeze_commit: null
+  m2_candidate_formed: true
+  founder_signature_eligible: true
+  m2_frozen: false
+  declared_counts:
+    ready_count: 17
+    partial_count: 0
+    absent_count: 0
+    frozen_count: 1
+    all_ready: true

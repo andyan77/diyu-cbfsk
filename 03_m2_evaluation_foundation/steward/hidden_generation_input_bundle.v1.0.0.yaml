@@ -1,0 +1,143 @@
+schema_version: '0.1'
+bundle_id: DIYU-CBFSK-M2-HIDDEN-GENERATION-INPUT-BUNDLE
+bundle_version: 1.0.0
+artifact_id: hidden_generation_input_bundle.v1.0.0
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第八节 A-8
+source_main_candidate_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+source_main_candidate_commit_note: 本包在该提交之上继续施工；输入包的文件哈希取自**本包交付态**，不是该提交当时的状态。source_main_candidate_commit 记的是血缘起点，files[].sha256
+  记的是实际交付内容——两者不是同一件事，不得混用。
+consumer_role: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+consumer_storage: STORE-A
+steward_prompt:
+  prompt_id: DIYU-CBFSK-M2-HIDDEN-STOREA-001
+  version: 1.0.0
+  path: 03_m2_evaluation_foundation/steward/hidden_asset_steward_prompt.v1.0.0.md
+  sha256: 969d771fda47e11324e6655b9169b422996b56732360691d380823e84cb21ed9
+  summary_does_not_substitute_full_file: true
+  summary_note: 任务 Prompt 里的摘要不得替代该完整文件；Steward 必须读全文。
+required_file_categories:
+- category: 交付覆盖映射
+  file_count: 1
+- category: 能力矩阵
+  file_count: 1
+- category: 未见品牌切分
+  file_count: 1
+- category: 未见品类边缘任务
+  file_count: 1
+- category: 抽样设计
+  file_count: 1
+- category: 任务类型合同
+  file_count: 1
+- category: 三张横向评分卡
+  file_count: 3
+- category: 七类纵向评分合同
+  file_count: 7
+- category: 可接受决策边界注册表
+  file_count: 1
+- category: 隐藏资产生成合同
+  file_count: 1
+- category: 硬门定义
+  file_count: 1
+- category: Steward 执行 Prompt
+  file_count: 1
+required_category_count: 12
+file_count: 20
+staleness_rule:
+  id: SR-STALE-01
+  machine_judgement: true
+  human_judgement_forbidden: true
+  statement: 任一输入文件哈希变化 → hidden_generation_input_status 置 STALE，且 existing_hidden_assets_status 置 INVALIDATED_REQUIRES_REGENERATION。
+  forbidden_reasoning: 不得以「只是小改，应该不影响」为由继续。
+  why: 这些文件定义了什么算合法解、什么算硬约束、题目怎么分层。公开侧改了一条边界而隐藏侧按旧版出了题，那批题考的就不是现在这套标准——而且事后无法知道是哪一条变了。
+  failure_states:
+  - HIDDEN_INPUT_BUNDLE_STALE
+  - STALE_BUNDLE_USED_FOR_GENERATION
+current_state:
+  hidden_generation_input_status: FRESH
+  existing_hidden_assets_status: NONE_GENERATED
+  generation_started: false
+  blocked_by: COND-011（STORE-A provision 证据未齐）
+machine_checkable_fields:
+  file_count:
+    type: integer
+    current_value: 20
+  required_category_count:
+    type: integer
+    required_value: 12
+  all_hashes_match:
+    type: boolean
+    required_value: true
+  generation_started:
+    type: boolean
+    current_value: false
+failure_states:
+- HIDDEN_INPUT_BUNDLE_STALE
+- STALE_BUNDLE_USED_FOR_GENERATION
+- REQUIRED_INPUT_FILE_MISSING
+- REQUIRED_CATEGORY_MISSING
+- STEWARD_PROMPT_HASH_STALE
+- BUNDLE_FILE_COUNT_MISSTATED
+files:
+- path: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
+  sha256: 10b8ec27562b613655256fb577cff224d294c86c3b6338eb572cfaa5c58f0a91
+  category: 交付覆盖映射
+- path: 03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml
+  sha256: 2e849acd69a902c8a8e1202f47537cad5a4bc58b004eca3b4eab8f619bfbb727
+  category: 能力矩阵
+- path: 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml
+  sha256: 66b74c9d4bc9295ac2d351223d3545c7c9086c715a2aa52c82ff7cc66ec99bca
+  category: 未见品牌切分
+- path: 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml
+  sha256: e8c21d2a4e06ce5040d4412e584fa224a2b1779d89ead1fcb1507dd62e26ee29
+  category: 未见品类边缘任务
+- path: 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml
+  sha256: fffa5992d7a437fb460b4b9f1eba224ddb6659843847098b6b55b908594c0597
+  category: 抽样设计
+- path: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  sha256: 6ffa4996af2738a44737a143ad644c66e86bce4e31744d0126cd0963ddd8af53
+  category: 任务类型合同
+- path: 03_m2_evaluation_foundation/scoring/scorecard_constraint_correctness.v0.1.yaml
+  sha256: bf64f954c1b94712abe1a40a60edfb539d8f819f4d8a08b06f718b8f30199557
+  category: 三张横向评分卡
+- path: 03_m2_evaluation_foundation/scoring/scorecard_mechanism_correctness.v0.1.yaml
+  sha256: 06c21d2cdb4cdb2efc8638bf0764ccfa728c9cdfc8e02920fe6ac5084266fd5f
+  category: 三张横向评分卡
+- path: 03_m2_evaluation_foundation/scoring/scorecard_open_decision.v0.1.yaml
+  sha256: 7aede8f7ac2c54c69daea697a3e5f1ce76e118fd46f59bca14ae18eedd4e9513
+  category: 三张横向评分卡
+- path: 03_m2_evaluation_foundation/scoring/expert_scoring_rubric.v0.1.yaml
+  sha256: d522b4f4581e8566279a493bc943498449f6b3e7762e6f139aa7c7aadeda8232
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/narrative_scoring_rubric.v0.1.yaml
+  sha256: 2ff3141b6bd532b9ef3a72a248712c5b77ecab934e63e5907468c58391a42352
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/persona_continuity_scoring_rubric.v0.1.yaml
+  sha256: 62d2596422af5c4e23cb38a363e628f9a1d459d8445c5c3d3a4eadb92f9c3b00
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml
+  sha256: 7d10781d2a9249ee068f7a601117f38ada3cb503b30949589aad41321b516ec0
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
+  sha256: a8a6fb984488c7cf5c92b627ab8e621b70818b71515182c205622d3968856344
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml
+  sha256: d069229332edc1bb61342ca1cc96ec80517cfd5d474efb058eb376b36ce55a2a
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/five_category_readiness_definition.v0.1.yaml
+  sha256: d667f99e0ee7363c6bf3017af84310bb979ae1c72738812412a36234328d6158
+  category: 七类纵向评分合同
+- path: 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml
+  sha256: 4e374540690771e38c76f9e92bce19f13e2212924d6bf62ae24b1f830ef51c58
+  category: 可接受决策边界注册表
+- path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml
+  sha256: ba417eaaa7f9ae7814bb1892c8ed1f3e6dc32f91759a0694443b14fa4ccd6def
+  category: 隐藏资产生成合同
+- path: 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml
+  sha256: 7416f5de65859f9e53a897860443ea16256585e57204ea79cf9ac78d7d9e410f
+  category: 硬门定义
+- path: 03_m2_evaluation_foundation/steward/hidden_asset_steward_prompt.v1.0.0.md
+  sha256: 969d771fda47e11324e6655b9169b422996b56732360691d380823e84cb21ed9
+  category: Steward 执行 Prompt

@@ -1,0 +1,35 @@
+fixture_id: N193-compliance-incomplete-checklist
+description: 只剩两条合规项——正是原正例压低下限掩盖的那种情况。
+checker: check_compliance_ledger
+expected: FAIL
+payload:
+  blanket_self_assessment_allowed: false
+  external_legal_opinion: false
+  legal_review_type: founder_compliance_self_assessment
+  items:
+  - compliance_item_id: CMP-01
+    issue: 未满 14 周岁个人信息与监护人同意机制
+    applicable_stage: M0
+    founder_decision: MITIGATE
+    rationale: 童装内容不采集可识别个体信息，个体适配只用中性字段。
+    evidence:
+    - PRD 9.4
+    - PRD 10.1
+    required_controls:
+    - 中性字段
+    - 品类安全合同
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-02
+    issue: AIGC 标识义务
+    applicable_stage: M7
+    founder_decision: DEFER
+    rationale: 平台标注规则待形态裁决后核验。
+    evidence:
+    - PRD 10.4
+    required_controls:
+    - 发布前标识检查
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false

@@ -8,7 +8,7 @@ project_id: DIYU-CBFSK-001
 task_class: L2
 recorded_by: CODEX_EXECUTION_ENGINEER
 recorded_at: '2026-08-13'
-authorization: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001
+authorization: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001
 baseline_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 baseline_commit_role: Founder 恢复执行授权第一节第 2 条指定的新基线 main
 m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
@@ -70,7 +70,7 @@ ep02_end_state:
   next_authorized_action: PROCEED_TO_M2_EP03
 ep02_end_state_note: EP02 自检完成时的状态。SELF_CHECKED 只表示包内确定性 Checker 全绿，不表示已通过 Guardian、总顾问或 Founder 审查——按授权，两包完成后统一收口。
 phase_1_adjudications:
-  ruling_landed: governance/founder_rulings/DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001.yaml
+  ruling_landed: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001.yaml
   transcription_only: true
   OI-01:
     status: ADJUDICATED_NOT_IMPLEMENTED
@@ -121,7 +121,7 @@ self_check:
   guardian_review: NOT_REQUESTED
   advisor_review: NOT_REQUESTED
   founder_review: NOT_REQUESTED
-  review_deferral_basis: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第一节第 4 条：两包完成后统一收口。
+  review_deferral_basis: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第一节第 4 条：两包完成后统一收口。
 forbidden_outputs_produced:
   real_model_api_calls: 0
   distillation_calls: 0
@@ -257,3 +257,11 @@ modified_artifacts:
   sha256: 32f0fefe73146b620aa0f572c152fc42b30c43560417f8cd5e846f8c0ebb9b2d
 superseded_by: M2-EP03
 supersession_note: ep02_end_state 是 EP02 自检完成那一刻的如实记录，不因后续推进而改写。当前态见 M2-EP03 回执。
+
+execution_run_id: null
+execution_run_id_status: NOT_RECORDED_AT_EXECUTION_TIME
+execution_run_id_note: >-
+  M2-EP02 执行当时没有登记 execution_run_id。A-5 把 UUID 守卫改为自动发现之后这个缺口才暴露出来。
+  执行侧**不追记也不推断**一个值——追记出来的批次标识无法与任何实际运行对应，比空着更有害。
+  本字段如实置 null 并具名登记状态；check_execution_uuid 的 RUN_ID_ABSENT_WITHOUT_DECLARATION
+  判据要求这类缺口必须显式声明，不得静默留空。

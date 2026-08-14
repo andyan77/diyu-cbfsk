@@ -7,6 +7,12 @@ from _common import cli, load_yaml
 
 LABEL = "check_compliance_ledger"
 
+# 清单下限来自合规审查合同（PRD 10.4 第八道门 Safety & Compliance 的七项必答）。
+# NB-M2-02：原先这个下限由 payload 传入，于是正例只要把它写成 2 就能用两条项目「通过」——
+# 夹具把尺子改短了再量自己。下限从此只有这一个定义处，夹具改不动。
+MINIMUM_ITEMS = 7
+MINIMUM_ITEMS_SOURCE = "01_contracts_and_schemas/compliance_review_contract.v1.0.yaml"
+
 REQUIRED_FIELDS = [
     "compliance_item_id",
     "issue",
@@ -34,8 +40,11 @@ def validate(payload: dict) -> list[str]:
         errors.append(f"LEGAL_REVIEW_TYPE: got {payload.get('legal_review_type')!r}")
 
     items = payload.get("items") or []
-    if len(items) < payload.get("minimum_items", 7):
-        errors.append(f"INCOMPLETE_CHECKLIST: {len(items)} items, expected at least {payload.get('minimum_items', 7)}")
+    if len(items) < MINIMUM_ITEMS:
+        errors.append(
+            f"INCOMPLETE_CHECKLIST: {len(items)} items, expected at least {MINIMUM_ITEMS} "
+            f"（下限定义于 {MINIMUM_ITEMS_SOURCE}，不由 payload 传入）"
+        )
 
     seen: set[str] = set()
     for item in items:
@@ -69,7 +78,6 @@ def collect() -> dict:
         "external_legal_opinion": ledger["external_legal_opinion"],
         "legal_review_type": ledger["legal_review_type"],
         "items": ledger["items"],
-        "minimum_items": 7,
     }
 
 

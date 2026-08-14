@@ -1,0 +1,20 @@
+fixture_id: N208-coverage-ratchet-broken
+description: 登记册自述上限与实际条目数不符——棘轮被绕过。
+checker: check_error_code_fixture_coverage
+expected: FAIL
+payload:
+  declared:
+  - checker: check_a
+    code: CODE_ONE
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_THREE
+  uncovered:
+  - checker: check_a
+    code: CODE_TWO
+  fixture_count: 12
+  ledger_entries:
+  - checker: check_a
+    code: CODE_TWO
+  declared_cap: 99

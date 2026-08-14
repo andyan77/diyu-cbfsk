@@ -1,0 +1,14 @@
+fixture_id: N221-open-item-count-misstated
+description: 报告自报未决项条数与回执对不上。
+checker: check_disclosure_discipline
+expected: FAIL
+payload:
+  pairs:
+  - receipt: r.yaml
+    report: r.md
+    open_items:
+    - id: OI-01
+      disclosed_in_report: true
+    - id: OI-02
+      disclosed_in_report: true
+    declared_open_item_count: 1

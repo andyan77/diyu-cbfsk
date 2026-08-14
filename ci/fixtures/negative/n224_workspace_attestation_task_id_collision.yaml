@@ -1,0 +1,28 @@
+fixture_id: N224-workspace-attestation-task-id-collision
+description: 两份见证文件claim同一个 task_id。
+checker: check_workspace_attestation
+expected: FAIL
+payload:
+  files:
+  - source_path: governance/workspaces/a.yaml
+    task_id: T-1
+    is_cryptographic_independence_proof: false
+    records:
+    - workspace_id: w
+      workspace_path: /w
+      conversation_or_session_id: s1
+      session_started_at: t
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: TEMPORARY_EXECUTION_WRITER
+      status: ACTIVE
+  - source_path: governance/workspaces/b.yaml
+    task_id: T-1
+    is_cryptographic_independence_proof: false
+    records:
+    - workspace_id: w2
+      workspace_path: /w
+      conversation_or_session_id: s1
+      session_started_at: t
+      base_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      role: TEMPORARY_EXECUTION_WRITER
+      status: ACTIVE

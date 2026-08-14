@@ -2,7 +2,7 @@ schema_version: '0.1'
 roster_id: DIYU-CBFSK-LIVE-GATE-ROSTER
 artifact_id: live_gate_roster.v0.1
 project_id: DIYU-CBFSK-001
-established_by: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 OI-01 general_rule GR-GATE-01
+established_by: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 OI-01 general_rule GR-GATE-01
 established_at_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
 contract:
   general_rule: 任何现役门禁的摘除或降级均为独立治理动作，须 Founder 单独授权，永不作为其他任务的副作用。
@@ -14,7 +14,7 @@ contract:
   - 2. 本册对应条目 status 改 RETIRED，并填 retirement_authorization（裁决 ID + 完整 Commit 哈希 + 替代覆盖）
   - 3. 才可从 run_all_checks 注册表移除
   downgrade_equals_retirement: 削弱判据（放宽阈值、去掉分支、改成只警告不失败）与摘除同等对待，一律须单独授权。
-live_gate_count: 32
+live_gate_count: 41
 gates:
 - checker: check_execution_uuid
   status: LIVE
@@ -110,5 +110,32 @@ gates:
   status: LIVE
   retirement_authorization: null
 - checker: check_m2_cross_package_consistency
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_deliverable_closure
+  status: LIVE
+  retirement_authorization: null
+- checker: check_milestone_closure_coverage
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_capability_matrix
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_calibration_set
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_calibration_review
+  status: LIVE
+  retirement_authorization: null
+- checker: check_error_code_fixture_coverage
+  status: LIVE
+  retirement_authorization: null
+- checker: check_disclosure_discipline
+  status: LIVE
+  retirement_authorization: null
+- checker: check_guardian_report_binding
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_hidden_generation_readiness
   status: LIVE
   retirement_authorization: null

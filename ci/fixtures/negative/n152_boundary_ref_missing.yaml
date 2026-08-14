@@ -1,0 +1,1598 @@
+fixture_id: N152-boundary-ref-missing
+description: ②类题引用了注册表里没有的边界族。
+checker: check_m2_calibration_set
+expected: FAIL
+payload:
+  cases:
+  - case_id: CAL-001
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 1
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-002
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 2
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-003
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 3
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-004
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 4
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-005
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 5
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-006
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 6
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-007
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 7
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-99
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-008
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 8
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-009
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 9
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-010
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 10
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-011
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 11
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-012
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 12
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-013
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 13
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-014
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 14
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-015
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 15
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-016
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 16
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-017
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 17
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-018
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 18
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-019
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 19
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-020
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 20
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-021
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 21
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-022
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 22
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-023
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 23
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-024
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 24
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-025
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 25
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-026
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 26
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-027
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 27
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-028
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 28
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-029
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 29
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-030
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 30
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-031
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 31
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-032
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 32
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-033
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 33
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-034
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 34
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-035
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 35
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-036
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 36
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-037
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 37
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-038
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 38
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-039
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 39
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-040
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 40
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-041
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 41
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-042
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 42
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-043
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 43
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-044
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 44
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-045
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 45
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-046
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 46
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-047
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 47
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-048
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 48
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-049
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 49
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-050
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 50
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-051
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 51
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-052
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 52
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-053
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 53
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-054
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 54
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-055
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 55
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-056
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 56
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-057
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 57
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-058
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 58
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-059
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 59
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-060
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 60
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-061
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 61
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-062
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 62
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-063
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 63
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-064
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 64
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-065
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 65
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-066
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 66
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-067
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 67
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-068
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 68
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-069
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 69
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-070
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 70
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-071
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 71
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-072
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 72
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-073
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 73
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-074
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 74
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-075
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 75
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-076
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 76
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-077
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 77
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-078
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 78
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+  - case_id: CAL-079
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 79
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-080
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 80
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-081
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 81
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-082
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 82
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-083
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 83
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-084
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 84
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+  - case_id: CAL-085
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 85
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-086
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 86
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+  - case_id: CAL-087
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 87
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-088
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 88
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-089
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 89
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  - case_id: CAL-090
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 90
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+  declared_grid:
+    total_cases: 90
+    empty_cells: 0
+  declared_anchor_item_count: 90
+  consumer_anchor_item_count: 90
+  categories:
+  - CAT-A
+  - CAT-B
+  - CAT-C
+  - CAT-D
+  - CAT-E
+  capability_classes:
+    professional_explanation:
+    - constraint_correctness
+    - mechanism_correctness
+    - open_decision
+    narrative_quality:
+    - mechanism_correctness
+    - open_decision
+  boundary_families:
+    ADB-M-01: mechanism_correctness
+    ADB-O-01: open_decision
+  families_without_out_of_boundary: []
+  registry_counts:
+    declared_total: 2
+    actual_total: 2
+  hard_gate_ids:
+  - HG-01
+  - HG-05
+  constraint_ids:
+  - HG-01
+  - WW-HC-01

@@ -1,0 +1,21 @@
+fixture_id: N184-fabricated-ruling-id-in-flag-authorization
+description: 状态位授权引用了一个凭空写出来的裁决编号，仓库里没有这个文件——NB-M2-01 的核心负例。
+checker: check_project_state
+expected: FAIL
+payload:
+  ruling_claims:
+  - where: state_flag_authorizations.flags.m2_started
+    reference: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+    ruling_id: DIYU-CBFSK-FOUNDER-M9-IMAGINARY-001
+    kind: founder_ruling
+    file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M9-IMAGINARY-001.yaml
+    file_exists: false
+    clause_path: milestone_plan_m2
+    clause_resolves: true
+  flags: {}
+  authorizations: {}
+  never_authorizable_declared: []
+  execution_status: M2_IN_PROGRESS
+  execution_status_authorization: {}
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []

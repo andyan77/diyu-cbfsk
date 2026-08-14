@@ -1,7 +1,7 @@
 # M2 里程碑交付报告（EP01 ＋ EP02 ＋ EP03）
 
 > 里程碑 M2｜计划 `MILESTONE_PLAN_M2 v1.1.0`｜分支 `candidate/m2`
-> 授权链：`DIYU-CBFSK-FOUNDER-M2-CHARTER-001` → `DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001`（含 EP03 精确 Prompt 批准）
+> 授权链：`DIYU-CBFSK-FOUNDER-M2-CHARTER-001` → `DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001`（含 EP03 精确 Prompt 批准）
 > M1 批准提交 `2df11012da46ace0de7b7bce6d199a578d32d341`｜合并基线 `main = c3f6ad372306cc12f139cf38624e9a5cea2cf329`
 
 ## 1. 结论
@@ -22,7 +22,7 @@ M2 三个执行包全部完成并形成冻结候选。**`m2_frozen` 仍为 `fals
 
 ## 3. M2 冻结候选内容
 
-**已形成候选**：Envelope/Profile 合同与 FINAL 绑定（29 件，钉 Founder 批准的 M1 提交）；六份 ADR 与六层架构映射；身份识别隔离能力清单（激活条件＝永不，红线）；D-09 三件套评测治理合同；D-28 三分类合同与三张评分卡；核心决策逻辑稳定率口径；锦标赛四维度合同与 dry-run 骨架；隐藏资产生成合同与可验证性原则。
+**已形成候选**：Envelope/Profile 合同与 FINAL 绑定（29 件，钉 Founder 批准的 M1 提交）；六份 ADR 与六层架构映射；身份识别隔离能力清单（激活条件＝永不，红线）；评测治理三件套（M2 冻结 Brief 第 2 节第 8/9/10 项）；D-28 三分类合同与三张评分卡；核心决策逻辑稳定率口径；锦标赛四维度合同与 dry-run 骨架；隐藏资产生成合同与可验证性原则。
 
 **明确未冻结**：全部评测阈值（`M2_FREEZE_REQUIRED`，`COND-007`）；隐藏资产本体（未生成）；真实基线运行结果（`OD-M2-01` 未执行）；锦标赛排序权重（不合成单一总分）。
 
@@ -63,7 +63,7 @@ M2 三个执行包全部完成并形成冻结候选。**`m2_frozen` 仍为 `fals
 
 ## 7. 红线与禁止产出核对
 
-真实模型 API 调用 **0**；蒸馏调用 **0**；隐藏内容进主仓 **0**；`m2_frozen`／`knowledge_distillation_started`／`production_servable` 全部 `false`；Billing／开发者门户／Marketplace **0**；人脸识别类能力 **0**（结构化扫描 255 份文件零命中）；对 M1 冻结物的原位修改 **0**（33 条 M1 回执哈希逐件复算，零漂移）。
+真实模型 API 调用 **0**；蒸馏调用 **0**；隐藏内容进主仓 **0**；`m2_frozen`／`knowledge_distillation_started`／`production_servable` 全部 `false`；Billing／开发者门户／Marketplace **0**；人脸识别类能力 **0**（结构化扫描 419 份文件零命中）；对 M1 冻结物的原位修改 **0**（33 条 M1 回执哈希逐件复算，零漂移）。
 
 熔断条款未触发：M1 顶层对象、核心语义、七级事实优先级与品类合同均未改动。
 
@@ -72,3 +72,25 @@ M2 三个执行包全部完成并形成冻结候选。**`m2_frozen` 仍为 `fals
 Guardian **未审查**；总顾问 **未审查**；Founder **未裁决**。按授权，两包完成后统一进行一次 Guardian → 一次总顾问 → 一次 Founder 裁决。本报告的全绿结论**只是执行侧自检**，不代替任何一方审查。
 
 合并 `main` 三项前置尚未齐备，本包**未合并、未自行合并**。
+
+
+---
+
+## 未决项全量披露（M2-EP04 追加，NB-M2-06）
+
+Guardian 非阻塞发现 NB-M2-06：本报告此前只提了回执里的部分未决项。
+**回执里有、报告里没有** 的条目，读者无从知道它存在——而读报告的人正是决定要不要往下走的人。
+现按披露纪律补齐**全部**条目，不筛选：
+
+| 编号 | 事项 | 当前状态 |
+|---|---|---|
+| `OI-M2-HIDDEN` | 隐藏评测资产被 HIDDEN_STORAGE_NOT_PROVISIONED 阻断 |  |
+| `OD-M2-01` | 真实基线运行未执行 |  |
+| `OI-01` | 三层哈希退役 |  |
+| `COND-011` | 隐藏存储 provision 条件未关闭 |  |
+| `COND-007` | 全部评测阈值仍为 M2_FREEZE_REQUIRED |  |
+| `OI-02` | execution_run_id 未纳入 check_execution_uuid 守卫 |  |
+| `OI-03` | README-MOD-01 列表排版错位 |  |
+
+本节由 `ci/checkers/check_disclosure_discipline.py` 的 `OPEN_ITEM_NOT_DISCLOSED` 判据守：
+回执里出现的每一个未决项编号，都必须能在对应报告正文里被找到。

@@ -12,7 +12,7 @@ freeze_semantics:
   effective_from: Founder 收口签署
   before_signature: 可修订
   after_signature: 只能按 benchmark_revision_protocol 的唯一合法通道修订，且因失败而降标永久禁止
-  authority: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 审查安排 / DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第四节 Phase 2
+  authority: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 审查安排 / DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第四节 Phase 2
 profile_lock:
   profile_id: m2_evaluation_profile
   profile_version: '1.0'
@@ -105,7 +105,7 @@ what_is_frozen_candidate:
 - M1→M2 Envelope/Profile 合同与 FINAL 绑定（29 件）
 - 六份最小 ADR 与六层架构映射
 - 身份识别隔离能力清单（永久红线）
-- D-09 三件套评测治理合同
+- 评测治理三件套（M2 冻结 Brief 第 2 节第 8/9/10 项）：reviewer_calibration_contract.v0.1 / evaluation_sampling_design.v0.1 / benchmark_revision_protocol.v0.1
 - D-28 三分类合同与三张评分卡
 - 核心决策逻辑稳定率口径
 - 基线锦标赛四维度合同与 dry-run 骨架

@@ -9,7 +9,7 @@ as a completed one.
 
 from __future__ import annotations
 
-from _common import ROOT, cli, docx_paragraph_texts, is_full_commit_hash, load_yaml, read_text
+from _common import founder_ruling_evidence, ROOT, cli, docx_paragraph_texts, is_full_commit_hash, load_yaml, read_text
 
 LABEL = "check_project_state"
 
@@ -77,8 +77,43 @@ def _authorization_error(flag: str, auth: dict | None) -> str | None:
     return None
 
 
+def _ruling_evidence_error(where: str, claim: dict) -> str | None:
+    """NB-M2-01：引用的裁决必须真的存在，且具名条款要解析得出来。
+
+    此前只看引用字符串非空——凭空写一个 DIYU-CBFSK-FOUNDER-M9-IMAGINARY-001 照样过关。
+    引用里没有裁决编号的（如 prd_signature.founder_prd_decision=PASS）属回执内部字段引用，
+    由签署回执自身守，不在此判。
+    """
+    if not claim.get("ruling_id"):
+        return None
+    if not claim.get("file_exists"):
+        return (
+            f"RULING_FILE_NOT_FOUND: {where} cites {claim['ruling_id']}, "
+            f"but {claim.get('file')!r} does not exist"
+        )
+
+    if claim.get("kind") != "founder_ruling":
+        return None
+    if claim.get("clause_path") is None:
+        return (
+            f"RULING_CLAUSE_PATH_MISSING: {where} cites {claim['ruling_id']} without naming a clause path — "
+            "指得出文件不等于文件里真有那一条"
+        )
+    if not claim.get("clause_resolves"):
+        return (
+            f"RULING_CLAUSE_NOT_FOUND: {where} cites {claim['ruling_id']} clause "
+            f"{claim.get('clause_path')!r}, which the ruling file does not contain"
+        )
+    return None
+
+
 def validate(payload: dict) -> list[str]:
     errors: list[str] = []
+
+    for claim in payload.get("ruling_claims") or []:
+        error = _ruling_evidence_error(claim.get("where", "<unknown site>"), claim)
+        if error:
+            errors.append(error)
 
     flags = payload.get("flags") or {}
     authorizations = payload.get("authorizations") or {}
@@ -159,6 +194,20 @@ def collect() -> dict:
                     hits.append({"source": name, "claim": claim, "paragraph": paragraph})
 
     authorizations = (signoff.get("state_flag_authorizations") or {}).get("flags") or {}
+
+    ruling_claims = []
+    for name, auth in sorted(authorizations.items()):
+        evidence = founder_ruling_evidence(auth.get("basis"), auth.get("ruling_clause_path"))
+        evidence["where"] = f"state_flag_authorizations.flags.{name}"
+        ruling_claims.append(evidence)
+    value_basis = (
+        ((signoff.get("state_flag_authorizations") or {}).get("execution_status") or {}).get("value_basis") or {}
+    )
+    for value, entry in sorted(value_basis.items()):
+        evidence = founder_ruling_evidence(entry.get("ruling"), entry.get("ruling_clause_path"))
+        evidence["where"] = f"state_flag_authorizations.execution_status.value_basis.{value}"
+        ruling_claims.append(evidence)
+
     flags = {name: state[name] for name in GATED_FLAGS if name in state}
     flags["m0_execution_started"] = receipt["m0_execution_started"]
     flags["knowledge_distillation_started"] = receipt["knowledge_distillation_started"]
@@ -168,6 +217,7 @@ def collect() -> dict:
     return {
         "flags": flags,
         "authorizations": authorizations,
+        "ruling_claims": ruling_claims,
         "never_authorizable_declared": (signoff.get("state_flag_authorizations") or {}).get(
             "never_authorizable"
         )

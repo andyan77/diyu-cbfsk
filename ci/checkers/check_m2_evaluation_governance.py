@@ -29,7 +29,9 @@ ROLE_MODEL = "governance/bootstrap/role_operating_model.v0.2.yaml"
 HIDDEN_CHECKER = "ci/checkers/check_hidden_benchmark_boundary.py"
 CHECKER_DIR = ROOT / "ci" / "checkers"
 
-# 三件套：启动包 v1.1 Phase 5「D-09 三件套」＝ M2 冻结 Brief 第 2 节第 8/9/10 项。
+# 三件套＝M2 冻结 Brief 第 2 节第 8/9/10 项。判据按 Brief 项号绑定，不按 Delta 编号——
+# D-09 是 PRD v1.1 Delta 的真实编号（第二部分「D-09 M2 评测治理三件套」），
+# 但那套编号不在 v1.2 活合同的编号空间里，活判据引用它会指向一份已归档的文档。
 REQUIRED_CONTRACTS = {
     "reviewer_calibration_contract.v0.1": CALIBRATION,
     "evaluation_sampling_design.v0.1": SAMPLING,

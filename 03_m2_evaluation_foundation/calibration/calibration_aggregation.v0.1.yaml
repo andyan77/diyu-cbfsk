@@ -1,0 +1,87 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-CALIBRATION-AGGREGATION
+artifact_id: calibration_aggregation.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: EMPTY_PENDING_REVIEW_EVIDENCE
+artifact_lifecycle_state: validated
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第三节 A-3c
+
+scope:
+  this_file_does: [合并两侧记录, 分歧统计]
+  this_file_does_not:
+    - 裁决任何阈值
+    - 判定谁对谁错
+    - 消除分歧
+  threshold_recommendation_owner: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml
+  founder_review_queue_owner: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml
+  duplicated_here: false
+  duplicated_here_note: 阈值建议与审查队列只有一个定义处（EQ-1），本文件引用不复制。
+
+inputs:
+  sides:
+    - side: GPT
+      sink: 03_m2_evaluation_foundation/calibration/reviews/gpt_calibration_review.jsonl
+      record_count: 0
+    - side: CLAUDE
+      sink: 03_m2_evaluation_foundation/calibration/reviews/claude_calibration_review.jsonl
+      record_count: 0
+  state_record: 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml
+  state_failure_state: CALIBRATION_REVIEW_EVIDENCE_MISSING
+
+merge_rules:
+  - id: AG-1
+    statement: 按 case_id 左右合并；一侧缺记录即该例标 SINGLE_SIDED，不得用另一侧的分数补齐。
+    failure_state: SINGLE_SIDE_IMPUTED
+  - id: AG-2
+    statement: 合并只对齐，不改分。任何一侧的 score 在合并过程中不得被修改。
+    failure_state: SCORE_MUTATED_DURING_MERGE
+  - id: AG-3
+    statement: >-
+      分歧要保留，不得为评分便利消灭。合法分歧（②③ 类落在同一区间内但打分不同）
+      与真实冲突（一侧判成立一侧判不成立）必须分开统计，不得合并成一个数字。
+    ruling_anchor: D-28
+    failure_state: LEGITIMATE_DISAGREEMENT_ERASED
+
+disagreement_statistics:
+  computed: false
+  computed_reason: 两侧记录均为 0 条，无可统计对象。
+  fields_when_computed:
+    total_cases_both_sided: {type: integer, current_value: 0}
+    verdict_conflict_count: {type: integer, current_value: null}
+    verdict_conflict_rate: {type: number, current_value: null}
+    score_gap_mean: {type: number, current_value: null}
+    legitimate_disagreement_count: {type: integer, current_value: null}
+    hard_gate_conflict_count: {type: integer, current_value: null}
+    disagreement_code_histogram: {type: object, current_value: null}
+  conflict_definition:
+    verdict_conflict: 一侧判该例成立、另一侧判不成立。
+    legitimate_disagreement: 两侧都判成立，但分数不同——②③ 类允许，不计入冲突率。
+    hard_gate_conflict: 同一硬门上两侧给出不同的 PASS/FAIL。
+    hard_gate_conflict_severity: 硬门冲突不是口味差异，必须逐条进 Founder 队列。
+
+by_stratum:
+  computed: false
+  strata: [category_id, evaluation_task_class, risk_tier]
+  strata_source: 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml
+  strata_restated_here: false
+  note: 分层统计在有记录后按三维分层输出；高风险格子须单独列出，不得并入总体。
+
+statement_discipline:
+  internal_panel: true
+  must_not_be_stated_as: [外部专家共识, 外部专家通过率, 独立第三方验证]
+  existing_guard: ci/checkers/check_external_review_claims.py
+  second_implementation_created: false
+
+machine_checkable_fields:
+  gpt_record_count: {type: integer, current_value: 0}
+  claude_record_count: {type: integer, current_value: 0}
+  aggregation_computed: {type: boolean, current_value: false}
+  execution_side_adjudicated: {type: boolean, required_value: false}
+
+failure_states:
+  - SINGLE_SIDE_IMPUTED
+  - SCORE_MUTATED_DURING_MERGE
+  - LEGITIMATE_DISAGREEMENT_ERASED
+  - AGGREGATION_CLAIMED_WITHOUT_RECORDS

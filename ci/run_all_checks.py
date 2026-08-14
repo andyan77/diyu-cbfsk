@@ -47,6 +47,15 @@ CHECKERS = [
     "check_m2_hidden_assets",
     "check_m2_main_state_guard",
     "check_m2_cross_package_consistency",
+    "check_m2_deliverable_closure",
+    "check_milestone_closure_coverage",
+    "check_m2_capability_matrix",
+    "check_m2_calibration_set",
+    "check_m2_calibration_review",
+    "check_error_code_fixture_coverage",
+    "check_disclosure_discipline",
+    "check_guardian_report_binding",
+    "check_m2_hidden_generation_readiness",
 ]
 
 

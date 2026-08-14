@@ -173,3 +173,66 @@ def is_full_commit_hash(value) -> bool:
     This is the single implementation — checkers import it, none re-derive it.
     """
     return isinstance(value, str) and COMMIT_HASH_RE.fullmatch(value) is not None
+
+
+FOUNDER_RULING_DIR = "governance/founder_rulings"
+
+# 授权来源不止裁决一种：M0 由 Founder 签署的执行申请授权，它是 DOCX，不在裁决目录里。
+# 这里按来源类型分流而不是开豁免——分流后存在性照样现场核验，凭空写的编号仍然会落空。
+NON_RULING_AUTHORIZATION_SOURCES = {
+    "DIYU-CBFSK-EXEC-REQ-M0-003": "笛语跨品牌服装搭配专家内核_M0执行申请_v1.2.docx",
+}
+_RULING_ID_RE = re.compile(r"DIYU-CBFSK-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}")
+
+
+def extract_ruling_id(reference) -> str | None:
+    """从「DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条」这类引用里取出裁决 ID。
+
+    取不到就返回 None——由调用方判 RULING_REFERENCE_UNPARSEABLE，不猜。
+    """
+    if not isinstance(reference, str):
+        return None
+    match = _RULING_ID_RE.search(reference)
+    return match.group(0) if match else None
+
+
+def founder_ruling_evidence(reference, clause_path=None) -> dict:
+    """裁决引用的存在性证据：文件在不在、具名条款解不解析得出来。
+
+    NB-M2-01：此前判据只看引用字符串非空，于是「DIYU-CBFSK-FOUNDER-M9-IMAGINARY-001」
+    这种凭空写出来的编号照样过关。这里现场解析文件与条款键路径——单一实现，
+    check_project_state 与 check_m2_main_state_guard 都调它，不各写一份。
+    """
+    ruling_id = extract_ruling_id(reference)
+    out = {
+        "reference": reference,
+        "ruling_id": ruling_id,
+        "kind": "founder_ruling",
+        "file": None,
+        "file_exists": False,
+        "clause_path": clause_path,
+        "clause_resolves": None,
+    }
+    if not ruling_id:
+        out["kind"] = None
+        return out
+    if ruling_id in NON_RULING_AUTHORIZATION_SOURCES:
+        out["kind"] = "execution_request"
+        out["file"] = NON_RULING_AUTHORIZATION_SOURCES[ruling_id]
+        out["file_exists"] = (ROOT / out["file"]).exists()
+        return out
+    rel = f"{FOUNDER_RULING_DIR}/{ruling_id}.yaml"
+    out["file"] = rel
+    path = ROOT / rel
+    out["file_exists"] = path.exists()
+    if not out["file_exists"] or clause_path is None:
+        return out
+    node = yaml.safe_load(path.read_text(encoding="utf-8"))
+    for key in str(clause_path).split("."):
+        if isinstance(node, dict) and key in node:
+            node = node[key]
+        else:
+            out["clause_resolves"] = False
+            return out
+    out["clause_resolves"] = node not in (None, "", [], {})
+    return out

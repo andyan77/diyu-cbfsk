@@ -1,6 +1,6 @@
 # M2-EP02 交付报告
 
-> 任务 `DIYU-CBFSK-M2-EP02-001`｜分级 `L2`｜授权 `DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001`
+> 任务 `DIYU-CBFSK-M2-EP02-001`｜分级 `L2`｜授权 `DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001`
 > 基线 `main = c3f6ad372306cc12f139cf38624e9a5cea2cf329`｜M1 批准提交 `2df11012da46ace0de7b7bce6d199a578d32d341`
 > 分支 `candidate/m2`｜工作区 `/home/faye/diyu-cbfsk-m2`
 
@@ -87,3 +87,23 @@
 已触发：`HIDDEN_STORAGE_NOT_PROVISIONED`（见 §3）。
 未触发：其余全部停止条件。熔断条款未触发——M1 顶层对象、核心语义、七级事实优先级与品类合同均未改动，本包只扩展引用层。
 禁止产出核对：真实模型 API 调用 0、蒸馏调用 0、隐藏内容进主仓 0；`m2_frozen`／`knowledge_distillation_started`／`production_servable` 全部保持 `false`。
+
+
+---
+
+## 未决项全量披露（M2-EP04 追加，NB-M2-06）
+
+Guardian 非阻塞发现 NB-M2-06：本报告此前只提了回执里的部分未决项。
+**回执里有、报告里没有** 的条目，读者无从知道它存在——而读报告的人正是决定要不要往下走的人。
+现按披露纪律补齐**全部**条目，不筛选：
+
+| 编号 | 事项 | 当前状态 |
+|---|---|---|
+| `OD-M2-01` | 真实基线运行未执行 |  |
+| `OI-M2-HIDDEN` | 隐藏评测资产被 HIDDEN_STORAGE_NOT_PROVISIONED 阻塞 |  |
+| `OI-01` | 三层哈希退役 |  |
+| `COND-011` | 隐藏存储 provision 条件未关闭 |  |
+| `OI-02` | execution_run_id 未纳入 check_execution_uuid 守卫 |  |
+
+本节由 `ci/checkers/check_disclosure_discipline.py` 的 `OPEN_ITEM_NOT_DISCLOSED` 判据守：
+回执里出现的每一个未决项编号，都必须能在对应报告正文里被找到。

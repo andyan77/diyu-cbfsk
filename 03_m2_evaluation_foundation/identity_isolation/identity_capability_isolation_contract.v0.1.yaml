@@ -90,3 +90,33 @@ current_state:
   any_face_recognition_dependency: false
   any_biometric_template_store: false
   scanned_at: M2-EP01
+
+scan_coverage_record:
+  finding: NB-M2-03
+  rule: >-
+    覆盖面数字一律是记录值，不是文中随手写的数。当前值由判据现算比对，历史值绑定它被测出来的那个提交。
+  guarded_by: ci/checkers/check_m2_identity_isolation.py SCAN_COVERAGE_COUNT_MISSTATED
+  current:
+    scanned_file_count: 594
+    measured_at_package: M2-EP04
+    evidence_level: runtime_verified
+    method: check_m2_identity_isolation.collect() 的 scanned_file_count
+  history:
+    - measured_at_commit: 43251b21a32fc9a3fee375675a611577babca570
+      package: M2-EP01
+      scanned_file_count: 270
+      previously_reported: 235
+      correction: 报告原写 235，实测 270；已在 m2_ep01_delivery_report.md 更正并留更正记录。
+      method: 在该提交上建临时 worktree，运行该提交自带的 checker
+      evidence_level: runtime_verified
+    - measured_at_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+      package: M2-EP03
+      scanned_file_count: 419
+      previously_reported: 255
+      correction: 里程碑报告原写 255，实测 419；已更正。
+      method: 同上
+      evidence_level: runtime_verified
+  why_the_original_numbers_were_wrong: >-
+    两个数字都是执行侧在写报告时凭印象填的，没有从判据取值。它们不构成安全风险——
+    零命中这一结论本身是判据实跑出来的，没有受影响——但「扫了多少份」被写错，
+    会让审查者对覆盖面形成错误印象，因此必须更正并交给判据守。

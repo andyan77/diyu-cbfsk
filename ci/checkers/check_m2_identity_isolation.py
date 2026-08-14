@@ -16,7 +16,7 @@ Schema 的 property 名与枚举值、能力/组件/服务登记、依赖清单�
 
 from __future__ import annotations
 
-from _common import ROOT, cli, load_yaml
+from _common import ROOT, cli, is_full_commit_hash, load_yaml
 
 LABEL = "check_m2_identity_isolation"
 
@@ -133,6 +133,8 @@ def validate(payload: dict) -> list[str]:
             "is green for the wrong reason"
         )
 
+    _validate_scan_coverage(payload, errors)
+
     state = payload.get("current_state") or {}
     for key in ("any_forbidden_capability_declared", "any_face_recognition_dependency", "any_biometric_template_store"):
         if state.get(key) is not False:
@@ -201,6 +203,47 @@ def scan(documents: dict, forbidden: set[str]) -> list[dict]:
     return hits
 
 
+def _validate_scan_coverage(payload: dict, errors: list[str]) -> None:
+    """NB-M2-03：覆盖面数字必须是记录值，且当前值现算比对。
+
+    「扫了多少份」写错不改变零命中这个结论，但会让审查者对覆盖面形成错误印象——
+    而覆盖面正是判断「零命中值不值钱」的唯一依据。
+    """
+    record = payload.get("scan_coverage_record")
+    if record is None:
+        errors.append("SCAN_COVERAGE_RECORD_MISSING: the contract records no scan coverage at all")
+        return
+    declared = record.get("declared_current_count")
+    actual = record.get("actual_current_count")
+    if declared != actual:
+        errors.append(
+            f"SCAN_COVERAGE_COUNT_MISSTATED: contract records {declared!r} scanned files, "
+            f"the scan actually walked {actual!r}"
+        )
+    for row in record.get("history") or []:
+        if not is_full_commit_hash(row.get("measured_at_commit")):
+            errors.append(
+                f"SCAN_COVERAGE_HISTORY_UNBOUND: history entry for {row.get('package')!r} "
+                f"records {row.get('measured_at_commit')!r}, which is not a full commit hash"
+            )
+        if row.get("evidence_level") != "runtime_verified":
+            errors.append(
+                f"SCAN_COVERAGE_HISTORY_UNMEASURED: history entry for {row.get('package')!r} "
+                f"claims evidence_level={row.get('evidence_level')!r}, coverage counts must be measured"
+            )
+
+
+def _scan_coverage_payload(contract: dict, actual: int) -> dict | None:
+    record = contract.get("scan_coverage_record")
+    if record is None:
+        return None
+    return {
+        "declared_current_count": (record.get("current") or {}).get("scanned_file_count"),
+        "actual_current_count": actual,
+        "history": record.get("history") or [],
+    }
+
+
 def collect() -> dict:
     import json
 
@@ -254,6 +297,7 @@ def collect() -> dict:
         "forbidden_capabilities": forbidden,
         "forbidden_capabilities_declared_count": contract["forbidden_capabilities"]["count"],
         "allowed_capabilities": allowed,
+        "scan_coverage_record": _scan_coverage_payload(contract, len(documents)),
         "scanned_file_count": len(documents),
         "forbidden_capability_declarations": scan(documents, set(forbidden)),
         "current_state": contract["current_state"],

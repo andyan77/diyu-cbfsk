@@ -135,63 +135,93 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: f6b44aa79a845423cf84a8d47d18af029fa3544bd0667a4b5f2fd67165d87f45
+    post_change_binary_sha256: fc639ef516540a707acdbacfb54e6105e197f2e0575e104f3c88bca19b302e14
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
+    landed_in_commit_backfill:
+      finding: NB-M2-04
+      what_was_wrong: >-
+        12 条登记项的 landed_in_commit 写的是 M1_EP03_CLOSEOUT_COMMIT 这类符号名。
+        符号名读起来像引用，实际上解析不到任何一个对象——「最新版」被禁的理由同样适用于它。
+      how_resolved: >-
+        逐条用该条目已登记的 binary_sha256 反查 README 历史 blob：对每个改动过 README 的提交
+        取出当时的 README.md 现算 sha256，与登记值精确相等的那个提交即为落地提交。
+        12 条全部命中且互不冲突，因此是核对出来的，不是按提交信息推断的。
+      method: git show <commit>:README.md | sha256 == binary_sha256
+      evidence_level: runtime_verified
+      backfilled_in_package: M2-EP04
+      guarded_by: ci/checkers/check_sequential_registration.py LANDED_COMMIT_BLOB_MISMATCH
     authorized_modification_history:
+      - change_id: README-MOD-14
+        authorization_ref: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 allowed_updates（状态真源及其机械投影）
+        binary_sha256: fc639ef516540a707acdbacfb54e6105e197f2e0575e104f3c88bca19b302e14
+        landed_in_commit: null
+        self_referential: true
+        self_reference_limitation: >-
+          本条落地的提交在写本条时尚不存在——登记项与它所在的提交无法互相先于对方。
+          landed_in_commit 因此为 null 并显式声明自指；判据只对最新一条放行这种情形，
+          且要求必须声明本字段（SELF_REFERENCE_UNDECLARED）。收口后可由 Founder 回填。
+        content: >-
+          抬头改 M2 BLOCK；状态块补 m2_ep04_status / m2_milestone_decision / m2_candidate_status /
+          m2_deliverables_ready / m2_public_blueprint_status / founder_signature_eligible，
+          m2_hidden_assets_status 由 BLOCKED_* 改为语义分离后的 NOT_STARTED；
+          M2 段补交付闭环、双轴矩阵、公开校准集三节并改写隐藏资产段；Checker 计数 32→41。
+        linked_registration_note: >-
+          依 OI-06 口径，「允许更新 README」自动包含本仓机制强制要求的联动登记项
+          （本条目 + post_change_binary_sha256），无需逐次裁决，但须在交付报告列明联动项。
       - change_id: README-MOD-13
-        authorization_ref: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第四节 Phase 2/4（M2 收口候选）
+        authorization_ref: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第四节 Phase 2/4（M2 收口候选）
         binary_sha256: f6b44aa79a845423cf84a8d47d18af029fa3544bd0667a4b5f2fd67165d87f45
-        landed_in_commit: M2_EP03_CLOSEOUT_COMMIT
+        landed_in_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
         content: 状态块补 EP02/EP03 与 Profile/隐藏资产状态、Checker 计数 25→32、M2 段改写为三包已交付候选并写明隐藏资产阻塞与 m2_frozen 仍为 false
       - change_id: README-MOD-12
-        authorization_ref: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第三节 Phase 0（受控合并）/ DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+        authorization_ref: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第三节 Phase 0（受控合并）/ DIYU-CBFSK-FOUNDER-M2-CHARTER-001
         binary_sha256: 6b24191f381f6f4a24264c69c461224ba613927e05907f7079d2bdd131e97096
-        landed_in_commit: M2_EP02_MERGE_COMMIT
+        landed_in_commit: 5572c7c6c6230b5f39b4a9b66849b25b5605d3cb
         content: 受控合并后的 README 交付态——M1 PASS 段（来自 main）与 M2 段（来自 candidate/m2）并存、execution_status 改 M2_IN_PROGRESS、Checker 计数合并
         renumbered_from: README-MOD-10
         renumber_reason: >-
           M2-EP01 在 candidate/m2 上分配了 README-MOD-10，与 main 上 M1-EP03 收口分配的同号条目撞号
-          （两条分支并行分配所致）。依 DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第三节 Phase 0
+          （两条分支并行分配所致）。依 DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第三节 Phase 0
           冲突解决规则「将 M2-EP01 的条目重编为下一个空号，内容不变」，本条由 10 重编为 12
           （11 已被 main 的 M1 PASS 条目占用）。内容与授权来源未改，只改编号，
           并新增 check_sequential_registration 断言该类编号唯一且单调。
       - change_id: README-MOD-11
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条（裁决落盘提交一次性预授权，允许项 2「状态位」）
         binary_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986
-        landed_in_commit: M1_PASS_RULING_LANDING_COMMIT
+        landed_in_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
         content: execution_status 改 M1_COMPLETE、新增 m1_status FOUNDER_ACCEPTED、抬头改 M1 PASS、M1 段改为已通过并写明 PASS 的边界与 M2 暂停状态
       - change_id: README-MOD-10
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-RUNTHROUGH-001（M1 连跑授权 + M1-EP03 执行包）
         binary_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d
-        landed_in_commit: M1_EP03_CLOSEOUT_COMMIT
+        landed_in_commit: 37f636c73dac1be7457dfc951984b43532056804
         content: 抬头改 M1 三包已交付候选待审、新增 M1-EP02 与 M1-EP03 两段、Schema 计数 18→19、Checker 计数 20→21、裁决目录补 FOUNDER-M1-RUNTHROUGH-001
       - change_id: README-MOD-09
         authorization_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 m1_pre_approval（M1-EP01 交付）
         binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
-        landed_in_commit: M1_EP01_DELIVERY_COMMIT
+        landed_in_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
         content: 新增 M1 对象模型段、Checker 计数 19→20、区分判据层与结构层两个 fixture runner、抬头改 M1-EP01 已交付
       - change_id: README-MOD-08
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条（M1-EP01 开工，m1_started 如实置 true）
         binary_sha256: 81eaf7a76c35b050b12ad26b53f07940d38af9ae075eff52314234b9b5abe0bc
-        landed_in_commit: M1_EP01_KICKOFF_COMMIT
+        landed_in_commit: 38d13b7dc451ee2372aee8ca3ca2d49c23866c33
         content: 抬头改 M1-EP01 施工中、execution_status 改 M1_IN_PROGRESS、m1_started 置 true、M1 段改为已开工并记合并 Commit
       - change_id: README-MOD-07
         authorization_ref: Guardian delta 复核 76a1394e RD-01（合并前必关条件）
         binary_sha256: 2ab1981c69e90041e199dc545697ab5ca521e639d8ee1b35bdc43d735dc3fc3a
-        landed_in_commit: RD01_CORRECTION_COMMIT
+        landed_in_commit: 8eaf5f25987d787a546096b6a60a4e6a6b5a30f4
         content: 更正状态位说明中「与先前的绝对禁止等效」这一不成立的表述，改为如实的屏障层数对照
       - change_id: README-MOD-06
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 1 条（M1 红线改造）
         binary_sha256: 752aa5f8fe54eb11a3673059b0964c108b81db823b64020761b7cd6cd336bdb9
-        landed_in_commit: M1_GATE_RECONSTRUCTION_COMMIT
+        landed_in_commit: 76a1394ee0ba1fae45fac6225167e431c2cd34d7
         content: 状态位说明改写为「两条红线位 + M1/M2 授权门控」、M1 开工冲突段改为已裁决、裁决目录补 FOUNDER-M1-GATE-001
       - change_id: README-MOD-05
         authorization_ref: DIYU-CBFSK-FOUNDER-M0-DECISION-001 repair_flow.on_pass（M0 PASS 生效后更新 README 与状态位）
         binary_sha256: 3d3c4cc82ed64ea7e5bd5dded5920a3a3e8deca6419276b0bcbd61f6f5e98f5a
-        landed_in_commit: M0_PASS_EFFECTIVE_COMMIT
+        landed_in_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
         content: M0 裁决链改写为 CONDITIONAL→Guardian delta APPROVE→PASS、execution_status 改 M0_COMPLETE、合同状态段改 M0_FROZEN、裁决目录补 FR-PROCESS-006、显式声明 M1 未开工且红线冲突待裁
       - change_id: README-MOD-01
         authorization_ref: 执行 Prompt v2.0 §15.1
@@ -201,17 +231,17 @@ active_baseline_candidates:
       - change_id: README-MOD-04
         authorization_ref: DIYU-CBFSK-EXEC-REQ-M0-003（Founder 已签署，即时生效）
         binary_sha256: bb99823b6ac6f17c7c88784a98ed3ef34acd7afb99f8af795d5c6382dd6ede65
-        landed_in_commit: M0_SINGLE_PACKAGE_DELIVERY_COMMIT
+        landed_in_commit: 2780e65dc32b20576635b887bd7634663afe531b
         content: 新增 M0 交付段、状态位改为 M0_IN_PROGRESS、Checker 计数由 16 更正为 19
       - change_id: README-MOD-03
         authorization_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列
         binary_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8
-        landed_in_commit: FINAL_COMMIT_ON_MAIN_AFTER_MERGE
+        landed_in_commit: 1153fc703e381be70d5bbd7d31790644a72cf78a
         content: 活基线段切换为 v1.2、归档段登记 归档_v1.1/、main_merged 与切换位置真
       - change_id: README-MOD-02
         authorization_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条
         binary_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503
-        landed_in_commit: SIGNOFF_CHILD_COMMIT_OF_9335180f9e1fd3d480f9b39e0a23597ee52079c7
+        landed_in_commit: dcd64842fb9c69d3ee5eb3042e0fda924f5605eb
         content: 状态位块改为签署后状态、v1.2 段改为已签署生效、Checker 计数由 13 更正为 16、裁决目录补 FR-GRANULARITY-005
         note: >-
           活基线指针切换、基线段改写与 v1.1 归档属下一次授权改写（README-MOD-03），

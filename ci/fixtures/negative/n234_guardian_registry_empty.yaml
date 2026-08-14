@@ -1,0 +1,9 @@
+fixture_id: N234-guardian-registry-empty
+description: 登记册里一轮审查也没有。
+checker: check_guardian_report_binding
+expected: FAIL
+payload:
+  entries: []
+  declared_counts:
+    total: 0
+    landed: 0

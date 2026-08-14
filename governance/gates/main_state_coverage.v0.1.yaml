@@ -42,6 +42,7 @@ ratified_commits:
     - commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
       ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
       ruling_clause: 第三条 裁决落盘提交一次性预授权
+      ruling_clause_path: article_3_ruling_landing_commit.authorization
       reason_verbatim: 记录本批准的提交无法先于本批准接受审查（无限回归）。故设立有界例外，由本裁决直接授权。
       scope: ONE_TIME_ONLY
       sets_precedent: false

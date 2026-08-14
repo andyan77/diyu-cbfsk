@@ -1,0 +1,33 @@
+fixture_id: N203-self-reference-undeclared
+description: 最新一条落在它自己创建的提交里，却没声明 self_reference_limitation。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries:
+  - registry: README.md.authorized_modification_history
+    numbers:
+    - 2
+    - 1
+    prefixes:
+    - README-MOD
+    - README-MOD
+    malformed_ids: []
+    entries:
+    - change_id: README-MOD-02
+      is_newest: true
+      self_referential: true
+      self_reference_limitation: null
+      landed_in_commit: null
+      landed_commit_is_full_hash: false
+      tracked_path: README.md
+      binary_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      landed_commit_blob_sha256: null
+    - change_id: README-MOD-01
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      landed_commit_blob_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

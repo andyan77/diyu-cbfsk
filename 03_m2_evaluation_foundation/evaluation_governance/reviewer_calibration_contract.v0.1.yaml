@@ -29,6 +29,12 @@ required_elements:
       element: Founder 标定锚点题
       machine_field: anchor_item_count
       landed_content_in_this_package: false
+      landed_in_later_package: M2-EP04
+      anchor_item_source: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+      anchor_item_count_now: 90
+      anchor_item_note: >-
+        90 例公开校准集在 M2-EP04 落盘，充当本合同的标定锚点题。锚点题必须对评审员可见，
+        因此只能取自公开侧——用隐藏集当锚点，评审员标定完就等于看过考卷。
     - id: RC-02
       element: AI 评审员盲评
       machine_field: blind_review_enabled
@@ -43,7 +49,7 @@ required_elements:
       machine_field: recalibration_required_on_model_version_change
 
 machine_checkable_fields:
-  anchor_item_count: {type: integer, minimum: 1, current_value: null, frozen_at: M2}
+  anchor_item_count: {type: integer, minimum: 1, current_value: 90, frozen_at: M2}
   blind_review_enabled: {type: boolean, current_value: true}
   ai_reviewer_disagreement_rate: {type: number, threshold_status: M2_FREEZE_REQUIRED, current_value: null}
   founder_override_rate: {type: number, threshold_status: M2_FREEZE_REQUIRED, current_value: null}

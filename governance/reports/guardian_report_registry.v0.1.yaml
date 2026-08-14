@@ -1,0 +1,74 @@
+schema_version: '0.1'
+registry_id: DIYU-CBFSK-GUARDIAN-REPORT-REGISTRY
+artifact_id: guardian_report_registry.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第七节 A-7
+established_at_package: M2-EP04
+purpose: Guardian 结论只能绑哈希引用，不能靠 Prompt 转述。本册登记每一轮审查的报告落盘状态与哈希；没落盘的必须具名挂账，任何判据都不得把它当成已通过的证据。
+rules:
+- id: GR-1
+  statement: status=LANDED 的条目必须有真实存在的报告文件，且 sha256 现算相符。
+  failure_state: GUARDIAN_REPORT_HASH_STALE
+- id: GR-2
+  statement: status 非 LANDED 的条目必须写明 reason 与 blocker_id。
+  failure_state: GUARDIAN_REPORT_GAP_UNDECLARED
+- id: GR-3
+  statement: 占位文件不得被登记为报告本身；它的哈希只证明占位记录未被改动。
+  failure_state: PLACEHOLDER_TREATED_AS_REPORT
+- id: GR-4
+  statement: reviewed_commit 必须是完整 40 位哈希。
+  failure_state: GUARDIAN_REVIEW_COMMIT_UNBOUND
+transcription_discipline: 凡 conclusion_source=FOUNDER_PARAPHRASE_IN_TASK_PROMPT 的条目，其 decision 是转述值，不得表述为「已取得 Guardian
+  报告」。
+counts:
+  total: 5
+  landed: 3
+  fulltext_not_provided: 2
+entries:
+- reviewed_commit: f48fed3091384cc459b258dace3c267b1d08d1b0
+  decision: REJECT
+  scope: M0 候选首轮
+  report: governance/reports/guardian_review_report.f48fed3.md
+  status: LANDED
+  sha256: cea3efb21ce03804ae45b8911546c2daef3057f583b4d38a5ff47808c43c76b1
+- reviewed_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+  decision: APPROVE_WITH_CONDITIONS
+  scope: M0 候选第二轮全量重审
+  report: governance/reports/guardian_review_report.9335180f.md
+  status: LANDED
+  sha256: faa5c3d04f2bddb3dae8a683a7eb4a0fd7cc2092fe299fc6d03cb5f2f53fbc5f
+- reviewed_commit: f01e45b4ca4d7416feaec4177f4f8aad2ce35458
+  decision: APPROVE
+  scope: M0 CONDITIONAL 修复 delta 复核
+  report: governance/reports/guardian_review_report.f01e45b.delta.md
+  status: LANDED
+  sha256: 30da15f79251be955b2d18e9df969e3672c5cb889d4b34161d3adcdee8edd263
+- reviewed_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  decision: PASS
+  scope: M1 收口候选
+  report: null
+  status: FULLTEXT_NOT_PROVIDED
+  sha256: null
+  cited_by:
+  - governance/gates/main_state_coverage.v0.1.yaml last_guardian_pass
+  reason: 该轮 Guardian 报告全文未落盘于本仓；执行侧只掌握 Founder 转述的结论。
+  blocker_id: OI-M2-GUARDIAN-REPORT
+- reviewed_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+  decision: APPROVE_WITH_CONDITIONS
+  scope: M2 冻结候选（EP01+EP02+EP03）
+  report: null
+  status: FULLTEXT_NOT_PROVIDED
+  sha256: null
+  placeholder: governance/reports/guardian_review_report.3008f56b.PENDING.md
+  placeholder_sha256: 30153f59dc38ab403245a77aae2fac43f6da4af1cad6fbfda6ce2e8c0d7d84d3
+  blocking_findings: 0
+  non_blocking_findings:
+  - NB-M2-01
+  - NB-M2-02
+  - NB-M2-03
+  - NB-M2-04
+  - NB-M2-05
+  - NB-M2-06
+  conclusion_source: FOUNDER_PARAPHRASE_IN_TASK_PROMPT
+  reason: 报告全文从未交到执行侧；A-7 要求的「全文落盘」因此无法完成。
+  blocker_id: OI-M2-GUARDIAN-REPORT

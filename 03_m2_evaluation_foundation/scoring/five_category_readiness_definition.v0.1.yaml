@@ -1,0 +1,101 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-FIVE-CATEGORY-READINESS
+artifact_id: five_category_readiness_definition.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+card_axis: vertical_capability
+capability_dimension: five_category_activation_readiness
+capability_dimension_cn: 五品类开启就绪
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 16 项
+prd_anchors: [PRD-10.2, PRD-4-品类范围, PRD-13-M12]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本合同不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+owned_metrics:
+  - metric_id: five_category_activation_readiness
+    prd_suggested_threshold: M12/导入检查为 100%
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M12
+    m2_obligation: 由 M2 冻结「什么叫就绪」的口径；阈值本身 PRD 已给 100%，M2 不得下调。
+
+category_enum_source: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json#/definitions/categoryId
+category_enum_restated_here: false
+category_enum_restated_here_note: 五类枚举只有一个定义处，本文件引用不复述（EQ-1）。
+adapter_surface_source: 01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml category_constraint_surface
+category_count: 5
+
+readiness_criteria:
+  all_required_per_category: true
+  items:
+    - id: RD-01
+      criterion: 该品类的适配合同存在且 hard_constraint_ids 非空
+      machine_field: adapter_contract_present
+      evidence_source: m1_interface_handoff category_constraint_surface
+    - id: RD-02
+      criterion: 该品类的全部硬约束在 scorecard_constraint_correctness 中有绑定
+      machine_field: hard_constraints_bound_ratio
+      required_value: 1.0
+    - id: RD-03
+      criterion: 该品类的 fail_closed 与停止条件绑定已登记
+      machine_field: fail_closed_bindings_present
+    - id: RD-04
+      criterion: 该品类在能力矩阵中三个任务类型 × 三个风险等级均可寻址
+      machine_field: capability_matrix_cells_addressable
+      required_value: 9
+    - id: RD-05
+      criterion: 该品类在公开校准集中每个格子均有非空样本
+      machine_field: calibration_cells_non_empty
+      required_value: 9
+      evidence_source: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+    - id: RD-06
+      criterion: 该品类的隐藏侧评测项达数量下限
+      machine_field: hidden_items_present
+      current_value: false
+      blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED
+    - id: RD-07
+      criterion: 该品类的 Founder 审查覆盖设置与风险等级一致（高风险 100% 不可抽样）
+      machine_field: founder_review_coverage_consistent
+
+readiness_is_not:
+  items:
+    - 文件存在即就绪
+    - 五类各有一份合同即就绪
+    - 通过率高即就绪
+  statement: >-
+    就绪是「这一类可以正式导入并开始正式生成」的开关，不是文档完备度。
+    RD-06 未满足时任何品类都不得声明就绪。
+
+current_readiness:
+  evaluated_at_package: M2-EP04
+  evidence_level: static_verified
+  all_five_ready: false
+  blocking_criterion: RD-06
+  per_category:
+    - {category_id: CAT-WOMENSWEAR, rd_01: true, rd_02: true, rd_03: true, rd_04: true, rd_05: true, rd_06: false, rd_07: true, ready: false}
+    - {category_id: CAT-KIDSWEAR, rd_01: true, rd_02: true, rd_03: true, rd_04: true, rd_05: true, rd_06: false, rd_07: true, ready: false}
+    - {category_id: CAT-TEEN-TREND, rd_01: true, rd_02: true, rd_03: true, rd_04: true, rd_05: true, rd_06: false, rd_07: true, ready: false}
+    - {category_id: CAT-FAMILY-TREND, rd_01: true, rd_02: true, rd_03: true, rd_04: true, rd_05: true, rd_06: false, rd_07: true, ready: false}
+    - {category_id: CAT-SPORT-TREND, rd_01: true, rd_02: true, rd_03: true, rd_04: true, rd_05: true, rd_06: false, rd_07: true, ready: false}
+
+machine_checkable_fields:
+  category_count: {type: integer, required_value: 5}
+  all_five_ready: {type: boolean, current_value: false}
+  ready_category_count: {type: integer, current_value: 0}
+  readiness_criteria_count: {type: integer, required_value: 7}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 任一判据无法取证时该品类判未就绪，不得因「大概齐了」放行。
+
+failure_states:
+  - CATEGORY_COUNT_DRIFT
+  - READINESS_CLAIMED_WITHOUT_CRITERIA
+  - READINESS_CRITERION_MISSING
+  - HIDDEN_ITEMS_ABSENT
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

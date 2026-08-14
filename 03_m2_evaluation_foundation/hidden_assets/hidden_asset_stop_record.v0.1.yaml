@@ -12,7 +12,7 @@ stop_condition:
   id: HIDDEN_STORAGE_NOT_PROVISIONED
   triggered: true
   triggered_at: M2-EP02 Phase 5 开始时的存储就绪性判定
-  authority: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 第三节 Phase 5 ＋ 第五节 STOP 清单
+  authority: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第三节 Phase 5 ＋ 第五节 STOP 清单
   instruction_followed: 报告等待 Founder 处置，不得就近落在主仓
 
 determination:

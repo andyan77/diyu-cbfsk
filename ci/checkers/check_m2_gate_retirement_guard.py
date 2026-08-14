@@ -9,7 +9,7 @@
 在注册表却没进册子 → 有门禁没登记。两个方向都判失败，只测一向会漏掉一半。
 
 摘除是独立治理动作：必须先有 Founder 单独授权、册子改 RETIRED 并绑定完整 Commit 哈希，
-才允许从注册表移除。授权不得夹带在其他任务里（DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 OI-01）。
+才允许从注册表移除。授权不得夹带在其他任务里（DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 OI-01）。
 """
 
 from __future__ import annotations

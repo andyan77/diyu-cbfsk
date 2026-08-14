@@ -1,0 +1,64 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-M2-BENCHMARK-FREEZE-RECEIPT
+artifact_id: benchmark_freeze_receipt.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: NOT_FROZEN_ZERO_ITEMS
+artifact_lifecycle_state: validated
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 7 项（泄漏检查 / 冻结清单 / 回执）
+
+triplet:
+  leakage_checker:
+    path: ci/checkers/check_hidden_benchmark_boundary.py
+    present: true
+    registered_in: ci/run_all_checks.py
+    last_run_result: PASS
+    evidence_level: runtime_verified
+    second_implementation_created: false
+  frozen_manifest:
+    path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+    present: true
+    frozen: false
+    asset_count: 0
+    blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED
+  receipt:
+    path: 02_benchmark_manifests/benchmark_freeze_receipt.v0.1.yaml
+    present: true
+    self_reference_limitation: >-
+      本回执自身的哈希无法写在本回执内。冻结时的哈希以交付 Receipt 的 artifact_sha256 为准。
+
+freeze_state:
+  frozen: false
+  frozen_at_commit: null
+  frozen_by: null
+  item_count: 0
+  content_hashes: []
+  why_not_frozen: >-
+    冻结的对象是隐藏评测集，而隐藏评测集尚未生成（STORE-A 未 provision）。
+    没有内容可冻结时签一份「已冻结」回执，是把空清单当成交付物。
+
+what_this_receipt_asserts_now:
+  - 三件套的位置与存在状态如实记录
+  - 泄漏检查器实跑结果为 PASS，且该结论只覆盖当前主仓内容
+  - 冻结清单为空，且空是「已确认没有」而非「还没写」
+what_this_receipt_does_not_assert:
+  - 隐藏集已建成
+  - 隔离已在隐藏内容上被验证过
+  - M2 通过标准中的冻结一条已满足
+
+verifiability_principle:
+  source: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml verifiability_principle
+  restated_here: false
+  restated_here_note: 可验证性原则只有一个定义处，本回执引用不复制（EQ-1）。
+
+machine_checkable_fields:
+  frozen: {type: boolean, current_value: false}
+  item_count: {type: integer, current_value: 0}
+  triplet_present_count: {type: integer, required_value: 3}
+  leakage_checker_registered: {type: boolean, required_value: true}
+
+failure_states:
+  - BENCHMARK_FROZEN_WITH_ZERO_ITEMS
+  - LEAKAGE_CHECKER_NOT_REGISTERED
+  - FROZEN_MANIFEST_MISSING

@@ -81,9 +81,26 @@ outside_hard_gates:
 three_layer_hash_mechanism:
   ruling: 退役
   replacement: 签署绑定 commit 哈希与 artifact SHA256
-  landing_status: ADJUDICATED_NOT_IMPLEMENTED
+  landing_status: NO_RETIREMENT_FINAL
+  final_adjudication:
+    ruling: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 第三节 ADJ-3
+    decision: no_retirement
+    verbatim: >-
+      维持三层，正式改判 no_retirement，撤销 ADJUDICATED_NOT_IMPLEMENTED 的挂起状态
+      （理由：L2/L3 无等效替代）。
+    supersedes_landing_status: ADJUDICATED_NOT_IMPLEMENTED
+    supersession_note: >-
+      挂起态的含义是「Founder 已裁决暂不做，但退役这件事仍悬着」。本次改判把它落定：
+      三层哈希**不退役**，本文件顶部那句 ruling: 退役 自此为历史条文，不再是待办。
+      原文一字未改，只在此标注其已被 DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 改判。
+    basis_evidence:
+      prerequisites_conclusion: L1 可由 artifact SHA256 替代；L2/L3 无可用替代
+      prerequisites_record: 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+      evidence_level: static_verified
+    checker_status: ci/checkers/check_docx_canonical_hashes.py 维持 LIVE，三层全部保留
+    oi_01_status: CLOSED
   adjudication:
-    ruling: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 OI-01
+    ruling: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 OI-01
     ruling_base_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
     decision: check_docx_canonical_hashes 维持有效不摘除
     retirement_authorized: false

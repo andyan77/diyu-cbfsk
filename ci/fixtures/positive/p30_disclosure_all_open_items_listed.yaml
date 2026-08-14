@@ -1,0 +1,14 @@
+fixture_id: P30-disclosure-all-open-items-listed
+description: 回执里两条未决项，报告里都提到了。
+checker: check_disclosure_discipline
+expected: PASS
+payload:
+  pairs:
+  - receipt: r.yaml
+    report: r.md
+    open_items:
+    - id: OI-01
+      disclosed_in_report: true
+    - id: OI-02
+      disclosed_in_report: true
+    declared_open_item_count: 2

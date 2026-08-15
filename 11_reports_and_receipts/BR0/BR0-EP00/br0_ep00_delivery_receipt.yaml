@@ -6,10 +6,13 @@ produced_from_template_note: 本回执是该模板的第一次真实使用——
 package_id: BR0-EP00
 package_title: 启动准备包（Baseline Alignment & Runtime Bootstrap Readiness）
 baseline_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
-candidate_commit: BR0_EP00_LANDING_COMMIT
+candidate_commit: 91173113584978dc80b16975b9f5b5efab368029
+candidate_branch: br0/ep00-bootstrap-readiness
 candidate_commit_note: >-
-  本回执与被它描述的交付物同处一个提交，落盘时无法自指。提交产生后由 git 可复算：
-  git rev-parse HEAD 即候选 Commit；引用一律用完整 40 位哈希，禁止以「最新版」代指。
+  首次落盘时本回执与被它描述的交付物同处一个提交，无法自指，故当时写作
+  BR0_EP00_LANDING_COMMIT。该提交已成为过去，此处回填为确定哈希——回填由
+  git rev-parse 可复算，不是新的声称。候选落在独立分支，未合并 main：
+  本包触及 CI、角色与状态，属 L3，合并须 Founder 批准。
 
 authority:
   founder_approval_ref: FOUNDER-SESSION-AUTHORIZATION-2026-08-15-BR0-EP00

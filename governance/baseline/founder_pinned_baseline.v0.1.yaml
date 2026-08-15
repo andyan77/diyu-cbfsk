@@ -144,7 +144,7 @@ active_baseline_candidates:
       - change_id: README-MOD-12
         authorization_ref: BR0-EP00 启动准备包 v0.2 EP00-02／EP00-03A（Founder 于 2026-08-15 会话内下发并授权推进；无独立签署裁决文件）
         binary_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
-        landed_in_commit: BR0_EP00_LANDING_COMMIT
+        landed_in_commit: 91173113584978dc80b16975b9f5b5efab368029
         content: 删除「## 当前项目状态」下整段 yaml 状态块，替换为一行指向 PRD_v1.2_change_map.yaml 的 resulting_state；Checker 计数 21→24；新增「支线（BR0—BR8）」一段；活基线表格与 `**当前活基线 · `SIGNED`**` 承重串逐字未动
         note: >-
           该状态块此前无任何判据读取——check_project_state 只把 README 当违禁措辞扫描面，

@@ -1,0 +1,45 @@
+fixture_id: P45
+description: >-
+  一个值为真的 Founder 动作声称挂满七项绑定且条款解析得出，一个要求类站点无需绑定，
+  扫描范围未收窄、计数相符——判据必须放行。
+  BR0-EP00 新增：迁入判据只有负例不算验证过（EQ-3）。
+checker: check_founder_confirmation_binding
+expected: PASS
+payload:
+  declared_scope:
+    key_stems: [approved, authorized]
+    excluded_prefixes: [ci/fixtures/]
+  actual_excluded_prefixes: [ci/fixtures/]
+  actual_key_stems: [approved, authorized]
+  declared_counts:
+    sites: 2
+    bound: 1
+    act_claims_true: 1
+  discovered_sites:
+    - file: PRD_v1.2_change_map.yaml
+      key_path: resulting_state.founder_merge_approved
+      value: true
+    - file: governance/baseline/baseline_migration_record.yaml
+      key_path: actions[3].deletion_requires_founder_approval
+      value: true
+  registered_sites:
+    - file: PRD_v1.2_change_map.yaml
+      key_path: resulting_state.founder_merge_approved
+      claim_kind: founder_act_claim
+      value_when_registered: true
+      binding:
+        authority_kind: founder_signature_record
+        authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+        authority_file: governance/receipts/founder_signoff_receipt.yaml
+        authority_clause_path: state_flag_authorizations.flags.founder_merge_approved
+        signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+        signed_by: FOUNDER_PRODUCT_AUTHORITY
+        signed_at: '2026-08-13'
+    - file: governance/baseline/baseline_migration_record.yaml
+      key_path: actions[3].deletion_requires_founder_approval
+      claim_kind: requirement
+      value_when_registered: true
+  binding_resolutions:
+    PRD_v1.2_change_map.yaml::resulting_state.founder_merge_approved:
+      file_exists: true
+      clause_resolves: true

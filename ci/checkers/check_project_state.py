@@ -145,6 +145,7 @@ def collect() -> dict:
     receipt = load_yaml("governance/receipts/baseline_reconciliation_receipt.yaml")
     signoff = load_yaml("governance/receipts/founder_signoff_receipt.yaml")
     state = change_map["resulting_state"]
+    product_truth = model["product_truth"]
     readme = read_text("README.md")
 
     hits = []
@@ -177,7 +178,13 @@ def collect() -> dict:
             "execution_status"
         )
         or {},
-        "candidate_marked_as_effective_truth": False,
+        # BR0-EP00：此前写死 False——「未签署的候选被当成活真源」这条判据因此永不触发。
+        # 现由规范源 product_truth 现算：候选与活基线是同一份时不成立；
+        # 分成两份而候选仍标生效时成立。
+        "candidate_marked_as_effective_truth": (
+            product_truth["candidate"] != product_truth["current_active"]
+            and product_truth.get("candidate_effective") is True
+        ),
         "forbidden_claim_hits": hits,
     }
 

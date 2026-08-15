@@ -1,0 +1,15 @@
+fixture_id: N422
+description: 登记册里有条目，源码里已经没有了。（COLLECT_LITERAL_REGISTRY_STALE）
+checker: check_collect_derivation_discipline
+expected: FAIL
+payload:
+  scanned_checkers:
+  - check_a.py
+  - check_b.py
+  literal_sites: []
+  registered:
+  - checker: check_a
+    field: canonical_risk_tiers
+    kind: contract_vocabulary
+    why_not_a_fact_source: 枚举词表，其定义处就是本仓合同，不是对世界的测量。
+  declared_literal_count: 0

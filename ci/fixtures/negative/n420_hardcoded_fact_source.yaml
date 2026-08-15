@@ -1,0 +1,15 @@
+fixture_id: N420
+description: collect() 里出现未登记的写死事实源。（HARDCODED_FACT_SOURCE）
+checker: check_collect_derivation_discipline
+expected: FAIL
+payload:
+  scanned_checkers:
+  - check_a.py
+  - check_b.py
+  literal_sites:
+  - checker: check_a
+    field: unregistered_main_commits
+    expression: '[]'
+    via: inline
+  registered: []
+  declared_literal_count: 1

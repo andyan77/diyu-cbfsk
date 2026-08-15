@@ -1,0 +1,19 @@
+fixture_id: N421
+description: 登记项把自己写成 fact_source——没有「合法的硬编码事实源」。（COLLECT_LITERAL_KIND_INVALID）
+checker: check_collect_derivation_discipline
+expected: FAIL
+payload:
+  scanned_checkers:
+  - check_a.py
+  - check_b.py
+  literal_sites:
+  - checker: check_a
+    field: canonical_risk_tiers
+    expression: '[''high'']'
+    via: inline
+  registered:
+  - checker: check_a
+    field: canonical_risk_tiers
+    kind: fact_source
+    why_not_a_fact_source: 枚举词表，其定义处就是本仓合同，不是对世界的测量。
+  declared_literal_count: 1

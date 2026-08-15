@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import yaml
+
 from _common import ROOT, cli, docx_all_text, docx_paragraph_texts, load_yaml
 
 LABEL = "check_ruling_coverage"
@@ -87,6 +89,55 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+# D-29 明文禁止的实现形态。判据要回答的是「有没有哪份 Founder 裁决**接受**了它」，
+# 不是「有没有人提过它」——D-29 自己就整段在提它。
+M6_PROMPT_RAG_FORMS = (
+    "将已接受知识注入 Prompt/RAG 后由 LLM 端到端直接作答",
+    "纯 Prompt/RAG 直答",
+    "Prompt/RAG 端到端直答",
+    "PROMPT_RAG_DIRECT_ANSWER",
+)
+# 同一段文字里出现任一否定/失败措辞，即判为「不是接受」。放在整段而不是短语之前判：
+# 「新增 negative fixture——纯 Prompt/RAG 直答实现通过 M6 必须 FAIL」这句里，
+# 否定词在短语之后，按「短语之前有没有否定」判会误判成接受。
+M6_REFUSAL_MARKERS = ("不得", "禁止", "不允许", "不可", "FAIL", "negative fixture", "反退化", "不是")
+
+
+def _m6_prompt_rag_accepted() -> bool:
+    """有没有哪份 Founder 裁决肯定性地接受了 M6 纯 Prompt/RAG 端到端直答。
+
+    BR0-EP00 之前这里写死 False——恒假分支，D-29 真被推翻也不会触发
+    （与 M2 期 STORE-A locator_present 硬编码 False 同源）。现改为现场扫裁决目录。
+
+    已知边界：本实现按「结构化字段 + 整段否定词」判定。一份用全新措辞肯定接受该形态、
+    且整段不含任何否定词的裁决，本实现看不见——这条限制记在
+    11_reports_and_receipts/BR0/BR0-EP00 的 known_issues 里，不假装已覆盖全部表达方式。
+    """
+    for path in sorted((ROOT / "governance" / "founder_rulings").glob("*.yaml")):
+        doc = yaml.safe_load(path.read_text(encoding="utf-8"))
+        for node in _walk_scalars(doc):
+            if node[0] == "accepted_implementation_form" and str(node[1]) in M6_PROMPT_RAG_FORMS:
+                return True
+            text = str(node[1])
+            if any(form in text for form in M6_PROMPT_RAG_FORMS) and not any(
+                marker in text for marker in M6_REFUSAL_MARKERS
+            ):
+                return True
+    return False
+
+
+def _walk_scalars(node, key=None):
+    """产出 (键名, 标量值) 二元组；键名用于识别结构化声明字段。"""
+    if isinstance(node, dict):
+        for k, v in node.items():
+            yield from _walk_scalars(v, k)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _walk_scalars(v, key)
+    elif node is not None:
+        yield (key, node)
+
+
 def collect() -> dict:
     change_map = load_yaml("PRD_v1.2_change_map.yaml")
     prd_text = docx_all_text(ROOT / "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx")
@@ -107,7 +158,7 @@ def collect() -> dict:
         ],
         "metric_threshold": threshold,
         "rulings_in_receipt_matrix": [r for r in REQUIRED_RULINGS if r in receipt_text],
-        "prompt_rag_direct_answer_accepted_for_m6": False,
+        "prompt_rag_direct_answer_accepted_for_m6": _m6_prompt_rag_accepted(),
     }
 
 

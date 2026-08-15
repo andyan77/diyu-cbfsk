@@ -1,0 +1,11 @@
+fixture_id: P43
+description: 全仓 collect() 无写死事实源，登记册为空且计数相符。
+checker: check_collect_derivation_discipline
+expected: PASS
+payload:
+  scanned_checkers:
+  - check_a.py
+  - check_b.py
+  literal_sites: []
+  registered: []
+  declared_literal_count: 0

@@ -17,32 +17,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ## 当前项目状态
 
-```yaml
-project_status: PROJECT_INITIATED
-execution_status: M1_COMPLETE
-production_servable: false
-m0_authorized: true
-current_active_baseline: PRD_v1.2
-current_active_baseline_status: SIGNED
-prd_v1_2_documentation_status: FOUNDER_SIGNED
-prd_v1_2_effective: true
-guardian_review_completed: true
-chatgpt_remote_review_completed: false
-chatgpt_remote_review_status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
-founder_prd_signed: true
-founder_m0_authorized: true
-founder_merge_approved: true
-main_merged: true
-m0_execution_started: true
-m0_founder_decision: PASS
-m0_founder_decision_original: CONDITIONAL
-m0_guardian_delta_review: APPROVE
-m1_started: true
-m1_status: FOUNDER_ACCEPTED
-m2_started: false
-knowledge_distillation_started: false
-pending_active_baseline_switch: false
-```
+当前状态以 `PRD_v1.2_change_map.yaml` 的 `resulting_state` 为准。
 
 状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权。`production_servable` 与 `knowledge_distillation_started` 属红线位，**任何签署都不得授权**（分别至 M12 发布、M2 冻结后另行裁决）。`m1_started` 与 `m2_started` 依 [`DIYU-CBFSK-FOUNDER-M1-GATE-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml) 转入授权门控。门控要求授权条目绑定完整 Commit 哈希且具名 `basis`，缺一即拦；`m2_started` 当前**无授权条目**，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`。但要说清楚：这**是**一次屏障降级——改造前即使补上一条完美授权，`m2_started` 也点不亮（须改 checker 源码）；改造后往签署回执加一条合规条目即可放行。m2 当前的锁靠的是「没有条目」，不是「不可授权」，两者不是一回事。这是 Founder 知情裁决，屏障层数对照见回执 `barrier_layer_delta`。
 
@@ -120,13 +95,19 @@ M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_
 
 `归档_v1.0/` 保存 PRD v1.0、v1.1 Delta、v1.0 审查报告与已作废的 M0 申请。`归档_v1.1/` 保存 PRD v1.1、M0 执行申请 v1.1 与 v1.1 核验回执——归档发生在 v1.2 签署生效**之后**，三份均为 R100 纯重命名、字节未变。两个归档目录都只作历史证据，不再是执行依据。
 
+## 支线（BR0—BR8）
+
+`笛语支线系统架构PRD_v0.3.2.docx` 是支线产品真源候选，状态 `FOUNDER_REVIEW_CANDIDATE`，**未签署、未生效**，不取代 PRD v1.2。`归档_支线v0.3/` 保存 v0.3.1 与 v0.3 设计输入，不属主线 `归档_v1.x/` 治理链。
+
+BR0-EP00 启动准备包已落盘：基线与 M2 资产边界见 [`01_contracts_and_schemas/branch_baseline.v0.1.yaml`](01_contracts_and_schemas/branch_baseline.v0.1.yaml)，复用钉版本台账见 [`01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml`](01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml)，执行合同模板与派发纪律见 [`execution/`](execution/)，交付报告与回执见 [`11_reports_and_receipts/BR0/BR0-EP00/`](11_reports_and_receipts/BR0/BR0-EP00/)。`candidate/m2` 维持 SUSPENDED_REFERENCE，未合并。BR0-EP01 Runtime Skeleton **未开工**。
+
 ## 工具与 CI
 
 - `工具/build_prd_v1_2.py`：从 v1.1 样式模板可重放生成三份 v1.2 DOCX。
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配共 21 个确定性 Checker。
+- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配、报告数字溯源、Founder 确认绑定、collect 派生纪律共 24 个确定性 Checker。后三个由 BR0-EP00 自 `candidate/m2` 选择性迁入，各自的登记册在 `governance/gates/`。
 - `ci/run_fixtures.py`：判据层 fixture——用字面量 payload 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_schema_fixtures.py`：结构层 fixture——用字面量实例驱动 M1 对象 JSON Schema 本身；每份 Schema 正负各一，只证明「对的能过」不算验证过。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

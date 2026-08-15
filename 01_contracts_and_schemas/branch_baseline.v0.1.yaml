@@ -1,0 +1,332 @@
+schema_version: '0.1'
+artifact_id: branch_baseline.v0.1
+contract_id: DIYU-CBFSK-BRANCH-BASELINE-001
+project_id: DIYU-CBFSK-001
+established_at_package: BR0-EP00
+purpose: >-
+  支线（笛语支线系统架构 PRD v0.3.2 的 BR0—BR8）在 main 上开工前，必须先把三件事钉死：
+  以哪个 Commit 为基线、candidate/m2 上的东西哪些可以拿哪些不可以拿、BR0-EP02 开工前
+  必须满足什么。本文件是这三件事的机器可读真源，不是散文说明。
+
+# ---------------------------------------------------------------------------
+# 一、授权
+# ---------------------------------------------------------------------------
+authority:
+  founder_approval_ref: FOUNDER-SESSION-AUTHORIZATION-2026-08-15-BR0-EP00-V0.2
+  founder_approval_form: in_session_dispatch
+  founder_approval_verbatim: 授权推进落盘实现交付
+  founder_ruling_file: null
+  founder_ruling_file_note: >-
+    本包由 Founder 于 2026-08-15 在会话内直接下发执行 Prompt「BR0-EP00 启动准备包 v0.2」并
+    明示授权推进。**仓内不存在**《BR0 启动裁决书 v0.1》或 A1—A4 裁决文件，因此
+    founder_approval_ref 不是裁决编号，不得被下游当作 governance/founder_rulings/ 下的具名裁决引用。
+    这是如实记录，不是补签。
+  scope_of_this_authorization:
+    - BR0-EP00 五项任务（EP00-01…EP00-05）
+    - README 状态块删除与 baseline pin 更新
+    - secret-and-hidden-boundary 判据改造
+    - 三个 A 类判据迁入 main
+  br0_ep01_start: BLOCKED_UNTIL_BR0_EP00_ACCEPTED
+  br0_ep01_identity: Runtime Skeleton
+  runtime_development: false
+  earlier_entry_blocker_disposition:
+    blocker: FOUNDER_RULING_A1_A4_NOT_SIGNED
+    origin: BR0-EP00 启动准备包 v0.2 的 Founder 追加条（「A1—A4 裁决书没签就先别贴」）
+    status: OPEN_QUESTION_NOT_SILENTLY_DROPPED
+    note: >-
+      最终收敛版把 BR0-EP01 的放行条件写成「BR0-EP00 完成后即允许编译」，未再提 A1—A4。
+      两处口径不同，本文件按后发者取放行条件，但不因此把前一条当作已撤销——
+      仓内确实不存在 A1—A4 裁决文件。是否仍以其为前置，列在未决事项等 Founder 一句话。
+
+# ---------------------------------------------------------------------------
+# 一之二、两份执行 Prompt 的合并去重记录
+# ---------------------------------------------------------------------------
+prompt_merge_record:
+  inputs:
+    - id: BR0-EP00-PROMPT-V0.2
+      title: 执行 Prompt｜BR0-EP00 启动准备包 v0.2
+      received: 2026-08-15 会话内
+    - id: BR0-EP00-PROMPT-FINAL
+      title: 执行 Prompt｜BR0-EP00 启动准备包最终收敛版
+      received: 2026-08-15 会话内（后发）
+  merge_rule: 两份要求项取并集；同一条目口径冲突时以后发者为准，并逐条记录被取代的口径。
+  conflicts_resolved:
+    - topic: Runtime Skeleton 的包编号
+      v0_2: BR0-EP02 是 Runtime Skeleton；BR0-EP01 是「合同收敛与复用边界」
+      final: BR0-EP01 就是 Runtime Skeleton
+      taken: final
+      why_consistent: >-
+        v0.2 把「合同收敛与复用边界」整包并入了本包 EP00-05，该包不再单独存在，
+        EP01 这个位置因此空出来给 Runtime Skeleton。两份口径合并后不冲突。
+    - topic: BR0-EP01 放行条件
+      v0_2: FOUNDER_RULING_A1_A4_NOT_SIGNED
+      final: BR0-EP00 完成后即允许编译
+      taken: final
+      residue: 见 authority.earlier_entry_blocker_disposition
+    - topic: 复用台账字段名
+      v0_2: 未指定字段名，只要求 路径 + 40 位 commit + 文件 SHA-256
+      final: asset / source_path / source_commit / file_sha256 / reuse_note
+      taken: final 的字段名；v0.2 的三项要求由这四个字段覆盖，另保留里程碑与复用方式两列
+    - topic: 附录 A 覆盖面
+      v0_2: 点名 6 组（跨品类冲突 / 内容 Profile / Safety Gate / 视觉 / 知识七态 / NG-SC）
+      final: 点名 9 组（含 ProductTruth / Inventory / Tenant / Persona）
+      taken: 并集——附录 A 由 14 行补至 29 行，两份点名的组全部覆盖
+  union_note: >-
+    v0.2 独有而最终版未提的要求（AC-05 反向注入、AC-09 单一报告树、AC-10 README 不再承载状态、
+    派发纪律一页、M2 ADR 六份分类、28 个判据三分类、BR0-EP02 交接 DoD）一律保留执行——
+    后发 Prompt 未提不等于取消。
+
+# ---------------------------------------------------------------------------
+# 一之三、明确延期事项（最终收敛版第八节）
+# ---------------------------------------------------------------------------
+deferred_items:
+  rule: >-
+    能阻塞 BR0-EP01 的问题在本包处理；不能阻塞的一律延期。禁止为追求完整性扩大范围。
+  to_br1:
+    - item: Error Taxonomy 机器化
+      why_not_now: 运行时错误码在 BR1-EP02 之后才存在，现在机器化没有被守护对象
+    - item: Human Review 边界
+      why_not_now: PRD v0.3.2 已有正文内容，不重复创建
+    - item: Mock / Real 详细合同
+      why_not_now: 依赖 BR1-EP03 首次真实 Provider 调用的实测形态
+  to_runtime_skeleton:
+    - item: ECS 部署拓扑
+    - item: 数据库 migration 规范细节
+  to_later:
+    - item: Stop Conditions 扩展
+    - item: 商业反馈闭环
+    - item: Pilot 相关内容
+  already_in_prd_do_not_recreate:
+    - Human Review 边界
+    - 发布策略与人工审核在环（D-25）
+    - Deliverable Superiority Test 协议（附录 I）
+
+# ---------------------------------------------------------------------------
+# 二、基线
+# ---------------------------------------------------------------------------
+baseline_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+baseline_commit_role: 本包开工时 main 的 HEAD；支线一切执行合同以此为编译基准
+runtime_base_branch: main
+
+candidate_m2:
+  commit: 64530031c0d0fcbc82ee77e1487e41c8661c0298
+  branch: candidate/m2
+  status: SUSPENDED_REFERENCE
+  role: 只读抽取源
+  observed_in_this_package: 本包只以 `git show candidate/m2:<path>` 读取，未 merge、未 cherry-pick、未建工作树
+
+reuse_policy:
+  mode: SELECTIVE_BACKPORT
+  meaning: >-
+    逐个判据、逐个文件地评估后单独迁入，并在 main 上重建其依赖与登记册；
+    不整支合并、不按目录整体拷贝。
+
+not_allowed:
+  - merge_candidate_m2
+  - copy_hidden_assets
+  - import_m2_product_state
+
+# ---------------------------------------------------------------------------
+# 三、candidate/m2 判据差集：28 个，逐个归类，不留空
+# ---------------------------------------------------------------------------
+checker_delta:
+  total: 28
+  measurement_command: >-
+    comm -13 <(git ls-tree -r --name-only main -- ci/checkers | sort)
+    <(git ls-tree -r --name-only candidate/m2 -- ci/checkers | sort)
+  evidence_level: runtime_verified
+
+  class_a_backported_now:
+    count: 3
+    disposition: 本包迁入 main 并接入 ci/run_all_checks.py
+    items:
+      - checker: check_report_number_traceability
+        why: 「报告里的计数数字必须追得到机器记录」是通用工程原则，与 M2 题域无关；支线自 BR0 起每包都出交付报告。
+      - checker: check_founder_confirmation_binding
+        why: 「Founder 确认类字段不得是裸布尔值」是治理通则；支线新增的每一个确认位都要受它约束。
+      - checker: check_collect_derivation_discipline
+        why: 「判据的事实源必须现场推导」是防假绿通则；M1 女装判据假绿即此类。
+
+  class_b_candidate_reevaluate_at_br2_closeout:
+    count: 7
+    disposition: 不在本包迁入；BR2 收口时逐个重评
+    reevaluation_point: BR2 收口（BR2-EP0n 终检，先于 BR3 开工）
+    reevaluation_criterion: >-
+      到 BR2 收口时，该判据在支线上是否已经有真实被守护对象。有则迁入并重建登记册；
+      没有则继续挂起，不为「资产复用」空迁。
+    items:
+      - checker: check_identifier_resolution
+        why_deferred: 支线标识体系（TenantContext / 22 张客户表主键）在 BR1—BR2 才成形，现在迁入无解析对象。
+      - checker: check_stop_code_enforcement
+        why_deferred: 依赖 stop_code_enforcement_registry；支线停机码在 BR2 安全边界包才定义。
+      - checker: check_sequential_registration
+        why_deferred: 守的是执行包顺序登记；支线执行包登记面（execution/）本包才刚建模板，无实例。
+      - checker: check_disclosure_discipline
+        why_deferred: 与 M2 分发包 pack_manifest 强耦合；支线无分发包形态。
+      - checker: check_guardian_report_binding
+        why_deferred: 依赖 guardian_report_registry；main 上没有该登记册，且支线 Guardian 审查周期尚未开始。
+      - checker: check_milestone_closure_coverage
+        why_deferred: 依赖 milestone_closure_coverage_rule；支线里程碑（BR0—BR8）收口口径在 BR0-EP02 之后才稳定。
+      - checker: check_error_code_fixture_coverage
+        why_deferred: 守的是错误码与夹具的覆盖关系；支线运行时错误码在 BR1-EP02 之后才存在。
+
+  class_c_not_backported:
+    count: 18
+    disposition: 不迁入；支线不恢复 M2 评测基座
+    reason: >-
+      17 个 check_m2_* 判据守的是 M2 评测基座自身的对象（锦标赛、评分卡、隐藏资产、
+      封存印记、主线状态守卫等），支线不建评测平台；check_calibration_launch_pack 守
+      校准包发射条件，同源。迁入即等于把 M2 产品状态带进 main。
+    items:
+      - check_m2_calibration_review
+      - check_m2_calibration_set
+      - check_m2_capability_matrix
+      - check_m2_cross_package_consistency
+      - check_m2_deliverable_closure
+      - check_m2_envelope_contract
+      - check_m2_evaluation_governance
+      - check_m2_gate_retirement_guard
+      - check_m2_governance_landing
+      - check_m2_hidden_assets
+      - check_m2_hidden_generation_readiness
+      - check_m2_identity_isolation
+      - check_m2_main_state_guard
+      - check_m2_predistribution_sequence
+      - check_m2_scoring_cards
+      - check_m2_suspension_seal
+      - check_m2_tournament
+      - check_calibration_launch_pack
+    note_identity_isolation: >-
+      check_m2_identity_isolation 不迁入，但它守的红线（五项人脸识别能力永不建设）
+      由 ADR-004 以原则形式迁移，见 m2_adr_classification；BR5 视觉包必须继承该红线。
+      判据本身留在 M2，是因为它读的是 M2 的能力登记与依赖清单，支线上没有那些对象。
+
+# ---------------------------------------------------------------------------
+# 四、M2 ADR 六份：只分类，不搬运
+# ---------------------------------------------------------------------------
+m2_adr_classification:
+  source_dir_on_candidate_m2: 03_m2_evaluation_foundation/adr/
+  action: CLASSIFY_ONLY
+  action_note: 本包不复制任何 ADR 文件到 main；下方结论是分类，不是搬运记录。
+
+  verified_general_principle_migrate:
+    count: 4
+    meaning: 结论已被验证为跨里程碑通用；支线继承其**原则**，不继承其文件与 M2 期设定。
+    items:
+      - adr: ADR-002
+        title: Model Provider Abstraction
+        overlaps: BR1-EP03
+        principle_inherited: 任何调用模型的位置只依赖模型无关合同，且必须声明 provider / model_id / model_version 并写入决策记录。
+        why: >-
+          与 v0.3.2 的 D-PROVIDER-USAGE 同向且更弱——后者进一步要求逐次 ModelCall 记 token 与
+          estimated_cost。原则可直接继承；ADR-002 的「不选型、不接供应商」在支线 BR1-EP03
+          已被真实 Provider 调用取代，故只迁原则不迁边界。
+      - adr: ADR-003
+        title: Tenant/Scope 与 M1→M2 组合消费
+        overlaps: BR2-EP01
+        principle_inherited: >-
+          下游只能以组合式引用消费上游冻结物，in_place_modification_allowed 恒为 false。
+        why: >-
+          组合消费与禁止原位修改是通用工程原则，支线 ArtifactLineage / ContentNodeRef 直接沿用。
+          但该 ADR 的租户设定条款已被推翻，见 clause_level_obsolescence。
+      - adr: ADR-004
+        title: 隐私与身份隔离
+        overlaps: BR5（视觉）
+        principle_inherited: >-
+          五项人脸识别能力（1:N 识别、1:1 验证、持久化人脸特征向量、生物识别模板存储、
+          跨会话面部关联）activation_condition = NEVER，红线，永不退役。
+        why: >-
+          红线级结论，与里程碑无关。支线 BR5 视觉条件包一旦启动即直接受其约束，
+          不得因为「支线是新分支」而重新讨论。
+      - adr: ADR-006
+        title: Canonical Connector 边界
+        overlaps: BR2-EP01
+        principle_inherited: >-
+          所有对外连接只经具名 Adapter，Adapter 必须声明方向、作用域、事实优先级归属与失败状态。
+        why: >-
+          支线 BR1 起就要接 Provider、BR7 起要接发布平台（首个平台＝视频号）。
+          这条边界如果不先继承，连接器会长在业务代码里。
+
+  retain_for_future_reference:
+    count: 2
+    meaning: 结论本身没错，但守的是 M2 评测基座的对象；支线不建该基座，故不继承、也不废弃。
+    items:
+      - adr: ADR-001
+        title: 六层架构与边界
+        why: >-
+          六层是 M2 评测基座的分层口径。支线 v0.3.2 用的是自己的 BR0—BR8 模块划分，
+          两套分层并存会造成「同一功能两套实现」（EQ-1）。M2 恢复时该 ADR 仍然有效，
+          因此保留而不废弃。
+      - adr: ADR-005
+        title: 评测锦标赛与最小可观测性
+        why: >-
+          支线的功能价值判定是 Deliverable Superiority Test——人工盲评、无加权总分、
+          且 v0.3.2 明文禁止建 A/B Runner、Evaluation Console、自动打分器。
+          四维度锦标赛指标属 M2 资产，支线不消费。M2 恢复时仍有效。
+
+  obsolete_retired:
+    count: 0
+    note: >-
+      六份 ADR 没有整份过时的。ADR-003 的租户条款单条过时，按条款级记录在
+      clause_level_obsolescence，不因此把整份 ADR 判废——那会连带丢掉仍然成立的组合消费原则。
+
+  clause_level_obsolescence:
+    - adr: ADR-003
+      clause: SINGLE_TENANT_M2 / 「多租户数据隔离实现」列入 not_building_now / 「scope 字段只记录，不驱动任何隔离逻辑」
+      status: SUPERSEDED
+      superseded_by: v0.3.2 D-TENANT-DAY1
+      superseding_rule: >-
+        每一张归属客户的表自建表第一天起就带 tenant_id NOT NULL，品牌域表带
+        FOREIGN KEY (tenant_id, brand_id) REFERENCES brands (tenant_id, brand_id)；
+        不做「先建后补」。BR1 最低要求＝服务端产出 TenantContext ＋ 租户作用域 ＋
+        tenant_id NOT NULL ＋ 品牌复合外键 ＋ 对象存储租户前缀。
+      why_it_matters: >-
+        若按 ADR-003 原文推进，支线会先建单租户表、再在 BR2 做一次「为既有客户表批量补
+        tenant_id」的大迁移——而 D-TENANT-DAY1 明文禁止该迁移。两者不可并存，必须在
+        BR0 就判定谁作废，不能留到 BR2 现场再吵。
+
+# ---------------------------------------------------------------------------
+# 五、交接给 BR0-EP02 的强制约束
+# ---------------------------------------------------------------------------
+handoff_to_br0_ep01:
+  compile_rule: >-
+    BR0-EP01（Runtime Skeleton）的执行合同必须基于本包的 candidate_commit JIT 编译，不得提前冻结。
+    「提前冻结」指在本包 Commit 存在之前就把 BR0-EP01 的验收判据写死。
+  mandatory_dod:
+    - id: EP01-DOD-01
+      requirement: 功能验证能力必须存在
+      minimum: >-
+        pytest 骨架 ＋ 至少 1 个针对 /healthz 的真实测试 ＋ 至少 1 个针对首个 migration 的真实测试，
+        并接入一个新的 GitHub workflow（不得只在本地跑）。
+      why: >-
+        本包交付后 main 上共 24 个确定性判据，全部读 YAML / DOCX / Markdown，
+        对运行时代码结构性失明。不加这一条，BR0 之后「CI 全绿」关于功能正确性仍然一个字也没说。
+    - id: EP01-DOD-02
+      requirement: 首次 migration 必须让所有客户表 tenant_id NOT NULL
+      minimum: >-
+        v0.3.2 D-TENANT-DAY1 点名的客户所属对象，在第一份 migration 里就带 tenant_id NOT NULL；
+        品牌域表带 (tenant_id, brand_id) 复合外键。
+      explicitly_not_required: 全表 RLS（BR1 不要求）
+      explicitly_forbidden: 先建表后批量补 tenant_id 的迁移
+    - id: EP01-DOD-03
+      requirement: 不得机械扩张 brand_id
+      minimum: >-
+        Tenant / TenantMembership / Tenant 级 Settings / 无品牌语义的 Tenant 级审计事件
+        一律不加 brand_id。
+  sequencing:
+    - BR0-EP00 交付并经 Founder 接受
+    - 然后才允许编译 BR0-EP01 Runtime Skeleton 执行合同
+    - v0.2 里的「BR0-EP01 合同收敛与复用边界」已整包并入本包 EP00-05，不再单独成包；EP01 编号让给 Runtime Skeleton
+  not_in_scope_for_ep01:
+    - STORE-A 证明链（隐藏评测前置，不是支线开工前置）
+    - 任何 B / C 类判据迁入
+    - 任何 M2 产品资产导入
+
+# ---------------------------------------------------------------------------
+# 六、失败状态
+# ---------------------------------------------------------------------------
+failure_states:
+  - BRANCH_BASELINE_COMMIT_DRIFT: baseline_commit 与实际编译基准不一致
+  - CHECKER_DELTA_COUNT_MISSTATED: 三类计数之和不等于 checker_delta.total
+  - M2_ASSET_IMPORTED: C 类判据或 M2 产品资产出现在 main
+  - EP01_COMPILED_BEFORE_EP00_ACCEPTED: BR0-EP01 执行合同在本包被接受前冻结

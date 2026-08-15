@@ -3,7 +3,9 @@
 
 from __future__ import annotations
 
-from _common import cli, is_full_commit_hash, load_yaml, sha256_text
+import subprocess
+
+from _common import ROOT, cli, is_full_commit_hash, load_yaml, sha256_text
 
 LABEL = "check_role_operating_model"
 
@@ -133,6 +135,77 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+# 一条 Guardian 审查记录「声称自己对当前候选仍然有效」的三个既有字段名。三处记录各用了
+# 一个名字（签署回执 / 交接包 / 冻结回执），字段名不同、语义相同；这里只列名字，
+# 值一律现读，不在判据里写任何一处的取值。
+GUARDIAN_VALIDITY_CLAIM_FIELDS = (
+    "valid_for_signature_base",
+    "valid_for_current_candidate",
+    "prior_decision_valid_for_this_candidate",
+)
+
+
+def _git(*args: str) -> str | None:
+    """读不到就返回 None，由调用方处理——不吞，也不假装成空字符串。"""
+    try:
+        return subprocess.run(
+            ["git", *args], cwd=ROOT, capture_output=True, text=True, check=True
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+
+
+def _validity_claiming_reviews():
+    """产出「声称自己仍然有效」的 Guardian 审查记录 (来源, 被审 Commit, 是否已委托复审)。
+
+    本判据守的那条规则是 role_separation_rules.after_new_commit
+    previous_guardian_decision_valid = false —— 被违反的形态是**先前结论被当作仍然有效**，
+    不是「HEAD 还没被审过」。两者不是一回事：main 上此刻确实存在尚未被 Guardian 审过的
+    提交（支线 PRD v0.3.2 是 FOUNDER_REVIEW_CANDIDATE），那是一个真实事实，
+    但它由审查流程本身承接，不由本分支承接。本分支只抓「拿旧结论当新结论用」。
+
+    BR0-EP00 之前这里是 []——分支永远拿不到事件，规则真被违反也不会触发。
+    现在从三份既有记录现读：任何一条 valid_* 字段为真、而被审 Commit 不等于 HEAD 的记录，
+    都是一次「旧结论被当作仍然有效」，除非同时有已委托的复审。
+    """
+    head = _git("rev-parse", "HEAD")
+    if head is None:
+        return []
+    sources = {
+        "governance/receipts/founder_signoff_receipt.yaml": ("guardian_review",),
+        "governance/receipts/guardian_handoff_package.yaml": ("prior_guardian_review",),
+        "governance/receipts/candidate_freeze_receipt.yaml": ("superseded_candidates",),
+    }
+    events = []
+    for rel, keys in sources.items():
+        if not (ROOT / rel).exists():
+            continue
+        doc = load_yaml(rel)
+        for key in keys:
+            node = doc.get(key)
+            rows = []
+            if isinstance(node, dict):
+                rows = [(f"{key}.{k}", v) for k, v in node.items() if isinstance(v, dict)]
+            elif isinstance(node, list):
+                rows = [(f"{key}[{i}]", v) for i, v in enumerate(node) if isinstance(v, dict)]
+            for where, row in rows:
+                reviewed = row.get("reviewed_commit") or row.get("commit")
+                if not reviewed:
+                    continue
+                claims = [row.get(f) for f in GUARDIAN_VALIDITY_CLAIM_FIELDS if f in row]
+                if not any(c is True for c in claims):
+                    continue
+                events.append(
+                    {
+                        "source": f"{rel}::{where}",
+                        "current_commit": head,
+                        "guardian_reviewed_commit": reviewed,
+                        "re_review_requested": row.get("re_review_requested") is True,
+                    }
+                )
+    return events
+
+
 def collect() -> dict:
     model = load_yaml("governance/bootstrap/role_operating_model.v0.2.yaml")
     manifest = load_yaml("governance/baseline/founder_pinned_baseline.v0.1.yaml")
@@ -147,8 +220,15 @@ def collect() -> dict:
         "roles": model["roles"],
         "role_separation_rules": model["role_separation_rules"],
         "review_mode": model["review_mode"],
-        "guardian_role_id": "CLAUDE_INDEPENDENT_GUARDIAN",
-        "founder_authorized_temporary_writers": ["TEMPORARY_EXECUTION_WRITER"],
+        # BR0-EP00：这两项此前是 Python 字面量。谁是正式 Guardian、谁被 Founder 授权临时写入，
+        # 都是仓内可查的事实（规范源 roles.formal_guardian / 基线 Manifest 的 founder_designation），
+        # 判据不许自己写一份——那等于判据造出自己要检查的事实。
+        "guardian_role_id": next(
+            (r["role_id"] for r in model["roles"] if r.get("formal_guardian") is True), None
+        ),
+        "founder_authorized_temporary_writers": sorted(
+            {cont["founder_designation"]} - {None}
+        ),
         "temporary_writers": [
             {
                 "role_id": cont["executor_role_id"],
@@ -157,7 +237,7 @@ def collect() -> dict:
                 "codex_default_writer_rule_changed": cont["codex_default_writer_rule_changed"],
             }
         ],
-        "commit_events": [],
+        "commit_events": _validity_claiming_reviews(),
     }
 
 

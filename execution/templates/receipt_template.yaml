@@ -1,0 +1,41 @@
+# 执行回执模板 · BR0-EP00 落盘
+#
+# 用法：复制本文件，改名为 <package_id>_receipt.yaml，落在
+# 11_reports_and_receipts/<BRn>/<BRn-EPmm>/ 下（仓内**唯一**报告与回执树，
+# 不得另起第二棵 reports_and_receipts/）。
+#
+# 回执回答三个问题：审的是哪个 Commit、每条验收实际结果是什么、证据在哪。
+# 它不回答「做得好不好」——那是裁决者的事。
+
+schema_version: '0.1'
+template_id: receipt_template.v0.1
+template_note: 本文件是模板本身，不是任何回执实例。
+
+package_id: <BRn-EPmm>
+candidate_commit: <40 位完整哈希>
+candidate_commit_rule: 禁止以「最新版」「当前分支」代指；回执不绑定具体 Commit 即无效。
+
+result: <PASS | CONDITIONAL | BLOCK>
+result_rule: >-
+  CONDITIONAL 不等于 PASS。判 CONDITIONAL 时，每个条件必须进条件台账并绑定证据与 Commit，
+  否则一律按 BLOCK 处理。
+
+acceptance_results:
+  - id: <AC-nn>
+    criterion: <与执行包合同逐字相同>
+    method: <与执行包合同逐字相同>
+    outcome: <PASS | FAIL | NOT_RUN>
+    outcome_rule: NOT_RUN 是合法结果，写 NOT_RUN 比写 PASS 诚实；未实测不得写 PASS。
+    evidence_ref: <本回执 evidence_refs 里的键名>
+
+evidence_refs:
+  <键名>: <仓内路径或可复算命令>
+
+known_issues:
+  - id: <KI-nn>
+    statement: <已知但未解决的问题；写清楚它会在什么条件下咬人>
+    disposition: <DEFERRED_TO_<包> | REQUIRES_FOUNDER_DECISION | ACCEPTED_RISK>
+known_issues_rule: >-
+  空列表必须是「查过了没有」，不是「没查」。没查就写 NOT_ASSESSED 并说明为什么没查。
+
+next_action: <下一步具体做什么，由谁做；不写「继续推进」这类无主语句>

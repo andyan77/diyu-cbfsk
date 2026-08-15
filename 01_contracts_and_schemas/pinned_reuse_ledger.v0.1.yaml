@@ -1,0 +1,305 @@
+schema_version: '0.1'
+artifact_id: pinned_reuse_ledger.v0.1
+contract_id: DIYU-CBFSK-PINNED-REUSE-LEDGER-001
+project_id: DIYU-CBFSK-001
+established_at_package: BR0-EP00
+purpose: >-
+  知道复用了什么。仅此而已——本台账不是资产管理平台，没有生命周期、没有审批流、没有服务。
+  它回答一个问题：支线复用的这份资产，是哪一版的哪些字节。
+  Git commit 只说明当时仓的状态，说明不了这个文件的字节，因此每条同时钉 40 位 commit 与
+  文件 SHA-256，两者缺一即 FAIL。
+
+rule:
+  commit_is_not_file_hash: >-
+    PRD v0.3.2 附录 A 的「来源」列写的是 commit，那是定位用的；本台账的 file_sha256 才是
+    钉版本用的。附录 A 与本台账不一致时以本台账为准。
+  every_entry_requires: [asset, source_path, source_commit, file_sha256]
+  recompute_command: sha256sum <source_path>
+  drift_meaning: >-
+    file_sha256 对不上，说明被复用的那份资产在支线开工后变过。这不自动等于错误，
+    但必须由对应 BR 包重新评估兼容性并更新本台账，不得默默沿用。
+
+coverage:
+  from_milestone: BR0
+  to_milestone: BR6
+  coverage_rule: >-
+    只覆盖 BR0—BR6 会真正用到的关键合同，不覆盖 01_contracts_and_schemas/ 全部 43 个文件。
+  groups_covered: [ProductTruth, Inventory, Tenant, Persona, PlatformProfile, PublicationPolicy, Compliance, KnowledgeState, NonGoals]
+  tenant_group_note: >-
+    本仓 M0/M1 没有独立的 Tenant 合同——租户根是支线 v0.3.2 D-TENANT-DAY1 在 BR1 新建的对象。
+    Tenant 组因此只登记上游约束（架构与集成边界，含凭据边界），不假装存在一份 Tenant 合同。
+  source_of_entries: PRD v0.3.2 附录 A｜建议复用的 M0/M1 资产映射（本包由 14 行补至 29 行）
+  entries_equal_appendix_a_rows: 29
+  deferred_to_later: >-
+    BR7（Pilot）与 BR8 的复用面依赖真实品牌与真实平台账号，届时另行登记。
+
+pinned_at_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+entry_count: 29
+entries:
+  - asset: capability_contract.v1.0.yaml
+    source_path: 01_contracts_and_schemas/capability_contract.v1.0.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 33bdcea262fe08edd33bd8444b25acd9fbb3fe42d7a775d8b18f1a3e64f89b2e
+    reuse_note: 能力边界与非目标参考；支线 [F] 冲突时以支线口径优先
+    consumed_by_milestone: BR0
+    reuse_mode: READ_ONLY_REFERENCE
+    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+    file_size_bytes: 10823
+  - asset: input_output_boundary.v1.0.yaml
+    source_path: 01_contracts_and_schemas/input_output_boundary.v1.0.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 56e5475feddc8edf04e07e453df99784354f6429869f96c0fde67f167090a0b7
+    reuse_note: 输入/输出对象清单参考
+    consumed_by_milestone: BR1
+    reuse_mode: CONSUME_VIA_ADAPTER
+    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+    file_size_bytes: 13093
+  - asset: m1_interface_handoff.v0.1.yaml
+    source_path: 01_contracts_and_schemas/m1_interface_handoff.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 1fd11e87f888e4b95085d6a2b91e010df76fdfc814b3307340f41812b3cedea5
+    reuse_note: 19 Schema / 14 维 / 约束 ID 的派生接口面
+    consumed_by_milestone: BR1
+    reuse_mode: REFERENCE_BY_ID
+    last_modified_commit: 37f636c73dac1be7457dfc951984b43532056804
+    file_size_bytes: 10777
+  - asset: brand_truth_pack.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/brand_truth_pack.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 47e30608b9ea8739869150d4b9a63aefbe8f8d69231dfd128f0f68cd76bf731e
+    reuse_note: ProductTruth 组：Brand Truth 输入兼容
+    consumed_by_milestone: BR1
+    reuse_mode: SCHEMA_ENTRY_VALIDATION
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 4146
+  - asset: garment_and_inventory.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/garment_and_inventory.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: ac622b53804db1c4f8ebfa21abc13df090b73f43e4752fddcb16ab7d94ed40f5
+    reuse_note: Inventory 组：商品/库存输入兼容
+    consumed_by_milestone: BR1
+    reuse_mode: MAP_TO_CANONICAL_PRODUCT_POOL
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 6028
+  - asset: styling_task_context.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/styling_task_context.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 831c1f8bd0aed611feb0831b65b0167c1efb7b065dd91d0f25368a19e510dd53
+    reuse_note: 任务上下文兼容
+    consumed_by_milestone: BR1
+    reuse_mode: EXTEND_IN_NEW_VERSION_NO_IN_PLACE_EDIT
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 1474
+  - asset: StylingResultBundle.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/StylingResultBundle.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: d8a602418f60c4bd428dbfb86453ec5a68c2755da93f7de4106b49e2beace44e
+    reuse_note: 输出对象语义参考
+    consumed_by_milestone: BR2
+    reuse_mode: COMPATIBLE_SUBSET
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 30677
+  - asset: styling_decision_trace.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 586a54ac54fd266dc6925891ff84a4f770fbb84d2b6e73b3f22ba342877cc9dc
+    reuse_note: DecisionTrace 参考；保留被舍弃的合法候选族
+    consumed_by_milestone: BR2
+    reuse_mode: COMPATIBLE_SUBSET
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 6658
+  - asset: brand_style_space.v0.1.yaml
+    source_path: 01_contracts_and_schemas/m1_object_model/brand_style_space.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: a8383b01dd9cca56d69141ad35816086ffc3e4a7d0bce9ac195337de5377c57a
+    reuse_note: 14 维风格空间
+    consumed_by_milestone: BR3
+    reuse_mode: PINNED_VERSION_REUSE
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 3975
+  - asset: womenswear.adapter.v0.1.yaml
+    source_path: 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: d7c168ef6d6b1b46f8eec3a952849b7a59c4d7382ae927c8e76e7a5b5514e84c
+    reuse_note: 女装硬约束与安全边界
+    consumed_by_milestone: BR3
+    reuse_mode: REVIEW_THEN_MAP
+    last_modified_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+    file_size_bytes: 3363
+  - asset: kidswear.adapter.v0.1.yaml
+    source_path: 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 6810710d25d1ea74a623221738d5022378a15f6b70feec55c7d8695744391fba
+    reuse_note: 童装硬约束与安全边界
+    consumed_by_milestone: BR3
+    reuse_mode: REVIEW_THEN_MAP_HIGH_RISK_100PCT_FOUNDER
+    last_modified_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+    file_size_bytes: 3353
+  - asset: teen_trend.adapter.v0.1.yaml
+    source_path: 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: a3a64b49d94d102889ab95703d48cce59337f331bbf44d1edff7abf0dc0cced4
+    reuse_note: 青少年硬约束与安全边界
+    consumed_by_milestone: BR3
+    reuse_mode: REVIEW_THEN_MAP_HIGH_RISK_100PCT_FOUNDER
+    last_modified_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+    file_size_bytes: 3515
+  - asset: family_trend.adapter.v0.1.yaml
+    source_path: 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: e53681f94871fcbe08508521310dfaa21ad6325c9a786dcb19b7f2779deac01b
+    reuse_note: 亲子硬约束与安全边界
+    consumed_by_milestone: BR3
+    reuse_mode: REVIEW_THEN_MAP_HIGH_RISK_100PCT_FOUNDER
+    last_modified_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+    file_size_bytes: 3367
+  - asset: sport_trend.adapter.v0.1.yaml
+    source_path: 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: c0332f0655e8c832226a7b5ee4e28d16991e366a407332fd9e6b34686084ee41
+    reuse_note: 运动品类；支线不激活
+    consumed_by_milestone: BR3
+    reuse_mode: HISTORICAL_REFERENCE_ONLY_NOT_IN_ACTIVE_CATEGORY_REGISTRY
+    last_modified_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+    file_size_bytes: 3566
+  - asset: cross_category_conflict_priority.v0.1.yaml
+    source_path: 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 3740dbcbda3925b8a42e9bb13eb24ddab2a8fc5351a446eb38c4bbebb934df79
+    reuse_note: 跨品类冲突优先级：6 条有序规则 + 5 条组合规则，全仓唯一
+    consumed_by_milestone: BR3
+    reuse_mode: REFERENCE_NO_COPY_UNIQUE_TABLE
+    last_modified_commit: 8ce837a4569565299be3f8dacf65121bb0908a44
+    file_size_bytes: 4787
+  - asset: platform_voice_profile.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/platform_voice_profile.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 4b718a70df4096944acb3807cd6319f00f6989f91cbce445548c5e7d54464f3b
+    reuse_note: Platform Profile 组：平台语感；首个平台＝视频号
+    consumed_by_milestone: BR4
+    reuse_mode: SCHEMA_ENTRY_VALIDATION
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 2004
+  - asset: stylist_persona_profile.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/stylist_persona_profile.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 8cfc5ac3650dce9ec5b8b8d6fd81481fa991e78e6c899afe01efacb8bb3184c7
+    reuse_note: Persona 组：搭配师人设（C-13）
+    consumed_by_milestone: BR4
+    reuse_mode: EXTEND_IN_NEW_VERSION_NO_IN_PLACE_EDIT
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 5117
+  - asset: audience_profile.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/audience_profile.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 209e84e61efbbf8c3dc11b7cad477c06883af52111928eec41f92213028adbc7
+    reuse_note: 受众 Profile；不得写入自然人身份字段
+    consumed_by_milestone: BR4
+    reuse_mode: SCHEMA_ENTRY_VALIDATION
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 2100
+  - asset: publication_policy.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/publication_policy.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: f00db419f0fdbe3464b8bb0d3f91c37eb6e1bda10e4ce741714712a96319093d
+    reuse_note: Publication Policy 组：发布策略与人工审核在环（D-25）
+    consumed_by_milestone: BR4
+    reuse_mode: SAFETY_GATE_INPUT
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 4132
+  - asset: compliance_review_contract.v1.0.yaml
+    source_path: 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 29bc72ad29a90822cd53192513ac6a9e7573b3969736cf72e36aa796867fd8a5
+    reuse_note: Compliance 组：合规审查七项必答；亦是 check_compliance_ledger 下限的定义处
+    consumed_by_milestone: BR4
+    reuse_mode: SAFETY_GATE_INPUT
+    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+    file_size_bytes: 9150
+  - asset: product_image_asset_bundle.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/product_image_asset_bundle.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 22075ef1f63a433565682cbae1ef4ef235e498aa76cd14e077acfabd7dbd0ef7
+    reuse_note: 商品图像资产包
+    consumed_by_milestone: BR5
+    reuse_mode: CONDITIONAL_READ_ONLY_UNTIL_BR5_AUTHORIZED
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 3005
+  - asset: visual_attribute_extraction_result.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/visual_attribute_extraction_result.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: b3e47ae858a31bcd54b02d4c6d9f33c9b8bd0581a232fc4f61788b148f11bf5a
+    reuse_note: 视觉属性抽取结果（C-15）
+    consumed_by_milestone: BR5
+    reuse_mode: CONDITIONAL_READ_ONLY_UNTIL_BR5_AUTHORIZED
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 3261
+  - asset: human_visual_profile.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/human_visual_profile.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 7dd3df0af76f2c1a7792a1ace483946406b492cc053c65f115f06e153a979b79
+    reuse_note: 人体视觉画像（C-04）
+    consumed_by_milestone: BR5
+    reuse_mode: CONDITIONAL_READ_ONLY_UNTIL_BR5_AUTHORIZED
+    last_modified_commit: 37f636c73dac1be7457dfc951984b43532056804
+    file_size_bytes: 6107
+  - asset: knowledge_state_machine.v1.0.yaml
+    source_path: 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: dc2ffe33928b6f0d5c2afd75861b252ab2c27e2dff75c96951fd4bf217137485
+    reuse_note: Knowledge State 组：七态线性链，不得跳态
+    consumed_by_milestone: BR6
+    reuse_mode: PINNED_VERSION_REUSE
+    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+    file_size_bytes: 8606
+  - asset: non_goals_and_stop_conditions.v1.0.yaml
+    source_path: 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 1d9c22b1f438914f57bff40d431ba7b25d69303ad6652cac3b9f4235ae5ef510
+    reuse_note: Non-goals 组：NG-01—NG-09 / SC-01—SC-22
+    consumed_by_milestone: BR0
+    reuse_mode: ALWAYS_IN_FORCE
+    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+    file_size_bytes: 10260
+  - asset: architecture_and_integration_boundary.v1.0.yaml
+    source_path: 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: df039ca4025ae8f019794a80c8b90c111a8117d0be7891a2cfe7dd8e06344608
+    reuse_note: Tenant 组：架构与集成边界、NFR、凭据边界。本仓 M0/M1 无独立 Tenant 合同，租户根由 D-TENANT-DAY1 在 BR1 新建
+    consumed_by_milestone: BR1
+    reuse_mode: READ_ONLY_REFERENCE
+    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+    file_size_bytes: 12574
+  - asset: persona_memory_snapshot.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/persona_memory_snapshot.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 69d7a67f6c66122016649308724f607b0997ac4256a86a00dcda5ec8fde1bbb6
+    reuse_note: Persona 组：人设记忆快照（C-13）
+    consumed_by_milestone: BR4
+    reuse_mode: SCHEMA_SHAPE_ONLY_NO_PRODUCTION_STORE
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 2340
+  - asset: persona_conflict_record.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/persona_conflict_record.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 0b56fc3dcf9c0e6c3f29c9ebe8d71d7df7bc4d5ac0830101bfc693b7f30c208b
+    reuse_note: Persona 组：人设冲突记录（C-13）
+    consumed_by_milestone: BR4
+    reuse_mode: SCHEMA_ENTRY_VALIDATION
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 2821
+  - asset: series_continuity_state.schema.v0.1.json
+    source_path: 01_contracts_and_schemas/m1_object_model/series_continuity_state.schema.v0.1.json
+    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    file_sha256: 58e6ae42abac6ccf8a07286e32a3e54362a00278eba23c203a35cc4491edee14
+    reuse_note: Persona 组：系列连续性状态（C-13）
+    consumed_by_milestone: BR4
+    reuse_mode: EXTEND_IN_NEW_VERSION_NO_IN_PLACE_EDIT
+    last_modified_commit: c714732ff9a303719dde7a5a70bfa9c2fc36d042
+    file_size_bytes: 1871
+
+failure_states:
+  - PINNED_REUSE_ENTRY_INCOMPLETE: 缺 asset / source_path / source_commit / file_sha256 任一
+  - PINNED_REUSE_HASH_DRIFT: 实测 sha256 与登记值不符且未重新评估
+  - PINNED_REUSE_PATH_MISSING: 登记路径在仓内不存在
+  - APPENDIX_A_LEDGER_MISMATCH: 附录 A 行数与本台账条目数不一致

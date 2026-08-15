@@ -1,0 +1,112 @@
+schema_version: '0.1'
+registry_id: DIYU-CBFSK-COLLECT-LITERAL-REGISTRY
+artifact_id: collect_literal_registry.v0.1
+project_id: DIYU-CBFSK-001
+established_at_package: BR0-EP00
+enforced_by: ci/checkers/check_collect_derivation_discipline.py
+backported_from: candidate/m2@64530031c0d0fcbc82ee77e1487e41c8661c0298（判据源码逐字未改；本登记册按 main 实测重建）
+
+rule:
+  verbatim: >-
+    凡判据用作事实源的字段，必须由 collect() 现场推导；硬编码常量或自述值充当事实源，一律 FAIL。
+    全仓横扫同类，逐处整改或登记
+  permanence: 永久生效
+  plain: >-
+    一个字段写着 []，读起来像「查过了，没有」；也可能是「根本没查」。
+    两者在报告里长得一模一样，只有翻开 collect() 才分得清。
+    本册的作用是：让「没查」这件事必须被写下来，写不出正当理由就过不了闸。
+  registration_is_not_exemption: >-
+    登记不是豁免。登记项必须写明它为什么根本不是事实源（是尺子、是契约词表），
+    且 kind 不允许写成 fact_source——没有「合法的硬编码事实源」这种东西。
+
+allowed_kinds:
+  expectation_constant: 判据用来比对的期望值本身来自合同，不是对世界的测量。
+  contract_vocabulary: 枚举词表，其定义处就是本仓合同。
+
+sweep:
+  swept_at_package: BR0-EP00
+  method: AST 解析每个 checker 的 collect()，取 return 字典中取值为纯字面量的键（含先赋局部名再返回的）。
+  evidence_level: runtime_verified
+  scanned_checkers_at_sweep: 24
+  sites_found_before_repair: 8
+  sites_remaining_after_repair: 0
+  disposition_rule: >-
+    八处全部整改，一处未以「尺子」名义登记。判断标准只有一条：这个值是对世界的测量，
+    还是合同给的期望值。八处全是前者——写死的是「谁是 Guardian」「有没有人被冒充成外部专家」
+    「哪个角色不可用」这类可查的事实。
+  repaired:
+    - checker: check_compliance_ledger
+      field: minimum_items
+      was: '7'
+      now: 读 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml 的 checklist.count
+      why_it_mattered: >-
+        清单下限的定义处是合规审查合同（七项必答，首轮冻结）。写死在判据里等于同一个数字
+        两个定义处（EQ-1）；合同改了下限，判据还量着旧尺子。
+    - checker: check_external_review_claims
+      field: ai_review_claims
+      was: '[]'
+      now: 读签署回执 guardian_review 两轮 + advisor_review，现推 reviewer_is_ai / presented_as
+      why_it_mattered: >-
+        「把 AI 评审说成外部专家」是红线，而检查它的那个分支永远拿不到一条记录——
+        恒空，红线真被踩也不会触发。
+    - checker: check_project_state
+      field: candidate_marked_as_effective_truth
+      was: 'False'
+      now: 由规范源 product_truth 现算（候选与活基线是否同一份、候选是否被称作已生效）
+      why_it_mattered: 恒假，「未签署的候选被当成活真源」这条判据因此永不触发。
+    - checker: check_role_operating_model
+      field: guardian_role_id
+      was: "'CLAUDE_INDEPENDENT_GUARDIAN'"
+      now: 取 roles 里 formal_guardian 为真的那一个
+      why_it_mattered: 谁是正式 Guardian 是规范源里的事实，判据不许自备一份。
+    - checker: check_role_operating_model
+      field: founder_authorized_temporary_writers
+      was: "['TEMPORARY_EXECUTION_WRITER']"
+      now: 读 founder_pinned_baseline continuation_execution.founder_designation
+      why_it_mattered: 同上；Founder 换了指派，判据不会跟着变。
+    - checker: check_role_operating_model
+      field: commit_events
+      was: '[]'
+      now: >-
+        扫三份既有记录（签署回执 guardian_review / 交接包 prior_guardian_review /
+        冻结回执 superseded_candidates），取其中 valid_for_signature_base、
+        valid_for_current_candidate、prior_decision_valid_for_this_candidate
+        任一为真、而被审 Commit 不等于 HEAD 的记录
+      why_it_mattered: >-
+        role_separation_rules.after_new_commit 写着「先前 Guardian 结论一律失效」，
+        而检查它的分支永远拿不到事件。
+      semantic_choice_declared: >-
+        本判据守的是「旧结论被当作仍然有效」，不是「HEAD 还没被 Guardian 审过」。
+        两者不是一回事：main 上此刻确实存在未被 Guardian 审过的提交（支线 PRD v0.3.2 是
+        FOUNDER_REVIEW_CANDIDATE），那是一个真实事实，由审查流程承接，不由本分支承接。
+        这个取舍是显式的，可被 Founder 推翻——推翻的后果是 CI 会在每次 HEAD 前进而未复审时报红。
+    - checker: check_ruling_coverage
+      field: prompt_rag_direct_answer_accepted_for_m6
+      was: 'False'
+      now: 扫 governance/founder_rulings/ 全部裁决，找肯定性接受该实现形态的声明
+      why_it_mattered: 恒假，与 M2 期 STORE-A locator_present 硬编码 False 同源；D-29 真被推翻也不会触发。
+    - checker: check_task_classification
+      field: role_availability
+      was: collect() 里的 Python 字面量表（三个角色）
+      now: >-
+        CODEX 读基线 Manifest continuation_execution；GPT 读签署回执 advisor_review；
+        Guardian 由签署回执 guardian_review 是否有带 decision 的轮次现推
+      why_it_mattered: >-
+        判据自己造出自己要检查的事实。整改当场暴露两处既存错误：
+        （一）GPT_CHIEF_ADVISOR 被写成 available=True，而签署回执明写执行侧持续连接故障并按
+        记录性豁免处置；（二）判据的处置词表写 EXPLICITLY_WAIVE_WITH_RISK_ACCEPTANCE，
+        回执记的是 EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE——分支从未被执行过，词表错位一直没人发现。
+
+literal_site_count: 0
+entries: []
+entries_note: >-
+  当前为空——八处已全部整改，没有一处需要以「尺子」名义留在代码里。
+  空不是「没检查」：check_collect_derivation_discipline 每次实扫全部 checker，
+  扫到任何一处未登记的字面量即 HARDCODED_FACT_SOURCE。
+
+failure_states:
+  - HARDCODED_FACT_SOURCE
+  - COLLECT_LITERAL_REGISTRY_STALE
+  - COLLECT_LITERAL_KIND_INVALID
+  - COLLECT_LITERAL_COUNT_MISSTATED
+  - COLLECT_SCAN_EMPTY

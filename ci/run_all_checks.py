@@ -36,6 +36,10 @@ CHECKERS = [
     "check_m0_deliverable_closure",
     "check_m1_object_coverage",
     "check_m1_category_adapters",
+    # BR0-EP00 EP00-04：自 candidate/m2 选择性迁入的三个通用治理判据（A 类）。
+    "check_report_number_traceability",
+    "check_founder_confirmation_binding",
+    "check_collect_derivation_discipline",
 ]
 
 

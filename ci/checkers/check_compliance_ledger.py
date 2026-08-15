@@ -64,12 +64,15 @@ def validate(payload: dict) -> list[str]:
 
 def collect() -> dict:
     ledger = load_yaml("governance/compliance/founder_compliance_decision_ledger.yaml")
+    contract = load_yaml("01_contracts_and_schemas/compliance_review_contract.v1.0.yaml")
     return {
         "blanket_self_assessment_allowed": ledger["blanket_self_assessment_allowed"],
         "external_legal_opinion": ledger["external_legal_opinion"],
         "legal_review_type": ledger["legal_review_type"],
         "items": ledger["items"],
-        "minimum_items": 7,
+        # BR0-EP00：下限此前写死 7。它的定义处是合规审查合同的 checklist.count（首轮冻结），
+        # 判据现读该字段——合同改了下限自动跟着改，不会出现「合同七项、判据还量着旧尺子」。
+        "minimum_items": contract["checklist"]["count"],
     }
 
 

@@ -135,12 +135,21 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986
+    post_change_binary_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-12
+        authorization_ref: BR0-EP00 启动准备包 v0.2 EP00-02／EP00-03A（Founder 于 2026-08-15 会话内下发并授权推进；无独立签署裁决文件）
+        binary_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
+        landed_in_commit: BR0_EP00_LANDING_COMMIT
+        content: 删除「## 当前项目状态」下整段 yaml 状态块，替换为一行指向 PRD_v1.2_change_map.yaml 的 resulting_state；Checker 计数 21→24；新增「支线（BR0—BR8）」一段；活基线表格与 `**当前活基线 · `SIGNED`**` 承重串逐字未动
+        note: >-
+          该状态块此前无任何判据读取——check_project_state 只把 README 当违禁措辞扫描面，
+          flags 全部来自 change_map / role_operating_model / baseline_reconciliation_receipt 三处。
+          它是第四份未受守护的重复副本，删除后 README 不再承载状态。
       - change_id: README-MOD-11
         authorization_ref: DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条（裁决落盘提交一次性预授权，允许项 2「状态位」）
         binary_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986

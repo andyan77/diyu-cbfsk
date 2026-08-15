@@ -173,3 +173,29 @@ def is_full_commit_hash(value) -> bool:
     This is the single implementation — checkers import it, none re-derive it.
     """
     return isinstance(value, str) and COMMIT_HASH_RE.fullmatch(value) is not None
+
+
+def clause_resolves(rel: str, clause_path=None) -> dict:
+    """「这个文件在不在、这条具名条款解不解析得出来」——只有这一个实现。
+
+    裁决引用、签署回执引用、Founder 见证记录引用，走的都是这一条路。
+    各写一份的结果是：某一处忘了查条款，凭空写的路径就在那一处过关。
+
+    自 candidate/m2 迁入（BR0-EP00 EP00-04），逻辑未改。
+    """
+    out = {"file": rel, "file_exists": False, "clause_path": clause_path, "clause_resolves": None}
+    if not rel:
+        return out
+    path = ROOT / rel
+    out["file_exists"] = path.exists()
+    if not out["file_exists"] or clause_path is None or not rel.endswith((".yaml", ".yml")):
+        return out
+    node = yaml.safe_load(path.read_text(encoding="utf-8"))
+    for key in str(clause_path).split("."):
+        if isinstance(node, dict) and key in node:
+            node = node[key]
+        else:
+            out["clause_resolves"] = False
+            return out
+    out["clause_resolves"] = node not in (None, "", [], {})
+    return out

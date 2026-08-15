@@ -1,0 +1,78 @@
+schema_version: '0.1'
+registry_id: DIYU-CBFSK-REPORT-NUMBER-BINDING-REGISTRY
+artifact_id: report_number_binding_registry.v0.1
+project_id: DIYU-CBFSK-001
+established_at_package: BR0-EP00
+enforced_by: ci/checkers/check_report_number_traceability.py
+backported_from: candidate/m2@64530031c0d0fcbc82ee77e1487e41c8661c0298（判据源码与渲染器逐字未改；本登记册按 main 实测重建）
+
+purpose: >-
+  报告里的计数数字必须追得到某个机器记录字段。M2 期 EP04 报告写 500/350/149 而台账实测
+  523/376/147，三个数字彼此还对不上（500−350≠149）——根因不是抄错一次，是数字与台账之间
+  根本没有连线。
+rule:
+  statement: 报告一律改为引用台账字段，由生成时读取。
+  mechanism: 报告写成模板（*.md.tmpl），数字位写 {{!ref:<路径>#<点分键路径>}}；判据重渲染后与落盘报告逐字节比对。
+  why_not_just_fix_the_numbers: >-
+    抄一遍正确数字只解决这一次。台账下次一变，报告又回到「看着像真的但没人再核过」的状态。
+    连上线之后，改数字这件事只能发生在台账里。
+  allowlist_discipline: >-
+    确实不是测量值的数字（版本号、条款序号、历史引述里的原始数字）逐条登记并写明理由。
+    白名单是公开可数的——判据看不见就算过，等于没有规则。
+
+effective_from_package: BR0-EP00
+retroactivity:
+  policy: NOT_RETROACTIVE
+  reason: >-
+    M0/M1 的四份交付报告不回改。为满足一条后立的格式规则去回改历史报告，
+    等于用今天的口径重写昨天的现场。它们按 legacy_untemplated 登记并写明理由，
+    判据据此放行——放行是显式的，不是判据看不见。
+
+discovery:
+  globs:
+    - 11_reports_and_receipts/*_delivery_report.md
+    - 11_reports_and_receipts/*/*_delivery_report.md
+    - 11_reports_and_receipts/*/*/*_delivery_report.md
+    - governance/reports/*_review_request.md
+  note: >-
+    判据按本 glob 自动发现交付报告；发现了却没登记即 REPORT_NOT_REGISTERED，新报告不能悄悄绕开本册。
+  glob_extension_br0:
+    added: 11_reports_and_receipts/*/*/*_delivery_report.md
+    why: >-
+      支线报告按 <BRn>/<BRn-EPmm>/ 两级归档，比主线深一层。加 glob 而不是逐条登记——
+      否则下一份支线报告会因为路径深一层而自动绕开本册。扫描范围只可扩大，不可收窄。
+
+report_count: 5
+reports:
+  - report: 11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_report.md
+    template: 11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_report.md.tmpl
+    status: templated
+    literal_allowlist: []
+
+  - report: 11_reports_and_receipts/m0_delivery_report.md
+    status: legacy_untemplated
+    reason: >-
+      M0 交付报告写于本规则确立之前（BR0-EP00 才把该判据迁入 main）。不回改历史报告；
+      其数字由当时的 M0 判据与回执各自守。
+
+  - report: 11_reports_and_receipts/m1_delivery_report.md
+    status: legacy_untemplated
+    reason: 同 M0——写于本规则确立之前，不回改。
+
+  - report: 11_reports_and_receipts/m1_ep01_delivery_report.md
+    status: legacy_untemplated
+    reason: 同 M0——写于本规则确立之前，不回改。
+
+  - report: 11_reports_and_receipts/m1_ep02_delivery_report.md
+    status: legacy_untemplated
+    reason: 同 M0——写于本规则确立之前，不回改。
+
+failure_states:
+  - REPORT_BINDING_COUNT_MISSTATED
+  - LEGACY_REPORT_WITHOUT_REASON
+  - REPORT_BINDING_STATUS_INVALID
+  - REPORT_TEMPLATE_MISSING
+  - REPORT_REF_UNRESOLVED
+  - REPORT_RENDER_DRIFT
+  - UNTRACED_COUNT_IN_REPORT
+  - REPORT_NOT_REGISTERED

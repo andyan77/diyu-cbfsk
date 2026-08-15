@@ -1,0 +1,74 @@
+# 执行包合同模板 · BR0-EP00 落盘
+#
+# 用法：复制本文件，改名为 <package_id>.yaml，落在 execution/packages/ 下。
+# 本模板只定义**最小字段**。字段少不是省事，是因为每多一个字段就多一处可以说假话的地方；
+# 需要更多信息时写进 planned_deliverables 或 acceptance，不要往顶层加自由字段。
+#
+# 明确不建设：执行包数据库、执行管理后台、自动生成系统、Receipt 平台。
+# 执行包是文件，不是服务。
+
+schema_version: '0.1'
+template_id: execution_package_template.v0.1
+template_note: 本文件是模板本身，不是任何执行包实例；不得被判据当作实例统计。
+
+# --- 身份 -------------------------------------------------------------------
+package_id: <BRn-EPmm>
+status: PLANNED            # 取值域固定：PLANNED / READY / RUNNING / CLOSED
+                           # PLANNED=已编译未放行；READY=前置齐备可开工；
+                           # RUNNING=已开工；CLOSED=已出回执并被裁决
+
+# --- 基线 -------------------------------------------------------------------
+baseline_commit: <40 位完整哈希>
+baseline_commit_rule: >-
+  必须写 40 位完整哈希，禁止「最新版」「当前 main」。执行合同按该 Commit JIT 编译，
+  不得在该 Commit 存在之前提前冻结验收判据。
+
+prd_refs:                  # 支线 PRD v0.3.2 的具名锚点，如 §10.5 / FR-825 / D-TENANT-DAY1
+  - <锚点>
+
+# --- 范围 -------------------------------------------------------------------
+scope:
+  in_scope:
+    - <本包要做的事，逐条>
+  out_of_scope:
+    - <本包明确不做的事，逐条；写「不做什么」比写「做什么」更能防止范围漂移>
+
+dependencies:              # 前置包 ID；无前置写空列表并说明
+  - <BRn-EPmm>
+
+# --- 环境 -------------------------------------------------------------------
+environment_class: <G|Z|L|S|V|P>
+environment_class_domain: [G, Z, L, S, V, P]
+environment_class_domain_source: BR0-EP00 启动准备包 v0.2 EP00-05 B（Founder 下发时即固定为这六个取值）
+environment_class_semantics: PENDING_FOUNDER_DEFINITION
+environment_class_semantics_note: >-
+  六个取值的语义在仓内、PRD v0.3.2 与执行规划 HTML 中均查无定义（已实测）。
+  本包按 Founder 给定的取值域原样固定，不自行编造每个字母代表什么环境——
+  编出来的定义会被下游当成真的。定义补齐前，实例填写者必须同时写 environment_note。
+environment_note: <本包实际用的分支、worktree 路径、允许写入的文件范围>
+
+# --- 交付 -------------------------------------------------------------------
+planned_deliverables:
+  - path: <仓内路径>
+    kind: <contract | schema | code | migration | report | receipt>
+
+# --- 验收 -------------------------------------------------------------------
+acceptance:
+  - criterion: <可判定的陈述；不得写「质量良好」这类不可判定语>
+    method: <DETERMINISTIC_GREP | DETERMINISTIC_CHECK | CI_FULL_RUN | NEGATIVE_INJECTION_TEST
+             | SECURITY_NEGATIVE_TEST | HUMAN_EXPERT_REVIEW>
+    blocking: <true|false>
+    evidence_ref: <回执里的字段路径，如 receipt.ci_run_ref>
+acceptance_rule: >-
+  每条验收必须有 method 与 evidence_ref，不得只写 true。布尔承诺无法判定，
+  它在报告里和「已验证」长得一模一样。
+
+evidence_types:            # 本包会产出的证据种类
+  - <ci_run_log | grep_result | negative_injection_log | render_diff | human_review_note>
+
+# --- 冻结与授权 -------------------------------------------------------------
+freeze_at: <本包交付物停止改动的时点；写 Commit 或事件，不写日期区间>
+execution_authority:
+  granted_by: <Founder 裁决 ID 或会话内下发记录；无则写 null，不得留空字符串>
+  granted_scope: <被授权做什么>
+  entry_blocker: <未满足即不得开工的前置；无则写 null>

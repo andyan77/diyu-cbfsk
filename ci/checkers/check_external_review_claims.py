@@ -72,6 +72,60 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+def _reviewer_kind(model: dict, role_id: str) -> tuple[bool, bool]:
+    """本仓的评审员全是 AI，Founder 是人。谁是哪一类由规范源 roles 现算，不写死。"""
+    for role in model["roles"]:
+        if role["role_id"] == role_id:
+            return role.get("human") is False, role.get("final_authority") is True
+    return False, False
+
+
+def _ai_review_claims(model: dict) -> list[dict]:
+    """每一条已登记的审查结论，连同它被呈现成什么。
+
+    BR0-EP00 之前这里是 []——「把 AI 评审说成外部专家」是红线，而检查它的分支永远拿不到
+    一条记录。现在从签署回执现读：两轮 Guardian 审查 ＋ 总顾问处置。
+
+    presented_as 缺省即 ai_review；哪天有人往记录里写 external_expert，这一分支当场触发。
+    覆盖面就是签署回执里这三条结构化记录，不多不少——散文报告不在此列，
+    它们由 forbidden_phrase_hits 那一侧扫。
+    """
+    signoff = load_yaml("governance/receipts/founder_signoff_receipt.yaml")
+    claims: list[dict] = []
+
+    guardian = signoff.get("guardian_review") or {}
+    is_ai, is_founder = _reviewer_kind(model, "CLAUDE_INDEPENDENT_GUARDIAN")
+    for name, row in sorted(guardian.items()):
+        if not isinstance(row, dict):
+            continue
+        claims.append(
+            {
+                "claim_id": f"founder_signoff_receipt:guardian_review.{name}:{row.get('reviewed_commit')}",
+                "reviewer_is_ai": is_ai,
+                "reviewer_is_founder": is_founder,
+                "presented_as": row.get("presented_as", "ai_review"),
+            }
+        )
+
+    advisor = signoff.get("advisor_review") or {}
+    if advisor:
+        is_ai, is_founder = _reviewer_kind(model, "GPT_CHIEF_ADVISOR")
+        claims.append(
+            {
+                "claim_id": f"founder_signoff_receipt:advisor_review:{advisor.get('advisor_review_status')}",
+                "reviewer_is_ai": is_ai,
+                "reviewer_is_founder": is_founder,
+                # 回执用「有没有被冒充成外部专家」这个布尔位记录同一件事；两处只留一个定义处。
+                "presented_as": (
+                    "external_expert"
+                    if advisor.get("ai_review_presented_as_external_expert") is True
+                    else "ai_review"
+                ),
+            }
+        )
+    return claims
+
+
 def collect() -> dict:
     model = load_yaml("governance/bootstrap/role_operating_model.v0.2.yaml")
     review = model["review_mode"]
@@ -106,7 +160,7 @@ def collect() -> dict:
         },
         "domain_review_type": review["domain_review_type"],
         "legal_review_type": review["legal_review_type"],
-        "ai_review_claims": [],
+        "ai_review_claims": _ai_review_claims(model),
     }
 
 

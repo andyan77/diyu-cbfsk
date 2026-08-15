@@ -10,9 +10,10 @@
 | 文档 | 用途 | 状态 |
 |---|---|---|
 | `笛语支线系统架构PRD_v0.3.2.docx` | 支线运行时的产品与工程合同（当前候选） | `FOUNDER_REVIEW_CANDIDATE`，**未签署、未生效** |
-| `笛语支线系统架构PRD_v0.3.1.docx` | 上一版候选 | 历史候选，保留不覆盖；本轮未纳入 Git 跟踪 |
-| `笛语支线_v0.3.2_阶段里程碑与执行包规划_Rev2.html` | 阶段、里程碑与执行包规划（单文件、无外部依赖、可打印） | 规划窗口输出，本轮原样收录，未作字节修改 |
-| `笛语支线系统架构PRD_v0.3_Draft.docx` | 历史 v0.3 设计输入 | `SUPERSEDED_HISTORICAL_DESIGN_INPUT`；`authoritative=false`、`runtime_dependency=false`；本轮未纳入 Git 跟踪 |
+| `笛语支线_v0.3.2_阶段里程碑与执行包规划_Rev2.html` | 阶段、里程碑与执行包规划（单文件、无外部依赖、可打印） | 规划窗口输出，本轮原样收录，仅按 Founder 指示对齐 PRD 裁决口径 |
+| `归档_支线v0.3/笛语支线系统架构PRD_v0.3.1.docx` | 上一版候选 | 历史候选，保留不覆盖；已归档并纳入 Git 跟踪（v0.3.2 的构建来源，保留才可复现） |
+| `归档_支线v0.3/笛语支线系统架构PRD_v0.3_Draft.docx` | 历史 v0.3 设计输入 | `SUPERSEDED_HISTORICAL_DESIGN_INPUT`；`authoritative=false`、`runtime_dependency=false`；已归档并纳入 Git 跟踪 |
+| `归档_支线v0.3/README.md` | 支线归档说明 | 说明该目录不属于主线 `归档_v1.x/` 的治理链路，不改变任何主线状态位 |
 
 支线 PRD **不是产品真源**，也不改变主线状态位——PRD v1.2 仍是唯一活基线，M0/M1 冻结资产与 M2 状态本轮零改动。
 

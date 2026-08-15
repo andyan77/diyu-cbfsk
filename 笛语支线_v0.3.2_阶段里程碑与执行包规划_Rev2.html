@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="笛语支线 PRD v0.3.2：以内容制作交付包在公平条件下显著优于事实喂齐的同等级普通 LLM 为功能价值唯一标准，并纳入 BR1-EP00、BR4 与 BR7 的阶段门。" name="description"/>
+<title>笛语支线 v0.3.2｜阶段、里程碑与执行包规划（Rev2）</title>
+<style>
+    :root {
+      --bg: #07101c;
+      --bg-2: #0b1626;
+      --panel: rgba(17, 31, 51, 0.96);
+      --panel-2: rgba(22, 40, 64, 0.94);
+      --line: #29425f;
+      --line-soft: rgba(84, 124, 166, 0.28);
+      --text: #edf5ff;
+      --muted: #a9b9cc;
+      --blue: #62a8ff;
+      --cyan: #52d8e8;
+      --green: #62d69f;
+      --yellow: #f2cb68;
+      --orange: #ff9e59;
+      --red: #ff6c78;
+      --purple: #ad9bff;
+      --shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% -8%, rgba(98, 168, 255, 0.20), transparent 32%),
+        radial-gradient(circle at 92% 0%, rgba(173, 155, 255, 0.14), transparent 26%),
+        linear-gradient(180deg, var(--bg), #06101b 48%, #08121f);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.64;
+    }
+    a { color: inherit; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    button { font: inherit; }
+    .shell { width: min(1500px, calc(100% - 32px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(16px);
+      background: rgba(7, 16, 28, 0.84);
+      border-bottom: 1px solid rgba(98, 168, 255, 0.16);
+    }
+    .topbar-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 820; }
+    .brand-mark {
+      width: 30px; height: 30px; display: grid; place-items: center;
+      border-radius: 9px; color: #06111f; font-weight: 950;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 0 26px rgba(82, 216, 232, 0.28);
+    }
+    .nav { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav a, .print-button {
+      text-decoration: none; color: var(--muted); background: transparent;
+      border: 1px solid transparent; border-radius: 10px; padding: 7px 9px; cursor: pointer;
+    }
+    .nav a:hover, .print-button:hover {
+      color: var(--text); border-color: var(--line); background: rgba(255,255,255,0.035);
+    }
+
+    header.hero { padding: 70px 0 34px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 7px 12px; border-radius: 999px; font-size: 13px;
+      font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      border: 1px solid rgba(98,168,255,0.35); background: rgba(98,168,255,0.10);
+    }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 7px rgba(242,203,104,0.1); }
+    h1 {
+      max-width: 1180px; margin: 18px 0 14px;
+      font-size: clamp(37px, 5vw, 72px); line-height: 1.08; letter-spacing: -0.045em;
+    }
+    .hero-copy { max-width: 1100px; margin: 0; color: var(--muted); font-size: clamp(17px, 1.7vw, 22px); }
+    .notice {
+      margin-top: 24px; padding: 14px 16px; border-radius: 14px;
+      border: 1px solid rgba(242,203,104,0.36); background: rgba(242,203,104,0.075);
+      color: #f8e7b0; font-size: 14px;
+    }
+
+    .metric-grid {
+      margin-top: 28px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px;
+    }
+    .metric {
+      min-height: 135px; padding: 18px; border-radius: var(--radius);
+      border: 1px solid var(--line); background: linear-gradient(180deg, rgba(20,37,60,.96), rgba(11,24,40,.97));
+      box-shadow: var(--shadow);
+    }
+    .metric .label { color: var(--muted); font-size: 12px; font-weight: 820; letter-spacing: .09em; text-transform: uppercase; }
+    .metric .value { margin-top: 7px; font-size: 28px; font-weight: 900; line-height: 1.2; }
+    .metric .detail { margin-top: 7px; color: var(--muted); font-size: 13px; }
+    .metric.primary { border-color: rgba(98,168,255,.48); background: linear-gradient(135deg, rgba(98,168,255,.11), transparent 56%), rgba(15,30,50,.98); }
+    .metric.warn { border-color: rgba(242,203,104,.48); }
+
+    main { padding-bottom: 84px; }
+    section { padding: 42px 0; scroll-margin-top: 74px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 22px; }
+    .section-heading h2 { margin: 0; font-size: clamp(27px, 3vw, 42px); line-height: 1.16; letter-spacing: -0.025em; }
+    .section-heading p { margin: 0; max-width: 760px; color: var(--muted); }
+    .kicker { color: var(--muted); font-size: 12px; font-weight: 850; letter-spacing: .10em; text-transform: uppercase; }
+    .panel {
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--panel), rgba(10,22,38,.97)); box-shadow: var(--shadow);
+    }
+
+    .verdict {
+      padding: 20px 22px; border-color: rgba(98,168,255,.36);
+      background: linear-gradient(135deg, rgba(98,168,255,.10), transparent 58%), rgba(14,29,48,.97);
+    }
+    .verdict h3 { margin: 0 0 8px; font-size: 24px; }
+    .verdict p { margin: 0; color: var(--muted); }
+    .verdict-grid { margin-top: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .mini-verdict { padding: 14px; border-radius: 13px; border: 1px solid var(--line-soft); background: rgba(255,255,255,.025); }
+    .mini-verdict strong { display: block; margin-bottom: 3px; }
+    .mini-verdict span { color: var(--muted); font-size: 13px; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 13px; background: rgba(255,255,255,.022); }
+    .legend-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .legend-dot.serial { background: var(--blue); }
+    .legend-dot.parallel { background: var(--cyan); }
+    .legend-dot.optional { background: var(--purple); }
+    .legend-dot.gate { transform: rotate(45deg); border-radius: 2px; background: var(--yellow); }
+
+    .macro-flow { padding: 18px; overflow-x: auto; }
+    .flow-canvas {
+      min-width: 1320px; display: grid;
+      grid-template-columns: 180px 52px 210px 52px 225px 52px 210px 52px 210px;
+      align-items: stretch;
+    }
+    .phase-node, .phase-cluster, .phase-gate {
+      min-height: 230px; padding: 18px; border-radius: 16px; border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(26,45,70,.95), rgba(15,28,47,.96));
+    }
+    .phase-node h3, .phase-cluster h3, .phase-gate h3 { margin: 5px 0 8px; font-size: 19px; line-height: 1.25; }
+    .phase-node p, .phase-cluster p, .phase-gate p { margin: 0; color: var(--muted); font-size: 13px; }
+    .node-id { color: var(--cyan); font-size: 12px; font-weight: 900; letter-spacing: .08em; }
+    .node-id.yellow { color: var(--yellow); }
+    .node-id.green { color: var(--green); }
+    .node-id.purple { color: var(--purple); }
+    .arrow { display: grid; place-items: center; }
+    .arrow span { position: relative; width: 33px; border-top: 2px solid var(--blue); }
+    .arrow span::after { content: ""; position: absolute; right: -1px; top: -5px; border-left: 8px solid var(--blue); border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+    .mini-stack { display: grid; gap: 8px; margin-top: 11px; }
+    .mini-node { padding: 10px 11px; border-radius: 11px; border: 1px solid rgba(98,168,255,.28); background: rgba(98,168,255,.065); font-size: 13px; }
+    .mini-node.cyan { border-color: rgba(82,216,232,.32); background: rgba(82,216,232,.06); }
+    .mini-node.green { border-color: rgba(98,214,159,.32); background: rgba(98,214,159,.06); }
+    .mini-node.purple { border-color: rgba(173,155,255,.34); background: rgba(173,155,255,.07); }
+    .phase-gate { display: flex; flex-direction: column; justify-content: center; text-align: center; border-color: rgba(242,203,104,.48); background: linear-gradient(135deg, rgba(242,203,104,.11), transparent 60%), rgba(24,35,50,.97); }
+    .diamond { width: 48px; height: 48px; margin: 0 auto 14px; transform: rotate(45deg); border: 2px solid var(--yellow); border-radius: 8px; display: grid; place-items: center; background: rgba(242,203,104,.10); }
+    .diamond span { transform: rotate(-45deg); color: var(--yellow); font-weight: 950; }
+    .critical-ribbon { margin-top: 16px; padding: 14px 16px; border: 1px solid rgba(98,168,255,.24); border-radius: 14px; background: rgba(98,168,255,.055); text-align: center; font-weight: 820; }
+
+    .phase-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .phase-card { padding: 18px; min-height: 250px; position: relative; overflow: hidden; }
+    .phase-card .number { position: absolute; right: 13px; top: 7px; font-size: 78px; font-weight: 950; color: rgba(98,168,255,.08); line-height: 1; }
+    .phase-card h3 { position: relative; margin: 7px 0 8px; font-size: 21px; }
+    .phase-card p { position: relative; margin: 0; color: var(--muted); font-size: 14px; }
+    .phase-card ul { position: relative; margin: 12px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+    .phase-card li + li { margin-top: 5px; }
+    .phase-tag { position: relative; display: inline-flex; padding: 5px 8px; border-radius: 8px; border: 1px solid rgba(82,216,232,.28); color: var(--cyan); font-size: 12px; font-weight: 850; }
+
+    .timeline-panel { padding: 18px; overflow-x: auto; }
+    .timeline { min-width: 1220px; }
+    .timeline-head, .timeline-row { display: grid; grid-template-columns: 170px repeat(9, 1fr); gap: 6px; }
+    .timeline-head { margin-bottom: 8px; }
+    .timeline-head > div { min-height: 43px; display: grid; place-items: center; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 850; text-align: center; }
+    .timeline-row { margin-top: 7px; }
+    .lane-name { display: flex; align-items: center; padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.024); font-weight: 780; font-size: 13px; }
+    .slot { min-height: 52px; border: 1px dashed rgba(41,66,95,.82); border-radius: 10px; background: rgba(255,255,255,.012); }
+    .bar { height: 100%; padding: 8px 9px; display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(98,168,255,.33); border-radius: 9px; background: rgba(98,168,255,.11); font-size: 12px; line-height: 1.25; font-weight: 850; }
+    .bar small { margin-top: 3px; color: var(--muted); font-weight: 600; }
+    .bar.cyan { border-color: rgba(82,216,232,.37); background: rgba(82,216,232,.085); }
+    .bar.green { border-color: rgba(98,214,159,.37); background: rgba(98,214,159,.085); }
+    .bar.purple { border-color: rgba(173,155,255,.38); background: rgba(173,155,255,.09); }
+    .bar.yellow { border-color: rgba(242,203,104,.40); background: rgba(242,203,104,.09); }
+    .bar.orange { border-color: rgba(255,158,89,.40); background: rgba(255,158,89,.09); }
+    .bar.red { border-color: rgba(255,108,120,.40); background: rgba(255,108,120,.09); }
+    .bar.optional { border-style: dashed; }
+    .timeline-note { margin-top: 12px; color: var(--muted); font-size: 12px; }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; min-width: 1180px; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: rgba(11,23,39,.95); box-shadow: var(--shadow); }
+    th, td { padding: 13px 13px; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tbody tr:last-child td { border-bottom: 0; }
+    th { position: sticky; top: 64px; z-index: 4; background: #12243b; color: #dcecff; text-align: left; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+    td { color: var(--muted); font-size: 13px; }
+    td strong { color: var(--text); }
+    .milestone { white-space: nowrap; }
+    .milestone-pill { display: inline-flex; min-width: 48px; justify-content: center; padding: 5px 8px; border-radius: 9px; border: 1px solid rgba(82,216,232,.28); background: rgba(82,216,232,.075); color: var(--cyan); font-weight: 900; }
+    .milestone-pill.visual { color: var(--purple); border-color: rgba(173,155,255,.30); background: rgba(173,155,255,.08); }
+    .package-count { color: #dcecff; font-weight: 820; white-space: nowrap; }
+    .serial { color: #cfe4ff; font-weight: 760; }
+    .optional-text { color: #d8ceff; }
+
+    .package-summary { margin: 10px 0 18px; display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+    .package-stat { padding: 15px; border-radius: 13px; border: 1px solid var(--line); background: rgba(255,255,255,.023); }
+    .package-stat strong { display: block; font-size: 24px; }
+    .package-stat span { color: var(--muted); font-size: 13px; }
+
+    details.milestone-detail { margin-bottom: 12px; border: 1px solid var(--line); border-radius: 16px; background: rgba(14,28,46,.93); box-shadow: var(--shadow); overflow: hidden; }
+    details.milestone-detail > summary { list-style: none; cursor: pointer; padding: 17px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; background: linear-gradient(180deg, rgba(25,44,69,.92), rgba(15,29,48,.92)); }
+    details.milestone-detail > summary::-webkit-details-marker { display: none; }
+    details.milestone-detail > summary::after { content: "+"; font-size: 24px; color: var(--blue); font-weight: 900; }
+    details.milestone-detail[open] > summary::after { content: "−"; }
+    .summary-left { display: flex; align-items: center; gap: 13px; }
+    .summary-title strong { display: block; font-size: 18px; }
+    .summary-title span { color: var(--muted); font-size: 13px; }
+    .detail-body { padding: 17px; }
+    .package-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .package-card { padding: 16px; border: 1px solid var(--line-soft); border-radius: 14px; background: rgba(255,255,255,.022); }
+    .package-card.critical { border-color: rgba(98,168,255,.35); }
+    .package-card.parallel { border-color: rgba(82,216,232,.34); }
+    .package-card.optional { border-color: rgba(173,155,255,.38); border-style: dashed; }
+    .package-id { color: var(--cyan); font-size: 12px; font-weight: 900; letter-spacing: .06em; }
+    .package-card h4 { margin: 4px 0 7px; font-size: 17px; }
+    .package-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .package-card dl { margin: 11px 0 0; display: grid; grid-template-columns: 88px 1fr; gap: 6px 8px; font-size: 12px; }
+    .package-card dt { color: #d8e9ff; font-weight: 800; }
+    .package-card dd { margin: 0; color: var(--muted); }
+    .not-build { margin-top: 11px; padding: 9px 10px; border-radius: 10px; border: 1px solid rgba(255,108,120,.22); background: rgba(255,108,120,.05); color: #ffc7cd; font-size: 12px; }
+
+    .parallel-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+    .parallel-card { padding: 17px; min-height: 210px; }
+    .parallel-card h3 { margin: 6px 0 8px; font-size: 18px; }
+    .parallel-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .converge { display: inline-flex; margin-top: 11px; padding: 5px 8px; border-radius: 8px; border: 1px solid rgba(82,216,232,.25); background: rgba(82,216,232,.07); color: #c9f7fb; font-size: 12px; font-weight: 800; }
+
+    .ui-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .ui-card { padding: 17px; min-height: 230px; }
+    .ui-card h3 { margin: 7px 0 7px; font-size: 18px; }
+    .ui-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .stage-chip { display: inline-flex; padding: 5px 8px; border-radius: 8px; color: var(--yellow); border: 1px solid rgba(242,203,104,.27); background: rgba(242,203,104,.07); font-size: 12px; font-weight: 850; }
+    .ui-card ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+
+    .gate-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .gate-card { padding: 18px; min-height: 230px; }
+    .gate-card h3 { margin: 8px 0; font-size: 19px; }
+    .gate-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .gate-card ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+    .gate-card.safety { border-color: rgba(255,108,120,.35); }
+    .gate-card.outcome { border-color: rgba(98,214,159,.35); }
+    .gate-card.experiment { border-color: rgba(173,155,255,.35); }
+
+    .cadence-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 15px; }
+    .cadence-panel { padding: 20px; }
+    .cadence-panel h3 { margin: 0 0 10px; }
+    .cadence-panel ul { margin: 0; padding-left: 19px; color: var(--muted); }
+    .cadence-panel li + li { margin-top: 7px; }
+    .sequence { margin-top: 13px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .sequence-step { min-height: 100px; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.022); }
+    .sequence-step strong { display: block; margin-bottom: 4px; }
+    .sequence-step span { color: var(--muted); font-size: 12px; }
+
+    .redline-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .redline { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 15px; border-radius: 14px; border: 1px solid rgba(255,108,120,.25); background: rgba(255,108,120,.05); }
+    .redline-icon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 10px; background: rgba(255,108,120,.14); color: var(--red); font-weight: 950; }
+    .redline strong { display: block; margin-bottom: 3px; }
+    .redline span { color: var(--muted); font-size: 13px; }
+
+    .decision-list { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .decision { padding: 14px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.022); }
+    .decision strong { display: block; margin-bottom: 4px; }
+    .decision span { color: var(--muted); font-size: 13px; }
+
+    .founder-summary { padding: 26px; border-color: rgba(98,168,255,.34); background: linear-gradient(135deg, rgba(98,168,255,.10), transparent 58%), linear-gradient(180deg, rgba(18,35,58,.97), rgba(10,23,39,.97)); }
+    .founder-summary h2 { margin: 0 0 10px; font-size: clamp(26px,3vw,40px); }
+    .founder-summary p { margin: 0; color: var(--muted); }
+    .founder-summary .command { margin-top: 16px; padding: 14px 16px; border-radius: 13px; border: 1px solid rgba(242,203,104,.34); background: rgba(242,203,104,.07); color: #f8e6aa; font-weight: 850; }
+
+    .source-note { margin-top: 16px; padding: 16px; color: var(--muted); font-size: 13px; }
+    footer { padding: 20px 0 44px; color: var(--muted); font-size: 12px; }
+
+    @media (max-width: 1120px) {
+      .metric-grid { grid-template-columns: repeat(2,1fr); }
+      .phase-grid { grid-template-columns: repeat(2,1fr); }
+      .parallel-grid { grid-template-columns: repeat(2,1fr); }
+      .ui-grid, .gate-grid { grid-template-columns: 1fr 1fr; }
+      .cadence-grid { grid-template-columns: 1fr; }
+      .sequence { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 22px, 1500px); }
+      .nav { display: none; }
+      header.hero { padding-top: 42px; }
+      .metric-grid, .phase-grid, .parallel-grid, .ui-grid, .gate-grid, .redline-grid, .decision-list { grid-template-columns: 1fr; }
+      .verdict-grid, .package-summary { grid-template-columns: 1fr 1fr; }
+      .package-grid { grid-template-columns: 1fr; }
+      .section-heading { flex-direction: column; align-items: start; gap: 8px; }
+      .sequence { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      :root { --bg:#fff; --panel:#fff; --line:#c9d2de; --text:#101820; --muted:#465565; }
+      body { background:#fff; color:#101820; }
+      .topbar { position:static; background:#fff; backdrop-filter:none; }
+      .nav, .print-button { display:none !important; }
+      .panel, .metric, table, details.milestone-detail { box-shadow:none; background:#fff; }
+      section { break-inside: avoid; }
+      th { position:static; background:#eaf0f6; }
+      .macro-flow, .timeline-panel, .table-wrap { overflow:visible; }
+      .flow-canvas, .timeline, table { min-width:0; }
+      .flow-canvas { transform:scale(.75); transform-origin:top left; width:133%; margin-bottom:-74px; }
+      .timeline { transform:scale(.78); transform-origin:top left; width:128%; margin-bottom:-62px; }
+      .phase-node, .phase-cluster, .phase-gate, .phase-card, .package-card, .parallel-card, .ui-card, .gate-card, .redline, .decision, .slot, .lane-name { background:#fff !important; }
+      details.milestone-detail { break-inside: avoid; }
+      details.milestone-detail > summary::after { display:none; }
+      details.milestone-detail:not([open]) .detail-body { display:block; }
+    }
+  
+    .package-card.discovery { border-color: rgba(242,203,104,.50); background: rgba(242,203,104,.055); }
+    .execution-mode {
+      margin: 0 0 16px; padding: 16px 18px; border-radius: 14px;
+      border: 1px solid rgba(242,203,104,.38); background: rgba(242,203,104,.065);
+      color: #f6e7b8; font-size: 14px;
+    }
+    .execution-mode strong { color: #fff2c9; }
+    .micro-badge {
+      display: inline-flex; align-items:center; padding: 4px 8px; border-radius: 999px;
+      border: 1px solid rgba(242,203,104,.35); background: rgba(242,203,104,.08);
+      color: #f6df99; font-size: 11px; font-weight: 850; letter-spacing:.04em;
+    }
+</style>
+</head>
+<body>
+<div class="topbar">
+<div class="shell topbar-inner">
+<div class="brand"><span class="brand-mark">笛</span><span>支线 v0.3.2｜阶段、里程碑与执行包规划 · Rev2</span></div>
+<nav aria-label="页面导航" class="nav">
+<a href="#verdict">总裁决</a><a href="#superiority">价值对比</a>
+<a href="#flow">总流程</a>
+<a href="#timeline">时间线</a>
+<a href="#milestones">里程碑</a>
+<a href="#packages">执行包</a>
+<a href="#dependencies">依赖</a>
+<a href="#gates">门禁</a>
+<button class="print-button" onclick="window.print()">打印 / 存为 PDF</button>
+</nav>
+</div>
+</div>
+<header class="hero shell">
+<span class="eyebrow"><span class="pulse"></span> Proposed execution plan · Founder review candidate</span>
+<h1>笛语支线 v0.3.2：只有最终内容制作交付包在公平对照下显著优于事实喂齐的同等级普通 LLM，功能价值才算成功。</h1>
+<p class="hero-copy">工程路线仍保持 5 个阶段、9 个里程碑和 25+2 个执行包，但所有复杂度都必须回到一个问题：它是否让客户最终拿到的内容制作交付包，明显优于客户把同样事实直接交给同等级大模型所得的结果。</p>
+<div class="notice">文档性质：建议执行分解，不等同于已签署 PRD，也不构成自动开工授权。本版只把功能价值裁决写进 BR1-EP00、BR4 和 BR7；不实际运行对比、不新增数据库表、不建设评测台。20–24 周仍是 4 人容量场景，单 worktree 默认串行。</div>
+<div class="metric-grid">
+<article class="metric primary"><div class="label">阶段</div><div class="value">5</div><div class="detail">基础与首切片、数据与决策、内容 MVP、增强与证据、Pilot 与发布</div></article>
+<article class="metric"><div class="label">正式里程碑</div><div class="value">9</div><div class="detail">BR0–BR8；沿用单一编号，不再维护 R1/R2 第二套路标</div></article>
+<article class="metric"><div class="label">执行包</div><div class="value">25 + 2</div><div class="detail">25 个通用执行包（含 1 个零代码 EP00）；2 个 BR5 视觉条件包</div></article>
+<article class="metric warn"><div class="label">4 人容量场景（非承诺）</div><div class="value">20–24 周*</div><div class="detail">假设 2 后端/AI + 1 前端 + 1 产品/设计/QA；当前模式默认按依赖串行</div></article>
+<article class="metric"><div class="label">功能价值门</div><div class="value">EP00 → BR4 → BR7</div><div class="detail">1 例早期穿刺；10 例内容 MVP 定型；Pilot 由真实品牌使用者盲化选择</div></article>
+</div>
+</header>
+<main class="shell">
+<section id="verdict">
+<div class="section-heading">
+<div><div class="kicker">01 · Executive verdict</div><h2>总裁决：先做垂直价值，后做横向完整</h2></div>
+<p>最高风险不是数据库或页面能否写出来，而是最终交付包能否在公平条件下明显胜过客户自己使用普通 LLM。真实样品先行，公平对照随后，工程复杂度必须为差距服务。</p>
+</div>
+<div class="panel verdict">
+<h3>推荐执行形态：一条内容主线 + 一道独立安全门 + 一套极薄公平对照</h3>
+<p>主路径：BR0 → BR1-EP00（1 例 B1 公平对照）→ BR1-EP01…04 → BR2 → BR3 → BR4（10 例优越性对比）→ BR6 → BR7（品牌方盲化选择）→ BR8。条件支路：BR5 在 BR4 后与 BR6 逻辑并行。</p>
+<div class="verdict-grid"><div class="mini-verdict"><strong>先见成品</strong><span>EP00 不写代码、不定完整 Schema；同题同事实与 B1 Fact-fed One-shot 比较，Founder 只给 YES / CONDITIONAL / NO。</span></div>
+<div class="mini-verdict"><strong>功能价值</strong><span>BR4 用 10 个预先固定案例判断内容制作交付包是否达到 CLEARLY_SUPERIOR，而不是看字段、页数和 Trace 长度。</span></div>
+<div class="mini-verdict"><strong>真实对手</strong><span>主基线是事实已喂齐的同等级普通 LLM；B0 裸问不得作为成功证据，B3 只诊断 Runtime 是否超越 Prompt 编译。</span></div>
+<div class="mini-verdict"><strong>安全独立</strong><span>Delivery Safety Gate 仍为独立硬门。好内容不能豁免错误 SKU、库存、事实、权限或安全违规。</span></div>
+<div class="mini-verdict"><strong>工程边界</strong><span>不建评分卡、对比 Runner、评测控制台或回归基线库；模块化单体、单 PostgreSQL、单 Worker、OSS、ECS、无 Billing。</span></div>
+</div>
+</div>
+</section><section id="superiority">
+<div class="section-heading">
+<div><div class="kicker">02 · Functional value standard</div><h2>功能价值唯一标准：公平条件下，内容制作交付包必须显著优于普通 LLM</h2></div>
+<p>这项比较只测最终产出物，不测项目自证。它不替代安全门，也不等同于客户付费结果。</p>
+</div>
+<div class="panel verdict">
+<h3>SUCCESS-FV-01｜同题、同事实、同等级模型、同输出合同</h3>
+<p>笛语支线的功能价值只有在中性呈现、随机顺序、输入等价的条件下成立。系统不能靠对手缺数据、输出更长、排版更漂亮或暴露更多内部结构取得假胜利。</p>
+<div class="verdict-grid">
+<div class="mini-verdict"><strong>同题</strong><span>场景、受众、商业目标、目标平台和任务要求完全一致。</span></div>
+<div class="mini-verdict"><strong>同事实</strong><span>商品事实、品牌规则、库存、图片、禁用项和不确定性完整等价。</span></div>
+<div class="mini-verdict"><strong>同模型</strong><span>尽量使用同一 provider / model / version；差异必须如实披露。</span></div>
+<div class="mini-verdict"><strong>同输出合同</strong><span>两边都交 3 候选、推荐取舍、3 Hook、正文/口播、脚本、镜头和商品引用。</span></div>
+<div class="mini-verdict"><strong>同中性模板</strong><span>去标识、统一格式、随机 A/B；不以 Logo、文件数量、Trace 长短暴露组别。</span></div>
+</div>
+</div>
+<div class="table-wrap" style="margin-top:16px;">
+<table>
+<thead><tr><th>对照</th><th>普通 LLM 获得什么</th><th>回答的问题</th><th>地位</th></tr></thead>
+<tbody>
+<tr><td><strong>B0 裸问</strong></td><td>只有任务描述，没有完整商品事实</td><td>有数据的一方能否打败没数据的一方</td><td><strong>禁止作为成功证据</strong></td></tr>
+<tr><td><strong>B1 Fact-fed One-shot</strong></td><td>全部事实、规则、库存、平台与同一输出合同；一次生成</td><td>客户把资料直接贴给同等级模型能做到什么程度</td><td><strong>主对照，BR1/BR4 必做</strong></td></tr>
+<tr><td><strong>B2 Serious User</strong></td><td>与 B1 相同，允许 2–3 轮追问与修正</td><td>认真使用普通模型的客户能否追平</td><td>BR4 从 10 例中预选 3 例抽样</td></tr>
+<tr><td><strong>B3 Compiled-prompt</strong></td><td>系统编译后的完整 Prompt 原样交给同一模型单轮生成</td><td>完整 Runtime 是否超越“事实库 + Prompt 编译器”</td><td>BR4 从 10 例中预选 3 例诊断</td></tr>
+</tbody>
+</table>
+</div>
+<div class="gate-grid" style="margin-top:16px;">
+<article class="panel gate-card experiment"><div class="node-id purple">唯一主问题</div><h3>哪一份愿意直接拿去制作？</h3><p>在不知道来源的情况下，哪一份可以直接交给内容团队进入拍摄、剪辑或发布准备，而不需要实质性重写？</p><ul><li>A</li><li>B</li><li>两份都可</li><li>两份都不可</li><li>无法判断</li></ul></article>
+<article class="panel gate-card safety"><div class="node-id" style="color:var(--red)">独立必要条件</div><h3>Delivery Safety Gate</h3><p>内容再吸引人，也不能豁免事实、SKU、库存、租户、品牌、品类与人工发布边界。</p><ul><li>安全失败即 BLOCK</li><li>不与内容偏好相互抵消</li><li>无综合总分</li></ul></article>
+<article class="panel gate-card outcome"><div class="node-id green">商业验证</div><h3>客户采用与付费另行证明</h3><p>公平对比证明功能价值；Pilot 中的接受、发布、编辑负担、复购与付费证据证明商业价值。</p><ul><li>商业结果只读</li><li>不自动回流生产</li><li>不替代功能价值门</li></ul></article>
+</div>
+<div class="table-wrap" style="margin-top:16px;">
+<table>
+<thead><tr><th>定位层</th><th>只回答什么</th><th>判断方式</th><th>禁止误读</th></tr></thead>
+<tbody>
+<tr><td><strong>L1 搭配决策</strong></td><td>是否专业、有洞察、有取舍，不是普通常识</td><td>A / B / 持平 / 都不成立</td><td>不能被 L2/L5 的结构优势掩盖</td></tr>
+<tr><td><strong>L2 事实正确</strong></td><td>SKU、库存、材质、价格与品牌事实是否真实</td><td>PASS / BLOCK</td><td>对照组同样必须获得完整事实</td></tr>
+<tr><td><strong>L3 平台原生</strong></td><td>是否真正适配平台，而非同稿换词</td><td>A / B / 持平 / 都不成立</td><td>不能只看标题和 Emoji</td></tr>
+<tr><td><strong>L4 可制作性</strong></td><td>脚本—镜头—SKU 是否对得上，能否直接执行</td><td>A / B / 持平 / 都不可用</td><td>整包更长不等于更可制作</td></tr>
+<tr><td><strong>L5 可复现追溯</strong></td><td>来源、版本、取舍与替换影响是否可解释</td><td>PASS / FAIL</td><td>结构优势不能单独证明内容代差</td></tr>
+</tbody>
+</table>
+</div>
+<div class="gate-grid" style="margin-top:16px;">
+<article class="panel gate-card experiment"><div class="node-id purple">BR1-EP00</div><h3>1 例早期穿刺</h3><p>对 B1 做零代码 A/B。YES：笛语包明显更愿意拿去制作；CONDITIONAL：有方向但需改 Prompt/最小合同；NO：B1 更好或两份都不可。</p></article>
+<article class="panel gate-card experiment"><div class="node-id purple">BR4</div><h3>10 例内容 MVP 定型门</h3><p>B1 全 10 例；B2 与 B3 各预选 3 例。9–10 例明确偏好笛语且至少 2/3 个预先指定难例胜出，方可记为 CLEARLY_SUPERIOR。</p></article>
+<article class="panel gate-card outcome"><div class="node-id green">BR7</div><h3>品牌方盲化选择</h3><p>用真实 Pilot 任务按同一中性方法比较，由实际使用者判断优先采用哪份；结果进入商业证据，不建设新界面或统计平台。</p></article>
+</div>
+<div class="table-wrap" style="margin-top:16px;">
+<table>
+<thead><tr><th>BR4 结果</th><th>解释</th><th>后续动作</th></tr></thead>
+<tbody>
+<tr><td><strong>CLEARLY_SUPERIOR</strong></td><td>笛语明确胜出 9–10 例，至少 2/3 难例胜出，Safety Gate 全通过；优势不能只来自 L2/L5</td><td>允许宣称内容主产品功能价值定型，进入 Pilot</td></tr>
+<tr><td><strong>ADVANTAGE_BUT_NOT_DECISIVE</strong></td><td>笛语胜出 7–8 例</td><td>承认有优势但无代差；先修内容合同/Prompt，不扩大 Runtime</td></tr>
+<tr><td><strong>NO_MATERIAL_ADVANTAGE</strong></td><td>笛语胜出不超过 6 例，或大量“两份都不可”</td><td>不得宣称功能成功；暂停扩建，回到产品/Prompt 发现</td></tr>
+<tr><td><strong>PROMPT_COMPILER_DOMINANT</strong></td><td>B1 被明显击败，但 B3 与笛语基本持平</td><td>内容产品可能成立，但完整 Runtime 增量未证明；优先收敛为更轻架构</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="flow">
+<div class="section-heading">
+<div><div class="kicker">03 · Macro flow</div><h2>五阶段总流程与关键汇合点</h2></div>
+<p>并行只能发生在明确无共享真源冲突的工作面；所有并行支路都必须在下一个用户旅程门之前汇合。</p>
+</div>
+<div class="legend">
+<span class="legend-item"><span class="legend-dot serial"></span>关键路径</span>
+<span class="legend-item"><span class="legend-dot parallel"></span>允许局部并行</span>
+<span class="legend-item"><span class="legend-dot optional"></span>条件支路</span>
+<span class="legend-item"><span class="legend-dot gate"></span>用户价值 / 风险门</span>
+</div>
+<div class="panel macro-flow">
+<div class="flow-canvas">
+<article class="phase-cluster">
+<div class="node-id">阶段 I</div>
+<h3>基础与首条价值切片</h3>
+<div class="mini-stack">
+<div class="mini-node"><strong>BR0</strong> 合同、骨架、Tenant 根</div><div class="mini-node" style="border-color:rgba(242,203,104,.38);background:rgba(242,203,104,.07)"><strong>BR1-EP00</strong> 1 例 B1 公平对照 · 零代码穿刺</div>
+<div class="mini-node cyan"><strong>BR1</strong> 首条 S0 决策 + 内容交付</div>
+</div>
+<p>先确认笛语样品是否明显优于事实喂齐的普通 LLM，再让 BR1 代码和 Schema 围绕真实优势生长。</p>
+</article>
+<div class="arrow"><span></span></div>
+<article class="phase-cluster">
+<div class="node-id">阶段 II</div>
+<h3>数据面与专业决策深化</h3>
+<div class="mini-stack">
+<div class="mini-node"><strong>BR2</strong> 薄多租户、多品牌、S1、血缘</div>
+<div class="mini-node cyan"><strong>BR3</strong> 规则、库存、深度多解与返工</div>
+</div>
+<p>把第一条链路从“能跑”升级为“可安全复用”。</p>
+</article>
+<div class="arrow"><span></span></div>
+<article class="phase-gate">
+<div class="diamond"><span>MVP</span></div>
+<div class="node-id yellow">阶段 III · BR4</div>
+<h3>内容主产品门</h3>
+<p>3 个创意方向、平台原生脚本/镜头、3+1 交付包，并通过 10 例 Deliverable Superiority Test。</p>
+</article>
+<div class="arrow"><span></span></div>
+<article class="phase-cluster">
+<div class="node-id purple">阶段 IV</div>
+<h3>条件视觉与证据捕获</h3>
+<div class="mini-stack">
+<div class="mini-node purple"><strong>BR5</strong> 可选概念视觉</div>
+<div class="mini-node green"><strong>BR6</strong> 只读商业结果 + Evidence</div>
+</div>
+<p>BR5 与 BR6 并行；视觉不阻塞文本内容主路径。</p>
+</article>
+<div class="arrow"><span></span></div>
+<article class="phase-cluster">
+<div class="node-id green">阶段 V</div>
+<h3>Pilot 与发布裁决</h3>
+<div class="mini-stack">
+<div class="mini-node green"><strong>BR7</strong> 2 Tenant / 3 Brand 真实 Pilot</div>
+<div class="mini-node"><strong>BR8</strong> ECS 加固、恢复与 Go/No-Go</div>
+</div>
+<p>真实品牌使用者进行盲化交付物选择；商业结果只读，不自动回流生产，最终由 Founder 裁决。</p>
+</article>
+</div>
+<div class="critical-ribbon">关键路径：BR0 → BR1-EP00（1例B1）→ BR1-EP01…04 → BR2 → BR3 → BR4（10例优越性门）→ BR6 → BR7（品牌方选择）→ BR8　｜　条件支路：BR4 → BR5 →（含视觉的 Pilot）</div>
+</div>
+</section>
+<section id="phases">
+<div class="section-heading">
+<div><div class="kicker">04 · Phase model</div><h2>五个阶段分别证明什么</h2></div>
+<p>每个阶段只回答一个商业或工程问题。不能用后续平台能力反向扩大早期施工范围。</p>
+</div>
+<div class="phase-grid">
+<article class="panel phase-card"><div class="number">1</div><span class="phase-tag">BR0–BR1</span><h3>模型能否先长出一份明显胜过 B1 的可卖样品？</h3><p>先在聊天窗口用同题、同事实、同等级模型和同输出合同完成零代码 A/B；通过后，Founder 再让代码复现这条优势。</p><ul><li>1–2 天 EP00；最多 2 次人工迭代</li><li>笛语样品 vs B1 Fact-fed One-shot</li><li>中性格式、随机 A/B、Founder 判断</li><li>通过后才冻结最小字段并进入代码闭环</li></ul></article>
+<article class="panel phase-card"><div class="number">2</div><span class="phase-tag">BR2–BR3</span><h3>能不能安全复制？</h3><p>同一系统能否服务多个 Tenant、多个 Brand，并保持规则、商品、库存和内容引用不串用。</p><ul><li>Tenant 安全根</li><li>同租户跨品牌</li><li>共享确定性规则引擎</li><li>定向返工与血缘</li></ul></article>
+<article class="panel phase-card"><div class="number">3</div><span class="phase-tag">BR4</span><h3>内容是否形成可重复的功能代差？</h3><p>同一专业决策不仅要编译成平台原生、可拍摄内容，还要在 10 个预先固定案例中明显胜过 B1。</p><ul><li>B1 全 10 例</li><li>B2/B3 各抽样 3 例</li><li>9–10 例明确胜出</li><li>Safety Gate 独立通过</li></ul></article>
+<article class="panel phase-card"><div class="number">4</div><span class="phase-tag">BR5–BR6</span><h3>增强能力是否克制？</h3><p>视觉是可选渲染；商业结果只读；Evidence 可以积累，但不能自动改写生产真源。</p><ul><li>CONCEPT_ONLY</li><li>Publication Metric 导入</li><li>Knowledge Candidate</li><li>RegressionCase</li></ul></article>
+<article class="panel phase-card"><div class="number">5</div><span class="phase-tag">BR7–BR8</span><h3>真实品牌方是否也优先采用笛语包？</h3><p>在真实 Pilot 任务中继续用中性 A/B，让实际使用者选择愿意拿去制作的交付包，并与付费、发布、复购证据一起裁决。</p><ul><li>2 Tenant / 3 Brand</li><li>≥30 真实任务建议值</li><li>恢复与安全演练</li><li>Founder Go/No-Go</li></ul></article>
+</div>
+</section>
+<section id="timeline">
+<div class="section-heading">
+<div><div class="kicker">05 · Calendar view</div><h2>4 人容量场景：20–24 周（非承诺）</h2></div>
+<p>依赖顺序是规范，日历不是。当前 Founder + AI 窗口模式下，同一 worktree 一律串行；只有独占 worktree、文件边界互斥且接口已冻结时才允许真并行。</p>
+</div>
+<div class="panel timeline-panel">
+<div class="timeline">
+<div class="timeline-head">
+<div>工作面</div><div>BR0<br/>1周</div><div>BR1<br/><small>EP00 1–2天 + 3–4周</small></div><div>BR2<br/>3周</div><div>BR3<br/>3周</div><div>BR4<br/>4–5周</div><div>BR5<br/>2周</div><div>BR6<br/>2周</div><div>BR7<br/>3–4周</div><div>BR8<br/>2–3周</div>
+</div>
+<div class="timeline-row">
+<div class="lane-name">产品 / 用户旅程</div>
+<div class="slot"><div class="bar yellow">边界与骨架<small>可登录 / Draft</small></div></div>
+<div class="slot"><div class="bar green">EP00 B1 → 首条闭环<small>先做公平对照，再编码</small></div></div>
+<div class="slot"><div class="bar">多租户/多品牌<small>S1 与跨品牌</small></div></div>
+<div class="slot"><div class="bar">决策深化<small>库存 / 返工 / 压测场景</small></div></div>
+<div class="slot"><div class="bar green">内容 MVP<small>3+1 多平台包</small></div></div>
+<div class="slot"><div class="bar purple optional">概念视觉<small>条件支路</small></div></div>
+<div class="slot"><div class="bar cyan">结果记录<small>只读 Outcome / Evidence</small></div></div>
+<div class="slot"><div class="bar orange">真实 Pilot<small>2 Tenant / 3 Brand</small></div></div>
+<div class="slot"><div class="bar red">Release Gate<small>恢复 / 安全 / Founder</small></div></div>
+</div>
+<div class="timeline-row">
+<div class="lane-name">后端 / 数据</div>
+<div class="slot"><div class="bar">Tenant 根 + DB<small>API / Worker / ECS骨架</small></div></div>
+<div class="slot"><div class="bar">最小 Task/Run<small>新表当日 tenant_id NOT NULL</small></div></div>
+<div class="slot"><div class="bar cyan">RLS / 复合外键<small>Upload / Import / Storage scope</small></div></div>
+<div class="slot"><div class="bar">Snapshot / Rule<small>L5A/L5C/L9 同引擎</small></div></div>
+<div class="slot"><div class="bar">Content Compiler<small>Canonical Package</small></div></div>
+<div class="slot"><div class="bar purple optional">Media provenance<small>Render-only</small></div></div>
+<div class="slot"><div class="bar cyan">Outcome import<small>Evidence / Regression</small></div></div>
+<div class="slot"><div class="bar orange">Pilot data<small>真实记录</small></div></div>
+<div class="slot"><div class="bar red">Backup / Restore<small>Monitoring / Rollback</small></div></div>
+</div>
+<div class="timeline-row">
+<div class="lane-name">前端 / 交互</div>
+<div class="slot"><div class="bar yellow">最小壳<small>登录 / Draft</small></div></div>
+<div class="slot"><div class="bar green">三张核心屏<small>向导 / 比较 / 内容</small></div></div>
+<div class="slot"><div class="bar">任务索引 / 品牌<small>Import feedback</small></div></div>
+<div class="slot"><div class="bar">完整 Trace / 返工<small>影响传播</small></div></div>
+<div class="slot"><div class="bar green">平台工作台<small>审核 / 导出</small></div></div>
+<div class="slot"><div class="bar purple optional">视觉预览<small>不建编辑器</small></div></div>
+<div class="slot"></div>
+<div class="slot"><div class="bar orange">商业结果只读面<small>Pilot 首次有数据</small></div></div>
+<div class="slot"><div class="bar red">运维与就绪<small>12行 One-Pager</small></div></div>
+</div>
+<div class="timeline-row">
+<div class="lane-name">验证 / 风险</div>
+<div class="slot"><div class="bar yellow">最小 CI<small>不建自证森林</small></div></div>
+<div class="slot"><div class="bar">EP00 B1 A/B + E2E<small>样品先行；真实内容包</small></div></div>
+<div class="slot"><div class="bar cyan">跨租户负例<small>0 泄漏</small></div></div>
+<div class="slot"><div class="bar">专业高压场景<small>无解 / 替换 / 突变</small></div></div>
+<div class="slot"><div class="bar green">内容硬门<small>事实 / SKU / 脚本镜头</small></div></div>
+<div class="slot"><div class="bar purple optional">视觉 Fidelity<small>FORCED_ON 内测</small></div></div>
+<div class="slot"><div class="bar cyan">Evidence / Regression<small>无自动晋级</small></div></div>
+<div class="slot"><div class="bar orange">Pilot 风险集<small>商业结果不是卡口</small></div></div>
+<div class="slot"><div class="bar red">恢复 / 性能 / 安全<small>具名 P0 全过</small></div></div>
+</div>
+<div class="timeline-note">容量估算假设：2 名后端/AI、1 名前端、1 名产品/设计/QA，Founder 每周可作 2 次快速裁决。当前实际执行为 Founder + AI 窗口：单 worktree 默认串行；并行支路必须各自独占 branch/worktree、避免同文件/同 migration/同 lockfile 写入，并由一个集成者在汇合门合并。</div>
+</div>
+</div>
+</section>
+<section id="milestones">
+<div class="section-heading">
+<div><div class="kicker">06 · Milestone register</div><h2>9 个里程碑总表</h2></div>
+<p>“主要交付”只列产品与运行资产；计划、变更说明和收口回报不单独计入交付包数量，避免文档数量重新变成进度。</p>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>里程碑</th><th>周期</th><th>用户 / 商业目标</th><th>执行包</th><th>主要交付</th><th>前置依赖</th><th>退出门</th></tr></thead>
+<tbody>
+<tr><td class="milestone"><span class="milestone-pill">BR0</span><br/><strong>运行基线</strong></td><td>1 周</td><td>建立可运行骨架，不建立“治理平台”。</td><td class="package-count">2 包</td><td>v0.3.2 生效候选、Pinned Reuse、FastAPI/React/Worker/Postgres、Tenant 根、ECS staging 骨架。</td><td class="serial">无；项目起点</td><td>本地与干净 ECS 可登录、创建 Tenant/Brand/Draft Task；Billing surface=0。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR1</span><br/><strong>首条商业切片</strong></td><td>EP00 1–2 天 + 3–4 周</td><td>先用 B1 公平对照确认模型能长出 Founder 愿意卖且明显更优的内容，再证明系统可重复交付。</td><td class="package-count">5 包</td><td>1 例零代码 A/B 样品、S0、最小商品池、女装规则、3 候选、DecisionTrace、视频号单平台内容包、ArtifactLineage、模型 usage/cost、审核导出。</td><td class="serial">BR0</td><td>EP00 对 B1：YES/CONDITIONAL 才进入代码施工；浏览器完成 Create→Decision→Content→Review→Export；未知不补写。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR2</span><br/><strong>薄多租户与多品牌</strong></td><td>3 周</td><td>让首条链路可以安全复制给多个客户和品牌。</td><td class="package-count">3 包</td><td>BR1 已带 tenant_id 的真实表；TenantMembership、强制作用域 Repository、对象存储/队列/审计/导出作用域、RLS、BrandOnboarding、TaskBrandBinding、S1 混合导入。</td><td class="serial">BR1 所有客户表已 tenant_id NOT NULL；品牌作用域引用已使用 tenant-matched 复合外键。</td><td>2 Tenant / 3 Brand 种子可运行；同租户跨品牌成功；跨租户访问不可辨识且 0 泄漏。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR3</span><br/><strong>专业决策深化</strong></td><td>3 周</td><td>从“能生成”升级为“能稳定取舍、替代和正确拒绝”。</td><td class="package-count">3 包</td><td>共享 RuleEngine、S2 Snapshot/TTL、库存替代、Skill/Ranker 深化、完整 Trace、节点级返工传播。</td><td class="serial">BR2 的租户/品牌/商品边界</td><td>反常识、无解、库存替换、场景突变、伪权重阻断等具名风险通过。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR4</span><br/><strong>内容主产品 MVP</strong></td><td>4–5 周</td><td>输出可直接制作的 3+1 内容包，并用 10 例公平对照判断是否形成明确功能代差。</td><td class="package-count">4 包</td><td>Narrative/Style/Platform/Hook Profile、3 Creative Directions、Copy/Script/Shot/Interaction、平台原生编译、Reviewer、Delivery Safety Gate、多格式导出、Deliverable Superiority Test。</td><td class="serial">BR3 已冻结的 Decision truth 与 Lineage</td><td>B1 全 10 例，B2/B3 各预选 3 例；笛语 9–10 例明确胜出、至少 2/3 难例胜出且 Safety Gate 全过，才可记为 CLEARLY_SUPERIOR。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill visual">BR5</span><br/><strong>可选概念视觉</strong></td><td>2 周</td><td>提供 CONCEPT_ONLY 视觉，不让视觉反向改判商品与搭配。</td><td class="package-count optional-text">2 条件包</td><td>Image Adapter、媒体 provenance、ShotPlan 输入、视觉 Fidelity 检查、ON/OFF/FORCED_ON、定向返工。</td><td class="serial">BR4；可与 BR6 并行</td><td>仅当 Pilot 选择视觉时阻断对应任务；文本内容主路径不受阻。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR6</span><br/><strong>结果与证据捕获</strong></td><td>2 周</td><td>记录真实发布和客户结果，但不让数据自动操控生产。</td><td class="package-count">2 包</td><td>Commercial Outcome v0.1 最小记录：平台、发布时间、链接、人工编辑时长、客户动作及必要关联 ID；人工/CSV 导入；Evidence/KnowledgeCandidate/RegressionCase。</td><td class="serial">BR4；与 BR5 并行</td><td>Outcome surface=READ_ONLY；自动反馈=false；先能可靠记 5 条真实记录，不提前冻结全平台指标字段。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR7</span><br/><strong>真实 Pilot</strong></td><td>3–4 周</td><td>用真实品牌、真实任务和品牌方盲化选择验证：功能优势是否对付费者仍然成立。</td><td class="package-count">3 包</td><td>2 Tenant / 3 Brand 接入、真实内容任务、品牌使用者中性 A/B 选择、内容接受/发布/编辑/复购/付费证据、Pilot Closeout。</td><td class="serial">BR4 + BR6；视觉 Pilot 另需 BR5</td><td>跨租户事故=0；品牌方选择证据已形成；实际内容被采用且有编辑负担与商业结果；不以内部评分替代。</td></tr>
+<tr><td class="milestone"><span class="milestone-pill">BR8</span><br/><strong>生产加固与发布裁决</strong></td><td>2–3 周</td><td>把 Pilot 能力变成可重复部署、恢复和交付的 Release Candidate。</td><td class="package-count">3 包</td><td>ECS/VPC/RAM/OSS/RDS/SLS、监控、备份恢复、性能、回滚、安全、12 行 Readiness One-Pager。</td><td class="serial">BR7 真实缺陷与容量证据</td><td>本 Release 绑定的 P0 风险场景全过；Founder PASS / CONDITIONAL / BLOCK；无 Billing/自动发布。</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="packages">
+<div class="section-heading">
+<div><div class="kicker">07 · Execution package register</div><h2>每个里程碑的执行包拆解</h2></div>
+<p>执行规则：每个里程碑通常 2–4 个代码执行包；BR1 额外增加 1 个严格限时的零代码 EP00。Plan 和收口不算执行包，也不要求每包都走完整 Guardian/Founder 大审。</p>
+</div>
+<div class="package-summary">
+<div class="package-stat"><strong>25</strong><span>通用必需执行包（含 EP00）</span></div>
+<div class="package-stat"><strong>2</strong><span>BR5 视觉条件执行包</span></div>
+<div class="package-stat"><strong>2–4</strong><span>每里程碑通常代码包数</span></div>
+<div class="package-stat"><strong>1</strong><span>每里程碑统一收口</span></div>
+</div>
+<details class="milestone-detail" open="">
+<summary><div class="summary-left"><span class="milestone-pill">BR0</span><div class="summary-title"><strong>运行基线｜2 包</strong><span>先冻结最小边界，再搭可运行骨架。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card critical"><div class="package-id">BR0-EP01</div><h4>合同收敛与复用边界</h4><p>把 v0.3.2、Canonical v0.2 和可复用 M0/M1 资产收敛成一套施工口径。</p><dl><dt>输出</dt><dd>PRD v0.3.2、简洁变更说明、Pinned Reuse Ledger、最多 2 份必要 ADR。</dd><dt>前置</dt><dd>Founder 确认最新裁决。</dd><dt>承接</dt><dd>为 EP02 提供目录、对象和非目标。</dd><dt>并行</dt><dd>不可与运行代码无边界并行；先冻结最小契约。</dd></dl><div class="not-build">不建设：文档生成平台、Checker 森林、镜像 PRD、角色投影体系。</div></article>
+<article class="package-card critical"><div class="package-id">BR0-EP02</div><h4>Runtime / ECS Skeleton 与 Tenant 根</h4><p>建立 React + FastAPI + Worker + PostgreSQL + OSS Adapter 的最小模块化单体。</p><dl><dt>输出</dt><dd>runtime 目录、首个 migration、Tenant/TenantMembership/Brand 根、Docker Compose、ECS staging Runbook、最小 CI。</dd><dt>前置</dt><dd>BR0-EP01。</dd><dt>承接</dt><dd>为 BR1 的真实垂直切片提供运行和部署底座。</dd><dt>串行</dt><dd>EP01 → EP02。</dd></dl><div class="not-build">不建设：Kubernetes、微服务、Billing、租户自助后台、通用工作流。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail" open="">
+<summary><div class="summary-left"><span class="milestone-pill">BR1</span><div class="summary-title"><strong>首条商业切片｜1 个零代码穿刺 + 4 个代码包</strong><span>先让 Provider 产出真实样品，再冻结最小字段并实现浏览器闭环。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card discovery">
+<div class="package-id">BR1-EP00</div><span class="micro-badge">NO CODE · 1–2 DAYS</span>
+<h4>真实商品 × 单平台 × B1 公平对照穿刺</h4>
+<p>在聊天窗口人工生成笛语样品，同时让事实喂齐的同等级普通 LLM 按同一输出合同生成 B1；零代码、零持久化、最多 2 轮。</p>
+<dl><dt>输入</dt><dd>1 张真实商品图、真实品牌事实、目标平台＝视频号、明确受众/场景；两边事实完全等价。</dd><dt>输出合同</dt><dd>两边都输出 3 候选、推荐与 tradeoff、3 Hook、正文/口播、脚本、镜头与商品引用。</dd><dt>盲化</dt><dd>统一中性模板、随机 A/B；Founder 不看来源，只判断哪份愿意直接拿去制作。</dd><dt>判据</dt><dd>YES：笛语明显优于 B1；CONDITIONAL：有方向但需改 Prompt/合同；NO：B1 更好或两份都不可。</dd><dt>承接</dt><dd>YES/CONDITIONAL 才允许 BR1 代码施工；真实样品用于最小 Schema 和导出模板。</dd></dl>
+<div class="not-build">不建设：Runner、评测集、评分卡、Prompt Tournament、基准库、数据库或 UI。</div>
+</article><article class="package-card critical"><div class="package-id">BR1-EP01</div><h4>邀请制 IAM、TenantContext 与任务向导</h4><p>Founder 登录、邀请、最小任务索引、S0 上传和创建任务向导。</p><dl><dt>输出</dt><dd>Session/Auth、Founder Operator、TenantContext、S0 Upload、Draft Task、UI-01；本包新建的客户表全部 tenant_id NOT NULL。</dd><dt>前置</dt><dd>BR0。</dd><dt>并行</dt><dd>仅在 EP00 完成后；若 EP01/EP02 各自独占 worktree 且不写同一 migration/contract，可局部并行，否则串行。</dd><dt>承接</dt><dd>为后续 Run 固化服务端租户作用域。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR1-EP02</div><h4>最小商品池、事实优先级与女装规则</h4><p>只做一个品类和一套足以支撑真实任务的商品事实与硬规则。</p><dl><dt>输出</dt><dd>Manual Product Pool、VisualFact/Unknown、Womenswear Rule subset、Candidate eligibility；Brand/Product 等品牌作用域表以 (tenant_id, brand_id/record_id) 形成 tenant-matched 约束。</dd><dt>前置</dt><dd>BR0 数据契约。</dd><dt>并行</dt><dd>与 EP01 只在独占 worktree + 互斥文件边界下并行；须在 EP03 前汇合。</dd><dt>承接</dt><dd>提供合法候选空间。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR1-EP03</div><h4>单 Provider、多候选与 DecisionTrace</h4><p>用一个 Provider 和最小 Styling Skill 生成 3 个实质候选并支持正确拒绝。</p><dl><dt>输出</dt><dd>ProviderAdapter、Skill v0.1、Candidate/Ranker、DecisionBundle/Trace、UI-02；每次调用落盘 provider/model、input/output/cached tokens（若可得）、latency、usage source、pricing version 与 estimated_cost。</dd><dt>前置</dt><dd>EP01 + EP02。</dd><dt>串行</dt><dd>必须在事实与规则稳定后集成。</dd><dt>承接</dt><dd>为内容编译提供单一 Decision truth。</dd><dt>退出</dt><dd>调用成本可按 Run/Step 查询；字段缺失时记录 null/UNAVAILABLE，不为成本记录建设 Billing 或仪表盘。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR1-EP04</div><h4>视频号内容切片、血缘、审核与导出</h4><p>首发平台已裁决为视频号；本包形成可用而非占位的内容制作包，其余平台留到 BR4。</p><dl><dt>输出</dt><dd>最小 ContentProductionPackage、3 个标题/Hook、Copy/Script/Shot 最小字段、ArtifactLineage、UI-03、ACCEPT/MINOR_EDIT、JSON/DOCX/PDF。</dd><dt>前置</dt><dd>EP03 + EP00 真实样品/字段观察清单。</dd><dt>承接</dt><dd>BR2 扩大 Tenant/Brand；BR4 扩为多平台 3+1 包。</dd><dt>退出</dt><dd>一条真实 Founder 样例浏览器闭环。</dd></dl><div class="not-build">不建设：全平台、CMS、视频编辑器、自动发布、完整返工工作台。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail">
+<summary><div class="summary-left"><span class="milestone-pill">BR2</span><div class="summary-title"><strong>薄多租户与多品牌｜3 包</strong><span>安全根是 tenant_id；brand_id 只表达品牌语义。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card critical"><div class="package-id">BR2-EP01</div><h4>Tenant-scoped Repository 与数据库隔离</h4><p>不再补 tenant_id 列；在 BR1 已正确建模的表上，统一强制作用域、RLS 和运行侧隔离。</p><dl><dt>输出</dt><dd>Tenant-scoped Repository、关键表 RLS、应用/迁移角色分离、tenant-scoped Job/Cache/Audit/Export、越权错误不可辨识。</dd><dt>前置</dt><dd>BR1 每张客户数据表已 tenant_id NOT NULL；品牌作用域引用已 tenant-matched。</dd><dt>承接</dt><dd>为多品牌和 Pilot 提供安全底座。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR2-EP02</div><h4>Brand Onboarding 与同租户跨品牌</h4><p>一个 Tenant 可接入多个 Brand，跨品牌任务通过 TaskBrandBinding 显式授权。</p><dl><dt>输出</dt><dd>BrandOnboarding、TaskBrandBinding、PRIMARY/SOURCE/ACCESSORY_PARTNER、2 Tenant / 3 Brand 种子。</dd><dt>前置</dt><dd>BR1 Brand/Task。</dd><dt>并行</dt><dd>仅在 EP01/EP02 独占 worktree、接口冻结且不并发修改共享 migration/contract 时并行；否则按 EP01→EP02。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR2-EP03</div><h4>S1 混合导入、对象存储作用域与血缘扩展</h4><p>支持图片、CSV/XLSX/JSON/PDF/DOCX 的逐文件归一化和部分成功。</p><dl><dt>输出</dt><dd>UploadAsset/DerivedAsset/ImportJob、OSS tenant prefix、tenant-scoped Job/Cache/Audit/Export、节点级 ContentNodeLineage。</dd><dt>前置</dt><dd>EP01 + EP02。</dd><dt>退出</dt><dd>跨租户 URL、列表、对象 ID、队列与导出负例均阻断。</dd></dl><div class="not-build">不建设：通用 ETL、连接器市场、媒体资产平台、跨租户协作。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail">
+<summary><div class="summary-left"><span class="milestone-pill">BR3</span><div class="summary-title"><strong>专业决策深化｜3 包</strong><span>把“模型能回答”升级为“系统能受约束地取舍”。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card critical"><div class="package-id">BR3-EP01</div><h4>Canonical RuleEngine、S2 Snapshot 与双重验证</h4><p>L5A、L5C、L9 调用同一规则引擎；候选时合法，交付时仍需复验。</p><dl><dt>输出</dt><dd>InventorySnapshot/TTL、Product scope、Brand/Category/Safety/Auth/Fact rules、Candidate/Delivery contexts。</dd><dt>前置</dt><dd>BR2 Tenant/Brand/Product 边界。</dd><dt>承接</dt><dd>内容和视觉均消费同一确定性结果。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR3-EP02</div><h4>Styling Skill / Ranker 深化与高压场景</h4><p>覆盖冲突美、多解、替代、副作用、失败条件、不可行性与场景突变。</p><dl><dt>输出</dt><dd>Skill v0.2、score components、alternatives、failure conditions、uncertainty、named risk scenarios。</dd><dt>前置</dt><dd>EP01 规则合同可先冻结接口后并行。</dd><dt>并行</dt><dd>可与 UI/Trace 增强局部并行。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR3-EP03</div><h4>完整候选比较、影响传播与定向返工</h4><p>商品、受众或 Hook 变化只重编译受影响节点，旧 revision 保持不可变。</p><dl><dt>输出</dt><dd>完整 UI-02、Trace drawer、before/after、dependency fingerprint、库存替换传播、最小局部重编译。</dd><dt>前置</dt><dd>EP01 + EP02 + BR1 Lineage。</dd><dt>退出</dt><dd>反常识、无解、库存替代、白T黑裤、上下文突变、Trace 回放通过。</dd></dl><div class="not-build">不建设：图数据库、DAG 编辑器、通用血缘平台、商业转化预测。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail" open="">
+<summary><div class="summary-left"><span class="milestone-pill">BR4</span><div class="summary-title"><strong>内容主产品 MVP｜4 包</strong><span>这是用户真正购买物的完整化，而不是“Decision 的附件”。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card critical"><div class="package-id">BR4-EP01</div><h4>叙事、内容风格、平台语法与 Hook 合同</h4><p>只建立少量版本化 Profile，不建设算法人格平台。</p><dl><dt>输出</dt><dd>NarrativeTypeRegistry、ContentStyleProfile、PlatformGrammarProfile、HookPatternLibrary。</dd><dt>前置</dt><dd>BR3 Decision truth / Lineage。</dd><dt>承接</dt><dd>为 Compiler 提供受控创作空间。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR4-EP02</div><h4>Canonical Content Compiler 与 3 个创意方向</h4><p>从单一专业决策生成 3 个可比较的“叙事 × 风格 × Hook”方向。</p><dl><dt>输出</dt><dd>CreativeDirection、ContentProductionPackage、CopyAsset/ScriptAsset/ShotPlan/InteractionPlaybook。</dd><dt>前置</dt><dd>EP01。</dd><dt>并行</dt><dd>可与导出模板准备局部并行。</dd><dt>退出</dt><dd>三个方向必须在至少一个可命名主维度上成对不同：叙事类型、受众场景、卖点排序、内容风格或 Hook 机制；每个方向都写明“选它放弃了什么”。不建多样性总分。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR4-EP03</div><h4>多平台原生编译与 3+1 导出</h4><p>把同一决策编译为小红书、抖音、视频号及公众号/长文中的适用集合。</p><dl><dt>输出</dt><dd>平台字段映射、3 Hook、关键词/封面/节拍/镜头、SRT、DOCX/PDF/TXT/XLSX/Manifest 渲染。</dd><dt>前置</dt><dd>EP01 + EP02。</dd><dt>退出</dt><dd>不同平台有结构差异，不是同稿换词。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR4-EP04</div><h4>审核、局部返工、Safety Gate 与 10 例交付包优越性门</h4><p>常规交付先过独立 Safety Gate；随后用中性 A/B 判断最终内容包是否明确胜过 B1。Preflight Signals 仅辅助编辑。</p><dl><dt>输出</dt><dd>UI-05、四类审核决定、ContentValidationResult、3+1 Delivery Package、10 例 Deliverable Superiority Test 一页结果。</dd><dt>对照</dt><dd>B1 全 10 例；B2 与 B3 各从同一案例集预选 3 例，运行前固定。</dd><dt>案例</dt><dd>3 个普通商业任务 + 至少 3 个难例；不得跑完后挑有利案例。</dd><dt>退出</dt><dd>9–10 例明确偏好笛语、至少 2/3 难例胜出、Safety Gate 全过；优势不能只来自 L2/L5。</dd><dt>承接</dt><dd>CLEARLY_SUPERIOR 才允许宣称内容主产品功能定型并进入 Pilot。</dd></dl><div class="not-build">不建设：自动对比 Runner、评分卡、总分、永久盲评页面、回归基线库、CTR/完播率预测。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail">
+<summary><div class="summary-left"><span class="milestone-pill visual">BR5</span><div class="summary-title"><strong>可选概念视觉｜2 条件包</strong><span>只有 Pilot 明确需要视觉时启用；不阻塞文字内容 MVP。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card optional"><div class="package-id">BR5-EP01</div><h4>Image Adapter、源素材与 Provenance</h4><p>媒体模型只有渲染权，无选款、改判和库存豁免权。</p><dl><dt>输出</dt><dd>Image Adapter、VisualProjection、asset_grade=CONCEPT_ONLY、source refs、prompt/model hash。</dd><dt>前置</dt><dd>BR4 Content Package / ShotPlan。</dd><dt>并行</dt><dd>与 BR6 完全并行。</dd></dl></article>
+<article class="package-card optional"><div class="package-id">BR5-EP02</div><h4>视觉 Fidelity、ON/OFF/FORCED_ON 与返工</h4><p>确认商品身份、搭配关系和镜头要求没有被视觉生成破坏。</p><dl><dt>输出</dt><dd>视觉 QA、VLM 对照、RV-F3、visual ON/OFF/FORCED_ON、L9 视觉复验。</dd><dt>前置</dt><dd>EP01 + BR3 RuleEngine。</dd><dt>退出</dt><dd>视觉失败只返工 Visual Projection；不污染 Decision truth。</dd></dl><div class="not-build">不建设：视频生成、自动剪辑、商业级商品图承诺、媒体编辑器。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail">
+<summary><div class="summary-left"><span class="milestone-pill">BR6</span><div class="summary-title"><strong>结果与证据捕获｜2 包</strong><span>数据可以存在，自动生产回路不允许存在。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card critical"><div class="package-id">BR6-EP01</div><h4>Publication Record 与只读 Commercial Outcome</h4><p>先做能真实填写的最小记录面；平台指标字段不靠想象一次定完。</p><dl><dt>输出</dt><dd>CommercialOutcomeRecord v0.1：tenant_id、task_id/content_package_revision_id、platform、published_at、url、human_edit_minutes、customer_action、recorded_by/at、evidence_source；人工表单与 CSV 导入。</dd><dt>前置</dt><dd>BR4 Package/Export。</dd><dt>承接</dt><dd>BR7 先录入 5 条有效真实记录；Founder 做一次字段评审，再批准 v0.2。5 条只用于发现字段，不是统计门槛。</dd><dt>暂缓</dt><dd>CTR、完播、收藏、转粉等平台专属指标先不升为固定列；如需暂存，使用受控 raw_metrics JSON，审核后再决定是否结构化。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR6-EP02</div><h4>Evidence、Knowledge Candidate 与 Regression</h4><p>真实修改可以形成候选和回归，但不能自动成为规则，也不能进入 STORE-A。</p><dl><dt>输出</dt><dd>EvidenceRecord、KnowledgeCandidate、AcceptedKnowledge 接口位、RegressionCase、Risk Scenario Registry。</dd><dt>前置</dt><dd>BR4 Review Delta；可与 EP01 并行。</dd><dt>退出</dt><dd>automatic_feedback_enabled=false；真实历史回归可阻断。</dd></dl><div class="not-build">不建设：在线学习、自动 Profile 更新、Feature Store、MLflow、隐藏评测接入。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail">
+<summary><div class="summary-left"><span class="milestone-pill">BR7</span><div class="summary-title"><strong>真实 Pilot｜3 包</strong><span>主成绩单是客户行动和真实内容表现，不是内部综合分。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card critical"><div class="package-id">BR7-EP01</div><h4>2 Tenant / 3 Brand Pilot Onboarding</h4><p>Tenant A 含 A1/A2 两品牌，Tenant B 含 B1；同租户跨品牌，跨租户禁止。</p><dl><dt>输出</dt><dd>真实 BrandTruth/Rules/Product/Inventory、Reviewer assignment、Pilot task plan。</dd><dt>前置</dt><dd>BR2、BR4、BR6；视觉任务另需 BR5。</dd><dt>退出</dt><dd>跨租户数据、文件、任务、Trace、Export 泄漏为 0。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR7-EP02</div><h4>真实内容运营与商业证据</h4><p>连续运行真实任务，记录接受、修改、发布、人工时间、复购和付费证据。</p><dl><dt>输出</dt><dd>建议 ≥30 真实任务、至少 1 个跨品牌任务、内容交付、首 5 条 CommercialOutcome v0.1 字段复盘、后续真实结果、失败与编辑记录。</dd><dt>前置</dt><dd>EP01。</dd><dt>承接</dt><dd>为 BR8 的容量、恢复和发布决策提供真实输入。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR7-EP03</div><h4>Pilot Closeout 与品牌方盲化交付物选择</h4><p>把实际使用者放到中性 A/B 前，判断品牌方是否也优先采用笛语内容包；与付费、发布、编辑负担一起形成商业裁决。</p><dl><dt>输出</dt><dd>品牌方盲化选择记录、Pilot closeout、内容接受/发布/编辑/复购/付费证据、产品合同 delta。</dd><dt>方法</dt><dd>从真实 Pilot 任务中预先选代表性案例；统一格式、随机顺序，不要求独立评测机构。</dd><dt>前置</dt><dd>EP02；BR4 功能价值门已达到 CLEARLY_SUPERIOR。</dd><dt>退出</dt><dd>Founder 根据品牌方优先采用证据、商业结果与 Safety Gate 决定进入 BR8、补丁或停止。</dd></dl><div class="not-build">不建设：永久 Evaluation Console、排行榜、自动统计平台、每 Release 四臂评测。</div></article>
+</div></div>
+</details>
+<details class="milestone-detail">
+<summary><div class="summary-left"><span class="milestone-pill">BR8</span><div class="summary-title"><strong>生产加固与发布裁决｜3 包</strong><span>把 Pilot 的真实缺陷转化为部署、恢复和安全能力。</span></div></div></summary>
+<div class="detail-body"><div class="package-grid">
+<article class="package-card parallel"><div class="package-id">BR8-EP01</div><h4>ECS 安全、可观测与运行手册</h4><p>建立 VPC、Security Group、RAM Role、Secrets、OSS 私有桶、RDS 内网和 SLS/CloudMonitor。</p><dl><dt>输出</dt><dd>生产 Compose/systemd、结构化日志、队列/成本/错误指标、告警、部署与故障 Runbook。</dd><dt>前置</dt><dd>BR7 真实流量与错误模式。</dd><dt>并行</dt><dd>可与 EP02 局部并行。</dd></dl></article>
+<article class="package-card parallel"><div class="package-id">BR8-EP02</div><h4>备份恢复、崩溃幂等、性能与回滚</h4><p>用真实恢复演练证明系统不是“能部署但救不回来”。</p><dl><dt>输出</dt><dd>RDS/OSS 恢复、Worker crash、API restart、migration rollback、容量/性能、凭证泄漏负例。</dd><dt>前置</dt><dd>BR7 数据规模；可与 EP01 并行。</dd><dt>退出</dt><dd>RPO/RTO 和性能按实测确认，不为目标数字提前堆基础设施。</dd></dl></article>
+<article class="package-card critical"><div class="package-id">BR8-EP03</div><h4>Risk Closure、12 行 One-Pager 与 Founder 发布裁决</h4><p>一页纸只汇总证据，不生成证据；最多 12 个顶层项。</p><dl><dt>输出</dt><dd>Release-bound P0 risk evidence、Pilot/Release Readiness One-Pager、Release notes、Founder PASS/CONDITIONAL/BLOCK。</dd><dt>前置</dt><dd>EP01 + EP02。</dd><dt>退出</dt><dd>具名 P0 全过；Billing、自助注册、自动发布、公共 API 均不存在。</dd></dl><div class="not-build">不建设：SaaS Control Plane、Billing、Subscription、Marketplace、Kubernetes。</div></article>
+</div></div>
+</details>
+</section>
+<section id="dependencies">
+<div class="section-heading">
+<div><div class="kicker">08 · Parallel &amp; dependency rules</div><h2>允许的并行窗口与必须汇合的门</h2></div>
+<p>并行的目的只是缩短等待，不允许制造第二套真源或让下游在上游语义未稳定时提前冻结。</p>
+</div>
+<div class="execution-mode"><strong>并行执行纪律：</strong>当前实际执行是 Founder + AI 窗口，而不是 4 名工程师。默认规则是“同一 worktree 串行”。只有满足 <strong>独占 branch/worktree、文件所有权互斥、共享接口先冻结、migration/lockfile 单一写入者、单一集成者</strong> 时，下面的逻辑并行才可变成真实并行；否则按卡片顺序执行。</div><div class="parallel-grid">
+<article class="panel parallel-card"><div class="node-id">窗口 A · BR1</div><h3>任务向导 ∥ 商品池/规则</h3><p>EP00 完成后，任务向导与商品/事实模型才可分支；只有独占 worktree 且不写同一 migration/contract 时并行，否则 EP01→EP02。</p><span class="converge">汇合：BR1-EP03 前</span></article>
+<article class="panel parallel-card"><div class="node-id">窗口 B · BR2</div><h3>隔离机制 ∥ 品牌接入</h3><p>Tenant-scoped Repository/RLS 与 BrandOnboarding/TaskBrandBinding 逻辑上可并行；当前执行只有独占 worktree 才并行，否则 EP01→EP02。</p><span class="converge">汇合：BR2-EP03 前</span></article>
+<article class="panel parallel-card"><div class="node-id">窗口 C · BR4</div><h3>内容 Profile ∥ 渲染模板</h3><p>Profile 合同与 DOCX/PDF/SRT/XLSX 模板逻辑上可并行；共享 ContentProductionPackage 合同由单一写入者维护。</p><span class="converge">汇合：BR4-EP02/03</span></article>
+<article class="panel parallel-card"><div class="node-id purple">窗口 D · BR5/BR6</div><h3>视觉 ∥ 结果/证据</h3><p>概念视觉与 Outcome/Evidence 互不依赖；单 worktree 下仍按先后执行。文本 Pilot 不等待视觉；含视觉任务才绑定 BR5。</p><span class="converge">汇合：对应 BR7 Pilot 任务</span></article>
+</div>
+<div class="table-wrap" style="margin-top:16px;">
+<table>
+<thead><tr><th>下游</th><th>必须继承的上游产物</th><th>不得重新定义</th><th>允许变化</th></tr></thead>
+<tbody>
+<tr><td><strong>BR1</strong></td><td>BR0 Tenant 根、运行骨架、复用边界；EP00 笛语样品、B1 对照与字段观察</td><td>技术形态、Billing=false、手工发布、tenant_id 安全根</td><td>最小女装规则和样品驱动字段（首发平台已定为视频号，不再是变量）</td></tr>
+<tr><td><strong>BR2</strong></td><td>BR1 已 tenant-aware 的 Task/Run/Decision/Content/Lineage/Product 表</td><td>tenant_id NOT NULL、tenant-matched 外键、内容 revision/lineage 语义</td><td>增加 Repository 强制作用域、RLS、存储/队列/审计/导出隔离、多品牌和 S1</td></tr>
+<tr><td><strong>BR3</strong></td><td>BR2 Tenant/Brand/Product/Inventory 边界</td><td>事实优先级、tenant_id 安全根</td><td>扩规则、库存、专业机制与返工</td></tr>
+<tr><td><strong>BR4</strong></td><td>BR3 Decision truth、RuleEngine、Lineage</td><td>商品选择、硬事实、候选合法性</td><td>叙事、内容风格、平台语法与表达</td></tr>
+<tr><td><strong>BR5</strong></td><td>BR4 ShotPlan 与 Content Package</td><td>商品身份、搭配关系、库存</td><td>视觉渲染和制作表达</td></tr>
+<tr><td><strong>BR6</strong></td><td>BR4 Export/Review；BR3 Risk/Trace</td><td>生产配置、Profile、Rule</td><td>只读记录、候选知识与回归</td></tr>
+<tr><td><strong>BR7</strong></td><td>BR4 内容 MVP、BR6 结果捕获、BR2 隔离</td><td>安全硬门、无自动发布、无 Billing</td><td>真实品牌配置、任务、品牌方盲化选择与客户证据</td></tr>
+<tr><td><strong>BR8</strong></td><td>BR7 真实缺陷、容量、恢复与商业证据</td><td>产品边界与租户安全根</td><td>部署参数、告警、容量和 Runbook</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ui-stages">
+<div class="section-heading">
+<div><div class="kicker">09 · UI staging</div><h2>六张核心界面的首次要求与延后元素</h2></div>
+<p>界面草图进入 PRD 后必须附带阶段字段；一张完整草图不等于其中所有按钮都在当期施工。</p>
+</div>
+<div class="ui-grid">
+<article class="panel ui-card"><span class="stage-chip">BR1</span><h3>UI-01 创建任务向导</h3><p>完成 S0、Tenant/Brand 只读上下文、事实确认、商品范围、成本预算与启动阻断。</p><ul><li>延后：通用 ETL</li><li>延后：跨租户品牌</li><li>非目标：工作流配置器</li></ul></article>
+<article class="panel ui-card"><span class="stage-chip">BR1</span><h3>UI-02 候选比较与 Trace</h3><p>BR1 最小形态即可比较 3 候选；BR3 补齐库存、影响传播、复杂返工与全量 Trace。</p><ul><li>延后：依赖图</li><li>延后：复杂影响分析</li><li>非目标：规则可视化平台</li></ul></article>
+<article class="panel ui-card"><span class="stage-chip">BR1 / BR4</span><h3>UI-03 平台原生内容工作台</h3><p>BR1 做视频号单平台垂直切片；BR4 扩为多平台、3 个创意方向、脚本/镜头/互动与 3+1 导出。</p><ul><li>延后：全平台批处理</li><li>延后：完整返工工作台</li><li>非目标：CMS/视频编辑器</li></ul></article>
+<article class="panel ui-card"><span class="stage-chip">BR2</span><h3>UI-04 生产工作台 / 任务列表</h3><p>BR1 仅有最小任务索引；BR2 增加 Tenant/Brand、风险、状态、Reviewer 和继续处理。</p><ul><li>延后：商业大屏</li><li>延后：自动排期</li><li>非目标：租户自助后台</li></ul></article>
+<article class="panel ui-card"><span class="stage-chip">BR4</span><h3>UI-05 审核与定向返工</h3><p>血缘和局部重编译从 BR1 开始；独立完整工作台在 BR4 内容资产齐全后形成。</p><ul><li>支持：before/after</li><li>支持：受影响节点</li><li>非目标：通用 DAG 编辑器</li></ul></article>
+<article class="panel ui-card"><span class="stage-chip">PILOT / BR7</span><h3>UI-06 商业结果只读面</h3><p>没有真实发布数据前不建空仪表盘；任何字段不得直接、自动、同步影响生产。</p><ul><li>mode=READ_ONLY</li><li>automatic_feedback=false</li><li>非目标：商业卡口/在线学习</li></ul></article>
+</div>
+</section>
+<section id="gates">
+<div class="section-heading">
+<div><div class="kicker">10 · Gate model</div><h2>一门、一试、一表</h2></div>
+<p>不再维护三张常规评分卡和每 Release 四臂评测。安全门守底线；Deliverable Superiority Test 判断功能价值；Commercial Outcome Ledger 记录真实商业结果。</p>
+</div>
+<div class="gate-grid">
+
+
+
+<article class="panel gate-card safety"><div class="node-id" style="color:var(--red)">一门 · 常规生产必经</div><h3>Delivery Safety Gate</h3><p>只有 PASS / BLOCK，不生成综合分；与内容偏好互不抵消。</p><ul><li>跨租户泄漏</li><li>SKU/库存/品牌/品类错误</li><li>虚构事实或经历</li><li>内容改变专业决策</li><li>Trace 缺失或未审核发布</li></ul></article><article class="panel gate-card experiment"><div class="node-id purple">一试 · 功能价值唯一标准</div><h3>Deliverable Superiority Test</h3><p>同题、同事实、同等级模型、同输出合同；B1 为主对照，BR1/BR4/BR7 分阶段运行。</p><ul><li>B0 不得作为证据</li><li>B2/B3 只抽样诊断</li><li>中性 A/B、随机顺序</li><li>不加权、不做总分</li><li>不建评测台</li></ul></article><article class="panel gate-card outcome"><div class="node-id green">一表 · 商业结果记录</div><h3>Commercial Outcome Ledger</h3><p>只读记录客户接受、发布、编辑、复购与付费证据；前 5 条真实记录后再评审字段。</p><ul><li>核心字段少而稳定</li><li>平台指标先 provisional</li><li>不合成总分</li><li>不自动回流</li><li>无数据写 null</li></ul></article></div>
+<div class="table-wrap" style="margin-top:16px;">
+<table>
+<thead><tr><th>里程碑退出证据</th><th>必须有</th><th>不能替代</th></tr></thead>
+<tbody>
+<tr><td><strong>用户旅程</strong></td><td>浏览器可操作、真实数据、可下载结果、失败恢复</td><td>文档页数、截图、Schema 数量</td></tr><tr><td><strong>功能价值</strong></td><td>BR4 的 10 例中性 A/B 达到 CLEARLY_SUPERIOR；BR1/BR7 有对应阶段证据</td><td>B0 裸问、输出篇幅、排版、Trace 数量、内部评分总分</td></tr>
+<tr><td><strong>具名 P0 风险</strong></td><td>该 Release 绑定的风险场景实际执行并全部通过</td><td>矩阵覆盖率、Fixture 数、代码覆盖率单独达标</td></tr>
+<tr><td><strong>商业结果</strong></td><td>Pilot 后记录品牌方选择、客户接受、发布、编辑、复购与付费证据</td><td>内部“内容战力总分”或自动回流生产</td></tr>
+<tr><td><strong>发布准备</strong></td><td>最多 12 行 One-Pager + evidence_ref + Founder 决定</td><td>新一轮回执森林或自动自证系统</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cadence">
+<div class="section-heading">
+<div><div class="kicker">11 · Execution cadence</div><h2>执行组织与包级节奏</h2></div>
+<p>每个执行包都要小到能独立提交、大到能产生可验证运行增量。当前单人 + AI 模式优先稳定串行，不用“逻辑并行”伪装实际产能。</p>
+</div>
+<div class="cadence-grid">
+<article class="panel cadence-panel">
+<h3>容量估算与当前实际执行模式</h3>
+<ul><li><strong>20–24 周场景：</strong>仅在 2 后端/AI + 1 前端 + 1 产品/设计/QA 基本同时投入时成立，且不构成交付承诺。</li><li><strong>当前模式：</strong>Founder + AI 窗口；依赖图有效，日历需要按实际吞吐重新估算。</li><li><strong>单 worktree：</strong>一个时间只允许一个写入流；其他窗口只读分析或等待。</li><li><strong>真并行：</strong>每个 EP 独占 branch/worktree，文件边界互斥，migration/contract/lockfile 有单一 Owner。</li><li><strong>汇合：</strong>由一个集成者按依赖顺序合并；禁止两个窗口交错写同一候选分支。</li></ul>
+</article>
+<article class="panel cadence-panel">
+<h3>每个里程碑固定节奏</h3>
+<div class="sequence">
+<div class="sequence-step"><strong>1. Plan</strong><span>一页以内；锁目标、包、依赖、退出门。</span></div>
+<div class="sequence-step"><strong>2. EP1</strong><span>先做最小可运行核心，不提前横向铺开。</span></div>
+<div class="sequence-step"><strong>3. EP2–4</strong><span>按真实 Commit 即时编译下一包 Prompt。</span></div>
+<div class="sequence-step"><strong>4. Demo</strong><span>用户旅程、失败路径、可下载结果与成本。</span></div>
+<div class="sequence-step"><strong>5. Closeout</strong><span>统一审查与 Founder 裁决；不每包重复大审。</span></div>
+</div>
+</article>
+</div>
+</section>
+<section id="redlines">
+<div class="section-heading">
+<div><div class="kicker">12 · Anti-overengineering</div><h2>简洁优雅的工程红线</h2></div>
+<p>任何新增复杂度必须对应真实用户伤害、数据风险、成本失控或已观察回归；“架构完整”“以后可能用”不是理由。</p>
+</div>
+<div class="redline-grid"><div class="redline"><div class="redline-icon">!</div><div><strong>没见真实成品，不冻结内容 Schema</strong><span>BR1-EP00 先生成一份 Founder 看得见的内容包；NO 就改 Prompt/策略，不让后续四包围绕错误假设施工。</span></div></div><div class="redline"><div class="redline-icon">!</div><div><strong>逻辑并行不等于同 worktree 并发写</strong><span>没有独占 worktree、互斥文件边界和单一集成者时，全部按依赖顺序串行。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>BR1 必须有内容交付</strong><span>不能把商品、规则、队列和 Schema 做完后仍没有一份用户可用内容包。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>tenant_id 从 Day-1 是安全根</strong><span>BR1 新建的每张客户数据表当时即 tenant_id NOT NULL；品牌作用域引用使用 tenant-matched 复合约束。BR2 不做跨几十张表的补列迁移。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>内容血缘从第一次生成写入</strong><span>关系字段 + 受控 JSONB 足够；不建图数据库和血缘服务。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>商业结果只读</strong><span>完播、点击、复购不得自动改变生成、排序、Profile、Rule 或发布权限。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>无 Billing / SaaS Control Plane</strong><span>多租户数据面不等于套餐、订阅、支付、Quota 和租户自助门户。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>视觉不阻塞文本主产品</strong><span>BR5 是条件支路；不因“视觉完整”延迟 BR4 内容 MVP 和 BR7 文本 Pilot。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>风险场景不是完成度矩阵</strong><span>只绑定具名 P0 风险；数量、覆盖率、Checker/Fixture 数不构成里程碑 KPI。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>One-Pager 永远最多 12 行</strong><span>新风险进入 Registry；增删拆换顶层行只能由 Founder 决定。</span></div></div>
+<div class="redline"><div class="redline-icon">!</div><div><strong>B0 裸问永远不是成功证据</strong><span>普通 LLM 必须获得与笛语等价的商品事实、规则、库存、平台要求和输出合同；禁止“有数据打没数据”。</span></div></div><div class="redline"><div class="redline-icon">!</div><div><strong>更长、更漂亮不等于更强</strong><span>两边统一中性格式和内容字段；不得用文件数量、排版、Trace 长度或系统标识制造假阳性。</span></div></div></div>
+</section>
+<section id="decisions">
+<div class="section-heading">
+<div><div class="kicker">13 · Founder decisions</div><h2>开工前与分阶段必须裁决的事项</h2></div>
+<p>这些是执行侧不能自行决定的产品输入。未决项只阻断其直接依赖的包，不应无差别阻塞整个项目。</p>
+</div>
+<div class="decision-list"><div class="decision"><strong>BR1-EP00 Founder 判定</strong><span>对笛语样品与 B1 Fact-fed One-shot 做中性 A/B：YES / CONDITIONAL / NO；B1 更优或两份都不可时不得冻结内容 Schema。</span></div><div class="decision"><strong>并行执行模式</strong><span>默认单 worktree 串行；只有独占 worktree 和单一集成者时批准真实并行。</span></div><div class="decision"><strong>Commercial Outcome v0.2</strong><span>前 5 条有效真实记录后，只做一次字段评审；5 条不是 KPI，也不是统计结论。</span></div>
+<div class="decision"><strong>BR1 首个平台 · 已裁决</strong><span>Founder 裁决：BR1-EP04 的首发平台为<strong>视频号</strong>；小红书、抖音与公众号/长文在 BR4 扩展。（PRD TBD-08 已解除阻断）</span></div>
+<div class="decision"><strong>首个 Provider</strong><span>每类只激活一个；不提前做动态模型路由。</span></div>
+<div class="decision"><strong>库存 TTL</strong><span>BR3 开始前冻结默认值和按数据源覆盖规则。</span></div>
+<div class="decision"><strong>Pilot 品牌与 Tenant</strong><span>BR7 前确认 Tenant A/A1/A2 与 Tenant B/B1 的真实接入对象。</span></div>
+<div class="decision"><strong>视觉是否进入 Pilot</strong><span>未明确需要时，BR5 不进入关键路径；文本内容 Pilot 先行。</span></div>
+<div class="decision"><strong>商业结果字段</strong><span>确认是否记录 engagement-period 收费证据；仍不实现 Billing。</span></div>
+<div class="decision"><strong>BR4 10 例案例清单（PRD TBD-16 · 业务命题已选定）</strong><span>Deliverable Superiority Test 与十例案例位于 <strong>PRD 附录 I</strong>；共 10 例、其中 4 个高难案例；B1 全十例，B2 抽 DS-01/05/06，B3 抽 DS-02/04/08。当前 FOUNDER_SELECTED / PROVISIONAL，BR3 结束前由 Founder 冻结协议、案例清单、共同事实包、模型条件与中性输出合同；未冻结则 BR4 不启动（BR4_NOT_AUTHORIZED）。案例全文只在 PRD 附录 I，不复制到本页。</span></div>
+<div class="decision"><strong>Readiness One-Pager 12 行 · 已裁决</strong><span>Founder 裁决：附录 H 的 12 个顶层项自 v0.3.2 签署起冻结；增删拆换均为 Founder-only；新风险进风险场景登记册，不上一页纸；BR7 Pilot 结束后 Founder 复核一次，之后不再改。（PRD TBD-15 已解除阻断）</span></div>
+<div class="decision"><strong>Release 地域与数据保留</strong><span>BR8 前确认 ECS/RDS/OSS 地域、保留期限和未成年人数据策略。</span></div>
+<div class="decision"><strong>BR7 品牌方判断</strong><span>用真实 Pilot 任务做中性 A/B；品牌使用者的优先采用选择进入商业证据，不要求建设独立评审角色或评测后台。</span></div></div>
+</section>
+<section>
+<div class="panel founder-summary">
+<h2>Founder 一页结论</h2>
+<p>v0.3.2 的合理粒度仍是 5 个阶段、9 个里程碑、25 个通用执行包 + 2 个视觉条件执行包。变化不是增加新执行包，而是把功能价值门嵌入现有 BR1-EP00、BR4 和 BR7：先用 1 例 B1 避免围绕错误样品写代码；BR4 用 10 例判断是否真的形成内容代差；BR7 再由实际品牌使用者判断是否优先采用。</p>
+<div class="command">建议开工口令：先锁 BR0 两包；随后只执行 BR1-EP00，并同步生成笛语样品与 B1 Fact-fed One-shot。Founder 在中性 A/B 下给出 YES/CONDITIONAL 后，再即时编译 BR1-EP01；不要提前生成剩余施工 Prompt。</div>
+</div>
+<div class="panel source-note">规划依据：v0.3.2 最新裁决、历史 v0.3 Draft 的可操作用户闭环与模型 usage-cost 记录、Canonical Runtime Architecture v0.2 对基础模型能力必须由评测证明的边界，以及本轮新增 Founder 裁决：内容制作交付包在公平条件下显著优于事实喂齐的同等级普通 LLM，是支线功能价值成功的唯一标准。</div>
+</section>
+</main>
+<footer class="shell">单文件 HTML｜Rev2｜无外部依赖｜适合浏览器查看、会议投屏与打印归档。</footer>
+</body>
+</html>

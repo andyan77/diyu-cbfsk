@@ -139,8 +139,11 @@ main 目前没有业务源码，所以这条误阻塞还没发作——BR0-EP01 
 ProductTruth、Inventory、Tenant、Persona、Platform Profile、Publication Policy、Compliance、
 Knowledge State、Non-goals，以及跨品类冲突优先级与三份视觉资产。
 
-本仓 M0/M1 **没有**独立的 Tenant 合同——租户根是 D-TENANT-DAY1 在 BR1 新建的对象。
-Tenant 组因此只登记上游约束（架构与集成边界，含凭据边界），不假装存在一份 Tenant 合同。
+**Tenant 组不进本台账**（EP00-FIX R-02）。本仓 M0/M1 没有独立的 Tenant 合同——租户根是
+D-TENANT-DAY1 在 BR1 新建的对象。首版曾把 `architecture_and_integration_boundary.v1.0.yaml`
+当 Tenant 组登进去，那是归类错误：它是架构与集成边界，不是 Tenant 合同，留在表内会让下游
+误读成「有 Tenant 合同可复用」，已删除。Persona 组的另外三份（人设记忆快照 / 人设冲突记录 /
+系列连续性状态）保留——C-13 人设五对象的真实成员，BR4-EP01 会消费，漏登成本高于多登。
 
 `01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml` 共
 {{ref:01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml#entry_count}} 条，逐条含 `asset` / `source_path` / 四十位 `source_commit` / `file_sha256`。
@@ -149,9 +152,11 @@ commit 不是 file hash 的替代：commit 说明当时仓的状态，说明不�
 `execution/templates/` 两份模板 ＋ `execution/dispatch_discipline.md` 一页派发纪律。
 未建执行包数据库、执行管理后台、自动生成系统、Receipt 平台——执行包是文件，不是服务。
 
-`environment_class` 的取值域按 Founder 给定固定为 G / Z / L / S / V / P，
-但六个字母各代表什么，仓内、PRD v0.3.2 与执行规划 HTML 均查无定义（已实测）。
-本包**没有编造**字母含义，标 `PENDING_FOUNDER_DEFINITION` 并要求实例填写者同时写 `environment_note`。
+`environment_class` 取值域固定为 G / Z / L / S / V / P。首版落盘时六个字母的语义在仓内、
+PRD v0.3.2 与执行规划 HTML 均查无定义，模板标的是占位符而**不是编造的含义**。
+EP00-FIX 中 Founder 已确认六行定义，落 `execution/README.md` 的枚举定义节，模板同步取真值，
+占位符全仓归零。BR0-EP00 自身运行在 **G**（治理/仓库环境）：只动合同与文档，
+未起任何服务、未建数据库、未接任何 Provider。
 
 ---
 
@@ -163,6 +168,32 @@ commit 不是 file hash 的替代：commit 说明当时仓的状态，说明不�
 `check_report_number_traceability` 立刻判 REPORT_RENDER_DRIFT；恢复后 PASS。
 理由是 M1 期发生过「女装判据假绿」——判据在，喂它恒假值，CI 全绿。
 迁一个判据过来却不验证它在守东西，等于把那次教训再丢一次。
+
+### unreviewed_commits（R-01 补偿动作）
+
+Founder 裁决 R-01：`commit_events` 保持守「旧结论被当作仍然有效」，不改为守「HEAD 尚未被
+Guardian 审过」。理由是仓内仅三份 Guardian 审查报告且全部是 M0 时期的，B 版语义会让 CI 长期常红，
+而常红的 CI 等于无 CI；Guardian 审查是里程碑级动作，不是每 commit 动作。
+
+作为补偿，这里如实列出自 `c3f6ad3` 起**未被任何 Guardian 审查报告覆盖**的提交：
+
+| Commit | 内容 |
+|---|---|
+| `947de26e19951f906f5379e9e604264810856905` | PRD v0.3.2：规范化落盘 TBD-16 十例 Founder 内容优越性案例 |
+| `11efc1be8dd8e5676fccacfed312e3e2c5eed31e` | 归档支线 v0.3 历史文档：v0.3.1 候选与 v0.3 设计输入入库 |
+| `a5564e1a4455b6521ae3c5e0b15385052c86c867` | 修正 v0.3.2 四处交叉一致性漂移 |
+| `91173113584978dc80b16975b9f5b5efab368029` | BR0-EP00 启动准备包 |
+| `eddbcd15243976c8b846a8f3690f0213d94662c2` | BR0-EP00 候选哈希回填 |
+
+EP00-FIX 自身的提交同样未被覆盖——它就是承载本节的那个提交，落盘时无法自指。
+
+仓内现有 Guardian 报告只有三份，覆盖 `f48fed3` / `9335180f` / `f01e45b`（delta），全部是 M0 时期。
+
+**这一节是信息记录**：不实现为红灯，不实现为判据，不进 `ci/run_all_checks.py`。
+它的作用是让「哪些提交没被审过」这件事有地方查，而不是让 CI 常红。
+Guardian 审查按里程碑节奏进行——下一次就是本包的 PR。
+
+---
 
 同样做了反向注入验证的还有两处新推导：
 把签署回执 `round_1.valid_for_signature_base` 翻真，`GUARDIAN_REVIEW_NOT_REDONE` 当场触发；
@@ -200,9 +231,22 @@ EP01 这个编号让给 Runtime Skeleton。
 
 ---
 
-## 十、需要 Founder 裁定
+## 十、条件状态
 
-三条，见回执 `open_conditions`：commit_events 的守护对象、waiver_timestamp 的取值来源、
-BR0-EP01 是否仍以 A1—A4 裁决书为前置。
+首版三条条件，Founder 已在 EP00-FIX 中裁掉两条：
 
-在三条裁定前，本包结论是 {{ref:11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_receipt.yaml#result}}，不是 PASS。
+| 条件 | 状态 |
+|---|---|
+| COND-01 commit_events 守护对象 | RESOLVED_BY_FOUNDER_RULING（R-01，保持 A 版 ＋ 本报告 unreviewed_commits 补偿） |
+| COND-02 waiver_timestamp 来源 | RESOLVED_BY_FOUNDER_RULING（R-04，标 `derived_from_signed_at`，签署回执未动） |
+| COND-03 A1—A5 裁决书 | OPEN——不是本包缺陷，签署即自动关闭，同时范围冻结生效 |
+
+本包结论：**{{ref:11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_receipt.yaml#result}}**。
+
+## 十一、之后的顺序
+
+1. Founder 签《BR0 启动裁决书 v0.1》（A1—A5）→ COND-03 关闭、`scope_freeze_rule` 生效
+2. Guardian 审 PR → 合并 main
+3. 基于合并后的 candidate_commit，JIT 编译 BR0-EP01 Runtime Skeleton
+
+本 PR 标题注明「待 Guardian 审查，勿合并」，执行侧不自行合并。

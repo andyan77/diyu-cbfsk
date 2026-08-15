@@ -28,6 +28,7 @@ sweep:
   method: AST 解析每个 checker 的 collect()，取 return 字典中取值为纯字面量的键（含先赋局部名再返回的）。
   evidence_level: runtime_verified
   scanned_checkers_at_sweep: 24
+  reswept_at_package: EP00-FIX（R-03 改造 check_workspace_attestation.collect() 后重扫，仍为 0 处）
   sites_found_before_repair: 8
   sites_remaining_after_repair: 0
   disposition_rule: >-

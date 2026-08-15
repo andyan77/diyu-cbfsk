@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from _common import cli, load_yaml
+from _common import ROOT, cli, load_yaml
 
 LABEL = "check_workspace_attestation"
 
@@ -17,7 +17,31 @@ REQUIRED_FIELDS = [
 ]
 
 
+def _documents(payload: dict) -> list[dict]:
+    """两种载荷都吃：扁平单文档，与 collect() 扫目录后的多文档。
+
+    R-03 之前 collect() 写死一个文件名——目录里再放一份佐证，判据看都不看。
+    改成扫目录后载荷可能带多份，因此这里统一成 [{file, document}]。
+    既有夹具喂的是扁平单文档，照旧工作；断言逻辑与错误码一条没动。
+    """
+    docs = payload.get("documents")
+    if docs is None:
+        return [{"file": payload.get("source_file"), "document": payload}]
+    return docs
+
+
 def validate(payload: dict) -> list[str]:
+    errors: list[str] = []
+    docs = _documents(payload)
+    if not docs:
+        errors.append("NO_ATTESTATION_DOCUMENT: 一份工作区佐证都没扫到 —— 扫不到不等于没问题")
+    for entry in docs:
+        for err in _validate_one(entry.get("document") or {}):
+            errors.append(f"{err} (in {entry['file']})" if len(docs) > 1 and entry.get("file") else err)
+    return errors
+
+
+def _validate_one(payload: dict) -> list[str]:
     errors: list[str] = []
 
     if payload.get("is_cryptographic_independence_proof") is not False:
@@ -79,10 +103,23 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+ATTESTATION_DIR = "governance/workspaces"
+SCHEMA_FILE = "workspace_attestation.schema.yaml"
+
+
 def collect() -> dict:
-    return load_yaml(
-        "governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml"
-    )
+    """扫 governance/workspaces/ 下每一份 workspace_attestation.*.yaml（Schema 本身除外）。
+
+    R-03：此前写死单一文件名，于是新任务放进来的佐证根本不会被读——判据在，
+    但它守的是一个固定文件，不是这个目录。
+    """
+    documents = []
+    for path in sorted((ROOT / ATTESTATION_DIR).glob("workspace_attestation.*.yaml")):
+        if path.name == SCHEMA_FILE:
+            continue
+        rel = f"{ATTESTATION_DIR}/{path.name}"
+        documents.append({"file": rel, "document": load_yaml(rel)})
+    return {"documents": documents}
 
 
 if __name__ == "__main__":

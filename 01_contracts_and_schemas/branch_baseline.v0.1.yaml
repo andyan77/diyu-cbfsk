@@ -26,17 +26,16 @@ authority:
     - README 状态块删除与 baseline pin 更新
     - secret-and-hidden-boundary 判据改造
     - 三个 A 类判据迁入 main
-  br0_ep01_start: BLOCKED_UNTIL_BR0_EP00_ACCEPTED
+  entry_blocker: FOUNDER_RULING_A1_A5_NOT_SIGNED
+  entry_blocker_meaning: 《BR0 启动裁决书 v0.1》（A1—A5）未签署即不得开工 BR0-EP01。仓内当前不存在该裁决文件。
+  execution_run_id: 5d56f467-6af5-4b93-b8ef-6232ced16328
+  execution_run_id_source: BR0_EP00_RUNTIME_UUID4
+  execution_run_id_uuid_version: 4
+  parent_execution_run_id: 0540b6d4-7930-43cc-9a92-cb45285d34fa
+  parent_execution_run_id_scope: M1 里程碑批次（11_reports_and_receipts/m1_delivery_receipt.yaml）
+  br0_ep01_start: BLOCKED_UNTIL_BR0_EP00_ACCEPTED_AND_A1_A5_SIGNED
   br0_ep01_identity: Runtime Skeleton
   runtime_development: false
-  earlier_entry_blocker_disposition:
-    blocker: FOUNDER_RULING_A1_A4_NOT_SIGNED
-    origin: BR0-EP00 启动准备包 v0.2 的 Founder 追加条（「A1—A4 裁决书没签就先别贴」）
-    status: OPEN_QUESTION_NOT_SILENTLY_DROPPED
-    note: >-
-      最终收敛版把 BR0-EP01 的放行条件写成「BR0-EP00 完成后即允许编译」，未再提 A1—A4。
-      两处口径不同，本文件按后发者取放行条件，但不因此把前一条当作已撤销——
-      仓内确实不存在 A1—A4 裁决文件。是否仍以其为前置，列在未决事项等 Founder 一句话。
 
 # ---------------------------------------------------------------------------
 # 一之二、两份执行 Prompt 的合并去重记录
@@ -82,24 +81,41 @@ prompt_merge_record:
 deferred_items:
   rule: >-
     能阻塞 BR0-EP01 的问题在本包处理；不能阻塞的一律延期。禁止为追求完整性扩大范围。
-  to_br1:
-    - item: Error Taxonomy 机器化
-      why_not_now: 运行时错误码在 BR1-EP02 之后才存在，现在机器化没有被守护对象
+  items:
+    - item: Error Taxonomy 机器可读化
+      owner_package: BR1
+      constraint: 必须沿用 PRD 附录 B 原编号 AUTH-/INPUT-/FACT-/RULE-；不得新造 ERR_* 体系
+      evidence: 实测 PRD v0.3.2 附录 B 现有 AUTH- 3 条、INPUT- 5 条、FACT- 5 条、RULE- 5 条；全文 ERR_ 0 处
+    - item: Mock/Real 详细边界
+      owner_package: BR1-EP03
     - item: Human Review 边界
-      why_not_now: PRD v0.3.2 已有正文内容，不重复创建
-    - item: Mock / Real 详细合同
-      why_not_now: 依赖 BR1-EP03 首次真实 Provider 调用的实测形态
-  to_runtime_skeleton:
+      owner_package: BR1-EP04
     - item: ECS 部署拓扑
-    - item: 数据库 migration 规范细节
-  to_later:
+      owner_package: BR0-EP01
+      note: 属 Runtime Skeleton 交付物，非 deferred 之外的独立工作
+    - item: Migration 规范细节
+      owner_package: BR0-EP01
     - item: Stop Conditions 扩展
-    - item: 商业反馈闭环
-    - item: Pilot 相关内容
+      owner_package: BR3
+      constraint: 修改既有 non_goals_and_stop_conditions.v1.0.yaml；不得新建 md
+    - item: 商业反馈闭环 / Pilot 相关
+      owner_package: BR6 / BR7
+    - item: 27 张规划卡补齐
+      owner_package: 各自 freeze_at
+    - item: Founder Decision 模板
+      owner_package: 不做
+      constraint: 沿用既有 governance/founder_rulings/*.yaml 格式
   already_in_prd_do_not_recreate:
     - Human Review 边界
     - 发布策略与人工审核在环（D-25）
     - Deliverable Superiority Test 协议（附录 I）
+
+scope_freeze_rule:
+  effective_from: FOUNDER_RULING_A1_A5_SIGNED
+  rule: 本包范围自裁决书签署起冻结；此后新发现一律进 deferred_items，不回改本包、不新增子任务
+  current_state: NOT_YET_EFFECTIVE
+  current_state_note: >-
+    裁决书未签署，冻结未生效——EP00-FIX 收口补丁因此合法。本包完成后即按上述规则冻结。
 
 # ---------------------------------------------------------------------------
 # 二、基线
@@ -114,6 +130,8 @@ candidate_m2:
   status: SUSPENDED_REFERENCE
   role: 只读抽取源
   observed_in_this_package: 本包只以 `git show candidate/m2:<path>` 读取，未 merge、未 cherry-pick、未建工作树
+
+tenant_contracts_absent_on_main: true  # 支线自建，不进 Ledger
 
 reuse_policy:
   mode: SELECTIVE_BACKPORT
@@ -288,39 +306,39 @@ m2_adr_classification:
 # ---------------------------------------------------------------------------
 # 五、交接给 BR0-EP02 的强制约束
 # ---------------------------------------------------------------------------
-handoff_to_br0_ep01:
-  compile_rule: >-
-    BR0-EP01（Runtime Skeleton）的执行合同必须基于本包的 candidate_commit JIT 编译，不得提前冻结。
-    「提前冻结」指在本包 Commit 存在之前就把 BR0-EP01 的验收判据写死。
-  mandatory_dod:
-    - id: EP01-DOD-01
-      requirement: 功能验证能力必须存在
-      minimum: >-
-        pytest 骨架 ＋ 至少 1 个针对 /healthz 的真实测试 ＋ 至少 1 个针对首个 migration 的真实测试，
-        并接入一个新的 GitHub workflow（不得只在本地跑）。
-      why: >-
-        本包交付后 main 上共 24 个确定性判据，全部读 YAML / DOCX / Markdown，
-        对运行时代码结构性失明。不加这一条，BR0 之后「CI 全绿」关于功能正确性仍然一个字也没说。
-    - id: EP01-DOD-02
-      requirement: 首次 migration 必须让所有客户表 tenant_id NOT NULL
-      minimum: >-
-        v0.3.2 D-TENANT-DAY1 点名的客户所属对象，在第一份 migration 里就带 tenant_id NOT NULL；
-        品牌域表带 (tenant_id, brand_id) 复合外键。
-      explicitly_not_required: 全表 RLS（BR1 不要求）
-      explicitly_forbidden: 先建表后批量补 tenant_id 的迁移
-    - id: EP01-DOD-03
-      requirement: 不得机械扩张 brand_id
-      minimum: >-
-        Tenant / TenantMembership / Tenant 级 Settings / 无品牌语义的 Tenant 级审计事件
-        一律不加 brand_id。
+br0_ep01_requirements:
+  runtime_test_capability:
+    pytest_skeleton_required: true
+    minimum_real_test_count: 1        # 针对 /healthz 与首个 migration，接入新 workflow
+  baseline:
+    use_candidate_commit_from_BR0_EP00: true
+  migration:
+    tenant_id_not_null_from_first_customer_table: true
+  execution_contract:
+    jit_compiled_from_ep00_candidate_commit: true
+
+  why_pytest_is_mandatory: >-
+    本包交付后 main 上共 24 个确定性判据，全部读 YAML / DOCX / Markdown，
+    对运行时代码结构性失明。不加 pytest 这一条，BR0 之后「CI 全绿」关于功能正确性一个字也没说。
+  migration_detail:
+    scope: v0.3.2 D-TENANT-DAY1 点名的客户所属对象
+    composite_fk: 品牌域表带 FOREIGN KEY (tenant_id, brand_id) REFERENCES brands (tenant_id, brand_id)
+    explicitly_not_required: 全表 RLS（BR1 不要求）
+    explicitly_forbidden: 先建表后批量补 tenant_id 的迁移
+    no_mechanical_brand_id_expansion: >-
+      Tenant / TenantMembership / Tenant 级 Settings / 无品牌语义的 Tenant 级审计事件
+      一律不加 brand_id。
   sequencing:
     - BR0-EP00 交付并经 Founder 接受
-    - 然后才允许编译 BR0-EP01 Runtime Skeleton 执行合同
-    - v0.2 里的「BR0-EP01 合同收敛与复用边界」已整包并入本包 EP00-05，不再单独成包；EP01 编号让给 Runtime Skeleton
+    - Founder 签署《BR0 启动裁决书 v0.1》（A1—A5）→ 范围冻结生效
+    - Guardian 审 PR → 合并 main
+    - 基于合并后的 candidate_commit JIT 编译 BR0-EP01 Runtime Skeleton 执行合同
+    - v0.2 里的「BR0-EP01 合同收敛与复用边界」已整包并入本包 EP00-05，不再单独成包
   not_in_scope_for_ep01:
     - STORE-A 证明链（隐藏评测前置，不是支线开工前置）
     - 任何 B / C 类判据迁入
     - 任何 M2 产品资产导入
+
 
 # ---------------------------------------------------------------------------
 # 六、失败状态

@@ -24,17 +24,22 @@ coverage:
   to_milestone: BR6
   coverage_rule: >-
     只覆盖 BR0—BR6 会真正用到的关键合同，不覆盖 01_contracts_and_schemas/ 全部 43 个文件。
-  groups_covered: [ProductTruth, Inventory, Tenant, Persona, PlatformProfile, PublicationPolicy, Compliance, KnowledgeState, NonGoals]
+  groups_covered: [ProductTruth, Inventory, Persona, PlatformProfile, PublicationPolicy, Compliance, KnowledgeState, NonGoals]
   tenant_group_note: >-
-    本仓 M0/M1 没有独立的 Tenant 合同——租户根是支线 v0.3.2 D-TENANT-DAY1 在 BR1 新建的对象。
-    Tenant 组因此只登记上游约束（架构与集成边界，含凭据边界），不假装存在一份 Tenant 合同。
-  source_of_entries: PRD v0.3.2 附录 A｜建议复用的 M0/M1 资产映射（本包由 14 行补至 29 行）
-  entries_equal_appendix_a_rows: 29
+    Tenant 组**不进本台账**（EP00-FIX R-02）。本仓 M0/M1 没有独立的 Tenant 合同——
+    租户根是支线 v0.3.2 D-TENANT-DAY1 在 BR1 新建的对象。此前登记的
+    architecture_and_integration_boundary.v1.0.yaml 归类错误：它是架构与集成边界，不是 Tenant 合同，
+    留在表内会让下游误读成「有 Tenant 合同可复用」，已删除。
+    Persona 组的另外三份（persona_memory_snapshot / persona_conflict_record /
+    series_continuity_state）保留：它们是 C-13 人设五对象的真实成员，BR4-EP01 会消费，
+    漏登成本高于多登。
+  source_of_entries: PRD v0.3.2 附录 A｜建议复用的 M0/M1 资产映射（本包由 14 行补至 28 行）
+  entries_equal_appendix_a_rows: 28
   deferred_to_later: >-
     BR7（Pilot）与 BR8 的复用面依赖真实品牌与真实平台账号，届时另行登记。
 
 pinned_at_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
-entry_count: 29
+entry_count: 28
 entries:
   - asset: capability_contract.v1.0.yaml
     source_path: 01_contracts_and_schemas/capability_contract.v1.0.yaml
@@ -261,15 +266,6 @@ entries:
     reuse_mode: ALWAYS_IN_FORCE
     last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
     file_size_bytes: 10260
-  - asset: architecture_and_integration_boundary.v1.0.yaml
-    source_path: 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml
-    source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
-    file_sha256: df039ca4025ae8f019794a80c8b90c111a8117d0be7891a2cfe7dd8e06344608
-    reuse_note: Tenant 组：架构与集成边界、NFR、凭据边界。本仓 M0/M1 无独立 Tenant 合同，租户根由 D-TENANT-DAY1 在 BR1 新建
-    consumed_by_milestone: BR1
-    reuse_mode: READ_ONLY_REFERENCE
-    last_modified_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
-    file_size_bytes: 12574
   - asset: persona_memory_snapshot.schema.v0.1.json
     source_path: 01_contracts_and_schemas/m1_object_model/persona_memory_snapshot.schema.v0.1.json
     source_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867

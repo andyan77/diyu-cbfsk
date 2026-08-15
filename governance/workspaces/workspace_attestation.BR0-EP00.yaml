@@ -1,0 +1,38 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-BR0-EP00-001
+task_id_uniqueness_note: >-
+  与既有六条记录所属任务 DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002 不同号；
+  本文件只描述 BR0-EP00 这一个批次的工作面。
+execution_run_id: 5d56f467-6af5-4b93-b8ef-6232ced16328
+parent_execution_run_id: 0540b6d4-7930-43cc-9a92-cb45285d34fa
+parent_execution_run_id_note: M1 里程碑批次（11_reports_and_receipts/m1_delivery_receipt.yaml 的 execution_run_id）
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+
+records:
+  - workspace_id: claude-code-br0-ep00-writer
+    workspace_path: /home/faye/笛语跨品牌服装搭配专家内核
+    conversation_or_session_id: 91a4fb81-c888-4176-b452-09023de0ece3
+    session_id_available: true
+    session_started_at: null
+    session_started_at_unavailable_reason: >-
+      工具未向执行侧暴露会话起始时间戳。不构造一个看起来像真的值——
+      置 null 并说明，比填一个推算值诚实。会话标识本身可得，已如实填写。
+    base_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: BR0_EP00_BOOTSTRAP_READINESS_AND_FIX_PATCH
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: >-
+      Founder 于 2026-08-15 会话内直接下发《BR0-EP00 启动准备包》与《EP00-FIX 收口补丁包》
+      并明示授权推进；沿用基线 Manifest continuation_execution.founder_designation
+      所载的 TEMPORARY_EXECUTION_WRITER 角色。
+    branch: br0/ep00-bootstrap-readiness
+
+guardian_status: NOT_YET_RUN
+guardian_status_note: >-
+  本批次尚无 Guardian 记录，因此本文件不带 founder_workspace_attestation 见证块——
+  Guardian 没跑就不得声称「Planner 与 Guardian 会话/工作区不同」，那是 UNWITNESSED_CLAIM。
+  见证行由 Guardian 审过 PR 之后另行落盘。

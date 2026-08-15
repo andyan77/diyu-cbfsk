@@ -15,9 +15,10 @@ from _common import UUID_V4_RE, cli, load_yaml
 
 LABEL = "check_execution_uuid"
 
-# 当前必须被守住的批次：治理任务、M0 里程碑、M1 里程碑。少一个就说明有批次脱离守卫。
+# 当前必须被守住的批次：治理任务、M0 里程碑、M1 里程碑、BR0-EP00 支线启动准备包。
 # 新增里程碑批次＝往 collect 的 runs 里加一条并把下限加一，不是再写一个 checker。
-MINIMUM_GUARDED_RUNS = 3
+# 本常量只增不减：减它等于把某个批次悄悄移出守卫。
+MINIMUM_GUARDED_RUNS = 4
 
 
 def _check_run(run: dict, errors: list[str]) -> str | None:
@@ -79,6 +80,8 @@ def collect() -> dict:
     change_map = load_yaml("PRD_v1.2_change_map.yaml")
     m0_receipt = load_yaml("11_reports_and_receipts/m0_delivery_receipt.yaml")
     m1_receipt = load_yaml("11_reports_and_receipts/m1_delivery_receipt.yaml")
+    branch_baseline = load_yaml("01_contracts_and_schemas/branch_baseline.v0.1.yaml")
+    attestation = load_yaml("governance/workspaces/workspace_attestation.BR0-EP00.yaml")
     cont = manifest["continuation_execution"]
 
     # 按 id 取，不按下标取：裁决文件里插一条修复项就会让下标失准，而 id 是稳定的。
@@ -121,6 +124,22 @@ def collect() -> dict:
                 ],
                 "run_id_occurrences": {
                     "11_reports_and_receipts/m1_delivery_receipt.yaml": m1_receipt["execution_run_id"],
+                },
+            },
+            {
+                "name": "br0_ep00_bootstrap_readiness_batch",
+                "execution_run_id": branch_baseline["authority"]["execution_run_id"],
+                "parent_execution_run_id": branch_baseline["authority"]["parent_execution_run_id"],
+                "continuation": True,
+                "forbidden_reuse_ids": [
+                    manifest["execution_run_id"],
+                    cont["execution_run_id"],
+                    m0_receipt["execution_run_id"],
+                    m1_receipt["execution_run_id"],
+                ],
+                "run_id_occurrences": {
+                    "governance/workspaces/workspace_attestation.BR0-EP00.yaml":
+                        attestation["execution_run_id"],
                 },
             },
         ]

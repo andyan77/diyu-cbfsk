@@ -39,12 +39,18 @@ dependencies:              # 前置包 ID；无前置写空列表并说明
 # --- 环境 -------------------------------------------------------------------
 environment_class: <G|Z|L|S|V|P>
 environment_class_domain: [G, Z, L, S, V, P]
-environment_class_domain_source: BR0-EP00 启动准备包 v0.2 EP00-05 B（Founder 下发时即固定为这六个取值）
-environment_class_semantics: PENDING_FOUNDER_DEFINITION
+environment_class_domain_source: Founder 确认（EP00-FIX 第五节）
+environment_class_semantics_source: execution/README.md 的「environment_class 枚举定义」节
+environment_class_semantics:
+  G: 治理/仓库环境——已批准基线 Commit、独占 branch/worktree、合同与文档；单一集成者
+  Z: 零代码发现环境——聊天窗口、选定 Provider、真实商品与品牌事实；无代码/数据库/Runner
+  L: 本地开发环境——Docker Compose：React + FastAPI + Worker + PostgreSQL + 本地对象存储 + Mock Provider
+  S: Staging ECS——单台 ECS、Nginx、Web/API/Worker、RDS、OSS 私有桶、SLS/CloudMonitor、真实 Provider
+  V: 条件视觉环境——S/P 环境 ＋ Image Adapter ＋ 媒体模型/VLM ＋ 真实源素材
+  P: Pilot Production——ECS/VPC/RAM/TLS/RDS/OSS/备份，真实 Tenant、Brand、Reviewer、真实任务
 environment_class_semantics_note: >-
-  六个取值的语义在仓内、PRD v0.3.2 与执行规划 HTML 中均查无定义（已实测）。
-  本包按 Founder 给定的取值域原样固定，不自行编造每个字母代表什么环境——
-  编出来的定义会被下游当成真的。定义补齐前，实例填写者必须同时写 environment_note。
+  取值域只可由 Founder 变更，实例不得自造第七个取值。语义的单一定义处是
+  execution/README.md；此处是就近副本，两处不一致时以 README 为准。
 environment_note: <本包实际用的分支、worktree 路径、允许写入的文件范围>
 
 # --- 交付 -------------------------------------------------------------------

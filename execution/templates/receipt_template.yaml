@@ -12,7 +12,8 @@ template_id: receipt_template.v0.1
 template_note: 本文件是模板本身，不是任何回执实例。
 
 package_id: <BRn-EPmm>
-candidate_commit: <40 位完整哈希>
+baseline_commit: <40 位完整哈希；本包据以编译的基线>
+candidate_commit: <40 位完整哈希；本包交付物所在的提交>
 candidate_commit_rule: 禁止以「最新版」「当前分支」代指；回执不绑定具体 Commit 即无效。
 
 result: <PASS | CONDITIONAL | BLOCK>
@@ -24,8 +25,8 @@ acceptance_results:
   - id: <AC-nn>
     criterion: <与执行包合同逐字相同>
     method: <与执行包合同逐字相同>
-    outcome: <PASS | FAIL | NOT_RUN>
-    outcome_rule: NOT_RUN 是合法结果，写 NOT_RUN 比写 PASS 诚实；未实测不得写 PASS。
+    result: <PASS | FAIL | NOT_RUN>
+    result_rule: NOT_RUN 是合法结果，写 NOT_RUN 比写 PASS 诚实；未实测不得写 PASS。
     evidence_ref: <本回执 evidence_refs 里的键名>
 
 evidence_refs:

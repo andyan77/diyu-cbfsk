@@ -1,0 +1,53 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-BR0-EP00-README-CHANGE-001
+project_id: DIYU-CBFSK-001
+package_id: BR0-EP00
+recorded_by: TEMPORARY_EXECUTION_WRITER
+recorded_at: "2026-08-15"
+purpose: >-
+  登记 README.md 本轮授权改写的来源。基线 Manifest 的
+  active_baseline_candidates[README.md].authorized_modification_history 记的是「改了什么、哈希是多少」，
+  本回执记的是「谁授权的、授权文本是什么、为什么这一改是允许的」。两者互补，不重复：
+  哈希只在 Manifest 一处（EQ-1），本回执不复制哈希以外的判定依据。
+
+change_id: README-MOD-12
+change_id_ref: governance/baseline/founder_pinned_baseline.v0.1.yaml → active_baseline_candidates[README.md].authorized_modification_history[README-MOD-12]
+
+authorization_source:
+  kind: in_session_founder_dispatch
+  ref: FOUNDER-SESSION-AUTHORIZATION-2026-08-15-BR0-EP00
+  verbatim: 授权推进落盘实现交付
+  dispatched_documents:
+    - 执行 Prompt｜BR0-EP00 启动准备包 v0.2
+    - 执行 Prompt｜BR0-EP00 启动准备包最终收敛版
+    - 执行 Prompt｜BR0-EP00 收口补丁包（EP00-FIX）
+  founder_ruling_file: null
+  founder_ruling_file_note: >-
+    仓内不存在《BR0 启动裁决书 v0.1》（A1—A5）。本条授权来自会话内直接下发，
+    不是 governance/founder_rulings/ 下的具名裁决——如实记录，不补签、不冒充。
+
+change_scope:
+  removed: 「## 当前项目状态」下整段 yaml 状态块
+  removed_reason: >-
+    该状态块无任何判据读取。check_project_state 只把 README 当违禁措辞的扫描面，
+    其 flags 全部来自 PRD_v1.2_change_map.yaml、role_operating_model.v0.2.yaml、
+    baseline_reconciliation_receipt.yaml 三处。它是第四份未受守护的重复副本。
+  added:
+    - 一行状态来源指向：当前状态以 PRD_v1.2_change_map.yaml 的 resulting_state 为准
+    - Checker 计数 21 → 24
+    - 「支线（BR0—BR8）」索引段
+  preserved_verbatim:
+    - '| `笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx` | 产品合同、范围、里程碑与验收门 | **当前活基线 · `SIGNED`** |'
+  preserved_reason: >-
+    check_active_product_truth 依赖该标记；删掉即判 DUAL_ACTIVE_PRODUCT_TRUTH（0 file(s)）。
+
+not_done:
+  - 未新建 governance/source-of-truth-file.yaml 或任何同类新状态文件
+  - 未合并 PRD_v1.2_change_map.yaml / role_operating_model.v0.2.yaml / baseline_reconciliation_receipt.yaml 三处状态真源（属扩张，不在本包范围）
+  - 未移除 README hash pin
+
+verification:
+  - check_active_product_truth: PASS
+  - check_project_state: PASS
+  - check_baseline_hashes: PASS
+  - 全量 ci/run_all_checks.py: EXIT=0

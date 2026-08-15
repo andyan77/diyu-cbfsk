@@ -1,5 +1,5 @@
-fixture_id: P21-execution-uuid-three-runs-guarded
-description: 治理任务、M0、M1 三个批次各有合法 v4 标识、各自不与父标识相同、各处出现值一致，达到覆盖面下限。
+fixture_id: P21-execution-uuid-four-runs-guarded
+description: 治理任务、M0、M1、BR0-EP00 四个批次各有合法 v4 标识、各自不与父标识相同、各处出现值一致，达到覆盖面下限（下限随 BR0-EP00 由 3 升 4）。
 checker: check_execution_uuid
 expected: PASS
 payload:
@@ -22,3 +22,9 @@ payload:
     continuation: true
     run_id_occurrences:
       m1_receipt.yaml: 0540b6d4-7930-43cc-9a92-cb45285d34fa
+  - name: br0_ep00_bootstrap_readiness_batch
+    execution_run_id: 5d56f467-6af5-4b93-b8ef-6232ced16328
+    parent_execution_run_id: 0540b6d4-7930-43cc-9a92-cb45285d34fa
+    continuation: true
+    run_id_occurrences:
+      workspace_attestation.BR0-EP00.yaml: 5d56f467-6af5-4b93-b8ef-6232ced16328

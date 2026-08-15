@@ -23,33 +23,68 @@ authority:
     - 执行 Prompt｜BR0-EP00 启动准备包最终收敛版
   merge_rule: 两份要求项取并集；口径冲突以后发者为准，逐条记录见 01_contracts_and_schemas/branch_baseline.v0.1.yaml prompt_merge_record
 
-result: CONDITIONAL
+result: PASS
 result_basis: >-
-  十条阻断性验收全部 PASS，全量 CI EXIT=0。判 CONDITIONAL 而非 PASS 的唯一原因是：
-  本包对两处判据语义做了显式取舍（commit_events 的守护对象、waiver_timestamp 的取值来源），
-  两者都改变了 CI 此后会拦什么。语义取舍属 Founder 权限，执行侧不得自行判 PASS。
-  条件见 open_conditions；条件全部裁定后本回执可升为 PASS。
+  十一条阻断性验收全部 PASS，全量 CI EXIT=0。首版判 CONDITIONAL 的两条语义取舍已由
+  Founder 在 EP00-FIX 中裁决（R-01 / R-04），COND-01 与 COND-02 关闭；
+  仅余 COND-03，它不是本包的缺陷，而是等《BR0 启动裁决书 v0.1》签署，签署即自动关闭。
+result_upgraded_by: EP00-FIX 收口补丁包（Founder 裁决 R-01…R-05）
+result_upgrade_note: >-
+  升 PASS 的依据是 Founder 裁了语义取舍，不是执行侧重新论证了一遍。
+  取舍本身没变——变的是它现在有授权。
+
+ruling_rationale:
+  R-01:
+    ruling: commit_events 保持 A 版语义——守「旧结论被当作仍然有效」，不改为守「HEAD 尚未被 Guardian 审过」
+    founder_reason: >-
+      仓内仅 3 份 Guardian 审查报告，均为 M0 时期；自 c3f6ad3 起的若干 commit 无对应报告。
+      B 版语义会使 CI 长期常红，而常红的 CI 等于无 CI。Guardian 审查是里程碑级动作，
+      不是每 commit 动作。
+    compensating_action: 交付报告新增 unreviewed_commits 节，逐条列出未被 Guardian 报告覆盖的 commit
+    compensating_action_boundary: 该节是信息记录；不得实现为红灯，不得实现为判据
+  R-02:
+    ruling: Pinned Reuse Ledger 定为 28 条
+    executed: 删 architecture_and_integration_boundary.v1.0.yaml（归类错误，非 Tenant 合同）；留 Persona 额外 3 条
+  R-03:
+    ruling: 改造 check_workspace_attestation 的 collect() 为扫目录
+    executed: 不新建 checker，只改既有 collect()；断言逻辑与错误码一条未动；补负例夹具 N110
+  R-04:
+    ruling: waiver_timestamp 接受推导值但必须标注
+    executed: 见 derived_field_provenance；签署回执本身未被修改
+  R-05:
+    ruling: 推送分支 + 开 PR，不合并
+    executed: 见 delivery_channel
+
+derived_field_provenance:
+  waiver_timestamp: '2026-08-13'
+  waiver_timestamp_provenance: derived_from_signed_at   # 非签署回执原生字段
+  waiver_timestamp_note: >-
+    规范源 role_unavailability_fallback 要求豁免记录含 waiver_timestamp，而签署回执
+    advisor_review 块没有该字段。此处取该回执的 signed_at——豁免是随该回执一并落盘的。
+    这是推导值，不得呈现为原生字段。签署回执未被修改（git diff 可验）。
 
 # --- 实测值：报告里的每一个计数数字都从这里读，不由人手抄 --------------------
 measurement:
   checkers_before: 21
   checkers_after: 24
   checkers_backported: 3
-  fixtures_total_after: 155
-  fixtures_added: 23
-  fixtures_added_note: 迁入 21 份（负例 21）＋ BR0-EP00 新写 2 份正例（P44 / P45），补齐两个迁入判据的正向侧
+  fixtures_total_after: 156
+  fixtures_added: 24
+  fixtures_added_note: 迁入 21 份负例 ＋ 新写 P44 / P45 两份正例（补齐两个迁入判据的正向侧）＋ EP00-FIX 新写 N110 负例（证明工作区佐证改扫目录后逐份在读）；P21 因下限由 3 升 4 改名并补第四批次，不计入新增
   schema_fixtures: 36
   literal_sites_found: 8
   literal_sites_remaining: 0
   confirmation_sites: 56
   confirmation_bound: 13
-  reuse_ledger_entries: 29
+  reuse_ledger_entries: 28
   appendix_a_rows_before: 14
-  appendix_a_rows_after: 29
+  appendix_a_rows_after: 28
   security_negative_fixtures: 9
   security_positive_fixtures: 6
   m2_checker_delta_total: 28
   m2_adr_total: 6
+  minimum_guarded_runs: 4
+  guarded_execution_batches: 4
   ci_exit_code: 0
   readme_lines_removed: 25
   measurement_method: >-
@@ -63,71 +98,82 @@ acceptance_results:
     criterion: README 内不再存在 project_state YAML 块；活基线表格与承重串 `**当前活基线 · `SIGNED`**` 逐字保留
     method: DETERMINISTIC_GREP
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: grep_result_ref
   - id: AC-02
     also_known_as: 最终收敛版 AC-02
     criterion: README 改动后 ci/run_all_checks.py EXIT=0，check_baseline_hashes 不报 AUTHORIZED_FILE_CHANGED_AFTER_FREEZE
     method: CI_FULL_RUN
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: ci_run_ref
   - id: AC-03
     also_known_as: 最终收敛版 AC-03
     criterion: 含业务概念词的源码不触发泄露判据；植入的真实凭据 / 手机号 / 身份证 / 客户文件路径逐条全部触发
     method: SECURITY_NEGATIVE_TEST
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: security_test_ref
   - id: AC-04
     also_known_as: 最终收敛版 AC-04
-    criterion: 三个迁入判据在 main 上实跑 PASS，各自至少一正一负夹具行为符合声明
+    criterion: 三个迁入判据在 main 上实跑 PASS，各自至少一正一负夹具行为符合声明；三者实际扫描到的对象数写明，任一为 0 判 FAIL
     method: CI_FULL_RUN
     blocking: true
-    outcome: PASS
-    evidence_ref: ci_run_ref
+    result: PASS
+    evidence_ref: scan_scope_ref
   - id: AC-05
     criterion: 把本包自己的 delivery-report 数字改一位，check_report_number_traceability 必须 FAIL；恢复后必须 PASS
     method: NEGATIVE_INJECTION_TEST
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: negative_injection_ref
   - id: AC-06
     also_known_as: 最终收敛版 AC-05
     criterion: Pinned Reuse Ledger 覆盖 BR0—BR6 所需 M0/M1 资产；每条含 asset / source_path / 40 位 source_commit / file_sha256，缺一即 FAIL
     method: DETERMINISTIC_CHECK
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: ledger_ref
   - id: AC-07
     also_known_as: 最终收敛版 AC-06
     criterion: 两份模板存在；environment_class 取值域声明为 G/Z/L/S/V/P；未创建任何平台/后台/数据库
     method: HUMAN_EXPERT_REVIEW
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: template_review_ref
   - id: AC-08
     criterion: branch_baseline.v0.1.yaml 明确列出 A 类三个、B 类七个及重评时点、C 类十八个、M2 ADR 六份三分类结论及理由
     method: HUMAN_EXPERT_REVIEW
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: classification_ref
   - id: AC-09
     criterion: 全仓无第二棵 reports_and_receipts/ 树；执行包模板只在 execution/ 下
     method: DETERMINISTIC_GREP
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: grep_result_ref
   - id: AC-10
     criterion: README 不再承载状态（readme_no_longer_carries_state），不是 source_of_truth_unique
     method: DETERMINISTIC_GREP
     blocking: true
-    outcome: PASS
+    result: PASS
     evidence_ref: grep_result_ref
     scope_note: >-
       状态真源本有三份（PRD_v1.2_change_map.yaml:resulting_state、
       role_operating_model.v0.2.yaml:project_state、baseline_reconciliation_receipt.yaml）。
       本包只消除 README 这第四份；合并那三份属扩张，不在本包范围，也未做。
+
+  - id: AC-11
+    criterion: workspace_attestation.BR0-EP00.yaml 存在且 check_workspace_attestation PASS；check_execution_uuid PASS 且 RUNS 含本批次
+    method: CI_FULL_RUN
+    blocking: true
+    result: PASS
+    evidence_ref: ci_run_ref
+    note: >-
+      依赖 R-03 改造后生效——改造前 collect() 写死单一文件名，新增佐证文件判据看都不看。
+      已活体验证：删掉新文件的 base_commit，判据当场报
+      MISSING_FIELD ... (in governance/workspaces/workspace_attestation.BR0-EP00.yaml)。
 
 evidence_refs:
   grep_result_ref: 11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_report.md 第三节
@@ -135,32 +181,54 @@ evidence_refs:
   security_test_ref: ".github/workflows/secret-and-hidden-boundary.yml 的 Leak detector self-test 步骤，本地实跑逐条 PASS"
   negative_injection_ref: 交付报告第七节 AC-05 段，含注入前后两次判据输出
   ledger_ref: 01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml
-  template_review_ref: execution/templates/ 两份 + execution/dispatch_discipline.md
+  template_review_ref: execution/templates/ 两份 + execution/dispatch_discipline.md + execution/README.md（environment_class 六行定义）
+  scan_scope_ref:
+    rule: 任一判据实扫对象数为 0 即判 FAIL —— 判据扫不到东西不等于没问题
+    check_report_number_traceability:
+      scanned_objects: 5
+      unit: 交付报告（1 份 templated + 4 份 legacy_untemplated）
+      unregistered_found: 0
+    check_founder_confirmation_binding:
+      scanned_objects: 56
+      unit: Founder 确认位（布尔字段站点）
+      registered: 56
+      act_claims_true_bound: 13
+    check_collect_derivation_discipline:
+      scanned_objects: 24
+      unit: checker 源码文件
+      literal_sites_remaining: 0
+    zero_scan_detected: false
   classification_ref: 01_contracts_and_schemas/branch_baseline.v0.1.yaml checker_delta / m2_adr_classification
 
 # --- 需要 Founder 裁定的条件 -------------------------------------------------
 open_conditions:
   - id: COND-BR0EP00-01
+    status: RESOLVED_BY_FOUNDER_RULING
+    resolved_by: EP00-FIX R-01
     statement: >-
       commit_events 的守护对象取「旧结论被当作仍然有效」，而非「HEAD 尚未被 Guardian 审过」。
       按前者，main 当前无事件、CI 绿；按后者，CI 会立刻报红——因为支线 PRD v0.3.2 的三个提交
       确实从未被 Guardian 审过。这是真实事实，本包没有把它藏起来，但也没有权限替 Founder 决定
       CI 是否应当因此常红。
-    requires: Founder 二选一
-    default_if_undecided: 维持本包取舍（守「旧结论被当作仍然有效」）
+    resolution: 保持 A 版语义；补偿动作＝交付报告 unreviewed_commits 节（信息记录，非红灯、非判据）
   - id: COND-BR0EP00-02
+    status: RESOLVED_BY_FOUNDER_RULING
+    resolved_by: EP00-FIX R-04
     statement: >-
       规范源 role_unavailability_fallback 要求豁免记录含 waiver_timestamp，
       而签署回执 advisor_review 块没有该字段。本包取回执 signed_at 作为该时点。
       这是推导，不是回执里原本写着的值。
-    requires: Founder 确认该取值口径，或补一次回执勘误
-    forbidden_action: 执行侧不得自行改写 Founder 签署回执
+    resolution: >-
+      接受推导值，但必须标 waiver_timestamp_provenance（值 derived_from_signed_at），不得呈现为原生字段
+    forbidden_action: 执行侧不得自行改写 Founder 签署回执（未改，git diff 可验）
   - id: COND-BR0EP00-03
+    status: OPEN
     statement: >-
-      BR0-EP01 的放行条件，v0.2 写 FOUNDER_RULING_A1_A4_NOT_SIGNED，最终收敛版写
-      「BR0-EP00 完成后即允许编译」。仓内不存在 A1—A4 裁决文件。本包按后发者取，
-      但不因此当作前一条已撤销。
-    requires: Founder 一句话确认 A1—A4 是否仍为前置
+      BR0-EP01 的放行条件为 FOUNDER_RULING_A1_A5_NOT_SIGNED（顶层 authority.entry_blocker）。
+      仓内不存在《BR0 启动裁决书 v0.1》（A1—A5）文件。
+    requires: Founder 签署该裁决书
+    closes_automatically_on: 裁决书签署落盘；签署同时范围冻结生效（scope_freeze_rule）
+    not_a_defect_of_this_package: true
 
 known_issues:
   - id: KI-01
@@ -178,9 +246,11 @@ known_issues:
     disposition: ACCEPTED_RISK
   - id: KI-03
     statement: >-
-      environment_class 的六个取值 G/Z/L/S/V/P，其语义在仓内、PRD v0.3.2 与执行规划 HTML
-      中均查无定义（已实测）。模板按 Founder 给定取值域原样固定，未编造字母含义。
-    disposition: REQUIRES_FOUNDER_DECISION
+      environment_class 六个取值 G/Z/L/S/V/P 此前在仓内、PRD v0.3.2 与执行规划 HTML 中
+      均查无定义，模板当时标的是占位符而非编造的含义。
+    disposition: RESOLVED
+    resolved_by: EP00-FIX 第五节 —— Founder 已确认六行定义，落 execution/README.md，模板同步取真值
+    residual: 无；该占位符全仓归零（execution/README.md 为语义单一定义处）
   - id: KI-04
     statement: >-
       check_compliance_ledger 的清单下限现读合规合同，但仍经 payload 传入，夹具理论上可把
@@ -188,6 +258,15 @@ known_issues:
       属 BR2 收口重评面，本包未做。
     disposition: DEFERRED_TO_BR2_CLOSEOUT
 
+delivery_channel:
+  branch: br0/ep00-bootstrap-readiness
+  pushed_to_remote: RECORDED_IN_EP00_FIX_REPORT
+  pull_request: base=main，标题注明「待 Guardian 审查，勿合并」
+  merged: false
+  merge_authority: Founder（本包属 L3：触及 CI、角色可用性与状态位）
+
 next_action: >-
-  Founder 裁定 open_conditions 三条；裁定后按 branch_baseline.v0.1.yaml handoff_to_br0_ep01
-  编译 BR0-EP01 Runtime Skeleton 执行合同。在此之前不得开始任何 Runtime 施工。
+  1) Founder 签《BR0 启动裁决书 v0.1》（A1—A5）→ COND-03 关闭、范围冻结生效；
+  2) Guardian 审 PR → 合并 main；
+  3) 基于合并后的 candidate_commit JIT 编译 BR0-EP01 Runtime Skeleton。
+  在此之前不得开始任何 Runtime 施工。

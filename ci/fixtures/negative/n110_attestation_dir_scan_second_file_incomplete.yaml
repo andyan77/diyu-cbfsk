@@ -1,0 +1,33 @@
+fixture_id: N110-attestation-dir-scan-second-file-incomplete
+description: >-
+  目录里有两份工作区佐证，第二份的记录缺 base_commit。判据改为扫目录之后必须逐份判——
+  只判第一份就等于「新任务把佐证放进来，判据看都不看」。R-03 落盘的守护点。
+checker: check_workspace_attestation
+expected: FAIL
+payload:
+  documents:
+    - file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+      document:
+        is_cryptographic_independence_proof: false
+        records:
+          - workspace_id: writer-local
+            workspace_path: /repo
+            conversation_or_session_id: eef1de95-7248-4561-bf98-f69bed6c335a
+            session_id_available: true
+            session_started_at: '2026-08-13T02:14:00-07:00'
+            base_commit: 1b6f66864b288b8ebd3ff5894fae839d57ae6655
+            role: TEMPORARY_EXECUTION_WRITER
+            status: ACTIVE
+            is_task_guardian: false
+    - file: governance/workspaces/workspace_attestation.BR0-EP00.yaml
+      document:
+        is_cryptographic_independence_proof: false
+        records:
+          - workspace_id: br0-ep00-writer
+            workspace_path: /repo
+            conversation_or_session_id: 91a4fb81-c888-4176-b452-09023de0ece3
+            session_id_available: true
+            session_started_at: null
+            role: TEMPORARY_EXECUTION_WRITER
+            status: ACTIVE
+            is_task_guardian: false

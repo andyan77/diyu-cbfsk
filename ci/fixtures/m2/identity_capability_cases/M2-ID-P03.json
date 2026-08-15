@@ -1,0 +1,23 @@
+{
+  "case_id": "M2-ID-P03",
+  "description": "普通账号登录与 API 鉴权：用户主动提供的账号身份，不属禁止范围。",
+  "expected_hits": 0,
+  "note": "",
+  "documents": {
+    "fake/auth_service.yaml": {
+      "services": [
+        {
+          "service_id": "account_auth",
+          "capabilities": [
+            "user_authorized_account_identity"
+          ],
+          "dependencies": [
+            "oauth2",
+            "session_token"
+          ],
+          "note": "账号身份不与任何面部或生物特征绑定"
+        }
+      ]
+    }
+  }
+}

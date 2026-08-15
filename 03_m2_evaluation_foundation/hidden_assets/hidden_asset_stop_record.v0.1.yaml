@@ -1,0 +1,110 @@
+schema_version: "0.1"
+record_id: DIYU-CBFSK-M2-HIDDEN-ASSET-STOP-001
+artifact_id: hidden_asset_stop_record.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+phase: Phase 5
+status: STOPPED_AWAITING_FOUNDER
+artifact_lifecycle_state: validated
+
+stop_condition:
+  id: HIDDEN_STORAGE_NOT_PROVISIONED
+  triggered: true
+  triggered_at: M2-EP02 Phase 5 开始时的存储就绪性判定
+  authority: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第三节 Phase 5 ＋ 第五节 STOP 清单
+  instruction_followed: 报告等待 Founder 处置，不得就近落在主仓
+
+determination:
+  method: 读取 governance/storage/hidden_benchmark_storage_contract.yaml 与条件台账当前状态
+  evidence_level: runtime_verified
+  facts:
+    - fact: Founder 已选定存储位置
+      value: STORE-A（独立私有仓库，受限访问）
+      source: hidden_benchmark_storage_contract.current_state.selected_storage_id
+    - fact: 该位置尚未 provision
+      value: false
+      source: hidden_benchmark_storage_contract.allowed_storage[STORE-A].provisioned
+    - fact: 合同自述同一事实
+      value: false
+      source: hidden_benchmark_storage_contract.current_state.selected_storage_provisioned
+    - fact: 跟踪条件仍未关闭
+      value: OPEN
+      source: governance/conditions/conditional_decision_ledger.yaml COND-011.status
+    - fact: 该条件的负责角色是 Founder
+      value: FOUNDER_PRODUCT_AUTHORITY
+      source: COND-011.owner
+  conclusion: >-
+    存储位置尚未就绪，且不在本仓可写范围——STORE-A 按定义必须是执行侧不可读的独立私有仓库。
+    Phase 5 的资产生成因此不启动。
+
+why_execution_side_cannot_resolve_it:
+  - id: R1
+    reason: >-
+      STORE-A 的定义是「Planner / Codex / 知识引出工作面不可读」的独立私有仓库。
+      由执行侧去创建它，等于执行侧天然拥有读权限——那样 provision 出来的东西不满足隔离定义，
+      形式上完成、实质上失效。
+  - id: R2
+    reason: COND-011 的 owner 与 verification_role 都是 FOUNDER_PRODUCT_AUTHORITY，不是执行侧。
+  - id: R3
+    reason: >-
+      「不得就近落在主仓」是本次指令的明文红线。在存储未就绪时把资产先放主仓再迁走，
+      会在 Git 历史里留下永久副本——克隆提供完整对象历史，删除不能撤销泄漏。
+
+actions_not_taken:
+  hidden_benchmark_items_generated: 0
+  hidden_brands_generated: 0
+  fixture_brands_generated: 0
+  answer_assets_generated: 0
+  hidden_content_written_to_main_repository: false
+  store_a_provisioned_by_execution_side: false
+  contract_current_state_modified: false
+  contract_current_state_modified_note: >-
+    未改 hidden_benchmark_storage_contract 的任何字段——它如实记录着「未 provision」，
+    改它才是问题。本记录只引用，不改写。
+
+what_was_delivered_instead:
+  - id: D1
+    item: 隐藏资产生成合同（解除阻塞后即可直接执行的规则）
+    path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml
+    rationale: 合同先行是 M2 的既定次序——规则先冻结，内容后生成，反过来等于出题方自己定义什么算及格。
+  - id: D2
+    item: 空清单（如实记录零资产，而不是留白）
+    path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+    rationale: 留白会被读成「还没想到」，写成 count=0 才是「已经确认没有」。
+  - id: D3
+    item: 可验证性原则（收口时只凭 manifest／计数／哈希／边界判据核验）
+    landed_in: hidden_asset_generation_contract.v0.1.yaml verifiability_principle
+
+founder_disposition_required:
+  question: 隐藏评测资产的生成如何处置？
+  options_for_founder:
+    - id: OPT-1
+      option: 先 provision STORE-A（Founder 侧创建独立私有仓库并使访问控制生效），再授权生成
+      consequence: COND-011 关闭；生成按已落盘的生成合同执行
+    - id: OPT-2
+      option: 改选 STORE-B 或 STORE-C 并 provision
+      consequence: 需同步更新 hidden_benchmark_storage_contract.current_state 与 COND-011
+    - id: OPT-3
+      option: 隐藏资产整体延后至 M2 冻结之后
+      consequence: >-
+        须同时裁决 M2 通过标准中「隐藏集在 M2 冻结前建成」这一条如何处理——
+        该条来自 M2 冻结 Brief 第 6 节，执行侧不得自行放宽。
+  execution_side_recommendation: OPT-1
+  execution_side_recommendation_reason: >-
+    选址已由 Founder 于 SIGNOFF-001 第四条裁定为 STORE-A，仅缺 provision 这一个动作；
+    改选或延后都会牵动已冻结的 M2 通过标准，代价更大。
+  blocking_for: [M2 冻结（EP03 Phase 2 的隐藏资产冻结记录将为空）, COND-011 关闭]
+  not_blocking_for: [EP02 其余 Phase, EP03 Phase 0/1/3/4/5]
+
+continuation_decision:
+  ep02_ep03_continued: true
+  basis: >-
+    Founder 授权 EP02→EP03 一站到底、两包完成后统一收口。本停止条件的作用域是
+    「隐藏资产生成」这一项，不是整个执行链——其余 Phase 不依赖隐藏资产存在。
+    执行侧因此按授权继续，并把本项作为收口时的首要待裁事项上报，
+    **不**把它记为已完成，也**不**用空清单冒充已交付。
+  what_is_explicitly_incomplete:
+    - Phase 5 隐藏资产生成
+    - M2 冻结 Brief 第 6 节「30—50 个合成封闭未见品牌须在 M2 冻结前建成」
+    - COND-011 关闭

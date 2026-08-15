@@ -1,0 +1,10 @@
+fixture_id: N209-error-code-scan-empty
+description: 一条错误码都没扫到——判据读到空不等于没问题。
+checker: check_error_code_fixture_coverage
+expected: FAIL
+payload:
+  declared: []
+  uncovered: []
+  fixture_count: 12
+  ledger_entries: []
+  declared_cap: 0

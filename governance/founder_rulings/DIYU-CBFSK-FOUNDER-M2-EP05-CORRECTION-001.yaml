@@ -1,0 +1,227 @@
+schema_version: "0.1"
+ruling_id: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001
+project_id: DIYU-CBFSK-001
+milestone: M2
+issued_by: FOUNDER_PRODUCT_AUTHORITY
+ruling_kind: correction_and_targeted_patch
+target_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+supersedes: []
+corrects: DIYU-CBFSK-FOUNDER-M2-EP05-001
+
+decision: BLOCK_CALIBRATION_DISPATCH
+retain_existing_artifacts: true
+rewrite_required: false
+targeted_patch_required: true
+
+why_two_verdicts_do_not_conflict: >-
+  Guardian 对本候选为 REJECT（阻断 1 条），总顾问为 BLOCK_CALIBRATION_DISPATCH（6 项）。
+  两者不冲突：前者是一根没接上的线，后者是测量对象不存在。
+
+retained_and_not_redone:
+  statement: >-
+    EP05 的编号锚点、STOP 码治理、数字模板、历史测量快照、棘轮机制均已验为扎实，予以保留，不重做。
+  items: [编号锚点, STOP 码治理, 数字模板, 历史测量快照, 棘轮机制]
+
+until_corrected:
+  calibration_pack_distribution_allowed: false
+  formal_hidden_batch_allowed: false
+  guardian_review_allowed: false
+  merge_allowed: false
+
+unchanged_state_flags:
+  m2_frozen: false
+  founder_signature_eligible: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+
+article_c1_calibration_pack_needs_object_under_review:
+  headline: 校准包补齐被评对象（本轮最重要）
+  scale_retained: 90
+  structure: 45 格（品类 × 任务类型 × 风险等级）× 每格 2 个候选输出 = 90 个评审单元
+  per_cell_coverage: 每格两份候选须覆盖——一份明确落在接受边界内，一份明确越界或处于高价值边界位置
+  new_fields_per_review_unit: [candidate_id, candidate_output, candidate_decision_trace]
+  decision_trace_required_for: [mechanism_correctness, open_decision]
+  candidate_authorship: 主执行侧撰写
+  candidate_nature: 评测刺激材料
+  non_candidate_knowledge:
+    must_be_marked: true
+    forbidden:
+      - 进入知识状态链
+      - 进入任何候选知识池
+      - 被后续里程碑当作候选知识消费
+  expected_label_placement:
+    must_not_enter_distribution_pack: true
+    only_in: Founder 锚点真源
+  on_recovery_compute_both: [两侧一致率, 对已冻结边界的符合率]
+  what_this_measures:
+    verbatim: 本次校准测的是评审员是否以同一方式理解已冻结边界，不测笛语系统能力。
+    must_be_written_into_contract: true
+    reports_must_not_state_as: 产品能力基线
+
+article_c2_judgment_language:
+  headline: 判定语言（评审输出与聚合共用）
+  new_record_fields: [candidate_id, judgment, review_note]
+  judgment_enum: [ACCEPT, REJECT, AMBIGUOUS]
+  judgment_meaning: 边界成员资格判断
+  score_meaning: 边界内质量或完整度
+  score_must_not_replace_judgment: true
+  constraint_class_score_values: [0.0, 1.0]
+  numeric_anchor_required_for: [mechanism_correctness, open_decision]
+  numeric_anchor_rule: 无锚点时不得声称 0.63 与 0.78 有稳定含义
+  review_note_required_when:
+    - disagreement_code 非空
+    - judgment 为 AMBIGUOUS
+    - hard_gate_result 出现 FAIL 或 NOT_APPLICABLE
+  aggregation_rule: 聚合直接比较 judgment
+  aggregation_forbidden:
+    statement: 严禁在聚合时用尚未冻结的阈值把 score 转成成立／不成立
+    why: 循环定义——先用未冻结阈值解释结果，再用结果去冻结该阈值
+
+article_c3_record_validation:
+  headline: 记录校验补齐（现有判据可放行畸形数据）
+  main_checker_must_enforce:
+    - 每侧恰好覆盖 90 个唯一 case
+    - 无重复 ID
+    - CAL-001~090 全覆盖
+    - score 为数值且在 0–1
+    - 约束题仅 0/1
+    - hard_gate_result 的键与本题 hard_gate_refs 精确相等
+    - 硬门值属合法枚举
+    - disagreement_code 属合法枚举
+    - 有记录时 produced_by_workspace 必填
+    - 同一侧 model 与 model_version 一致
+    - 聚合数字由原始 180 条重算
+  required_negative_fixtures:
+    CAL-N01: 缺 candidate_output
+    CAL-N02: 重复 case_id
+    CAL-N03: 缺一个 case
+    CAL-N04: score 越界
+    CAL-N05: 约束题 score=0.5
+    CAL-N06: 硬门键多或少
+    CAL-N07: 非法硬门值
+    CAL-N08: 非法 disagreement_code
+    CAL-N09: 有异议缺 review_note
+    CAL-N10: produced_by_workspace 为空
+    CAL-N11: 两侧 workspace 相同
+    CAL-N12: 聚合数字非由原始记录重算
+
+article_c4_threshold_evidence_typing:
+  headline: 阈值证据分型（评审员校准 ≠ 产品指标统计校准）
+  evidence_kinds: [POLICY_THRESHOLD, EMPIRICAL_CUTPOINT]
+  policy_threshold:
+    decided_by: FOUNDER_PRODUCT_AUTHORITY
+    basis: [商业风险, 误接受代价, PRD 建议值, 校准分歧]
+    must_not_be_disguised_as: 统计估计
+  empirical_cutpoint:
+    requires: [真实候选输出, metric_to_review_unit_mapping, estimator, minimum_sample_count, false_acceptance_policy, false_rejection_policy]
+    recomputed_by_checker_from_raw_records: true
+  new_mapping_file_fields: [metric_id, review_unit_ids, evidence_kind, estimator, minimum_sample_count, recommendation_rule, false_acceptance_policy]
+  explicit_statement:
+    verbatim: >-
+      两名评审员在 90 个边界题上达成一致，只能说明评分口径可理解，
+      不能统计推导出人设一致性、语感、多模态等产品指标应取 0.82 还是 0.87。
+
+article_c5_timing_gate_five_items_and_founder_binding:
+  headline: 时序门改五项 ＋ Founder 确认绑定（含 Guardian 阻断 BLOCK-M2E5-01）
+  preconditions:
+    TG-01: 两侧结果齐全
+    TG-02: 聚合完成
+    TG-03: 阈值建议形成
+    TG-04: Founder 冻结全部 M2 阈值且 COND-007 = CLOSED
+    TG-05: Founder 确认公开蓝图在指定冻结 Commit 上无需修改（绑定完整 40 位 Commit 与输入包哈希）
+  rationale:
+    verbatim: >-
+      若隐藏资产先于阈值冻结生成，而 Founder 又要在 STORE-A 侧做高风险私有审查，
+      「是否看过隐藏题之后才定及格线」将永远无法自证清白。
+  guardian_block_fix:
+    finding_id: BLOCK-M2E5-01
+    statement: founder_confirmation 不得再是裸布尔值
+    checker_must_validate: [confirmed_by, confirmed_at, confirmed_at_commit, 具名裁决文件存在且条款路径可解析]
+    commit_must_be_full_40_hex: true
+    reuse_existing_single_implementation: ci/checkers/_common.py 既有的裁决证据解析器与完整哈希校验器
+    contract_file_hash_pinned: true
+    negative_fixture_requirement: 执行侧自填四个字段仍须 FAIL
+
+article_c6_store_a_file_level_intake:
+  headline: STORE-A 证据改为文件级 intake（现为读台账自述）
+  checker_must:
+    - 从固定公开证据目录读取两份真实 YAML
+    - 校验必填字段与值
+    - 校验访问矩阵全部角色
+    - 扫描全部 scalar，拒绝 URL scheme、代码托管仓库定位符、token、deploy key、本机绝对路径、私有主机名、隐藏内容、随机种子
+    - 计算两份文件 SHA-256
+    - 由文件推导 COND-011 可否关闭
+    - 台账只记录推导结果，不得作为证据本身
+  revoke: locator_present 硬编码 False
+  until_fixed: intake 过程一律不得被称为「机器核验」
+
+article_c7_founder_confirmation_fields_general_rule:
+  headline: 通用化——Founder 确认类字段（永久生效）
+  permanent: true
+  rule: >-
+    凡表示「Founder 已确认／已批准／已授权／已签署」的字段，一律不得是执行侧可写的裸布尔值；
+    必须绑定：具名裁决文件（存在且条款路径可解析）＋ 完整 40 位签署基线 Commit ＋ 签署人 ＋ 签署时点。
+  required_bindings: [ruling_file_resolvable, clause_path_resolvable, signature_base_commit_40_hex, signed_by, signed_at]
+  new_repo_wide_checker_required: true
+  scan_semantics: [confirmed, approved, authorized, signed]
+  negative_fixture_required: true
+  existing_fields_must_be_remediated: true
+  rationale:
+    verbatim: 本轮的洞不是一个文件写漏了，是一类字段的设计缺省——被守的一方自己就能开门。
+
+article_c8_four_non_blocking:
+  headline: 四条非阻塞
+  items:
+    - id: NB-1
+      subject: PR 正文修正四项 PARTIAL 的描述
+      statement: >-
+        Provision 证据通过只会得到 COND-011=CLOSED 与 m2_hidden_assets_status=STORAGE_READY；
+        四项 PARTIAL 仍须经历正式资产生成、私有冻结、双检查与公开 Manifest 导入，
+        不是回传两份 YAML 就 READY。
+    - id: NB-2
+      subject: 输入包字段更名
+      rename: {from: source_main_candidate_commit, to: bloodline_base_commit}
+      add_field: bundle_content_digest
+      move_candidate_commit_binding_to: Receipt 或外部签署记录
+      why: 避免自引用悖论
+    - id: NB-3
+      subject: FF-ONLY 表述
+      required_wording: 当前候选满足快进前提，最终在合并瞬间重新核验
+      must_not_be_stated_as: 平台已保证
+    - id: NB-4
+      subject: NB-M2E5-01
+      statement: STOP 登记册条目自报的 sites 路径须与实扫结果比对
+
+article_c9_self_check_and_stop_point:
+  headline: 自检与停点
+  requirements:
+    - 全量 checker 与夹具全绿、退出码 0
+    - EQ-1～EQ-5 自查
+    - 报告一律引用机器记录字段，不手工复述数字
+  stop_point:
+    stay_on_branch: candidate/m2
+    forbidden_after_completion:
+      - 分发校准包
+      - 启动任何隐藏批次（含试产）
+      - 发起审查
+      - 合并
+  section_14:
+    statement: >-
+      本裁决产生新 Commit 后，Guardian 与总顾问对 41f62181 的结论即失效，
+      须对新 Head 各做一次 Delta 核验。
+
+machine_checkable_fields:
+  article_count: 9
+  timing_gate_precondition_count: 5
+  required_negative_fixture_count: 12
+  judgment_enum_size: 3
+  evidence_kind_count: 2
+  calibration_review_unit_count: 90
+  calibration_cell_count: 45
+  candidates_per_cell: 2
+  merge_allowed: false
+  calibration_pack_distribution_allowed: false
+  formal_hidden_batch_allowed: false
+  guardian_review_allowed: false

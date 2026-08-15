@@ -284,7 +284,25 @@ conditions:
     required_evidence:
       - 独立私有仓库已创建且访问控制生效（Planner / Codex / 知识引出工作面不可读）
       - hidden_benchmark_storage_contract.allowed_storage.STORE-A.provisioned=true 并绑定裁决 Commit
-    status: OPEN
+    status: EVIDENCE_SUBMITTED
     verification_role: FOUNDER_PRODUCT_AUTHORITY
     closure_commit: null
     founder_closure_decision: null
+    status_change:
+      from: OPEN
+      to: EVIDENCE_SUBMITTED
+      at_package: M2-EP04
+      basis: >-
+        Founder 在 DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 收口裁决第三节第 1 项声明：已在另一账号、
+        另一台电脑 provision 私有隐藏资产仓库（STORE-A），并设任务级角色
+        FOUNDER_HIDDEN_BENCHMARK_STEWARD。该声明构成三项关闭要件中的 founder_attestation。
+      why_not_closed: >-
+        三项要件（store_a_provisioning_attestation / access_matrix / founder_attestation）
+        执行侧只拿到第三项。凭一项关掉三要件条件，等于把「Founder 说做了」记成「已核验做了」，
+        而本条的全部意义正是核验隔离是否真的生效。因此推进到台账允许的 EVIDENCE_SUBMITTED，
+        不推进到 CLOSED。
+      still_missing:
+        - store_a_provisioning_attestation（STORE-A 仓库标识与 provision 证明）
+        - access_matrix（须显示 Planner / Codex / 知识引出工作面均不可读）
+      semantics_ref: governance/conditions/m2_condition_state_semantics.v0.1.yaml cond_011
+      execution_side_did_not_modify_storage_contract: true

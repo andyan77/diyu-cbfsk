@@ -1,0 +1,16 @@
+fixture_id: M2-N131
+description: artifact_id 与文件名对不上——文件改名后引用会指向旧名。
+checker: check_m2_cross_package_consistency
+expected: FAIL
+payload:
+  unresolved_paths: []
+  unresolved_profiles: []
+  unresolved_adrs: []
+  unresolved_constraint_ids: []
+  artifact_id_mismatches:
+  - file: 03_m2_evaluation_foundation/scoring/a.v0.1.yaml
+    declared: scorecard_old.v0.1
+    implied: a.v0.1
+  state_field_conflicts: []
+  profile_count: 1
+  scanned_file_count: 20

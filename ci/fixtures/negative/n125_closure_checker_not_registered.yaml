@@ -1,0 +1,41 @@
+fixture_id: M2R-N16-closure-checker-not-registered
+description: checker 存在但没进 run_all_checks 注册表——等于没跑。
+checker: check_milestone_closure_coverage
+expected: FAIL
+payload:
+  milestones:
+  - milestone: M0
+    upstream_source: src/M0_brief.md
+    upstream_source_exists: true
+    coverage_map: map/M0_coverage.yaml
+    coverage_map_exists: true
+    closure_checker: ci/checkers/check_m0_closure.py
+    closure_checker_exists: true
+    closure_checker_registered: true
+    milestone_receipt: 11_reports_and_receipts/m0_delivery_receipt.yaml
+    milestone_receipt_exists: true
+  - milestone: M1
+    upstream_source: src/M1_brief.md
+    upstream_source_exists: true
+    coverage_map: map/M1_coverage.yaml
+    coverage_map_exists: true
+    closure_checker: ci/checkers/check_m1_closure.py
+    closure_checker_exists: true
+    closure_checker_registered: true
+    milestone_receipt: 11_reports_and_receipts/m1_delivery_receipt.yaml
+    milestone_receipt_exists: true
+  - milestone: M2
+    upstream_source: src/M2_brief.md
+    upstream_source_exists: true
+    coverage_map: map/M2_coverage.yaml
+    coverage_map_exists: true
+    closure_checker: ci/checkers/check_m2_closure.py
+    closure_checker_exists: true
+    closure_checker_registered: false
+    milestone_receipt: 11_reports_and_receipts/m2_delivery_receipt.yaml
+    milestone_receipt_exists: true
+  milestones_with_receipts:
+  - M0
+  - M1
+  - M2
+  declared_milestone_count: 3

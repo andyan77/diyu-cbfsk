@@ -1,0 +1,19 @@
+{
+  "case_id": "M2-ID-P04",
+  "description": "色彩分析用的面部区域定位：算几何位置，不产生可跨会话比对的标识。",
+  "expected_hits": 0,
+  "note": "",
+  "documents": {
+    "fake/vision_pipeline.yaml": {
+      "components": [
+        {
+          "component": "color_analysis",
+          "capabilities": [
+            "face_region_localization_for_color_analysis",
+            "ephemeral_image_processing"
+          ]
+        }
+      ]
+    }
+  }
+}

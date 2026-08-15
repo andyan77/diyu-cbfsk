@@ -1,0 +1,478 @@
+schema_version: '0.1'
+decision_file_id: DIYU-CBFSK-M2-THRESHOLD-FREEZE-DECISION
+artifact_id: threshold_freeze_decision.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: AWAITING_FOUNDER_DECISION
+artifact_lifecycle_state: validated
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第三节 A-3c
+tracked_condition: COND-007
+execution_side_does_not_adjudicate:
+  statement: 本文件只做合并、分歧统计、Founder 审查队列与阈值建议，不自行裁决任何阈值。founder_decision 一律为 null，只有 Founder 能填。
+  failure_state_if_violated: EXECUTION_SIDE_FROZE_THRESHOLD
+ground_truth_source:
+  metrics: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx 10.2 表格
+  extraction: 判据从 DOCX 表格独立提取 34 行，不读本文件自述（防自证）。
+  owner_mapping: 03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml metric_ownership
+metric_count: 34
+counts:
+  m2_freeze_required: 25
+  suggested_adjustable: 8
+  not_adjustable: 1
+  recommendation_present: 9
+  recommendation_absent: 25
+  founder_decided: 0
+why_recommendations_are_absent:
+  count: 25
+  reason: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  record: 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml
+  statement: 25 条 M2_FREEZE_REQUIRED 指标没有建议值，不是漏写——没有校准数据就给建议值，那个数字是编的。有建议值的 9 条全部来自 PRD 已给的值，来源写在 evidence_source。
+high_risk_policy:
+  metric: high_risk_founder_full_review_rate
+  value: 100%
+  adjustable: false
+  sampling_allowed: false
+  statement: 高风险项维持零容忍或 Founder 全审 100%，不是可调阈值。
+  source: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 5 节
+hidden_set_tuning_forbidden:
+  forbidden: true
+  statement: 严禁使用隐藏集参与任何阈值调参。调参只能用公开校准集。
+  reason: 用隐藏集调参，等于让考生先看一遍考卷再定及格线——之后所有分数都不再是能力的度量。
+  failure_state: HIDDEN_SET_USED_FOR_TUNING
+  allowed_tuning_source: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+founder_review_queue:
+  queue_length: 0
+  queue_state: EMPTY_PENDING_REVIEW_EVIDENCE
+  populated_from: 两侧评审记录中 disagreement_code 非 null 的条目，以及全部 high 风险例
+  high_risk_cases_always_queued: 30
+  high_risk_cases_always_queued_source: public_calibration_set.v0.1 中 risk_tier=high 的例数
+machine_checkable_fields:
+  metric_count:
+    type: integer
+    required_value: 34
+  founder_decided_count:
+    type: integer
+    current_value: 0
+  execution_side_decision_count:
+    type: integer
+    required_value: 0
+  calibration_sample_count_total:
+    type: integer
+    current_value: 0
+failure_states:
+- EXECUTION_SIDE_FROZE_THRESHOLD
+- HIDDEN_SET_USED_FOR_TUNING
+- THRESHOLD_METRIC_MISSING
+- THRESHOLD_METRIC_UNKNOWN
+- RECOMMENDATION_WITHOUT_EVIDENCE
+- HIGH_RISK_THRESHOLD_LOWERED
+items:
+- metric: internal_review_panel_pass_rate（未见品牌）
+  owner_artifact: unseen_brand_split.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 80%
+  threshold_recommendation: ≥ 80%
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: internal_review_panel_pass_rate（未见品类/边缘任务）
+  owner_artifact: unseen_category_edge_cases.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 75%
+  threshold_recommendation: ≥ 75%
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: 严重风格错位率
+  owner_artifact: expert_scoring_rubric.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: < 5%
+  threshold_recommendation: < 5%
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: 核心决策逻辑稳定率
+  owner_artifact: decision_logic_stability_rate.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 85%
+  threshold_recommendation: ≥ 85%
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: 专业解释平均分
+  owner_artifact: expert_scoring_rubric.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 4.0/5
+  threshold_recommendation: ≥ 4.0/5
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: 叙事质量平均分
+  owner_artifact: narrative_scoring_rubric.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 4.0/5
+  threshold_recommendation: ≥ 4.0/5
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: 账号差异化通过率
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 85%
+  threshold_recommendation: ≥ 85%
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: 人工可发布率
+  owner_artifact: benchmark_capability_matrix.v0.1
+  threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+  prd_value: ≥ 75%
+  threshold_recommendation: ≥ 75%
+  evidence_source: PRD v1.2 10.2 建议质量门
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null
+- metric: persona_identity_consistency_score
+  owner_artifact: persona_continuity_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: professional_value_consistency_score
+  owner_artifact: persona_continuity_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: historical_viewpoint_contradiction_rate
+  owner_artifact: persona_continuity_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: series_continuity_score
+  owner_artifact: persona_continuity_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: persona_drift_rate
+  owner_artifact: persona_continuity_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: topic_repetition_without_new_value_rate
+  owner_artifact: persona_continuity_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: self_media_native_voice_score
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: platform_native_expression_score
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: spoken_rhythm_score
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: shootability_score
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: lecture_style_penalty_rate
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: formulaic_template_rate
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: ai_generated_tone_detection_rate
+  owner_artifact: social_media_native_voice_scoring_rubric.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: visual_attribute_extraction_accuracy
+  owner_artifact: multimodal_attribute_benchmark.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: visual_attribute_confidence_calibration
+  owner_artifact: multimodal_confidence_calibration_contract.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: structured_fact_conflict_rate
+  owner_artifact: multimodal_attribute_benchmark.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: authoritative_fact_override_rate
+  owner_artifact: multimodal_attribute_benchmark.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: unverifiable_attribute_claim_rate
+  owner_artifact: multimodal_attribute_benchmark.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: cross_image_consistency_score
+  owner_artifact: multimodal_attribute_benchmark.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: low_quality_image_failure_close_rate
+  owner_artifact: multimodal_attribute_benchmark.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: five_category_activation_readiness
+  owner_artifact: five_category_readiness_definition.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: unauthorized_auto_publish_rate
+  owner_artifact: hard_gate_definitions.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: ai_reviewer_disagreement_rate
+  owner_artifact: reviewer_calibration_contract.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: founder_override_rate
+  owner_artifact: reviewer_calibration_contract.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: founder_sample_review_rate
+  owner_artifact: reviewer_calibration_contract.v0.1
+  threshold_kind: M2_FREEZE_REQUIRED
+  prd_value: M2_FREEZE_REQUIRED
+  threshold_recommendation: null
+  evidence_source: null
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: founder_decides_at_freeze
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- metric: high_risk_founder_full_review_rate
+  owner_artifact: reviewer_calibration_contract.v0.1
+  threshold_kind: NOT_ADJUSTABLE
+  prd_value: 100%
+  threshold_recommendation: 100%
+  evidence_source: PRD v1.2 10.2 + M2 冻结 Brief 第 5 节
+  calibration_sample_count: 0
+  founder_decision: null
+  founder_decision_commit: null
+  false_acceptance_policy: zero_tolerance_no_sampling
+  revision_rule: benchmark_revision_protocol.v0.1 唯一合法通道；因失败而降标永久禁止。
+  blocked_by: null

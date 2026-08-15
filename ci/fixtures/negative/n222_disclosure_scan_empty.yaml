@@ -1,0 +1,6 @@
+fixture_id: N222-disclosure-scan-empty
+description: 一对回执/报告都没扫到。
+checker: check_disclosure_discipline
+expected: FAIL
+payload:
+  pairs: []

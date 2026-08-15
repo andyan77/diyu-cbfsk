@@ -1,0 +1,750 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-FOUNDER-CONFIRMATION-BINDING-REGISTRY
+artifact_id: founder_confirmation_binding_registry.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP05-CORRECTION
+status: VALIDATED
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c7_founder_confirmation_fields_general_rule
+permanent: true
+rule:
+  verbatim: 凡表示「Founder 已确认／已批准／已授权／已签署」的字段，一律不得是执行侧可写的裸布尔值；必须绑定：具名裁决文件（存在且条款路径可解析）＋ 完整 40 位签署基线 Commit ＋ 签署人 ＋ 签署时点。
+  why: 本轮的洞不是一个文件写漏了，是一类字段的设计缺省——被守的一方自己就能开门。
+  plain: 一个 false 改成 true 只要一次键盘操作，事后也看不出是谁在哪个版本上确认的。要求它挂上具名文件、条款、完整哈希、人和时间，是为了让「谁说的」这件事有地方查。
+scan_scope:
+  globs:
+  - '**/*.yaml'
+  excluded_prefixes:
+  - ci/fixtures/
+  excluded_reason: 夹具是给判据喂的字面量，不是本仓对外的声称。
+  narrowing_rule: 扫描范围只可扩大，不可收窄；收窄即 CONFIRMATION_SCAN_SCOPE_NARROWED。
+  key_stems:
+  - acknowledge
+  - acknowledged
+  - approval
+  - approve
+  - approved
+  - attest
+  - attestation
+  - attested
+  - authorization
+  - authorize
+  - authorized
+  - confirm
+  - confirmation
+  - confirmed
+  - confirms
+  - sign
+  - signature
+  - signed
+  - signoff
+  - witnessed
+  value_type: boolean
+claim_kinds:
+  founder_act_claim: 声称 Founder 做过某个动作。值为 true 时必须有完整绑定。
+  requirement: 声称某事需要 Founder 批准。是要求，不是已发生。
+  capability: 角色权限位。
+  negation: 声称「没有被授权」。
+  eligibility: 声称够不够格被签署。由交付状态推导。
+  derived_state: 对 git 事实或既有记录的观测结果，可复算。
+  discipline_acknowledgement: 承认一条纪律。
+  inside_founder_ruling: 字段写在 Founder 亲发的裁决文件里，文件本身即那份具名记录。
+  inside_founder_signature_record: 字段写在 Founder 签署回执里，它是被指向的那一端。
+binding_required_when:
+  claim_kind: founder_act_claim
+  value: true
+  required_fields:
+  - authority_kind
+  - authority_ref
+  - authority_file
+  - authority_clause_path
+  - signature_base_commit
+  - signed_by
+  - signed_at
+  authority_file_must_exist: true
+  authority_clause_must_resolve: true
+  commit_must_be_full_40_hex: true
+  resolver: ci/checkers/_common.py clause_resolves（单一实现，裁决引用与本判据共用）
+counts:
+  sites: 92
+  kind_capability: 1
+  kind_derived_state: 5
+  kind_discipline_acknowledgement: 1
+  kind_eligibility: 7
+  kind_founder_act_claim: 21
+  kind_inside_founder_ruling: 3
+  kind_inside_founder_signature_record: 14
+  kind_negation: 11
+  kind_requirement: 13
+  bound: 13
+  act_claims_true: 13
+failure_states:
+- CONFIRMATION_FIELD_NOT_REGISTERED
+- CONFIRMATION_REGISTRY_ENTRY_ORPHANED
+- CONFIRMATION_CLAIM_KIND_INVALID
+- FOUNDER_CONFIRMATION_UNBOUND
+- CONFIRMATION_VALUE_DRIFT
+- CONFIRMATION_SITE_COUNT_MISSTATED
+- CONFIRMATION_SCAN_SCOPE_NARROWED
+sites:
+- file: 03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml
+  key_path: founder_confirmation.confirmed
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
+  key_path: current_closure_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: 03_m2_evaluation_foundation/tournament/baseline_tournament_contract.v0.1.yaml
+  key_path: real_baseline_run.not_authorized_by_this_package
+  value_when_registered: true
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: 11_reports_and_receipts/m1_delivery_receipt.yaml
+  key_path: acceptance_gate_self_check.is_founder_approval
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: 11_reports_and_receipts/m1_delivery_receipt.yaml
+  key_path: merge_invariant_verification.origin_main_equals_approved_commit
+  value_when_registered: true
+  claim_kind: derived_state
+  binding: null
+  why_no_binding: 是对 git 事实或既有记录的观测结果，可由命令复算，不是在声称 Founder 做过什么。
+- file: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_receipt.yaml
+  key_path: frozen_paths_untouched.prd_v1_2_and_signature_artifacts
+  value_when_registered: true
+  claim_kind: derived_state
+  binding: null
+  why_no_binding: 是对 git 事实或既有记录的观测结果，可由命令复算，不是在声称 Founder 做过什么。
+- file: 11_reports_and_receipts/m2_ep01/m2_ep01_task_manifest.yaml
+  key_path: baseline_rule.live_git_observation.main_head_equals_signed_baseline
+  value_when_registered: true
+  claim_kind: derived_state
+  binding: null
+  why_no_binding: 是对 git 事实或既有记录的观测结果，可由命令复算，不是在声称 Founder 做过什么。
+- file: 11_reports_and_receipts/m2_ep01/m2_ep01_task_manifest.yaml
+  key_path: governance_sources_read.read_at_signed_baseline_commit
+  value_when_registered: true
+  claim_kind: derived_state
+  binding: null
+  why_no_binding: 是对 git 事实或既有记录的观测结果，可由命令复算，不是在声称 Founder 做过什么。
+- file: 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_receipt.yaml
+  key_path: ep04_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml
+  key_path: ep05_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: PRD_v1.2_change_map.yaml
+  key_path: resulting_state.m0_authorized
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: state_flag_authorizations.flags.m0_authorized.authorized
+- file: PRD_v1.2_change_map.yaml
+  key_path: resulting_state.founder_prd_signed
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: state_flag_authorizations.flags.founder_prd_signed.authorized
+- file: PRD_v1.2_change_map.yaml
+  key_path: resulting_state.founder_m0_authorized
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: state_flag_authorizations.flags.founder_m0_authorized.authorized
+- file: PRD_v1.2_change_map.yaml
+  key_path: resulting_state.founder_merge_approved
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: state_flag_authorizations.flags.founder_merge_approved.authorized
+- file: governance/baseline/baseline_migration_record.yaml
+  key_path: actions[3].deletion_requires_founder_approval
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/baseline/founder_pinned_baseline.v0.1.yaml
+  key_path: document_editing_authorized
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_ruling
+    authority_ref: DIYU-CBFSK-FR-ORG-002
+    authority_file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: founder_patches
+    signature_base_commit: ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+    commit_basis: baseline_reconciliation_receipt.remote_head_commit（该阶段的基线 Commit）
+- file: governance/baseline/founder_pinned_baseline.v0.1.yaml
+  key_path: active_baseline_candidates[3].authorized_modification_in_this_task
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: merge_authorization.execution_sequence
+- file: governance/bootstrap/role_operating_model.v0.2.yaml
+  key_path: effective_precondition_satisfied_by.founder_merge_approved
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: merge_authorization.approved_for_merge
+- file: governance/bootstrap/role_operating_model.v0.2.yaml
+  key_path: project_state.m0_authorized
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: state_flag_authorizations.flags.m0_authorized.authorized
+- file: governance/bootstrap/role_operating_model.v0.2.yaml
+  key_path: current_team.effort_baseline.founder_approved_estimation_basis
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: prd_signature.founder_prd_decision
+- file: governance/bootstrap/role_operating_model.v0.2.yaml
+  key_path: roles[1].final_approval_permission
+  value_when_registered: false
+  claim_kind: capability
+  binding: null
+  why_no_binding: 角色权限位，描述这个角色能不能做，不是某次动作发生过没有。
+- file: governance/bootstrap/role_operating_model.v0.2.yaml
+  key_path: workspace_attestation.when_session_id_unavailable.founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/bootstrap/role_operating_model.v0.2.yaml
+  key_path: product_truth.candidate_signed_by_founder
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_signature_record
+    authority_ref: DIYU-CBFSK-FOUNDER-SIGNOFF-001
+    authority_file: governance/receipts/founder_signoff_receipt.yaml
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: founder_signoff_receipt.signature_base_commit
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: prd_signature.founder_prd_decision
+- file: governance/conditions/conditional_decision_ledger.yaml
+  key_path: conditions[0].conditional_is_not_pass_acknowledged
+  value_when_registered: true
+  claim_kind: discipline_acknowledgement
+  binding: null
+  why_no_binding: 承认的是一条纪律（CONDITIONAL 不等于 PASS），不是 Founder 的某次批准。
+- file: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  key_path: founder_confirmation.confirmed
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/conditions/m2_condition_state_semantics.v0.1.yaml
+  key_path: candidate_status.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M0-DECISION-001.yaml
+  key_path: due_decisions[1].founder_confirms_red_line_priority_reading
+  value_when_registered: true
+  claim_kind: inside_founder_ruling
+  binding: null
+  why_no_binding: 字段就写在 Founder 亲发的裁决文件里——文件本身即是那份具名记录，再要它指向另一份具名记录就成了循环。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml
+  key_path: article_3_merge_pre_authorization.approved_for_merge
+  value_when_registered: true
+  claim_kind: inside_founder_ruling
+  binding: null
+  why_no_binding: 字段就写在 Founder 亲发的裁决文件里——文件本身即是那份具名记录，再要它指向另一份具名记录就成了循环。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001.yaml
+  key_path: article_4_hidden_scale_adoption.multimodal_scope.founder_approval_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP05-001.yaml
+  key_path: article_9_state_and_not_authorized.candidate_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001.yaml
+  key_path: unchanged_state_flags.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP06-001.yaml
+  key_path: article_5_unchanged.state_flags_remain_false.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同上——转录裁决第五节维持不变的六位状态旗，说的是够不够格，不是已经签了。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP06-001.yaml
+  key_path: machine_checkable_fields.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同一裁决的机器可核字段投影，值与上一条同源。
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml
+  key_path: machine_checkable_fields.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同上——转录裁决第十二节维持不变的七位红线旗，说的是够不够格，不是已经签了。
+- file: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml
+  key_path: package_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml
+  key_path: article_landing.by_article.A4.measurement.guardian_workspace_attested
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: >-
+    本值为 false，记的是「见证不存在」。它是 B-03 的落地记录本身：
+    Guardian 隔离工作区见证未交到执行侧，因此该轮结论不计入独立核验证据。
+    置 true 才需要绑定，绑定物是 governance/workspaces/ 下的对应见证条目，由判据现场比对。
+  open_item: OI-FIX-03
+- file: governance/workspaces/workspace_attestation.M2-PREMERGE-FIX.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: >-
+    说的是「这份见证还需要 Founder 手工补签」，是一项待办要求，不是「Founder 已签」。
+    真正的已签位是同文件的 founder_workspace_attestation.status，当前为 NOT_YET_ATTESTED。
+- file: governance/reports/m2_premerge_review_request.v0.1.yaml
+  key_path: review_rounds.items[0].records[0].workspace_attested
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: >-
+    本字段为 false，记的是「见证**不存在**」，不是「Founder 已见证」。
+    它恰恰是本册要保的那一侧：Guardian 在独立工作区审的这一轮，见证未交到执行侧，
+    因此判据把该记录标为不计入独立核验证据（counts_as_independent_verification: false）。
+    置 true 才需要绑定——绑定物是 governance/workspaces/ 下 role=CLAUDE_INDEPENDENT_GUARDIAN
+    且 base_commit 等于被审提交的那条见证，由 check_m2_suspension_seal 现场比对，不是自述。
+  open_item: OI-FIX-03
+- file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001.yaml
+  key_path: machine_checkable_fields.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 挂起裁决第六节维持不变项的机器投影，说的是够不够格，不是已经签了。
+- file: governance/conditions/m2_seal_ledger.v0.1.yaml
+  key_path: state_flags_at_seal.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 挂起那一刻的状态快照，转录自交付状态推导值。
+- file: governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml
+  key_path: what_this_file_is.merge_authorized_now
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: >-
+    值为 false，即「Founder 尚未授权合并」，不构成 Founder 动作声称。
+    置 true 时必须绑定具名裁决＋完整 40 位签署基线 Commit＋签署人＋签署时点；
+    本轮三门齐备之一就是「本裁决之后的合并授权」，那份授权尚不存在。
+- file: 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml
+  key_path: gaps[0].execution_side_authoring_intent.must_be_confirmed_before_use
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这条撰写意图要 Founder 确认后才能拿来分流」，是要求，不是已确认。
+- file: 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+  key_path: package_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 交付末态里的够格位，由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+  key_path: article_landing.by_article.A4.measurement.merge_authorized_now
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: >-
+    值为 false，即「Founder 尚未授权合并」，不构成 Founder 动作声称。
+    这是交付那一刻对合并协议的快照——报告引的必须是冻结值，不是活登记册，否则报告会随后续施工悄悄改变。
+- file: governance/workspaces/workspace_attestation.M2-SEAL.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
+  key_path: three_layer_hash_mechanism.adjudication.retirement_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
+  key_path: three_layer_hash_mechanism.adjudication.weakening_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: version_strategy.prd_v1_1_must_not_be_signed_now
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: execution_authorizations.m0_execution_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: execution_authorizations.m1_execution_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: execution_authorizations.m2_execution_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: execution_authorizations.knowledge_distillation_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: execution_authorizations.production_execution_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: execution_authorizations.main_merge_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+  key_path: founder_confirmation.baseline_manifest_confirmed
+  value_when_registered: true
+  claim_kind: inside_founder_ruling
+  binding: null
+  why_no_binding: 字段就写在 Founder 亲发的裁决文件里——文件本身即是那份具名记录，再要它指向另一份具名记录就成了循环。
+- file: governance/receipts/baseline_reconciliation_receipt.yaml
+  key_path: document_editing_authorized
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_ruling
+    authority_ref: DIYU-CBFSK-FR-ORG-002
+    authority_file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: founder_patches
+    signature_base_commit: ce13cf3d6dca3ed6ac918400c8c08c10051832bf
+    commit_basis: baseline_reconciliation_receipt.remote_head_commit（该阶段的基线 Commit）
+- file: governance/receipts/baseline_reconciliation_receipt.yaml
+  key_path: founder_prd_signed
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/receipts/baseline_reconciliation_receipt.yaml
+  key_path: founder_m0_authorized
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/receipts/baseline_reconciliation_receipt.yaml
+  key_path: founder_merge_approved
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/receipts/candidate_freeze_receipt.yaml
+  key_path: state_at_freeze.founder_baseline_confirmed
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_ruling
+    authority_ref: DIYU-CBFSK-FR-ORG-002
+    authority_file: governance/founder_rulings/DIYU-CBFSK-FR-ORG-002.yaml
+    signed_by: FOUNDER_PRODUCT_AUTHORITY
+    signed_at: '2026-08-13'
+    authority_clause_path: founder_confirmation.baseline_manifest_confirmed
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: candidate_freeze_receipt.candidate_commit
+- file: governance/receipts/candidate_freeze_receipt.yaml
+  key_path: state_at_freeze.founder_workspace_attestation_witnessed
+  value_when_registered: true
+  claim_kind: founder_act_claim
+  binding:
+    authority_kind: founder_attestation_record
+    authority_ref: DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002
+    authority_file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+    authority_clause_path: founder_workspace_attestation_round_2.status
+    signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
+    commit_basis: workspace_attestation…founder_workspace_attestation_round_2.witnessed_commit
+    signed_by: Founder
+    signed_at: '2026-08-13'
+- file: governance/receipts/candidate_freeze_receipt.yaml
+  key_path: state_at_freeze.founder_prd_signed
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/receipts/candidate_freeze_receipt.yaml
+  key_path: state_at_freeze.founder_m0_authorized
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/receipts/candidate_freeze_receipt.yaml
+  key_path: state_at_freeze.founder_merge_approved
+  value_when_registered: false
+  claim_kind: founder_act_claim
+  binding: null
+  why_no_binding: 当前为 false——该动作尚未发生。置 true 时必须同时补齐绑定，否则判据当场失败。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: guardian_review.round_1.valid_for_signature_base
+  value_when_registered: false
+  claim_kind: derived_state
+  binding: null
+  why_no_binding: 是对 git 事实或既有记录的观测结果，可由命令复算，不是在声称 Founder 做过什么。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: merge_authorization.approved_for_merge
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: merge_authorization.push_to_remote_authorized
+  value_when_registered: false
+  claim_kind: negation
+  binding: null
+  why_no_binding: 断言的是「没有被授权」。声称没有授权不需要授权来背书——需要背书的是声称有。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.prd_v1_2_effective.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.founder_prd_signed.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.m0_authorized.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.founder_m0_authorized.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.founder_merge_approved.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.main_merged.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.guardian_review_completed.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.m0_execution_started.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.m1_started.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.m2_started.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.flags.chatgpt_remote_review_completed.authorized
+  value_when_registered: false
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.execution_status.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/receipts/founder_signoff_receipt.yaml
+  key_path: state_flag_authorizations.active_baseline_signature.authorized
+  value_when_registered: true
+  claim_kind: inside_founder_signature_record
+  binding: null
+  why_no_binding: 签署回执是被指向的那一端：全仓其他确认位都绑到它身上。它自己每条都带 basis 与 signature_base_commit。
+- file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+  key_path: records[2].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+  key_path: records[3].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+  key_path: records[4].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml
+  key_path: records[5].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.M2-EP04.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.M2-EP05.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.schema.yaml
+  key_path: when_session_id_unavailable.founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_receipt.yaml
+  key_path: correction_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 说的是「够不够格拿去签」，不是「已经签了」。够格与否由交付状态推导，不是 Founder 的动作。
+- file: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_receipt.yaml
+  key_path: package_end_state.founder_signature_eligible
+  value_when_registered: false
+  claim_kind: eligibility
+  binding: null
+  why_no_binding: 同上——交付末态里的够格位，不是 Founder 的动作。
+- file: governance/workspaces/workspace_attestation.M2-EP06.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这件事需要 Founder 批」，不是「Founder 已经批了」。要求本身不构成授权声称。
+- file: governance/workspaces/workspace_attestation.M2-EP05-CORRECTION.yaml
+  key_path: records[0].founder_manual_attestation_required
+  value_when_registered: true
+  claim_kind: requirement
+  binding: null
+  why_no_binding: 说的是「这份见证需要 Founder 手工补签」，不是「已经签了」。要求本身不构成授权声称。

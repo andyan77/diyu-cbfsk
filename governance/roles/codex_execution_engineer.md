@@ -60,12 +60,14 @@
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M1_COMPLETE
+execution_status: M2_IN_PROGRESS
 m0_authorized: true
 m1_started: true
 m1_status: FOUNDER_ACCEPTED
-m2_started: false
+m2_started: true
+m2_status: SUSPENDED_BY_FOUNDER
 knowledge_distillation_started: false
 production_servable: false
 main_merged: true
+execution_permitted: false
 ```

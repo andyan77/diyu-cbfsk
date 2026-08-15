@@ -1,0 +1,13 @@
+fixture_id: M2-P11
+description: EP01 与 EP02 产物四类交叉引用全部解析成功，Profile 唯一，状态字段无冲突。
+checker: check_m2_cross_package_consistency
+expected: PASS
+payload:
+  unresolved_paths: []
+  unresolved_profiles: []
+  unresolved_adrs: []
+  unresolved_constraint_ids: []
+  artifact_id_mismatches: []
+  state_field_conflicts: []
+  profile_count: 1
+  scanned_file_count: 20

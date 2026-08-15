@@ -1,0 +1,222 @@
+schema_version: "0.1"
+registry_id: DIYU-CBFSK-M2-ACCEPTABLE-DECISION-BOUNDARY-REGISTRY
+artifact_id: acceptable_decision_boundary_registry.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 18 项
+ruling_anchors: [D-28]
+prd_anchors: [PRD-3.3-P-14, PRD-10.2, PRD-16.2-SC-20]
+
+principle:
+  statement: >-
+    ②③ 类任务的冻结对象是可接受决策边界，不是参考答案。本注册表就是那个被冻结的对象。
+  why_not_answers: >-
+    冻结一份参考答案，等于宣布搭配只有一种做法；再往后所有评测都在比「像不像那一份」，
+    而不是「成不成立」。边界冻结的是合法与不合法的分界，中间怎么走由方案自己负责。
+  stop_condition: SC-20
+  risk: R-22
+
+gold_answer_policy:
+  constraint_correctness: allowed
+  mechanism_correctness: forbidden
+  open_decision: forbidden
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+  restated_here_note: 口径只有一个定义处，本注册表引用不复述（EQ-1）。
+
+registry_scope:
+  covers: 公开校准集的 ②③ 类题目
+  does_not_cover: 隐藏侧题目的边界
+  hidden_side_owner: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+  hidden_side_location: STORE-A
+  hidden_side_note: >-
+    隐藏侧题目的边界条目由 Steward 在 STORE-A 内产出，不进主仓；主仓只收计数与哈希。
+    本注册表作为生成输入交给 Steward（见 A→B 输入包 required_files）。
+
+boundary_family_count: 15
+mechanism_family_count: 8
+open_decision_family_count: 7
+
+families:
+  - boundary_id: ADB-M-01
+    task_class: mechanism_correctness
+    name: 比例与视觉重心
+    acceptable_reasoning_interval: >-
+      判断须建立在「腰线位置 / 上下装长度比 / 视觉重心高低」这一组可观察量上，并说明该量如何
+      影响目标效果。区间内允许不同取值组合；区间外＝未指出任何可观察量，或以体型标签直接下结论。
+    out_of_boundary:
+      - 以「梨形身材应该…」一类粗糙标签替代机制
+      - 只给结论不给可观察量
+    bound_conflict_rule_ids: [CP-01]
+  - boundary_id: ADB-M-02
+    task_class: mechanism_correctness
+    name: 廓形与身体线条关系
+    acceptable_reasoning_interval: >-
+      须说明廓形（合体 / 直筒 / 廓型）与身体线条的相互作用方向及其适用条件；
+      允许结论相反，只要条件前提不同且各自成立。
+    out_of_boundary:
+      - 同一条件下给出互相矛盾的作用方向
+      - 未说明适用条件的绝对化断言
+    bound_style_dimension_ids: [structure, body_curve_relation]
+  - boundary_id: ADB-M-03
+    task_class: mechanism_correctness
+    name: 色彩强度与肤色场景
+    acceptable_reasoning_interval: >-
+      须联合肤色、场景光照与品牌色彩语法三者说明；允许在冷暖判断上分歧，
+      但不得脱离品牌真源的色彩硬规则。
+    out_of_boundary:
+      - 违反品牌色彩硬规则
+      - 只凭「显白」一类效果词，无任何条件
+    bound_style_dimension_ids: [color_intensity]
+    bound_hard_gate_ids: [HG-02]
+  - boundary_id: ADB-M-04
+    task_class: mechanism_correctness
+    name: 材质与季节功能
+    acceptable_reasoning_interval: >-
+      须从材质的可观察属性（垂坠 / 挺括 / 光泽 / 厚度）推到功能结论；
+      材质成分本身只能取自权威结构化事实，不得由图像或经验推断。
+    out_of_boundary:
+      - 推断成分
+      - 以材质名称直接等同于性能承诺
+    bound_style_dimension_ids: [material_rusticity_luster]
+    bound_hard_gate_ids: [HG-10]
+  - boundary_id: ADB-M-05
+    task_class: mechanism_correctness
+    name: 正式度与场合匹配
+    acceptable_reasoning_interval: >-
+      须明确场合的正式度区间与方案的正式度落点，并说明二者的匹配或有意错位的理由。
+    out_of_boundary:
+      - 未定义场合正式度即断言匹配
+      - 把错位说成匹配而不给理由
+    bound_style_dimension_ids: [formality]
+  - boundary_id: ADB-M-06
+    task_class: mechanism_correctness
+    name: 品牌语法迁移
+    acceptable_reasoning_interval: >-
+      须先取品牌真源的硬规则与软偏好，再说明本方案如何落在该语法内；
+      未见品牌下允许推理不完整，但不得用系统自身的固定审美替代品牌语法。
+    out_of_boundary:
+      - 把品牌搭成系统自己的固定审美（严重风格错位）
+      - 违反品牌硬规则
+    bound_hard_gate_ids: [HG-02]
+  - boundary_id: ADB-M-07
+    task_class: mechanism_correctness
+    name: 货盘约束下的替代
+    acceptable_reasoning_interval: >-
+      须先确认商品可售性，再给替代路径；替代必须落在有效货盘内，
+      并说明替代件在哪一维度上承接了原件的作用。
+    out_of_boundary:
+      - 引用不存在或不可售的商品
+      - 总部库存冒充门店库存
+    bound_hard_gate_ids: [HG-01]
+  - boundary_id: ADB-M-08
+    task_class: mechanism_correctness
+    name: 安全约束触发后的收窄
+    acceptable_reasoning_interval: >-
+      安全硬约束一旦触发，可接受推理是「收窄候选集并说明被排除的原因」；
+      区间内允许收窄幅度不同，区间外＝以任何理由放宽该约束。
+    out_of_boundary:
+      - 为满足请求放宽安全约束
+      - 未说明收窄依据
+    bound_conflict_rule_ids: [CP-01, CP-02]
+    bound_hard_gate_ids: [HG-03]
+    risk_tier: high
+  - boundary_id: ADB-O-01
+    task_class: open_decision
+    name: 同人同场景的多方案族
+    legal_solution_families:
+      - 裤装族
+      - 裙装族
+      - 连体族
+    acceptance_boundary: >-
+      至少两个成立但取舍不同的族，且说明什么条件变化会交换它们的优先级。
+      族内质量按专业解释与叙事两卡评，不比较族之间谁「更对」。
+    out_of_boundary:
+      - 只给一个族并宣称唯一解
+      - 给多个族但不说明交换条件
+    d28_note: 同条件下一次裤装方案、一次裙装方案且均成立——这不是稳定性反例。
+  - boundary_id: ADB-O-02
+    task_class: open_decision
+    name: 加法与减法两条改造路径
+    legal_solution_families: [加法路径, 减法路径]
+    acceptance_boundary: 两条路径都须给出；只会做加法即越界。
+    out_of_boundary:
+      - 只给加法
+      - 减法路径只是删掉单品而无机制说明
+    prd_anchor: PRD-10.3 必设隐藏测试第三条
+  - boundary_id: ADB-O-03
+    task_class: open_decision
+    name: 预算档位取舍
+    legal_solution_families: [控预算族, 重点单品族, 均衡族]
+    acceptance_boundary: 须说明每族在什么预算与使用频次假设下成立。
+    out_of_boundary: [无预算假设的档位推荐]
+  - boundary_id: ADB-O-04
+    task_class: open_decision
+    name: 风格表达强度
+    legal_solution_families: [收敛表达族, 强化表达族]
+    acceptance_boundary: 两族须落在同一品牌语法内，强度差异不得越过品牌硬规则。
+    out_of_boundary: [以强化表达为由越过品牌硬规则]
+    bound_style_dimension_ids: [individuality_intensity, visual_density]
+    bound_hard_gate_ids: [HG-02]
+  - boundary_id: ADB-O-05
+    task_class: open_decision
+    name: 场景优先级取舍
+    legal_solution_families: [功能优先族, 表达优先族]
+    acceptance_boundary: >-
+      须说明该场景下功能与表达的冲突点；运动与安全场景中功能优先不可被表达优先覆盖。
+    out_of_boundary: [在安全相关场景以表达优先覆盖功能约束]
+    bound_hard_gate_ids: [HG-03]
+  - boundary_id: ADB-O-06
+    task_class: open_decision
+    name: 品牌语法内的叙事视角
+    legal_solution_families: [人物处境视角, 常见误解视角, 品牌语法视角]
+    acceptance_boundary: 视角不同但专业结论一致；叙事不得改变搭配结论。
+    out_of_boundary: [为叙事效果改变专业结论]
+    detection_owner: 03_m2_evaluation_foundation/scoring/narrative_scoring_rubric.v0.1.yaml
+    second_implementation_created: false
+  - boundary_id: ADB-O-07
+    task_class: open_decision
+    name: 跨品类组合的主次取舍
+    legal_solution_families: [以成人为主族, 以未成年人为主族, 对等呼应族]
+    acceptance_boundary: >-
+      任何族都须先按 CP-02「多品类命中取更严」通过安全约束，再谈主次。
+    out_of_boundary: [以主次取舍为由适用较松的品类规则]
+    bound_conflict_rule_ids: [CP-02]
+    bound_combination_rule_ids: [COMBO-01, COMBO-02, COMBO-03, COMBO-04, COMBO-05]
+    bound_hard_gate_ids: [HG-03]
+    risk_tier: high
+
+usage_rules:
+  - id: UR-1
+    statement: 每一道 ②③ 类题必须引用且只引用一个 boundary_id。
+    failure_state: BOUNDARY_REF_MISSING
+  - id: UR-2
+    statement: 题目自带的区间或解族是该 family 的具体化，不得与 family 的边界冲突。
+    failure_state: BOUNDARY_CONTRADICTS_FAMILY
+  - id: UR-3
+    statement: 任何 ②③ 类题不得同时携带唯一 Gold Answer 字段。
+    failure_state: SINGLE_GOLD_ANSWER_ON_OPEN_TASK
+  - id: UR-4
+    statement: 边界一经 Founder 冻结，只能走 benchmark_revision_protocol 修订；因失败而放宽永久禁止。
+    failure_state: BOUNDARY_RELAXED_AFTER_FAILURE
+
+machine_checkable_fields:
+  boundary_family_count: {type: integer, required_value: 15}
+  mechanism_family_count: {type: integer, required_value: 8}
+  open_decision_family_count: {type: integer, required_value: 7}
+  every_family_has_out_of_boundary: {type: boolean, required_value: true}
+  gold_answer_field_present: {type: boolean, required_value: false}
+
+freeze_status: NOT_FROZEN
+freeze_at: Founder 收口签署
+threshold_status: NOT_A_THRESHOLD_ARTIFACT
+
+failure_states:
+  - BOUNDARY_REF_MISSING
+  - BOUNDARY_CONTRADICTS_FAMILY
+  - SINGLE_GOLD_ANSWER_ON_OPEN_TASK
+  - BOUNDARY_RELAXED_AFTER_FAILURE
+  - BOUNDARY_FAMILY_COUNT_DRIFT

@@ -1,0 +1,151 @@
+schema_version: '0.1'
+ledger_id: DIYU-CBFSK-ARTIFACT-CHANGE-SINCE-DELIVERY-FREEZE
+artifact_id: artifact_change_since_delivery_freeze.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-PREMERGE-FIX
+established_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_2_b01_zero_byte_claim_false
+enforced_by: ci/checkers/check_m2_suspension_seal.py
+artifact_lifecycle_state: validated
+
+what_this_replaces:
+  retracted_claims:
+  - claim: 自 a4be75e 起零字节改动
+    appeared_in:
+    - governance/reports/m2_premerge_review_request.v0.1.yaml what_reviewers_should_know.what_changed_since_a4be75e
+    - governance/reports/m2_premerge_review_request.md 审查对象段
+    - 11_reports_and_receipts/m2_seal/m2_seal_delivery_report.md
+    - 11_reports_and_receipts/m2_seal/m2_seal_delivery_receipt.yaml
+  - claim: 'artifacts_rewritten: 0'
+    kind: 同源的绝对表述
+  why_retracted: >-
+    它是绝对的，而事实不是。自 a4be75e 起确有既有文件被逐字节改写。
+    执行侧当时想说的是「交付语义没变」——那句话是对的；但写出来的是「零字节改动」，
+    那句话是错的。审查方按写出来的那句话去核，核出不符，于是整份声明的可信度一起塌。
+  the_lesson: >-
+    绝对表述（零、全部、任何、从未）只要有一个反例就整句失效。
+    描述事实要用可复算的范围与分类，不要用听起来更有力的绝对量词。
+
+freeze_point:
+  commit: a4be75e5ee723fe552a293d40632405711920554
+  what: M2 交付态冻结点（M2-EP06）
+  meaning: M2 的全部**交付物**以该 Commit 为准。
+
+precise_facts:
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_2_b01_zero_byte_claim_false B-01-2
+  delivery_semantics_changed_since_a4be75e: false
+  existing_m2_files_byte_changed_since_a4be75e: true
+  change_nature: runtime_measurement_record_update
+  change_nature_meaning: >-
+    改的是「上次量出来是多少」这类记录值，不是「规则是什么」。
+    覆盖面计数、扫描面记账、判据数——这些数字随仓库长大而变，与交付语义无关。
+
+classification_rule:
+  purpose: 判定一次改动到底动了交付物还是动了记录。
+  delivery_artifact_prefixes:
+  - 00_charter/
+  - 01_contracts_and_schemas/
+  - 02_benchmark_manifests/
+  - 03_m2_evaluation_foundation/
+  record_prefixes:
+  - governance/
+  - ci/
+  - 11_reports_and_receipts/
+  projection_files:
+  - CLAUDE.md
+  - AGENTS.md
+  - README.md
+  - .github/copilot-instructions.md
+  rule: >-
+    delivery_artifact_prefixes 下的既有文件字节变了，必须逐条写明改的是什么以及为什么不是语义变更；
+    其余前缀下的变动属治理记录与机器投影，按类计数即可。
+  failure_state: DELIVERY_ARTIFACT_SEMANTICS_CHANGED
+
+changed_existing_m2_files:
+  note: >-
+    「既有文件字节变了」的全量清单，由 git 现算：
+    `git diff --name-status a4be75e5ee723fe552a293d40632405711920554 HEAD` 取 M 与 D 两类
+    （新增文件不属「既有文件被改」）。判据现算后与本清单逐条比对，不等即失败。
+  count: 31
+  items:
+  - path: 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+  - path: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_receipt.yaml
+  - path: AGENTS.md
+  - path: CLAUDE.md
+  - path: README.md
+  - path: ci/checkers/check_external_review_claims.py
+  - path: ci/checkers/check_m2_evaluation_governance.py
+  - path: ci/checkers/check_m2_identity_isolation.py
+  - path: ci/checkers/check_m2_tournament.py
+  - path: ci/checkers/check_project_state.py
+  - path: ci/checkers/check_role_operating_model.py
+  - path: ci/checkers/check_ruling_coverage.py
+  - path: ci/checkers/check_task_classification.py
+  - path: ci/compile_role_instructions.py
+  - path: ci/fixtures/positive/p12_authorized_state_flags.yaml
+  - path: ci/fixtures/positive/p19_m1_started_with_bound_authorization.yaml
+  - path: ci/run_all_checks.py
+  - path: governance/baseline/founder_pinned_baseline.v0.1.yaml
+  - path: governance/bootstrap/role_operating_model.v0.2.yaml
+  - path: governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml
+  - path: governance/gates/founder_confirmation_binding_registry.v0.1.yaml
+  - path: governance/gates/live_gate_roster.v0.1.yaml
+  - path: governance/gates/report_number_binding_registry.v0.1.yaml
+  - path: governance/gates/stop_code_enforcement_registry.v0.1.yaml
+  - path: governance/identifiers/identifier_registry.v0.1.yaml
+  - path: governance/receipts/m2_package_commit_ledger.yaml
+  - path: governance/roles/chatgpt_chief_advisor.md
+  - path: governance/roles/claude_execution_planner.md
+  - path: governance/roles/claude_independent_guardian.md
+  - path: governance/roles/codex_execution_engineer.md
+  - path: governance/roles/founder_decision_charter.md
+
+changed_delivery_artifacts:
+  note: 上表中落在 delivery_artifact_prefixes 下的部分——这才是「交付物被改了没有」的答案。
+  count: 1
+  items:
+  - path: 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+    what_changed: scan_coverage_record 的当前值与历史条目；本包进一步把数字整体移出，只留规则与指针。
+    semantics_changed: false
+    why_not_semantics: >-
+      该文件的语义是「五项禁止能力永不建设、扫描扫结构化面不扫散文」。
+      这三条一个字未动——两次改动都只碰 scan_coverage_record，即「上次扫了多少份」的记账。
+      本包按 B-01-4 把该记账整体搬进 governance/gates/scan_coverage_measurement_ledger.v0.1.yaml，
+      此后该合同不再随扫描面变动而改。
+    change_nature: runtime_measurement_record_update
+    evidence_level: runtime_verified
+    evidence_method: git diff a4be75e..HEAD -- <path>
+
+deleted_since_freeze:
+  count: 0
+  items: []
+  rule: 交付物被删除一律属语义变更，不适用 runtime_measurement_record_update 分类。
+
+absolute_claim_scan:
+  purpose: 撤销一句话不等于它从仓里消失。判据现场全仓搜这几个串，防它在别处复活。
+  phrases:
+  - 零字节改动
+  - 未改任何 M2 交付物字节
+  - 未改任何交付物字节
+  scan_extensions: ['.md', '.yaml', '.yml', '.tmpl']
+  exclusions:
+  - governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml
+  - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml
+  - governance/reports/m2_premerge_review_request.v0.1.yaml
+  exclusions_why: >-
+    这三处是**记录撤销这件事**的地方：缺陷登记册、认定该缺陷的裁决、以及登记 retracted_claim 的请求件。
+    把原话引出来正是它们的职责；扫到它们等于因为病历上写着病名就判病人有病。
+  directory_exclusions:
+  - ci/fixtures/
+  directory_exclusions_why: >-
+    夹具**必须**写得出违规串，否则 ABSOLUTE_UNCHANGED_CLAIM_PRESENT 这条判据无从被行使（EQ-3）。
+    夹具里的字符串是喂给 validate() 的输入数据，不是本仓对外的声明——
+    与 check_m2_identity_isolation 排除自己的 scan_cases 目录同源。
+  exclusions_discipline: >-
+    文件级豁免逐条列名，不用通配——通配一开，下一份文件就能靠改名混进来。
+    唯一的目录级豁免是夹具目录，理由如上，且夹具本身另由 run_fixtures 逐条断言行为。
+
+failure_states:
+- CHANGED_FILE_LIST_MISSTATED
+- DELIVERY_ARTIFACT_SEMANTICS_CHANGED
+- ABSOLUTE_UNCHANGED_CLAIM_PRESENT

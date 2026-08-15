@@ -1,0 +1,9 @@
+fixture_id: N424
+description: 一个 checker 也没扫到——判据没读到东西不等于没问题。（COLLECT_SCAN_EMPTY）
+checker: check_collect_derivation_discipline
+expected: FAIL
+payload:
+  scanned_checkers: []
+  literal_sites: []
+  registered: []
+  declared_literal_count: 0

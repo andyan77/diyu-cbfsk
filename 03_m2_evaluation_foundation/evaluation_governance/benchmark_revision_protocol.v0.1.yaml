@@ -1,0 +1,81 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-BENCHMARK-REVISION-PROTOCOL
+artifact_id: benchmark_revision_protocol.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_CONTRACT_LANDED
+artifact_lifecycle_state: draft
+adr_ref: ADR-005
+prd_anchors: [PRD-10.1, PRD-10.2, PRD-10.4, PRD-16.2, D-28]
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 10 项
+
+scope_note:
+  this_package_delivers: 冻结后修订通道合同 + 锦标赛四维度定义 + 最小机器可检字段
+  this_package_does_not_deliver: [评测执行框架, 观测平台, 任何基线运行结果]
+  freeze_status: NOT_FROZEN
+  freeze_at: M2 冻结
+
+principle: 冻结之后，评测只能按本协议修订；这是唯一合法通道。
+
+absolute_prohibition:
+  id: BRP-ABS-1
+  statement: 因失败而降标永久禁止。
+  meaning: >-
+    不得因为模型没通过就下调阈值、放宽判据、删掉难题或把硬门改成软门。
+    评测存在的意义是发现不达标；把标准改到能通过，等于取消这个意义。
+  failure_state: THRESHOLD_LOWERED_AFTER_FAILURE
+  waivable: false
+  prd_anchor: PRD-10.4
+
+legal_revision_reasons:
+  - id: RR-1
+    reason: 题目本身有错（事实错误、表述歧义、与冻结合同矛盾）
+    requires: [错误证据, Founder 裁决]
+  - id: RR-2
+    reason: 产品合同变更导致判据失效（Founder 裁决在先）
+    requires: [裁决 ID, 受影响题目清单]
+  - id: RR-3
+    reason: 发现泄漏，须替换受污染题目
+    requires: [泄漏证据, 替换题来源隔离证明]
+  - id: RR-4
+    reason: 新增覆盖（只增不改既有判据）
+    requires: [新增题目清单]
+    note: 只增不改是唯一不需要重跑既有基线的修订类型。
+
+revision_requirements:
+  founder_ruling_required: true
+  commit_binding_required: true
+  full_hash_required: true
+  rebaseline_required_on: [RR-1, RR-2, RR-3]
+  ledger_note: 修订记录随 M2 冻结资产一并落盘（M2-EP02/EP03），本包不建台账。
+
+tournament_dimensions:
+  count: 4
+  adr_ref: ADR-005
+  all_required: true
+  all_required_note: 任何一个维度缺席，比较结果都不成立。
+  items:
+    - {dimension_id: quality, name: 质量, measures: 评分卡得分与硬门通过与否, threshold_status: M2_FREEZE_REQUIRED}
+    - {dimension_id: cost, name: 成本, measures: 每次运行的调用成本, threshold_status: M2_FREEZE_REQUIRED}
+    - {dimension_id: latency, name: 延迟, measures: 端到端耗时, threshold_status: M2_FREEZE_REQUIRED}
+    - {dimension_id: human_intervention, name: 人工干预, measures: 需要人改多少、改哪里, threshold_status: M2_FREEZE_REQUIRED,
+       note: 最容易被省的一维；省了会把「模型很好」和「有人在后面一直补」混为一谈。}
+
+minimal_observability:
+  required_run_fields: [run_id, arm, quality, cost, latency, human_intervention, hard_gate_results]
+  platform_built: false
+  platform_note: 不建观测平台；先用运行时产出的结构化记录。
+
+open_decision_scoring:
+  ruling: D-28
+  gold_answer_forbidden_for: [mechanism_correctness, open_decision]
+  frozen_object: acceptable_decision_boundary
+  failure_state: SINGLE_GOLD_ANSWER_ON_OPEN_TASK
+  stop_condition: SC-20
+
+machine_checkable_fields:
+  tournament_dimension_count: {type: integer, required_value: 4}
+  threshold_lowered_after_failure: {type: boolean, required_value: false}
+  revision_requires_founder_ruling: {type: boolean, required_value: true}
+  revisions_recorded: {type: integer, current_value: 0}

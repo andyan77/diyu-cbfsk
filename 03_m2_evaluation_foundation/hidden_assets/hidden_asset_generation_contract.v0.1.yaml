@@ -1,0 +1,197 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-HIDDEN-ASSET-GENERATION-CONTRACT
+artifact_id: hidden_asset_generation_contract.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED_BUT_UNEXECUTED
+artifact_lifecycle_state: draft
+blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED
+blocked_record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+
+single_implementation:
+  boundary_enforcement_delegated_to: ci/checkers/check_hidden_benchmark_boundary.py
+  second_implementation_created: false
+  stop_condition_if_violated: DUPLICATE_HIDDEN_BOUNDARY_IMPLEMENTATION
+  storage_contract: governance/storage/hidden_benchmark_storage_contract.yaml
+  note: >-
+    本合同只规定「生成时按什么规则」，边界执行一概复用既有实现。
+    再写一套隐藏边界扫描，两套判据迟早分叉——一套拦得住、另一套拦不住，而报告只会引用其中一套。
+
+execution_precondition:
+  all_required: true
+  items:
+    - id: PRE-HID-01
+      requirement: STORE-A（或 Founder 改选的存储）实际 provision 且访问控制生效
+      current: false
+      verification: hidden_benchmark_storage_contract.allowed_storage[*].provisioned
+    - id: PRE-HID-02
+      requirement: COND-011 关闭并绑定裁决 Commit
+      current: OPEN
+    - id: PRE-HID-03
+      requirement: Founder 明示授权开始生成
+      current: false
+  consequence_if_unmet: 不生成任何隐藏题、隐藏品牌、夹具品牌或答案资产；不得就近落在主仓。
+
+main_repository_allowed_artifacts:
+  source: governance/storage/hidden_benchmark_storage_contract.yaml main_repository.allowed_artifacts
+  restated_here: false
+  restated_here_note: 清单只有一个定义处，本合同引用不复制（EQ-1）。
+  in_scope_for_this_contract: [manifest, 计数, 哈希, 隔离断言]
+  never_in_main_repository:
+    - 隐藏题正文
+    - 参考答案
+    - 评分细则的保密部分
+    - 隐藏品牌完整事实包
+    - 生成参数
+    - 隐藏运行原始输出
+
+sampling_design_binding:
+  source: 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml
+  restated_here: false
+  required_strata: [category, evaluation_task_class, risk_tier]
+  rule_refs: [SD-1, SD-2, SD-3, SR-1, SR-3]
+  empty_stratum_forbidden: true
+  empty_stratum_failure_state: STRATUM_EMPTY
+
+homogeneity_control:
+  ruling_anchors: [D-18, PRD-8.7]
+  separation_required_between: [夹具池, 隐藏池]
+  separated_on:
+    - 生成配方
+    - 参数空间
+    - 随机种子
+    - 工作区
+    - 上下文
+  hidden_pool_extra: 隐藏池另有专属风格坐标覆盖
+  founder_package_must_not_enter_hidden_pool: true
+  founder_package_rule_source: D-18
+  failure_states: [HIDDEN_POOL_HOMOGENEOUS_WITH_FIXTURE_POOL, FOUNDER_PACKAGE_IN_HIDDEN_SET]
+  double_check_required: 泄漏 ＋ 同质性双检查报告
+
+synthetic_marking:
+  required: true
+  rule: 所有合成资产必须显式标记 synthetic=true 与生成来源
+  why: >-
+    不标记的合成品牌一旦流出，读者无从判断它是不是真实品牌事实。
+    「看起来像真的」正是合成资产的设计目标，因此标记不能靠人记得。
+  failure_state: SYNTHETIC_ASSET_UNMARKED
+  real_brand_data_forbidden: true
+
+verifiability_principle:
+  id: HID-VERIFY-01
+  statement: >-
+    收口时 Guardian 与总顾问只凭 manifest、计数、哈希与边界判据核验隔离，
+    不得要求读取隐藏内容。
+  rationale: >-
+    要求读取隐藏内容才能核验，等于为了证明隔离而破坏隔离。审查者一旦读过隐藏题，
+    该隐藏集对这位审查者就永久失效——而审查者恰恰参与后续所有轮次。
+  reviewer_may_verify_with: [frozen manifest, item counts, content hashes, 边界判据结果, runner 接口定义, 结果摘要]
+  reviewer_may_not_request: [隐藏题正文, 参考答案, 隐藏品牌完整事实包, 逐题原始输出, 生成参数]
+  on_such_request: 一律拒绝并报告
+  failure_state: HIDDEN_CONTENT_DISCLOSURE_REQUESTED
+  applies_to: [CLAUDE_INDEPENDENT_GUARDIAN, GPT_CHIEF_ADVISOR, CODEX_EXECUTION_ENGINEER, CLAUDE_EXECUTION_PLANNER]
+  founder_exempt: true
+  founder_exempt_note: Founder 是隐藏集的所有者，不受本条限制。
+
+freeze_timing:
+  hidden_assets_freeze_effective_from: Founder 收口签署
+  before_signature: 可修订
+  after_signature: 按 benchmark_revision_protocol 的唯一合法通道修订
+  source: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 审查安排
+
+quantity_floor:
+  adopted_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 收口裁决第四节（Founder 全盘采纳，含图像）
+  source_section: 同一裁决 v1.1 第九节
+  single_definition_here: true
+  single_definition_note: 数量下限只有本处一个定义；Steward Prompt 与输入包 Manifest 一律引用不复制（EQ-1）。
+  brands:
+    hidden_brand_count: 40
+    hidden_brand_count_range_from_brief: [30, 50]
+    range_source: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 6 节
+  products:
+    products_per_brand_min: 12
+    products_per_brand_max: 18
+    total_product_records_min: 480
+  images:
+    actual_image_files_min: 240
+    must_cover_all_multimodal_referenced_products: true
+  evaluation_items_per_brand:
+    constraint_correctness: 4
+    mechanism_correctness: 4
+    open_decision: 4
+  evaluation_items_total:
+    total_min: 480
+    cross_category_min: 60
+    multimodal_min: 80
+    persona_continuity_min: 60
+    social_media_native_voice_min: 60
+    high_risk_min: 100
+    high_risk_founder_review_coverage: 1.0
+    high_risk_sampling_allowed: false
+
+per_brand_minimum_composition:
+  rule: 缺一即该品牌不计数。
+  counting_rule: 计数以「满足最低构成」为准；仅有名称与风格坐标的品牌不得计入 brand_count。
+  failure_state: BRAND_COUNTED_WITHOUT_MINIMUM_COMPOSITION
+  required_components:
+    - 品牌事实包
+    - 目标受众
+    - 品类
+    - 硬规则
+    - 软偏好
+    - 禁用组合
+    - 商品目录
+    - 库存快照
+    - 场景
+    - 商品图像
+    - 三类评测项
+    - 合法机制区间
+    - 合法解族
+    - 硬门引用
+
+image_rules:
+  all_synthetic: true
+  generation_must_be_reproducible: true
+  reproducibility_definition: 同输入同输出（固定配方、固定参数、固定随机种子）
+  real_brand_images_forbidden: true
+  web_scraped_images_forbidden: true
+  coverage_requirement: 图像须覆盖全部多模态题所引用的商品
+  failure_states:
+    - REAL_BRAND_IMAGE_USED
+    - WEB_SCRAPED_IMAGE_USED
+    - IMAGE_GENERATION_NOT_REPRODUCIBLE
+    - MULTIMODAL_ITEM_WITHOUT_IMAGE
+
+steward_role:
+  role_id: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+  adopted_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第十节
+  permissions:
+    main_repo_read: false
+    main_repo_write: false
+    store_a_read_write: true
+    public_export_write: true
+  forbidden:
+    - 参与 M3/M4 候选知识生成
+    - 担任 Guardian
+    - 把隐藏正文复制回主仓
+  handover_chain:
+    - step: 1
+      actor: FOUNDER_HIDDEN_BENCHMARK_STEWARD
+      action: 在私有工作区产出 public_export/（净化包：仓库标识、清单哈希、计数、双检查摘要）
+    - step: 2
+      actor: FOUNDER_PRODUCT_AUTHORITY
+      action: 转交主仓执行侧
+    - step: 3
+      actor: MAIN_REPO_EXECUTION_SIDE
+      action: 接收时**先**对净化包跑一次隐藏边界检查
+      gate: 任何题目 / 答案 / 品牌正文命中即拒收并报告
+      checker: ci/checkers/check_hidden_benchmark_boundary.py
+      second_implementation_created: false
+      failure_state: SANITIZED_PACKAGE_REJECTED_ON_INTAKE
+    - step: 4
+      actor: MAIN_REPO_EXECUTION_SIDE
+      action: 通过后写 Manifest、更新条件台账、跑全量 CI、形成最终候选
+  intake_order_note: >-
+    边界检查必须在写 Manifest 之前跑。反过来做，等于先把内容收进来再检查它该不该进来——
+    一旦命中，Git 历史里已经有副本了。

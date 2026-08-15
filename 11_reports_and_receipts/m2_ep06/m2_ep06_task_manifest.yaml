@@ -1,0 +1,75 @@
+schema_version: '0.1'
+manifest_id: DIYU-CBFSK-M2-EP06-TASK-MANIFEST
+project_id: DIYU-CBFSK-001
+control_header:
+  task_id: DIYU-CBFSK-M2-EP06-001
+  task_id_assigned_by: EXECUTION_SIDE
+  task_id_assigned_by_note: 本轮裁决未给出任务 ID。执行侧自建一个并如实标注签发方，不冒充 Founder 指派；登记见 governance/identifiers/identifier_registry.v0.1.yaml。
+  task_class: L3_CRITICAL_EVALUATION_CLOSEOUT
+  milestone: M2
+  execution_package: M2-EP06
+  execution_run_id: 4c9e17b8-3d2a-4f61-a8b5-7e0c6d915af2
+  parent_execution_run_id: 8f1d3a2c-6b47-4e59-9c30-2a5d8e714b6f
+  base_candidate_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+  branch: candidate/m2
+  base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+authority: DIYU-CBFSK-FOUNDER-M2-EP06-001（接收与分发前序列 · 本裁决不构成审查）
+package_nature:
+  is_a_review: false
+  intake_only: true
+  intake_meaning: 「接收」是收下并排进复核队列，不是「已核验通过」。真正的核验发生在第三节第 4 步的两侧 Delta。
+  scope_note: 审阅队列在本包内完成，不另开包（裁决第二节明文）。
+frozen_paths:
+- 00_charter/**
+- 01_contracts_and_schemas/m1_object_model/**
+- 01_contracts_and_schemas/category_adapter_contracts/**
+- 11_reports_and_receipts/m1_delivery_receipt.yaml
+- governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml
+- 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+allowed_updates:
+- 03_m2_evaluation_foundation/calibration/**
+- 03_m2_evaluation_foundation/identity_isolation/**
+- 11_reports_and_receipts/**
+- ci/**
+- governance/conditions/**
+- governance/gates/**
+- governance/identifiers/**
+- governance/receipts/**
+- governance/workspaces/**
+- governance/founder_rulings/（仅新增本轮裁决落盘文件）
+forbidden:
+- calibration_pack_distribution
+- hidden_batch_including_pilot
+- guardian_review_kickoff
+- merge_pr_3
+- m2_frozen_true
+- m3_started
+- m4_started
+- knowledge_distillation_started
+- production_servable
+- hidden_content_in_main
+- filling_founder_confirmation_fields
+- choosing_empirical_cutpoint_disposition
+articles:
+- id: A1
+  subject: 接收与补报完整 40 位候选 Commit 哈希
+  landed: true
+- id: A2
+  subject: Founder 审阅队列 90 行 ＋ 需重点确认子表
+  landed: true
+- id: A3
+  subject: 分发前序列五步闸 ＋ guardian 条件解除
+  landed: true
+- id: A4
+  subject: 阈值裁决工作表合同（本轮只落合同不出内容）
+  landed: true
+- id: A5
+  subject: 维持不变——六位状态旗与八项未授权
+  landed: true
+stop_point:
+  stay_on_branch: candidate/m2
+  no_review_kickoff: true
+  no_review_kickoff_note: 第 4 步排在第 2、3 步之后；解除禁令不等于现在可以发起。
+  no_merge: true
+  no_pack_distribution: true
+  no_hidden_batch: true

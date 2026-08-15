@@ -1,0 +1,43 @@
+fixture_id: M2-N103
+description: 清单自报主仓里有隐藏内容——目录命名不构成读取权限隔离。
+checker: check_m2_hidden_assets
+expected: FAIL
+payload:
+  storage_provisioned: false
+  selected_storage_id: STORE-A
+  cond_011_status: OPEN
+  asset_counts:
+    asset_count: 0
+    hidden_benchmark_items: 0
+    hidden_brands: 0
+    fixture_brands: 0
+    answer_assets: 0
+  declared_asset_count: 0
+  content_hash_count: 0
+  manifest_frozen: false
+  manifest_claims_delivered: false
+  stop_record_present: true
+  stop_condition_id: HIDDEN_STORAGE_NOT_PROVISIONED
+  stop_record_triggered: true
+  enforcement_delegated_to: ci/checkers/check_hidden_benchmark_boundary.py
+  second_implementation_created: false
+  hidden_content_in_main_repository: true
+  sampling_design_bound: true
+  sampling_restated_fields: []
+  homogeneity_control_present: true
+  synthetic_marking_required: true
+  founder_package_may_enter_hidden_pool: false
+  verifiability_principle:
+    may_verify_with:
+    - frozen manifest
+    - item counts
+    - content hashes
+    - 边界判据结果
+    may_not_request:
+    - 隐藏题正文
+    - 参考答案
+    - 隐藏品牌完整事实包
+    - 逐题原始输出
+    - 生成参数
+    on_such_request: 一律拒绝并报告
+    founder_exempt: true

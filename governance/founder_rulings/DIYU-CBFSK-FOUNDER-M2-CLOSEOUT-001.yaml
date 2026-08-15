@@ -1,0 +1,141 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001
+project_id: DIYU-CBFSK-001
+title: M2 收口裁决 —— BLOCK_M2_FREEZE_AND_MERGE
+ruling_date: "2026-08-13"
+issued_by: FOUNDER_PRODUCT_AUTHORITY
+milestone: M2
+landed_at_package: M2-EP04
+transcription_note: >-
+  本文件由执行侧转录 Founder 粘贴的裁决原文，以 Founder 原文为准。
+  转录范围＝该裁决六节全部条款；执行侧未增删裁决内容，只补落盘所需的机器可检字段。
+
+article_1_milestone_decision:
+  decision: BLOCK_M2_FREEZE_AND_MERGE
+  reviewed_candidate_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+  basis_verbatim: >-
+    Guardian 对 3008f56b2c200324b2f2cd1babafdef1950b5bc6 独立审查为 APPROVE_WITH_CONDITIONS、
+    阻断 0（已交付部分真实可信、七类硬门全过）；总顾问独立审查为 BLOCK（M2 冻结 Brief 的 18 项强制交付未闭环）。
+    两者不冲突：前者审「东西是不是真的」，后者审「该有的是不是都在」，里程碑完整性以上位合同为准。
+  guardian:
+    decision: APPROVE_WITH_CONDITIONS
+    blocking_findings: 0
+    non_blocking_findings: [NB-M2-01, NB-M2-02, NB-M2-03, NB-M2-04, NB-M2-05, NB-M2-06]
+    report_status: FULLTEXT_NOT_PROVIDED
+    report_registry: governance/reports/guardian_report_registry.v0.1.yaml
+  chief_advisor:
+    decision: BLOCK
+    reason: M2 冻结 Brief 的 18 项强制交付未闭环
+  consequences:
+    candidate_branch_preserved: true
+    artifacts_rewritten: false
+    artifacts_reverted: false
+    pr_3_open_not_merged: true
+    m2_frozen: false
+    m2_interface_handoff_status: CANDIDATE_ONLY_UNTIL_FOUNDER_FREEZE
+    m3_m4_may_consume_as_baseline: false
+
+article_2_confirmations_and_discipline:
+  confirmation_1:
+    subject: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 的签发人
+    verbatim: >-
+      DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 确由本人签发，其内容即本人粘贴的《M2 恢复执行授权
+      ＋ EP02→EP03 一站到底 ＋ 收口安排》。Guardian 报告中「无法独立核验该授权是否出自 Founder」一项，
+      予以确认闭合。
+    closes: Guardian「无法独立核验授权来源」一项
+  discipline_2:
+    verbatim: >-
+      凡 Founder 裁决文件一律带 FOUNDER- 前缀；执行侧不得在 founder_rulings 目录下创建无该前缀的授权文件。
+    landed_action: 执行侧建的 DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001 已重命名为带前缀版本，正文未改。
+    landed_record: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001.yaml naming_correction
+    pre_existing_exception_routed_to_founder: OI-M2-NAMING
+  discipline_3:
+    verbatim: 引用裁决的存在性核验要求见 v1.1 第四节 NB-M2-01。
+    landed_action: >-
+      check_project_state 与 check_m2_main_state_guard 现场解析被引裁决文件与具名条款路径；
+      捏造裁决 ID 的负例已落盘（n*_fabricated_ruling_id_*）。
+
+article_3_four_adjudications:
+  - id: ADJ-1
+    subject: 隐藏资产
+    decision: OPT-1
+    verbatim: >-
+      采纳 OPT-1。Founder 已在另一账号、另一台电脑 provision 私有隐藏资产仓库（STORE-A），
+      设任务级角色 FOUNDER_HIDDEN_BENCHMARK_STEWARD；资产生成时点在工作面 A 冻结生成合同之后，不得提前。
+    generation_timing_constraint: 工作面 A 冻结生成合同之后，不得提前
+    landed_effect:
+      cond_011_status: EVIDENCE_SUBMITTED
+      cond_011_not_closed_reason: 三项关闭要件中执行侧只掌握 founder_attestation 一项
+      semantics_record: governance/conditions/m2_condition_state_semantics.v0.1.yaml cond_011
+  - id: ADJ-2
+    subject: OD-M2-01 真实基线运行
+    decision: DEFERRED_TO_POC_OR_M10
+    verbatim: >-
+      延后至 POC 或 M10，当前保留确定性 dry-run。理由：完整决策系统尚未成型，
+      此刻的真实锦标赛只能测出通用模型之间的差异，无法证明笛语相对基线的优势。
+    landed_effect: 锦标赛 dry-run 保持确定性骨架；本包未发生任何真实模型 API 调用。
+  - id: ADJ-3
+    subject: OI-01 三层哈希
+    decision: no_retirement
+    verbatim: >-
+      维持三层，正式改判 no_retirement，撤销 ADJUDICATED_NOT_IMPLEMENTED 的挂起状态
+      （理由：L2/L3 无等效替代）。
+    supersedes: DIYU-CBFSK-FR-CALIBRATION-004 中「三层哈希机制退役」的 ADJUDICATED_NOT_IMPLEMENTED 挂起态
+  - id: ADJ-4
+    subject: COND-007 阈值
+    decision: MUST_FREEZE_BEFORE_M2_PASS
+    verbatim: 须在 M2 通过前完成校准并冻结；校准一律使用公开校准集，严禁用隐藏集调参。
+    landed_effect:
+      calibration_set: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+      hidden_set_tuning_forbidden: true
+      current_blocker: CALIBRATION_REVIEW_EVIDENCE_MISSING
+
+article_4_hidden_scale_adoption:
+  adopted: true
+  scope: 总顾问提出的隐藏资产数量下限，全盘采纳（含图像）
+  definition_location: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml quantity_floor
+  restated_here: false
+  multimodal_scope:
+    must_be_defined_within: D-10 边界（Founder 原文表述）
+    execution_side_anchor_finding: >-
+      执行侧核对真源后发现：D-10 在 PRD v1.1 Delta 中的标题是「运行时模型合同」；
+      Founder 所引的实质内容逐字对应 D-12「商品属性来源」，且 D-12 已被 D-23 在 PRD v1.2 中部分改判。
+      执行侧未放宽也未改写任何裁决，按 D-12 与 D-23 的交集定义多模态评测范围。
+    detail_record: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml scope_boundary_check
+    founder_approval_required: true
+    founder_approval_status: PENDING
+
+article_5_founder_side_ruleset:
+  scope: 主仓 main 分支保护 Ruleset
+  requirements: [禁 force push, 禁删除, 要求线性历史, 要求三个 workflow 成功]
+  founder_must_be_bypass_actor: true
+  founder_must_be_bypass_actor_reason: 否则命令行 FF-ONLY 合并会被规则拦下
+  blocking_for_m2: false
+  counted_in_m2_criteria: false
+  in_repo_secondary_evidence: ci/checkers/check_m2_main_state_guard.py
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  execution_side_action: 无（本项在 Founder 侧执行，执行侧不代操作 GitHub 设置）
+
+article_6_not_authorized:
+  items:
+    - 合并 PR #3
+    - 置 m2_frozen=true
+    - M3 正式执行
+    - M4 知识蒸馏
+    - 隐藏内容进入主仓
+    - production_servable
+  execution_side_compliance:
+    pr_3_merged: false
+    m2_frozen: false
+    m3_started: false
+    m4_started: false
+    knowledge_distillation_started: false
+    production_servable: false
+    hidden_content_in_main_repository: false
+    verified_by: [ci/checkers/check_project_state.py, ci/checkers/check_hidden_benchmark_boundary.py]
+
+machine_checkable_fields:
+  decision: {type: string, required_value: BLOCK_M2_FREEZE_AND_MERGE}
+  adjudication_count: {type: integer, required_value: 4}
+  not_authorized_count: {type: integer, required_value: 6}
+  m2_frozen: {type: boolean, required_value: false}

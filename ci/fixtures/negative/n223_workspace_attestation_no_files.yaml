@@ -1,0 +1,6 @@
+fixture_id: N223-workspace-attestation-no-files
+description: 目录下一份见证文件都没有。
+checker: check_workspace_attestation
+expected: FAIL
+payload:
+  files: []

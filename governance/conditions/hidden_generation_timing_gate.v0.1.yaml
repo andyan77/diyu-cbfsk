@@ -1,0 +1,187 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-HIDDEN-GENERATION-TIMING-GATE
+artifact_id: hidden_generation_timing_gate.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP05-CORRECTION
+established_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate
+amended_by: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c5_timing_gate_five_items_and_founder_binding
+amendment_summary: 前置由四项改为五项；founder_confirmation 由裸布尔改为具名绑定；本合同文件哈希钉进隐藏生成输入包。
+
+purpose: >-
+  避免整批返工。能力矩阵、评分卡与可接受边界都还可能被校准结果改动；
+  现在按它们出 40 个品牌的正式批，改一条边界就得整批重来。
+  这道门把「什么时候可以开始正式生产」变成一个可机器判定的状态，而不是一次口头判断。
+
+state:
+  field: public_blueprint_stable_for_hidden_generation
+  current_value: false
+  value_rule: 五项前置全部为真才可置 true；任一为假即为 false。
+  execution_side_may_flip: false
+  execution_side_may_flip_note: >-
+    第四、第五项前置是 Founder 的动作，执行侧不得代填。前三项由判据现算；
+    后两项到齐、且 founder_confirmation 的四个绑定字段全部可解析后，由 Founder 置 true。
+  hash_pinned_in: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
+  hash_pinned_why: >-
+    钉在包外，不钉在自己身上。哈希写进本文件，那么每次改本文件都要改那个哈希，
+    改完哈希文件又变了——自己给自己盖章，盖不上。
+
+preconditions:
+  count: 5
+  items:
+    - id: TG-01
+      condition: 两侧校准评审结果均已回收
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml sides[].record_count
+      recomputed_by_checker: true
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-02
+      condition: 分歧统计完成
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml disagreement_statistics.computed
+      recomputed_by_checker: true
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-03
+      condition: 阈值建议形成
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml counts.recommendation_absent
+      recomputed_by_checker: true
+      criterion: 每一条 M2_FREEZE_REQUIRED 指标都有 threshold_recommendation（recommendation_absent 归零）
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-04
+      condition: Founder 冻结全部 M2 阈值且 COND-007 = CLOSED
+      current: false
+      evidence_source: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml counts.founder_decided ＋ 条件台账 COND-007 状态
+      recomputed_by_checker: true
+      criterion: threshold_freeze_decision 的 34 条全部带 founder_decision 与 40 位 founder_decision_commit，且 COND-007 状态为 CLOSED
+      owner: FOUNDER_PRODUCT_AUTHORITY
+      blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    - id: TG-05
+      condition: Founder 确认公开蓝图在指定冻结 Commit 上无需修改
+      current: false
+      evidence_source: 本文件 founder_confirmation
+      recomputed_by_checker: false
+      binds: [confirmed_at_commit（完整 40 位）, input_bundle_sha256]
+      scope: [能力矩阵, 三张横向评分卡与七类纵向能力卡, 可接受决策边界注册表]
+      owner: FOUNDER_PRODUCT_AUTHORITY
+      why_after_tg_04: >-
+        阈值必须先冻结，隐藏资产才可以生成。反过来——先出隐藏题、Founder 在 STORE-A 侧看过之后再定及格线——
+        「是否看过隐藏题才定的线」这件事将永远无法自证清白。顺序本身就是证据。
+
+founder_confirmation:
+  confirmed: false
+  confirmed_by: null
+  confirmed_at: null
+  confirmed_at_commit: null
+  ruling_ref: null
+  ruling_clause_path: null
+  input_bundle_sha256: null
+  scope_when_confirmed: [能力矩阵, 三张横向评分卡与七类纵向能力卡, 可接受决策边界注册表]
+  execution_side_must_not_fill: true
+  binding_rule:
+    source: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c7_founder_confirmation_fields_general_rule
+    statement: >-
+      confirmed 不得是裸布尔值。置 true 时必须同时给出：具名裁决文件（存在且条款路径可解析）、
+      完整 40 位签署基线 Commit、签署人、签署时点，以及被确认那一刻的输入包哈希。
+    why: >-
+      裸布尔值的问题不是写错了，是被守的一方自己就能开门——
+      一个 false 改成 true 只要一次键盘操作，事后也看不出是谁在哪个版本上确认的。
+    checker_must_validate: [confirmed_by, confirmed_at, confirmed_at_commit, ruling_ref, ruling_clause_path]
+    commit_must_be_full_40_hex: true
+    reuses: ci/checkers/_common.py founder_ruling_evidence 与 is_full_commit_hash
+    failure_state: FOUNDER_CONFIRMATION_UNBOUND
+
+while_false:
+  allowed:
+    - id: AL-01
+      action: STORE-A provision 与证据回传
+    - id: AL-02
+      action: 私有工具链建设（Schema／生成器／检查器／密封 Runner／测试工具）
+    - id: AL-03
+      action: 2 个品牌的试产批
+      constraints:
+        pilot_flag_required: true
+        pilot_brand_limit: 2
+        counted_in_brand_count: false
+        formal_batch_must_regenerate: true
+        why: >-
+          试产批的用途是验工具链，不是攒产量。蓝图还可能改，
+          现在生成的内容一旦被计入正式数，后面改边界时就会有人舍不得重做。
+  forbidden:
+    - id: FB-01
+      action: 40 品牌正式批生成
+      failure_state: FORMAL_BATCH_BEFORE_TIMING_GATE
+
+current_generation_state:
+  formal_batch_started: false
+  pilot_batch_started: false
+  pilot_brand_count: 0
+  counted_brand_count: 0
+
+store_a_evidence:
+  status: NOT_RECEIVED
+  purified_file_count: 2
+  files:
+    - name: store_identity.yaml
+      minimum_fields: [store_id, repository_visibility, created_from_scratch, fork_of_main, shares_main_history, founder_attestation]
+    - name: access_matrix.yaml
+      minimum_fields: [access]
+  required_values:
+    repository_visibility: private
+    created_from_scratch: true
+    fork_of_main: false
+    shares_main_history: false
+  required_access_matrix:
+    founder: admin
+    hidden_steward: read_write
+    main_codex: none
+    claude_planner: none
+    guardian: none
+    chief_advisor: none
+    m3_m4_elicitation: none
+  founder_attestation_fields: [signed_by, signed_at]
+  must_not_contain: [URL scheme, 代码托管仓库定位符, Token, Deploy Key, 本机绝对路径, 私有主机名, 任何隐藏内容, 随机种子]
+  must_not_contain_why: >-
+    这两份文件的用途是证明隔离成立，不是让人找得到仓库。
+    写上地址，等于为了证明门锁着而把钥匙挂在门上。
+  intake_directory: 03_m2_evaluation_foundation/hidden_assets/store_a_evidence/
+  intake_is_file_level: true
+  intake_rule:
+    source: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c6_store_a_file_level_intake
+    statement: >-
+      判据从固定公开证据目录读取两份真实 YAML，逐项校验字段、值与访问矩阵，
+      扫描全部标量拒绝定位符，计算两份文件的 SHA-256，并由文件推导 COND-011 可否关闭。
+    ledger_records_derivation_only: true
+    ledger_is_not_evidence: true
+    why: >-
+      此前这里读的是台账自述——台账说「收到了」就算收到了，说「没有泄漏」就算没有泄漏。
+      被检查的一方自己填检查结果，那不是核验，是转述。
+    revoked: locator_present 硬编码 False
+    failure_state_if_ledger_used_as_evidence: STORE_A_LEDGER_SELF_REPORT
+  derived_by_checker: true
+  received_fields: []
+  received_file_sha256: {}
+  failure_states: [STORE_A_EVIDENCE_INCOMPLETE, STORE_A_EVIDENCE_LEAKS_LOCATOR, STORE_A_LEDGER_SELF_REPORT]
+
+on_main_repo_acceptance:
+  precondition: 主仓收到净化包并通过隐藏边界复检（check_hidden_benchmark_boundary）
+  boundary_recheck_performed: false
+  order_is_fixed: true
+  order_note: 先复检后入库，不可对调——先收进来再检查，一旦命中，Git 历史里已经有副本了。
+  then:
+    cond_011: CLOSED
+    m2_hidden_assets_status: STORAGE_READY
+  failure_state: BOUNDARY_RECHECK_SKIPPED_ON_INTAKE
+
+failure_states:
+  - FOUNDER_CONFIRMATION_UNBOUND
+  - STORE_A_LEDGER_SELF_REPORT
+  - TIMING_GATE_OPEN_WITHOUT_PRECONDITIONS
+  - TIMING_GATE_PRECONDITION_MISSTATED
+  - FORMAL_BATCH_BEFORE_TIMING_GATE
+  - PILOT_COUNTED_IN_BRAND_COUNT
+  - PILOT_BATCH_EXCEEDS_LIMIT
+  - STORE_A_EVIDENCE_INCOMPLETE
+  - STORE_A_EVIDENCE_LEAKS_LOCATOR
+  - BOUNDARY_RECHECK_SKIPPED_ON_INTAKE
+  - EXECUTION_SIDE_FLIPPED_TIMING_GATE

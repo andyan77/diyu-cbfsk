@@ -1,0 +1,105 @@
+schema_version: "0.1"
+card_id: DIYU-CBFSK-M2-CAPABILITY-CARD-NATIVE-VOICE
+artifact_id: social_media_native_voice_scoring_rubric.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+card_axis: vertical_capability
+capability_dimension: social_media_native_voice
+capability_dimension_cn: 自媒体原生语感
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 13 项
+ruling_anchors: [D-21]
+prd_anchors: [PRD-10.2, PRD-8.2, PRD-8.3]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+axis_relation:
+  horizontal_cards_are_task_class_cards: true
+  relation: 纵向能力卡与横向任务类型卡两轴独立取值；判定模式取横向卡。
+  rewritten_horizontal_cards: false
+
+owned_metrics:
+  - {metric_id: self_media_native_voice_score, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: platform_native_expression_score, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: spoken_rhythm_score, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: shootability_score, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: lecture_style_penalty_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: formulaic_template_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: ai_generated_tone_detection_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: 账号差异化通过率, prd_suggested_threshold: ≥ 85%, threshold_status: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE, threshold_value: null, measured_at_milestone: M7, m2_obligation: 冻结口径与阈值；冻结后不得因失败降标。}
+
+metric_count_note:
+  brief_says: 「语感六项」（M2 冻结 Brief 第 5 节的概述性说法）
+  prd_10_2_actually_lists: 7（另加 PRD 已给建议阈值的「账号差异化通过率」共 8 项归本卡）
+  handling: 以 PRD 10.2 表格逐行 metric id 为准；差异登记为 OI-M2-METRIC-GROUPING，未改写 Brief。
+  discrepancy_id: OI-M2-METRIC-GROUPING
+
+evaluation_task_class_applicability:
+  constraint_correctness: false
+  mechanism_correctness: true
+  open_decision: true
+  constraint_correctness_exclusion_reason: >-
+    语感没有 0/1 正确答案。唯一接近硬约束的是「不得改变专业结论」，而那条由 narrative 卡的
+    NARRATIVE_DISTORTED_DECISION 承接，不在本卡重复设一份。
+
+gold_answer_allowed_by_task_class:
+  mechanism_correctness: false
+  open_decision: false
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+
+scored_elements:
+  - {id: NV-01, element: 平台原生表达, statement: 表达方式符合目标平台的原生形态，而非通用书面稿。}
+  - {id: NV-02, element: 口播节奏, statement: 句长、停顿与口语节奏可被直接念出来。}
+  - {id: NV-03, element: 场景感, statement: 有具体场合、时间与情境，不是悬空建议。}
+  - {id: NV-04, element: 镜头可拍性, statement: 所述内容可被拍出来，不依赖不可见的抽象概念。}
+  - {id: NV-05, element: 人设辨识度, statement: 读得出是这一个搭配师，而不是任意账号都能发。}
+  - {id: NV-06, element: 非讲课腔, statement: 不以授课口吻罗列知识点。}
+  - {id: NV-07, element: 非套路模板, statement: 不套用「反常识标题 + 三个技巧」一类固定骨架。}
+  - {id: NV-08, element: 非 AI 腔, statement: 不出现模型腔调的固定句式与万能过渡语。}
+
+professional_conclusion_invariant:
+  statement: 语感改写不得改变专业结论。改结论换来的语感分一律不计。
+  prd_anchor: PRD-10.2 说明列
+  failure_state: VOICE_REWRITE_CHANGED_CONCLUSION
+  detection_owner: narrative_scoring_rubric.v0.1 NARRATIVE_DISTORTED_DECISION
+  second_implementation_created: false
+
+account_differentiation:
+  statement: 不同账号须具备不同事实范围、任务与叙事视角。
+  metric_id: 账号差异化通过率
+  binding: platform_voice_profile.schema + stylist_persona_profile.schema
+  failure_state: ACCOUNTS_NOT_DIFFERENTIATED
+
+binding_kind: m1_object_ids
+bound_schema_ids:
+  - https://diyu-cbfsk.local/m1/platform_voice_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/publication_policy.schema.v0.1.json
+bound_object_ids: [D-21-01, IN-09, IN-12]
+bound_hard_gate_ids: []
+bound_hard_gate_note: 语感本身不承接 10.1 硬门；越界表达由 HG-04 / HG-08 在叙事与人设两卡承接。
+
+machine_checkable_fields:
+  voice_element_coverage:
+    type: array
+    item_enum: [NV-01, NV-02, NV-03, NV-04, NV-05, NV-06, NV-07, NV-08]
+    required_minimum_elements: 6
+  fixed_template_skeleton_used: {type: boolean, required_value: false}
+  professional_conclusion_changed_by_rewrite: {type: boolean, required_value: false}
+  platform_voice_profile_bound: {type: boolean, required_value: true}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 缺 PlatformVoiceProfile 时判 fail-closed，不得用「通用平台习惯」顶替账号口径。
+
+failure_states:
+  - VOICE_ELEMENT_MISSING
+  - FORMULAIC_TEMPLATE_USED
+  - VOICE_REWRITE_CHANGED_CONCLUSION
+  - ACCOUNTS_NOT_DIFFERENTIATED
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

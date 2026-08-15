@@ -1,0 +1,35 @@
+fixture_id: M2-N55
+description: 登记项 change_id 没有数字后缀——编号唯一性无从判定。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries:
+  - registry: governance/baseline/founder_pinned_baseline.v0.1.yaml:README.md.authorized_modification_history
+    numbers:
+    - 12
+    - 11
+    - 10
+    - 9
+    - 8
+    - 7
+    - 6
+    - 5
+    - 1
+    - 4
+    - 3
+    - 2
+    prefixes:
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    malformed_ids:
+    - README-MOD-LATEST

@@ -1,0 +1,210 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-EP05-CORRECTION-DELIVERY-RECEIPT
+project_id: DIYU-CBFSK-001
+milestone: M2
+package_id: M2-EP05-CORRECTION
+task_id: DIYU-CBFSK-M2-EP05-CORRECTION-001
+task_class: L3_CRITICAL_EVALUATION_CLOSEOUT
+execution_run_id: 8f1d3a2c-6b47-4e59-9c30-2a5d8e714b6f
+parent_execution_run_id: 6220d220-6756-466f-85ab-1d1a2ba19caa
+base_candidate_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+branch: candidate/m2
+authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_ep06/m2_ep06_delivery_receipt.yaml
+superseded_note: >-
+  本回执自此只描述 EP05-CORRECTION 交付那一刻的状态。EP06 接收了本包的六项修正并追加了审阅队列与分发前序列，
+  当前状态以 EP06 回执为准；本回执各计数字段是那一刻的实测值，不随后续施工更新。
+self_reference_limitation: 本回执随本包内容同处一个提交，无法记录自身所在的候选 Commit。候选 Commit 的绑定在提交完成后由外部记录（PR 与分支引用）承接——写进来就会改变文件内容，从而改变那个哈希，自己指自己永远差一步。
+candidate_commit_binding:
+  value: null
+  why_null: 见 self_reference_limitation。输入包 NB-2 的更名也是同一条道理：血缘起点可以写，本包所属候选提交不可以。
+  recover_with: git rev-parse candidate/m2
+correction_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_ep05_status: SUPERSEDED_BY_CORRECTION
+  m2_ep05_correction_status: SELF_CHECKED
+  m2_milestone_decision: BLOCK_M2_FREEZE_AND_MERGE
+  m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  m2_deliverables_ready: 14
+  m2_deliverables_total: 18
+  public_blueprint_stable_for_hidden_generation: false
+  m2_hidden_assets_status: NOT_STARTED
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m2_frozen: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+  pr_3_merged: false
+  calibration_pack_distribution_allowed: false
+  next_authorized_action: FOUNDER_CONFIRMS_ANCHOR_TRUTH_THEN_DISTRIBUTES_CALIBRATION_PACK
+self_check:
+  checkers: 46
+  predicate_fixtures: 528
+  schema_fixtures: 36
+  exit_code: 0
+  evidence_level: runtime_verified
+  measured_by: python3 ci/run_all_checks.py
+  note: 全绿只表示确定性判据与夹具按声明行为，不表示 M2 已交付、不表示已通过任何一方审查。
+  error_code_fixture_coverage:
+    declared_codes_total: 620
+    fail_fixtures_run: 479
+    covered_codes: 473
+    uncovered_codes: 147
+    ratchet_cap: 147
+    cap_moved: false
+    new_checkers_debt: 0
+new_checkers:
+- name: check_founder_confirmation_binding
+  codes: 7
+  debt: 0
+new_tools:
+- path: ci/tools/refresh_hidden_bundle.py
+  purpose: 重算输入包哈希、分类计数与内容摘要
+- path: ci/tools/refresh_stop_registry.py
+  purpose: 按实扫结果重建 STOP 登记册 sites 与分类
+structural_fixes_beyond_the_ruling:
+- what: measurement_history 由数组改为按包名索引
+  why: 报告原按下标 entries.0 引用历史值。再插一条历史，下标整体位移——EP04 的报告会悄悄开始念 EP05 的数字，而两份报告都没被改过。
+  affected:
+  - governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml
+  - 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md.tmpl
+- what: EP05 报告的四组数字改引本包交付快照
+  why: 它们原本指向活的 STOP 登记册、输入包、门禁册与标识符注册表。本包一改，EP05 的报告数字就跟着变——那不是报告，是仪表盘。
+  affected:
+  - 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml measurements_at_delivery
+- what: clause_resolves 提为 _common 单一实现
+  why: 裁决引用、签署回执引用、Founder 见证引用原本各走各的解析路径。各写一份的结果是某一处忘了查条款，凭空写的路径就在那一处过关。
+open_item_count: 6
+open_items:
+- id: OI-M2-CALIBRATION-CANDIDATES
+  what: 90 个候选输出由主执行侧撰写，属评测刺激材料；边界锚点尚未经 Founder 确认。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  status: OPEN
+- id: OI-M2-ANCHOR-TRUTH-CONFIRMATION
+  what: founder_boundary_anchor_truth.v0.1 的 founder_confirmation 五个绑定字段全部为空，执行侧不代填。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  status: OPEN
+- id: OI-M2-EMPIRICAL-CUTPOINT-INPUTS
+  what: 2 条 EMPIRICAL_CUTPOINT 指标的估计输入不存在，因此不出建议值。
+  blocked_by:
+  - CALIBRATION_REVIEW_EVIDENCE_MISSING
+  - FOUNDER_REVIEW_QUEUE_EMPTY
+  status: OPEN
+- id: OI-M2-CALIBRATION
+  what: 两侧隔离评审均未执行，记录各 0 条。
+  status: OPEN
+- id: OI-M2-HIDDEN
+  what: STORE-A 两份净化证据文件未回传，收件目录为空。
+  status: OPEN
+- id: OI-M2-FIXTURE-DEBT
+  what: 147 条已声明错误码尚无 expected=FAIL 夹具行使；上限未动，本包新增判据零欠账。
+  status: REGISTERED_WITH_RATCHET
+not_authorized_and_not_done:
+- item: 分发校准包
+  done: false
+- item: 启动任何隐藏批次（含试产）
+  done: false
+- item: 发起 Guardian 或总顾问审查
+  done: false
+- item: '合并 PR #3'
+  done: false
+- item: 置 m2_frozen=true
+  done: false
+- item: M3 正式执行
+  done: false
+- item: M4 知识蒸馏
+  done: false
+- item: production_servable
+  done: false
+section_14:
+  statement: 本裁决产生新 Commit 后，Guardian 与总顾问对 41f62181 的结论即失效，须对新 Head 各做一次 Delta 核验。
+  but: until_corrected 期间 guardian_review_allowed=false——失效不等于现在就可以发起下一轮，何时发起由 Founder 决定。
+stop_point:
+  stay_on_branch: candidate/m2
+  no_review_kickoff: true
+  no_merge: true
+  no_pack_distribution: true
+  no_hidden_batch: true
+article_landing:
+  indexed_by: article
+  why_not_a_list: 报告按下标引用条目，插一条就整体位移——上一处同样的毛病刚在 measurement_history 修过一次。
+  by_article:
+    C-1:
+      landed_in:
+      - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+      - 03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml
+      measurement:
+        review_units: 90
+        candidates: 90
+        decision_traces: 60
+        cells: 45
+        inside: 45
+        outside: 45
+    C-2:
+      landed_in:
+      - 03_m2_evaluation_foundation/calibration/numeric_scoring_anchors.v0.1.yaml
+      - 03_m2_evaluation_foundation/calibration/launch_pack/review_prompt.shared.v1.1.0.md
+      - 03_m2_evaluation_foundation/calibration/launch_pack/output_format.md
+      measurement:
+        record_fields: 12
+        judgment_values: 3
+        anchor_levels_per_class: 5
+    C-3:
+      landed_in:
+      - ci/checkers/check_m2_calibration_review.py
+      measurement:
+        negative_fixtures_added: 12
+        fixture_ids: CAL-N01—CAL-N12
+    C-4:
+      landed_in:
+      - 03_m2_evaluation_foundation/calibration/metric_review_unit_mapping.v0.1.yaml
+      measurement:
+        metrics: 34
+        policy_threshold: 32
+        empirical_cutpoint: 2
+        empirical_with_inputs_available: 0
+    C-5:
+      landed_in:
+      - governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+      measurement:
+        preconditions: 5
+        satisfied: 0
+        founder_confirmation_source: governance/conditions/hidden_generation_timing_gate.v0.1.yaml founder_confirmation（不在此复述取值）
+        founder_binding_fields_filled: 0
+        founder_binding_fields_required: 5
+    C-6:
+      landed_in:
+      - 03_m2_evaluation_foundation/hidden_assets/store_a_evidence/
+      - ci/checkers/check_m2_hidden_generation_readiness.py
+      measurement:
+        evidence_files_expected: 2
+        evidence_files_present: 0
+        derived_status: NOT_RECEIVED
+        locator_hardcode_revoked: true
+    C-7:
+      landed_in:
+      - governance/gates/founder_confirmation_binding_registry.v0.1.yaml
+      - ci/checkers/check_founder_confirmation_binding.py
+      measurement:
+        sites: 74
+        founder_act_claims: 21
+        bound: 13
+        claim_kinds: 9
+    C-8:
+      landed_in:
+      - 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
+      - governance/gates/stop_code_enforcement_registry.v0.1.yaml
+      - governance/conditions/m2_condition_state_semantics.v0.1.yaml
+      measurement:
+        bundle_files: 21
+        bundle_categories: 13
+        stop_codes: 157
+        stop_machine_checked: 66
+        stop_human_judgement: 36
+        stop_future_runtime: 55

@@ -1,0 +1,231 @@
+# M2-EP05 交付报告 · 整合与并行启动
+
+> 任务 `DIYU-CBFSK-M2-EP05-INTEGRATION-001`（执行侧自建编号，非 Founder 指派）
+> 裁决 `DIYU-CBFSK-FOUNDER-M2-EP05-001` · 分支 `candidate/m2` · 基线 `cffa6ccba2abf3c67b06e358dc33aa5d051e7868`
+> 本报告的计数数字全部由模板引用机器记录字段渲染，不是手抄值（见 §八）。
+
+## 结论先说
+
+四项定锚裁决全部落盘，Guardian 三条发现（NB-M2E4-01/02/03）全部闭合，
+Steward Prompt 升到 v1.1.0，校准评审启动包已可独立分发，隐藏生成时序门已装上。
+
+**M2 仍然 BLOCK。** 阻塞的还是那两件执行侧做不了的事：两侧校准评审没人跑，STORE-A 证据没回来。
+`m2_frozen` `founder_signature_eligible` 均为 `false`，PR #3 未合并。
+
+---
+
+## 一、自检（断言门控之前的实测值）
+
+| 项 | 实测 |
+|---|---|
+| 确定性 Checker | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.checkers}} 个，全部 PASS |
+| 判据层夹具 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.predicate_fixtures}} 份，行为与声明一致 |
+| M1 Schema 夹具 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.schema_fixtures}} 份，行为与声明一致 |
+| 退出码 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.exit_code}} |
+| 冻结路径与 `origin/main` 差异 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.frozen_path_diff_vs_origin_main}} 处 |
+| 真实模型调用 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.real_model_calls}} 次 |
+| 隐藏资产生成 | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#self_check.hidden_assets_generated}} 个 |
+
+错误码夹具覆盖实跑：声明 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP05.declared_codes_total}} 条，
+有负例行使 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP05.covered_codes}} 条，
+挂账 {{ref:governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml#measurement_history.by_package.M2-EP05.uncovered_codes}} 条。
+本包新增的 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#new_checkers.count}} 个 Checker
+**零欠账**，棘轮上限未动。
+
+---
+
+## 二、四项定锚裁决的落点
+
+| 定锚 | 落点 | 效果 |
+|---|---|---|
+| ANCHOR-1 多模态边界 | `multimodal_attribute_benchmark.v0.1.yaml` `scope_boundary` | 边界现场解析 PRD v1.2 3.2 非目标条文；`D-10` 认定为笔误，真实编号 `D-12`／`D-23` 绑定并登记；关闭 `OI-M2-ANCHOR` |
+| ANCHOR-2 命名 | `governance/identifiers/identifier_registry.v0.1.yaml` | 现存 `FR-*` 保留为历史合法命名，不批量重命名；`FOUNDER-` 前缀规则自本裁决之后生效；关闭 `OI-M2-NAMING` |
+| ANCHOR-3 Guardian 报告 | `guardian_report_registry.v0.1.yaml` `ep05_ruling` | 旧结论依 §14 失效、占位记录保留、不再阻断 M2 收口；最终 Head 仍须取得全文 |
+| ANCHOR-4 指标分组 | `benchmark_capability_matrix.v0.1.yaml` `metric_ownership` | PRD 10.2 逐项 metric ID 为机器真源；Brief 分组说法不具数量真源地位；关闭 `OI-M2-METRIC-GROUPING` |
+
+ANCHOR-3 有一处必须说清：裁决免掉的是「因它而阻断收口」，**不是**「可以把占位当全文」。
+占位记录仍标 `FULLTEXT_NOT_PROVIDED`，判据 `PLACEHOLDER_TREATED_AS_REPORT` 照旧行使。
+
+---
+
+## 三、Guardian 三条发现的处置
+
+### NB-M2E4-01 · 编号锚点
+
+`DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001` 被引用 31 次却查无此文件——因为它是**任务 ID**，不是裁决 ID。
+既有判据只核验 `basis` 与 `ruling` 两个键，换个键名（`established_by` / `finding` / `authorization_ref`）
+存在性核验就完全失效。
+
+处置：建标识符注册表，登记全仓
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.identifier_registry.entry_count}} 个编号，逐个标类型；
+新判据 `check_identifier_resolution` 全量扫描仓内编号 token，
+任务 ID 通过 `dispatched_by` 指向真实签署件而可解析，裁决 ID 必须真有文件。
+射程从两个键扩到注册表声明的全部引用位，**少扫一个键即 FAIL**。
+
+### NB-M2E4-02 · 幽灵 STOP 码
+
+`MULTIMODAL_SCOPE_CONFLICT_WITH_D10` 无实现、无夹具，却被 EP04 报告写成实测结论。已作废删除。
+
+全仓 STOP 声明位逐条标 `enforcement`，按三类分栏：
+
+| enforcement | 条数 | 含义 |
+|---|---|---|
+| `machine_checked` | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.machine_checked}} | 有现役判据实现该码，可实测触发与否 |
+| `human_judgement` | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.human_judgement}} | 须由人判断，机器只能记录判断结果 |
+| `future_runtime` | {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.future_runtime}} | 要等产品或隐藏资产实际运行才有可检对象 |
+
+合计 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.stop_code_registry.total_codes}} 条。
+`machine_checked` 不是自称——判据现场比对：检测器必须在现役门禁册内 `LIVE`，
+且码字符串必须真出现在那份判据源码里。
+
+本轮三个 STOP 的分栏呈现：
+
+| STOP 码 | enforcement | 分型 | 现状 |
+|---|---|---|---|
+| `HIDDEN_STORAGE_NOT_PROVISIONED` | machine_checked | SUBSYSTEM_BLOCK ＋ MILESTONE_BLOCK | 已触发（判据实测） |
+| `CALIBRATION_REVIEW_EVIDENCE_MISSING` | machine_checked | DEPENDENCY_WAIT | 已触发（判据实测） |
+| `GUARDIAN_REPORT_FULLTEXT_NOT_PROVIDED` | human_judgement | DEPENDENCY_WAIT | 依 ANCHOR-3 不再阻断收口；残留义务在最终 Head |
+
+**通则（永久）已落为判据**：任何声明为 STOP 的错误码，无检测器实现就不得表述为「未触发」。
+执行时这条判据当场抓到两处：EP04 报告里那一句已撤回；
+M2 启动签署回执里两条无检测器的前置（路径已存在 / 分支已存在）补了 `enforcement: human_judgement` 与判断人，
+原判定文字一字未改。
+
+### NB-M2E4-03 · 数字引用
+
+EP04 报告写 500/350/149，台账实测 523/376/147，而且 500−350≠149。
+修法不是抄一遍正确数字——报告改模板，数字生成时现读机器记录：
+
+```
+{{!ref:<路径>#<点分键路径>}}
+```
+
+判据把模板重新渲染一遍与落盘报告逐字节比对；台账变了而报告没重渲染，比对当场失败。
+计数类数字若不落在任何引用渲染出的区间内，判 `UNTRACED_COUNT_IN_REPORT`。
+
+执行时发现一处设计陷阱并当场改掉：EP04 报告若直接引 `measurement`（当前值），
+它的内容会随后续施工悄悄变化——那不是报告，是仪表盘。
+因此台账加 `measurement_history`，历史报告引它自己那一刻的条目。
+
+---
+
+## 四、Steward Prompt v1.1.0
+
+v1.0.0 止于报告纪律，缺施工、测试、私有审查、冻结与 Runner，另一台机器拿着它跑不到底。
+v1.1.0 补齐
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.hidden_generation_input_bundle.steward_prompt_phase_count}}
+个阶段：隔离预检 → 私仓与 Provision 证明 → 输入包哈希校验 → 工具链建设 → 品牌 → 商品与图像 →
+评测题 → 双检查 → 私有审查 → 冻结与 Merkle Root → 净化导出 → Report/Receipt 与 COMPLETE 完成门。
+
+每阶段带入口条件、产出与完成判据；入口条件不满足就停在那一阶段，
+**不得用后一阶段的产出倒推前一阶段的结论**。
+
+输入包同步升到 v1.1.0，
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.hidden_generation_input_bundle.file_count}}
+份文件哈希全量重算，另落 `steward_prompt.sha256` 旁挂文件。
+v1.0.0 两份文件**删除**——同一份输入包留两个版本会产生两套哈希口径，改一处漏一处。
+
+---
+
+## 五、校准评审启动包（已就绪，等 Founder 分发）
+
+`03_m2_evaluation_foundation/calibration/launch_pack/`，可独立分发：
+
+| 内容 | 数量 |
+|---|---|
+| 全量题目 | {{ref:03_m2_evaluation_foundation/calibration/launch_pack/pack_manifest.yaml#case_count}} 例 |
+| 分批清单 | {{ref:03_m2_evaluation_foundation/calibration/launch_pack/pack_manifest.yaml#batch_count}} 批，每批 {{ref:03_m2_evaluation_foundation/calibration/launch_pack/pack_manifest.yaml#batch_size}} 例 |
+| 评审 Prompt | 两侧共用一份正文，只有身份行不同 |
+| 输出格式说明 | 九个字段，含 `disagreement_code` 取值表 |
+| 硬门术语表 | 判定所需，随包自带 |
+
+包由题库**派生**，不是第二份题库：判据重新派生一遍与落盘文件逐字节比对，手改会被抓到。
+包内不含项目治理上下文、既往结论、另一侧结果——判据按黑名单逐文件扫。
+
+**两侧评审记录仍是 {{ref:03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#sides.0.record_count}} 条**，状态 `CALIBRATION_REVIEW_EVIDENCE_MISSING` 保持不变。
+执行侧没有、也不会自行扮演任一侧产出模拟分数：分歧率的意义在于两位评审互不知道对方判了什么，
+同一个执行侧写两份，测出来的不是分歧，是想象力。
+
+---
+
+## 六、隐藏生成时序门
+
+新状态 `public_blueprint_stable_for_hidden_generation`，当前为 **false**，
+{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#timing_gate.preconditions_total}}
+项前置满足 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#timing_gate.preconditions_met}} 项。
+
+| 门关着时 | |
+|---|---|
+| 允许 | STORE-A provision 与证据回传；私有工具链建设；{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#timing_gate.pilot_brand_limit}} 个品牌的试产批（标 `pilot: true`，不计入 `brand_count`，正式批须重新生成） |
+| 禁止 | 40 品牌正式批生成 |
+
+判据现算前三项前置（评审回收 / 分歧统计 / 阈值建议），门自称满足而证据源说没满足即 FAIL；
+第四项是 Founder 的确认动作，**执行侧不得代填**——代填就把「我确认过」变成了「它自己说确认过」。
+
+STORE-A 证据两份净化文件的最低字段与禁写内容已定；
+`COND-011 → CLOSED` 与 `m2_hidden_assets_status → STORAGE_READY` 的前提是**先复检后入库**，
+顺序不可对调：先收进来再检查，一旦命中，Git 历史里已经有副本了。
+
+---
+
+## 七、交付闭环与门禁现状
+
+{{ref:03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#current_closure_state.deliverable_count}} 项强制交付：
+**{{ref:03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#current_closure_state.ready_count}} 项 READY /
+{{ref:03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#current_closure_state.partial_count}} 项 PARTIAL /
+{{ref:03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#current_closure_state.frozen_count}} 项 FROZEN**，
+与 EP04 相同——本包没有解开那个条件，也没有假装解开。
+
+最终资产存在门
+{{ref:governance/conditions/m2_condition_state_semantics.v0.1.yaml#final_asset_existence_gate.total_count}} 条判据，
+当前满足 {{ref:governance/conditions/m2_condition_state_semantics.v0.1.yaml#final_asset_existence_gate.satisfied_count}} 条。
+
+现役门禁册 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#measurements_at_delivery.live_gate_roster.live_gate_count}} 个，
+与 `run_all_checks` 注册表双向比对一致。
+
+---
+
+## 八、联动更新项（逐条列明）
+
+| 联动项 | 内容 |
+|---|---|
+| `ci/run_all_checks.py` ＋ `live_gate_roster` | 新增 {{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#new_checkers.count}} 个 Checker，两处同步登记 |
+| `error_code_fixture_coverage_ledger` | 加 `measurement_history`；当前 `measurement` 更新为本包实测；棘轮上限未动 |
+| `identity_capability_isolation_contract` | 扫描面记录当前值更新，旧值进 `history` 并标 `evidence_level` |
+| `m2_deliverable_coverage_map` | 多模态卡证据哈希重算 |
+| `m2_condition_state_semantics` | 补时序门交叉引用与四项定锚的未决项关闭记录 |
+| `founder_m2_kickoff_signature_receipt` | 两条无检测器的「未触发」补 `enforcement` 标注，原判定文字未改 |
+| `m2_ep04_delivery_receipt` | `OI-M2-FIXTURE-DEBT` 条目内的计数笔误（149→147）纠正并留注 |
+| `m2_ep04_delivery_report` | 改为模板渲染；幽灵 STOP 表述撤回并追加更正说明 |
+| `README.md` ＋ `founder_pinned_baseline` | 状态块与 Checker 计数更新，基线新增登记条目 |
+| PR #3 | 标题与正文按裁决第六节更新，**未产生新 Commit**（走 REST API PATCH） |
+| `m2_delivery_report.md` | 首行加 SUPERSEDED 声明并指向最新回执，不回改正文 |
+
+---
+
+## 九、全部未决项（{{ref:11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#open_item_count}} 条，不筛选）
+
+| 编号 | 事项 | 状态 |
+|---|---|---|
+| `OI-M2-HIDDEN` | STORE-A 净化 provision 证据两份未回传，隐藏资产未生成 | AWAITING_FOUNDER |
+| `OI-M2-CALIBRATION` | 两侧隔离评审未执行；启动包已就绪待分发 | AWAITING_FOUNDER |
+| `OI-M2-GUARDIAN-REPORT` | 最终 Head 的 Guardian 报告全文仍未取得 | 依 ANCHOR-3 不再阻断收口，残留义务保留 |
+| `OI-M2-TIMING-GATE` | 时序门第四项前置（Founder 确认）未到 | AWAITING_FOUNDER |
+| `OI-M2-FIXTURE-DEBT` | 已声明错误码尚无负例行使，按裁决第八节维持挂账 | REGISTERED_WITH_RATCHET |
+| `OI-M2-LEGACY-REPORT-NUMBERS` | 立规前的历史报告未模板化 | REGISTERED（不追溯） |
+| `OI-M2-LEGACY-STOP-TABLE` | 既往报告 STOP 表格未分栏 | REGISTERED（不追溯，「未触发」通则不豁免） |
+| `COND-007` | 阈值冻结 | OPEN |
+| `COND-011` | 隐藏存储 provision | EVIDENCE_SUBMITTED |
+
+两处「不追溯」是执行侧的判断，在此显式说明：为满足一条后立的格式规则去回改历史报告，
+等于用今天的口径重写昨天的现场；与「历史记录只可追加更正、不得静默改写」同一条纪律。
+若 Founder 要求回改，执行侧照办。
+
+---
+
+## 十、未授权且未做
+
+`合并 PR #3` ／ `m2_frozen=true` ／ `40 品牌正式批` ／ `M3 正式执行` ／ `M4 知识蒸馏` ／
+`隐藏内容进入主仓` ／ `production_servable` —— 全部为 `false`，逐项见回执 `not_authorized_and_not_done`。
+
+停在 `candidate/m2`，未发起任何审查轮。§14 照旧：本轮结论仅对本包落地的候选提交有效。

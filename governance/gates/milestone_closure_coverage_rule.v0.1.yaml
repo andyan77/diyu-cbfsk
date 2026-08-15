@@ -1,0 +1,76 @@
+schema_version: "0.1"
+rule_id: GR-CLOSURE-01
+artifact_id: milestone_closure_coverage_rule.v0.1
+project_id: DIYU-CBFSK-001
+status: ACTIVE
+scope: 今后每个里程碑收口（永久生效）
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第一节通则
+adopted_at_package: M2-EP04
+
+statement: >-
+  每个里程碑收口都必须有一张由上位真源生成的交付覆盖矩阵与对应 closure checker；
+  执行包不得以自身交付清单证明自身完整。
+
+why: >-
+  执行包用自己的交付清单证明自己交齐了，等于同一支笔写考纲和答卷。上位真源（章程、Brief、PRD）
+  是在执行开始之前就定下的，它不知道执行侧后来做了什么，因此才能当尺子。
+
+requirements:
+  - id: CR-1
+    requirement: 覆盖矩阵的清单必须从上位真源解析取得，不得由矩阵自述。
+    failure_state: COVERAGE_MAP_SELF_DECLARED
+  - id: CR-2
+    requirement: 每个里程碑必须有一个已注册的 closure checker。
+    failure_state: MILESTONE_WITHOUT_CLOSURE_CHECKER
+  - id: CR-3
+    requirement: closure checker 必须出现在 ci/run_all_checks.py 的注册表内，否则等于没跑。
+    failure_state: CLOSURE_CHECKER_NOT_REGISTERED
+  - id: CR-4
+    requirement: 凡在 11_reports_and_receipts/ 有里程碑级交付回执的里程碑，必须在本登记册内。
+    failure_state: MILESTONE_RECEIPT_WITHOUT_COVERAGE_ENTRY
+  - id: CR-5
+    requirement: 上位真源文件与覆盖矩阵文件都必须真实存在。
+    failure_state: COVERAGE_SOURCE_MISSING
+
+naming_and_placement:
+  numbering_and_location_convention: 按仓库既有命名规范分配并登记
+  convention_source: 现有三条登记项即规范样例——覆盖矩阵落在该里程碑的产物目录，checker 落在 ci/checkers/。
+
+milestones:
+  - milestone: M0
+    upstream_source: 00_charter/project_charter.v1.0.yaml
+    upstream_source_section: m0_deliverables
+    coverage_map: 00_charter/project_charter.v1.0.yaml
+    coverage_map_note: >-
+      M0 的覆盖矩阵与上位真源同处一文件——章程既是清单来源也是登记处。
+      判据另与 PRD/执行申请交叉核对名称与序号，因此不构成自证。
+    closure_checker: ci/checkers/check_m0_deliverable_closure.py
+    deliverable_count: 14
+    milestone_receipt: 11_reports_and_receipts/m0_delivery_receipt.yaml
+  - milestone: M1
+    upstream_source: 01_contracts_and_schemas/m1_object_model_brief.md
+    upstream_source_section: 对象清单与覆盖要求
+    coverage_map: 01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.1.yaml
+    closure_checker: ci/checkers/check_m1_object_coverage.py
+    deliverable_count: 27
+    deliverable_count_note: M1 的计数单位是对象，不是文件；以覆盖映射表的对象数为准。
+    milestone_receipt: 11_reports_and_receipts/m1_delivery_receipt.yaml
+  - milestone: M2
+    upstream_source: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md
+    upstream_source_section: 第 2 节 M2 必须交付（18 项）
+    coverage_map: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
+    closure_checker: ci/checkers/check_m2_deliverable_closure.py
+    deliverable_count: 18
+    milestone_receipt: 11_reports_and_receipts/m2_delivery_receipt.yaml
+
+machine_checkable_fields:
+  registered_milestone_count: {type: integer, current_value: 3}
+  unregistered_milestone_receipt_count: {type: integer, required_value: 0}
+  unregistered_closure_checker_count: {type: integer, required_value: 0}
+
+failure_states:
+  - COVERAGE_MAP_SELF_DECLARED
+  - MILESTONE_WITHOUT_CLOSURE_CHECKER
+  - CLOSURE_CHECKER_NOT_REGISTERED
+  - MILESTONE_RECEIPT_WITHOUT_COVERAGE_ENTRY
+  - COVERAGE_SOURCE_MISSING

@@ -1,0 +1,20 @@
+fixture_id: P28-error-code-coverage-ledger-balanced
+description: 未覆盖的码全部具名挂账，上限与册子条数相等——棘轮处于合法状态。
+checker: check_error_code_fixture_coverage
+expected: PASS
+payload:
+  declared:
+  - checker: check_a
+    code: CODE_ONE
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_THREE
+  uncovered:
+  - checker: check_a
+    code: CODE_TWO
+  fixture_count: 12
+  ledger_entries:
+  - checker: check_a
+    code: CODE_TWO
+  declared_cap: 1

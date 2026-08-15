@@ -1,0 +1,98 @@
+schema_version: "0.1"
+artifact_id: m1_object_layer_map.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_DELIVERED
+artifact_lifecycle_state: draft
+adr_ref: ADR-001
+ruling_anchors: [DIYU-CBFSK-FOUNDER-M2-CHARTER-001]
+
+contract:
+  purpose: ADR-001 六层架构的落地件——把 M1 冻结的 12 输入与 15 输出对象逐一归到层。
+  ground_truth: 01_contracts_and_schemas/m1_object_model/object_coverage_map.v0.1.yaml
+  ground_truth_rule: >-
+    对象清单以 M1 覆盖映射表为准，本表不得增删对象。check_m2_governance_landing 从覆盖映射表
+    独立取 object_id 集合，双向比对本表——本表多一个是凭空造对象，少一个是漏映射，两个方向都判失败。
+  m1_objects_modified: false
+  m1_objects_modified_note: 本表只做归属标注，不打开任何 M1 Schema 文件写入。
+
+layers:
+  - layer_id: knowledge_layer
+    name: 知识层
+    domain_side: domain_core
+  - layer_id: domain_core
+    name: 领域内核层
+    domain_side: domain_core
+  - layer_id: persona_plane
+    name: 人设平面
+    domain_side: domain_core
+  - layer_id: narrative_plane
+    name: 叙事平面
+    domain_side: domain_core
+  - layer_id: delivery_surface
+    name: 交付面
+    domain_side: delivery_surface
+  - layer_id: evaluation_and_governance
+    name: 评测与治理层
+    domain_side: cross_cutting
+
+domain_boundary:
+  line_between: [narrative_plane, delivery_surface]
+  meaning: L1—L4 判断「什么是对的、由谁以什么口吻说」；L5 决定「以什么形态送出去」。
+  content_first_api_second: 内容与 API 都只是 delivery_surface 的交付形态，不是两套系统。
+
+knowledge_layer_note:
+  m1_object_count: 0
+  statement: >-
+    知识层在 M1 对象层**没有**落点，这是如实状态不是遗漏：其载体是 M0 冻结的
+    knowledge_state_machine.v1.0.yaml 里的 13 类知识单元与七级状态链，
+    M1-EP01 只做搭配输入输出对象的 Schema 化。M2 不为补齐映射而新造 M1 对象
+    （那会触发 NEW_TOP_LEVEL_INPUT_OR_OUTPUT_OBJECT_REQUIRED 熔断）。
+
+mapping:
+  - {object_id: IN-01, name: UniversalExpertKernel, layer_id: domain_core}
+  - {object_id: IN-02, name: CategoryAdapter, layer_id: domain_core}
+  - {object_id: IN-03, name: BrandTruthPack, layer_id: domain_core}
+  - {object_id: IN-04, name: InventorySnapshot, layer_id: domain_core}
+  - {object_id: IN-05, name: AudienceProfile, layer_id: domain_core}
+  - {object_id: IN-06, name: IndividualProfile, layer_id: domain_core}
+  - {object_id: IN-07, name: StylingTaskContext, layer_id: domain_core}
+  - {object_id: IN-08, name: ProductImageAssetBundle, layer_id: domain_core}
+  - {object_id: IN-09, name: StylistPersonaProfile, layer_id: persona_plane}
+  - {object_id: IN-10, name: PersonaMemorySnapshot, layer_id: persona_plane}
+  - {object_id: IN-11, name: FounderProvidedRealBrandPackage, layer_id: domain_core}
+  - {object_id: IN-12, name: PublicationPolicy, layer_id: delivery_surface}
+  - {object_id: OUT-01, name: BrandAudienceInterpretation, layer_id: domain_core}
+  - {object_id: OUT-02, name: StylingDiagnosis, layer_id: domain_core}
+  - {object_id: OUT-03, name: StylingThesis, layer_id: domain_core}
+  - {object_id: OUT-04, name: OutfitPlan, layer_id: domain_core}
+  - {object_id: OUT-05, name: InclusionExclusionReasons, layer_id: domain_core}
+  - {object_id: OUT-06, name: TransformationPlan, layer_id: domain_core}
+  - {object_id: OUT-07, name: AlternativePlan, layer_id: domain_core}
+  - {object_id: OUT-08, name: SuitabilityExplanation, layer_id: domain_core}
+  - {object_id: OUT-09, name: NarrativePackage, layer_id: narrative_plane}
+  - {object_id: OUT-10, name: ContentProjection, layer_id: delivery_surface}
+  - {object_id: OUT-11, name: DecisionTrace, layer_id: evaluation_and_governance}
+  - {object_id: OUT-12, name: VisualAttributeExtractionResult, layer_id: domain_core}
+  - {object_id: OUT-13, name: PersonaContinuityUpdate, layer_id: persona_plane}
+  - {object_id: OUT-14, name: SocialMediaVoicePlan, layer_id: narrative_plane}
+  - {object_id: OUT-15, name: PublicationDecision, layer_id: delivery_surface}
+
+additional_m1_schemas:
+  note: >-
+    以下 Schema 在 M1 注册表内，但不属 12 输入 / 15 输出这两份冻结计数
+    （它们是 D-20 / D-21 的支撑对象与公共定义）。一并标注归属层，避免日后被当成「没人管的对象」。
+  items:
+    - {schema_object_id: D-20-03, name: PublishedViewpointLedger, layer_id: persona_plane}
+    - {schema_object_id: D-20-04, name: SeriesContinuityState, layer_id: persona_plane}
+    - {schema_object_id: D-20-05, name: PersonaConflictRecord, layer_id: persona_plane}
+    - {schema_object_id: D-21-01, name: PlatformVoiceProfile, layer_id: narrative_plane}
+    - {schema_object_id: SHARED_DEFS, name: M1 公共定义, layer_id: null, cross_cutting: true}
+
+fact_priority_unchanged:
+  statement: >-
+    分层不引入第二套事实优先级。七级优先级仍由 common_defs.schema.v0.1.json#/definitions/factPriorityLevel
+    单独定义；persona_plane 与 narrative_plane 均不得覆盖 domain_core 的品牌真源与品类硬约束。
+  source_of_truth: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json#/definitions/factPriorityLevel
+  changed_by_this_package: false

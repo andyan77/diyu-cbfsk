@@ -1,0 +1,104 @@
+schema_version: '0.1'
+registry_id: DIYU-CBFSK-COLLECT-LITERAL-REGISTRY
+artifact_id: collect_literal_registry.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_5_b04_mainline_guard_hardcoded B-04-4
+established_at_package: M2-PREMERGE-FIX
+enforced_by: ci/checkers/check_collect_derivation_discipline.py
+
+rule:
+  verbatim: >-
+    凡判据用作事实源的字段，必须由 collect() 现场推导；硬编码常量或自述值充当事实源，一律 FAIL。
+    全仓横扫同类，逐处整改或登记
+  permanence: 永久生效
+  plain: >-
+    一个字段写着 []，读起来像「查过了，没有」；也可能是「根本没查」。
+    两者在报告里长得一模一样，只有翻开 collect() 才分得清。
+    本册的作用是：让「没查」这件事必须被写下来，写不出正当理由就过不了闸。
+  registration_is_not_exemption: >-
+    登记不是豁免。登记项必须写明它为什么根本不是事实源（是尺子、是契约词表），
+    且 kind 不允许写成 fact_source——没有「合法的硬编码事实源」这种东西。
+
+allowed_kinds:
+  expectation_constant: 判据用来比对的期望值本身来自合同，不是对世界的测量。
+  contract_vocabulary: 枚举词表，其定义处就是本仓合同。
+
+sweep:
+  finding: B-04-4
+  same_origin_as: STORE-A locator_present 硬编码 False
+  swept_at_package: M2-PREMERGE-FIX
+  method: AST 解析每个 checker 的 collect()，取 return 字典中取值为纯字面量的键（含先赋局部名再返回的）。
+  evidence_level: runtime_verified
+  sites_found_before_repair: 10
+  sites_remaining_after_repair: 0
+  repaired:
+  - checker: check_m2_suspension_seal
+    field: unregistered_main_commits
+    was: '[]'
+    now: git rev-list 冻结点..origin/main 后按路径分类
+    why_it_mattered: 裁决点名此处；它当时被作为合规证据引用，而它永远回答「没有」。
+  - checker: check_m2_suspension_seal
+    field: pr_merged
+    was: 读台账自述 state_flags_at_seal.pr_3_merged
+    now: git merge-base --is-ancestor <candidate head> origin/main
+  - checker: check_m2_suspension_seal
+    field: tag_applied
+    was: 读合同自述 tag.tag_applied
+    now: git tag --list
+  - checker: check_m2_suspension_seal
+    field: frozen_observation_entered
+    was: 读合同自述 mainline_state_after_merge.entered
+    now: 同 pr_merged——合并发生即进入冻结观察态
+  - checker: check_m2_tournament
+    field: dry_run_executed
+    was: 'True'
+    now: 两次实跑是否各自产出结果对象
+    why_it_mattered: 恒真，骨架一次没跑出结果也照样说跑过了。
+  - checker: check_ruling_coverage
+    field: prompt_rag_direct_answer_accepted_for_m6
+    was: 'False'
+    now: 扫裁决目录取 milestone=M6 的裁决，看它接受了什么实现形态
+    why_it_mattered: 恒假，与 locator_present 硬编码 False 同源——D-29 真被违反也不会触发。
+  - checker: check_project_state
+    field: candidate_marked_as_effective_truth
+    was: 'False'
+    now: 由 product_truth 现推（候选与活基线是否同一份、候选是否被称作已生效）
+  - checker: check_task_classification
+    field: role_availability
+    was: collect() 里的 Python 字面量表
+    now: 读规范源 role_operating_model.v0.2.yaml role_availability.items
+    why_it_mattered: 判据自己造出自己要检查的事实。
+  - checker: check_role_operating_model
+    field: commit_events
+    was: '[]'
+    now: git rev-parse HEAD 对上 guardian_report_registry 最近一轮审过的提交
+    why_it_mattered: 「提交变了却没重审」这条分支永远拿不到事件。
+  - checker: check_role_operating_model
+    field: founder_authorized_temporary_writers
+    was: '[''TEMPORARY_EXECUTION_WRITER'']'
+    now: 读 founder_pinned_baseline continuation_execution.founder_designation
+  - checker: check_role_operating_model
+    field: guardian_role_id
+    was: "'CLAUDE_INDEPENDENT_GUARDIAN'"
+    now: 取 roles 里 formal_guardian 为真的那一个
+  - checker: check_m2_evaluation_governance
+    field: canonical_risk_tiers
+    was: '[''high'', ''medium'', ''low'']'
+    now: 读 role_operating_model review_mode.risk_tiered_review.tiers
+    why_it_mattered: >-
+      两份合同的 values_source 都指向规范源那一块，指过去却发现那里根本没列举值，
+      于是判据在 Python 里自备了一把尺子。尺子必须住在它被声称住的地方。
+
+literal_site_count: 0
+entries: []
+entries_note: >-
+  当前为空——十处已全部整改，没有一处需要以「尺子」名义留在代码里。
+  空不是「没检查」：check_collect_derivation_discipline 每次实扫全部 checker，
+  扫到任何一处未登记的字面量即 HARDCODED_FACT_SOURCE。
+
+failure_states:
+- HARDCODED_FACT_SOURCE
+- COLLECT_LITERAL_REGISTRY_STALE
+- COLLECT_LITERAL_KIND_INVALID
+- COLLECT_LITERAL_COUNT_MISSTATED
+- COLLECT_SCAN_EMPTY

@@ -1,0 +1,239 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-SEAL-DELIVERY-RECEIPT
+project_id: DIYU-CBFSK-001
+milestone: M2
+package_id: M2-SEAL
+task_id: DIYU-CBFSK-M2-SEAL-001
+task_class: L3_CRITICAL_GOVERNANCE
+execution_run_id: 7b3e51d9-0c46-4a82-9f17-5e6a2c0b84d3
+parent_execution_run_id: 4c9e17b8-3d2a-4f61-a8b5-7e0c6d915af2
+base_candidate_commit: f71617eee44a6008d8180fe81aeea901efc54816
+delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
+base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+branch: candidate/m2
+authority: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_premerge_fix/m2_premerge_fix_delivery_receipt.yaml
+superseded_why: >-
+  本回执描述的是 9b60bda 的结束状态。并入前审查在该提交上给出 DO_NOT_MERGE_AS_IS，
+  M2-PREMERGE-FIX 据此定点修复并形成新候选；当前态改由该包回执承载。
+  本件作为历史证据保留，不删除、不改写（除按 B-01-1 更正两处失真计数外）。
+self_reference_limitation: 本回执随本包内容同处一个提交，无法记录自身所在的候选 Commit——写进来就会改变文件内容，从而改变那个哈希。
+candidate_commit_binding:
+  value: null
+  recover_with: git rev-parse candidate/m2
+  ledger: governance/receipts/m2_package_commit_ledger.yaml
+  is_premerge_review_target: true
+  note: 裁决第三节要求执行侧报出该完整 40 位哈希；它同时是本轮并入前审查的对象。
+
+package_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_status: SUSPENDED_BY_FOUNDER
+  m2_freeze_gate_open: false
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  m2_deliverables_ready: 14
+  m2_deliverables_total: 18
+  calibration_pack_distribution_status: NOT_DISTRIBUTED
+  design_gaps_disposed: 0
+  design_gaps_total: 3
+  premerge_review_conclusions_received: 0
+  merge_gates_satisfied: 0
+  merge_gates_total: 3
+  mainline_frozen_observation_entered: false
+  m2_hidden_assets_status: NOT_STARTED
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m2_frozen: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+  pr_3_merged: false
+  next_authorized_action: BOTH_SIDES_RETURN_PREMERGE_REVIEW_CONCLUSIONS
+
+self_check:
+  checkers: 48
+  predicate_fixtures: 588
+  schema_fixtures: 36
+  exit_code: 0
+  evidence_level: runtime_verified
+  measured_by: python3 ci/run_all_checks.py
+  note: 全绿只表示确定性判据与夹具按声明行为，不表示 M2 已交付、不表示已通过任何一方审查。
+  error_code_fixture_coverage:
+    declared_codes_total: 675
+    fail_fixtures_run: 536
+    covered_codes: 528
+    uncovered_codes: 147
+    ratchet_cap: 147
+    cap_moved: false
+    new_checkers_debt: 0
+
+new_checkers:
+- name: check_m2_suspension_seal
+  codes: 25
+  negative_fixtures: 25
+  positive_fixtures: 1
+  debt: 0
+  replaces: 上一版封口台账自述的「本台账没有机器守卫……封存靠人遵守，不靠判据拦阻」
+new_tools: []
+
+prior_window_handling:
+  prior_commit: f71617eee44a6008d8180fe81aeea901efc54816
+  decision: BUILT_ON_NOT_REVERTED
+  why: >-
+    裁决第一节写着「不重写、不回退、不删除」。回退一个已推送的提交要么产生 revert 提交、
+    要么强推改写历史，两者都与该条相违；而那一版记录的事实经复核属实，是不完整，不是错。
+    因此就地扩写为本裁决要求的挂起记录，并保留它曾是 doc-only 的事实与被取代的理由。
+  what_was_corrected:
+  - field: review_status_at_seal.why_review_cannot_start_now
+    why: 本裁决第三节把审查对象改为「结扎落盘后形成的最终候选」，该对象在本包提交后即存在；旧结论对旧对象成立，对新对象不成立。
+  - field: form.kind = DOC_ONLY
+    why: 本裁决第二节明文「一律以机器状态封存，不以意图封存」，且 SEAL-1 要求判据；doc-only 形态就此作废。
+  founder_offered_rollback: true
+  rollback_not_taken_reason: 见 why；如 Founder 仍要回退，须另行具名裁决——回退本身是一次改写历史的动作。
+
+article_landing:
+  by_article:
+    A1:
+      title: M2 挂起裁定
+      landed: [governance/bootstrap/role_operating_model.v0.2.yaml, governance/conditions/m2_seal_ledger.v0.1.yaml]
+      measurement:
+        m2_status: SUSPENDED_BY_FOUNDER
+        freeze_gate_open: false
+        artifacts_rewritten: 1
+        artifacts_deleted: 0
+        artifacts_rewritten_retracted_value: 0
+        artifacts_rewritten_correction: >-
+          本值原写 0，失真。自交付态冻结点 a4be75e 起，
+          03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+          的字节确实被改过（scan_coverage_record 记账值）。改的是记账，不是语义——
+          但「0 处」这句话本身不成立。
+        delivery_semantics_changed: false
+        corrected_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_2_b01_zero_byte_claim_false B-01-1
+        full_list: governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml
+    A2:
+      title: 未落盘部分结扎
+      landed:
+      - 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml
+      - 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml
+      - ci/checkers/check_m2_suspension_seal.py
+      measurement:
+        seal_item_count: 7
+        sealed_pack_files: 17
+        pack_distribution_status: NOT_DISTRIBUTED
+        review_records_per_side: 0
+        design_gaps: 3
+        design_gaps_disposed: 0
+        affected_review_units: 5
+        hidden_asset_count: 0
+        threshold_metric_count: 34
+        threshold_frozen_count: 0
+        timing_gate_preconditions: 5
+        timing_gate_satisfied: 0
+        deliverables_ready: 14
+        deliverables_partial: 4
+        machine_enforced: true
+    A3:
+      title: 并入前审查
+      landed: [governance/reports/m2_premerge_review_request.v0.1.yaml, governance/reports/m2_premerge_review_request.md]
+      measurement:
+        question_count: 4
+        out_of_scope_count: 4
+        reviewer_count: 2
+        conclusions_received: 0
+        relay_verbatim_enforced: true
+    A4:
+      title: 合并与主线封存
+      landed: [governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml]
+      measurement:
+        merge_gate_count: 3
+        merge_gates_satisfied: 0
+        merge_authorized_now: false
+        tag_applied: false
+        frozen_observation_entered: false
+    A5:
+      title: 恢复条件
+      landed: [governance/conditions/m2_seal_ledger.v0.1.yaml]
+      measurement:
+        restore_step_count: 9
+        must_not_assume_count: 2
+        founder_owned_steps: 5
+        execution_side_steps: 4
+    A6:
+      title: 未授权
+      landed: [governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001.yaml]
+      measurement:
+        not_authorized_count: 10
+        state_flags_held_false: 7
+        state_flags_held_false_retracted_value: 6
+        state_flags_held_false_correction: >-
+          本值原写 6，漏计。裁决 DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 第十二节把口径钉死为七位并逐条列出：
+          m2_frozen／founder_signature_eligible／downstream_consumption_allowed／
+          m3_started／m4_started／knowledge_distillation_started／production_servable。
+        state_flags_held_false_items:
+        - m2_frozen
+        - founder_signature_eligible
+        - downstream_consumption_allowed
+        - m3_started
+        - m4_started
+        - knowledge_distillation_started
+        - production_servable
+        corrected_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_12_unchanged
+
+structural_fixes_beyond_the_ruling:
+- id: SF-SEAL-01
+  what: merge_authorized_now 在合并协议文件里写了两处。
+  why: 同一个派生值两处定义，改一处漏一处；漏掉的那处会让「Founder 授权了合并吗」出现两个答案。
+  fix: 只保留 what_this_file_is 那一处，machine_checkable_fields 改为指向它。
+- id: SF-SEAL-02
+  what: OI-EP06-03（EP06 自身候选哈希回填台账）本轮结清。
+  why: a4be75e 已成为过去，回填由 git 可复算，不是新的声称。
+  fix: governance/receipts/m2_package_commit_ledger.yaml M2-EP06 条目 candidate_commit 由占位符改为确定哈希。
+
+open_item_count: 7
+open_items:
+- id: OI-SEAL-01
+  what: execution_status 是否随挂起迁移至 M2_SUSPENDED——该取值不在已签署回执的 authorized_values 内。
+  what_founder_would_need_to_do: 在 founder_signoff_receipt.yaml 的 authorized_values 里具名补上，并绑定完整 40 位签署基线 Commit。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  execution_side_must_not_do: true
+- id: OI-SEAL-02
+  what: 本包自身候选 Commit 的完整 40 位哈希写不进本包（自引用），随交付报告报出，下一个包回填台账。
+  owner: TEMPORARY_EXECUTION_WRITER
+- id: OI-SEAL-03
+  what: 三条已知设计缺口一条未处置；恢复第 1 步即处置它们。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+- id: OI-SEAL-04
+  what: Guardian 与总顾问的并入前审查结论均未回，转达件已备好。
+  owner: [CLAUDE_INDEPENDENT_GUARDIAN, CHATGPT_CHIEF_ADVISOR]
+- id: OI-SEAL-05
+  what: 三门第三门「本裁决之后的合并授权」尚未给出，合并不在当前授权范围内。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+- id: OI-SEAL-06
+  what: 「M2 挂起点」标签未打——按协议须在合并完成且哈希核验通过之后才打。
+  owner: TEMPORARY_EXECUTION_WRITER
+  blocked_on: 合并
+- id: OI-SEAL-07
+  what: STORE-A provision、阈值冻结、时序门五项等封存项维持原状，解封须 Founder 裁决具名该项。
+  owner: FOUNDER_PRODUCT_AUTHORITY
+
+not_authorized_and_not_done:
+- {item: 分发校准包, done: false}
+- {item: 任何隐藏批次含试产, done: false}
+- {item: 置 m2_frozen 为真, done: false}
+- {item: 置 founder_signature_eligible 为真, done: false}
+- {item: 置 downstream_consumption_allowed 为真, done: false}
+- {item: M3, done: false}
+- {item: M4, done: false}
+- {item: 知识蒸馏, done: false}
+- {item: production_servable, done: false}
+- {item: 在本裁决之外向 main 提交任何功能性内容, done: false}
+
+stop_point:
+  branch: candidate/m2
+  merged: false
+  main_untouched: true
+  what_happens_next: 两侧各出一次结论；三门齐备且 Founder 另行授权后才谈合并。
+  execution_side_must_not: [发起合并, 代填审查结论, 处置设计缺口, 解封任何被封项]

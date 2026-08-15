@@ -1,0 +1,121 @@
+schema_version: '0.1'
+record_id: DIYU-CBFSK-M2-FREEZE-CANDIDATE-001
+artifact_id: m2_freeze_candidate_record.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP03
+status: FREEZE_CANDIDATE_PENDING_FOUNDER_SIGNATURE
+artifact_lifecycle_state: validated
+freeze_semantics:
+  m2_frozen: false
+  m2_frozen_note: 本记录**不**把 m2_frozen 置 true。冻结自 Founder 收口签署起正式生效——本包只形成候选并锁定内容指纹，签署之前一切可修订。把 m2_frozen 提前置 true 属禁止产出。
+  effective_from: Founder 收口签署
+  before_signature: 可修订
+  after_signature: 只能按 benchmark_revision_protocol 的唯一合法通道修订，且因失败而降标永久禁止
+  authority: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 审查安排 / DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第四节 Phase 2
+profile_lock:
+  profile_id: m2_evaluation_profile
+  profile_version: '1.0'
+  binding_status: FINAL
+  final_m1_binding_required: false
+  member_count: 29
+  source_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  source_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  locked: true
+  locked_note: FINAL 且锁定：M1 绑定不再变动。若 M1 冻结物字节发生变化，check_m2_envelope_contract 判 M1_FROZEN_ARTIFACT_DRIFT（熔断），而不是默默重绑。
+hidden_asset_freeze_record:
+  asset_count: 0
+  content_hashes: []
+  frozen: false
+  state: BLOCKED_HIDDEN_STORAGE_NOT_PROVISIONED
+  honest_statement: 隐藏资产冻结记录为空，因为一件都没生成——STORE-A 未 provision。空记录是如实状态，不得读成「隐藏集已冻结」。M2 通过标准中「隐藏集须在 M2 冻结前建成」这一条**尚未满足**，须由
+    Founder 在收口时处置。
+  verifiability_principle: Guardian 与总顾问只凭 manifest、计数、哈希与边界判据核验隔离，不得要求读取隐藏内容；当前无内容可读，核验对象即为「计数为 0」这一事实本身。
+  record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+freeze_list:
+  digest_recipe: sha256(file_bytes)
+  item_count: 30
+  scope: 03_m2_evaluation_foundation/ 全部产物
+  excludes:
+  - ci/checkers/*（判据实现随仓演进，不属冻结内容）
+  - 11_reports_and_receipts/*（报告与回执记录过程，不属冻结内容）
+  items:
+  - path: 03_m2_evaluation_foundation/adr/ADR-001-six-layer-architecture-and-boundary.md
+    sha256: 090b199d40f56de6e1363f65d2914d7cf06b393c369237c7113c87fbef25d49a
+  - path: 03_m2_evaluation_foundation/adr/ADR-002-model-provider-abstraction.md
+    sha256: 43401d5771f86f8235340275a71207bc75d6b9ba616385ec04be7c32da91fb1e
+  - path: 03_m2_evaluation_foundation/adr/ADR-003-tenant-scope-and-composed-consumption.md
+    sha256: b76f493e6c0440937e829c20833096207be43387cb768fb99cbbfaa94ccd1362
+  - path: 03_m2_evaluation_foundation/adr/ADR-004-privacy-and-identity-isolation.md
+    sha256: 0917db64bf81691f76e1fba816665d0b037eeaa614701bb9fe5eace6e8c45dc7
+  - path: 03_m2_evaluation_foundation/adr/ADR-005-benchmark-tournament-and-observability.md
+    sha256: e8029c6e59dbb0d9cf3b277c84711ebb3a58a54cf394d12557edaa9916a5749c
+  - path: 03_m2_evaluation_foundation/adr/ADR-006-canonical-connector-boundary.md
+    sha256: 1c4b987e9c96749d1edd20cd16d06d8d2366858ce65f24810b582d48c04a9812
+  - path: 03_m2_evaluation_foundation/architecture/m1_object_layer_map.v0.1.yaml
+    sha256: 213dd61d5327ea5d5cdb699949793a449a4b5ec634e966c738201f8154c97d41
+  - path: 03_m2_evaluation_foundation/commercial_decision_record.v0.1.yaml
+    sha256: 4f5b8fd35cb65efde6196f1d1f925b050e4ea4c300948a47ec726b7dccfbe561
+  - path: 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml
+    sha256: 4cae3ea623e0b8e07d39c78cdd143d10f3a29cfa9c40c54db5094cd195a8a1f7
+  - path: 03_m2_evaluation_foundation/envelope/m1_source_binding.v0.1.yaml
+    sha256: 8ce3a45fa09c1521cba5f545d9d727f70584913e4d9602e68ed378f5f67c22e4
+  - path: 03_m2_evaluation_foundation/envelope/m1_to_m2_envelope.schema.v0.1.json
+    sha256: 027965002e93e8e92e694f74ec651277b7bf9937bb209157997059c73a976888
+  - path: 03_m2_evaluation_foundation/envelope/profile_composition.schema.v0.1.json
+    sha256: 37f625a43b595ed2912e284840e3badf7e6115a515b0c8b698a9be018469524a
+  - path: 03_m2_evaluation_foundation/envelope/profiles/m2_evaluation_profile.v1.0.yaml
+    sha256: 7106d7e899e6281e041edff5f28ede9f7eeffe274dbb7be668c9ed51da920392
+  - path: 03_m2_evaluation_foundation/evaluation_governance/benchmark_revision_protocol.v0.1.yaml
+    sha256: 92fa029ea11ec2f26a712be3c755399612d9999bd8b29a9ef0b082c89a584a71
+  - path: 03_m2_evaluation_foundation/evaluation_governance/evaluation_asset_classification_profile.v0.1.yaml
+    sha256: 42a103a1364076bb71f70e7a8d8a77be0fc0424a11db80fdd066b9315fbd4f36
+  - path: 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml
+    sha256: 83bd40e9f65c3f56b7cadd00b6ab4d9924b4e1a64babce06c4406d122a186188
+  - path: 03_m2_evaluation_foundation/evaluation_governance/reviewer_calibration_contract.v0.1.yaml
+    sha256: 0c62d83cde0368fc69090a5ae2fa555e576425e5c21e7dc5528f8158e053d08b
+  - path: 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+    sha256: 9f9345f13b80fc5ec1e0ee543669c5068f09923a7f95bca11171a273746a77c3
+  - path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml
+    sha256: 2f16d9400d33ae790bf093bd7232a5fe927f2c1acd49f038e5fab858b47e7724
+  - path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+    sha256: 8411de859b3b061f9378d90d1f2c5e2b86557c16c125f040535f8374008bf56d
+  - path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+    sha256: 1f88a9fe38ae6585b148e6d09dc0543844e2ad9ae00da06097e24dba0460de6d
+  - path: 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+    sha256: 2d666d61e79b0262d456c039d3b2ce29300920e733e5f7c5c1873faf5bdff140
+  - path: 03_m2_evaluation_foundation/m2_interface_handoff.v0.1.yaml
+    sha256: 0c7d7696a0498e4694a132a6e286b19badb2c9a5c9fe85aa02fe351d0615f8fb
+  - path: 03_m2_evaluation_foundation/scoring/decision_logic_stability_rate.v0.1.yaml
+    sha256: 369e8fb9e218b4255c7715f153098075d9a279d81999b2b3eacd70c0d9c227cf
+  - path: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+    sha256: 6ffa4996af2738a44737a143ad644c66e86bce4e31744d0126cd0963ddd8af53
+  - path: 03_m2_evaluation_foundation/scoring/scorecard_constraint_correctness.v0.1.yaml
+    sha256: bf64f954c1b94712abe1a40a60edfb539d8f819f4d8a08b06f718b8f30199557
+  - path: 03_m2_evaluation_foundation/scoring/scorecard_mechanism_correctness.v0.1.yaml
+    sha256: 06c21d2cdb4cdb2efc8638bf0764ccfa728c9cdfc8e02920fe6ac5084266fd5f
+  - path: 03_m2_evaluation_foundation/scoring/scorecard_open_decision.v0.1.yaml
+    sha256: 7aede8f7ac2c54c69daea697a3e5f1ce76e118fd46f59bca14ae18eedd4e9513
+  - path: 03_m2_evaluation_foundation/tournament/baseline_tournament_contract.v0.1.yaml
+    sha256: 85d603f5a4dddc1c267c0aac1f2bac330a9b84cc865e3982c393c6ecb7a4576d
+  - path: 03_m2_evaluation_foundation/tournament/run_tournament_dryrun.py
+    sha256: 6dbb4521ed7e36f7852bc4bac7873441eb22d9690234a972697b68344ecd5172
+  self_exclusion: 本记录自身不在清单内：清单一旦写入本文件，文件内容即改变，其自身哈希随之失效。与 Receipt 的 self_reference_limitation 同一个道理，不是遗漏。
+what_is_frozen_candidate:
+- M1→M2 Envelope/Profile 合同与 FINAL 绑定（29 件）
+- 六份最小 ADR 与六层架构映射
+- 身份识别隔离能力清单（永久红线）
+- 评测治理三件套（M2 冻结 Brief 第 2 节第 8/9/10 项）：reviewer_calibration_contract.v0.1 / evaluation_sampling_design.v0.1 / benchmark_revision_protocol.v0.1
+- D-28 三分类合同与三张评分卡
+- 核心决策逻辑稳定率口径
+- 基线锦标赛四维度合同与 dry-run 骨架
+- 隐藏资产生成合同与可验证性原则
+what_is_not_frozen:
+- item: 全部评测阈值
+  state: M2_FREEZE_REQUIRED，由 Founder 在 M2 冻结时裁决（COND-007）
+- item: 隐藏评测资产本体
+  state: 未生成，被 HIDDEN_STORAGE_NOT_PROVISIONED 阻塞
+- item: 真实基线运行结果
+  state: 未执行（OD-M2-01）
+- item: 锦标赛排序权重
+  state: 未冻结，不合成单一总分

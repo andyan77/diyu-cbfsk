@@ -1,0 +1,92 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-M2-THRESHOLD-DECISION-WORKSHEET-CONTRACT
+artifact_id: threshold_decision_worksheet_contract.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP06
+status: CONTRACT_LANDED_WORKSHEET_NOT_DUE_YET
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-EP06-001 article_4_threshold_decision_worksheet
+
+what_this_file_is:
+  is: 阈值裁决工作表的合同——它到期时必须长什么样。
+  is_not: 工作表本身。
+  due_at: 聚合完成时
+  due_now: false
+  why_not_now: >-
+    工作表六列里有一列是「本次校准的分歧分布」。分歧分布要从两侧回收的评审记录里算，
+    现在两个记录槽都是 0 条。这一列现在只能留空或者编——留空的工作表 Founder 没法用来圈选，
+    编出来的分歧分布会直接变成阈值的依据。所以合同先落，工作表等有记录再出。
+  what_landing_the_contract_buys: >-
+    到期时这份工作表长什么样，现在就被判据钉死了。聚合一旦完成而工作表缺项，
+    check_m2_calibration_review 会当场判 FAIL，不靠人记得这件事。
+
+enforced_by: ci/checkers/check_m2_predistribution_sequence.py
+worksheet_path_when_due: 03_m2_evaluation_foundation/calibration/threshold_decision_worksheet.v0.1.yaml
+consumed_by:
+  who: FOUNDER_PRODUCT_AUTHORITY
+  when: TG-04 逐项圈选
+  tg_04: governance/conditions/hidden_generation_timing_gate.v0.1.yaml preconditions TG-04
+
+required_per_item_fields:
+- id: metric_meaning
+  what: 指标含义一句话
+  style_rule: 不用术语堆砌
+  style_check: 人判，非机器判
+- id: prd_suggested_value
+  what: 当前 PRD 建议值；无则注明「无」
+  nullable_with_explicit_none: true
+- id: calibration_disagreement
+  what: 与该指标相关的评审单元上，两侧判定不一致的比例与典型分歧点
+  computed_from: 两侧回收的评审记录
+  must_not_be_fabricated: true
+  blocked_until: 两侧评审记录回收
+- id: too_loose_consequence
+  what: 判松了会发生什么
+  style_rule: 一句具体后果
+- id: too_tight_consequence
+  what: 判紧了会发生什么
+  style_rule: 一句具体后果
+- id: three_options
+  what: 三档可选值及各自含义
+  option_count: 3
+
+coverage_rule:
+  statement: metric_review_unit_mapping.v0.1 的每一条 metric 必须在工作表出现且仅出现一次。
+  metric_count: 34
+  failure_states: [WORKSHEET_METRIC_MISSING, WORKSHEET_METRIC_DUPLICATE]
+
+empirical_cutpoint_handling:
+  count: 2
+  metrics: [ai_reviewer_disagreement_rate, founder_override_rate]
+  no_recommendation_this_round: true
+  reason: 估计输入不存在
+  disposition_options:
+  - id: DEFER_TO_MILESTONE_WITH_RUNTIME_DATA
+    what: 延后至有真实运行数据的里程碑
+  - id: RECLASSIFY_AS_POLICY_THRESHOLD
+    what: 改判为政策阈值
+  decided_by: FOUNDER_PRODUCT_AUTHORITY
+  decided_at: TG-04
+  must_be_listed_in_worksheet: true
+  execution_side_must_not_choose: true
+  execution_side_must_not_choose_why: >-
+    两个选项的差别是「这条线到底要不要靠数据定」。执行侧替 Founder 选「改判为政策阈值」，
+    等于把一条本来要等实测的线，变成一条谁都能拍的线。
+
+what_this_worksheet_is_not:
+  items:
+  - 不是阈值建议表——六列里没有一列叫「建议值」，PRD 建议值那一列是既有事实的转录，不是本轮产出的建议。
+  - 不是产品能力基线——分歧分布测的是两位评审员读边界读不读得一样，不是系统跑得怎么样。
+  - 不是统计推导——政策阈值那 32 条本来就不由数据定；把工作表当成「算出来的及格线」是把裁决伪装成估计。
+  source: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c4_threshold_evidence_typing
+
+failure_states:
+- WORKSHEET_NOT_PRODUCED_AT_AGGREGATION
+- WORKSHEET_ITEM_FIELD_MISSING
+- WORKSHEET_METRIC_MISSING
+- WORKSHEET_METRIC_DUPLICATE
+- WORKSHEET_DISAGREEMENT_FABRICATED
+- WORKSHEET_EMPIRICAL_DISPOSITION_SELF_CHOSEN
+- WORKSHEET_OPTION_COUNT_INVALID
+- WORKSHEET_METRIC_DUPLICATE

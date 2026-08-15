@@ -1,0 +1,200 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-DELIVERY-RECEIPT-001
+milestone: M2
+project_id: DIYU-CBFSK-001
+plan_id: MILESTONE_PLAN_M2
+plan_version: 1.1.0
+packages:
+- M2-EP01
+- M2-EP02
+- M2-EP03
+package_id: M2-EP03
+task_class: L2
+recorded_by: CODEX_EXECUTION_ENGINEER
+recorded_at: '2026-08-13'
+authorization_chain:
+- DIYU-CBFSK-FOUNDER-M2-CHARTER-001（M2 章程 + EP01 派发）
+- DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001（恢复执行 + EP02/EP03 一站到底 + EP03 精确 Prompt 批准）
+baseline_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+m1_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+branch: candidate/m2
+describes_current_state: false
+superseded_by: M2-EP04
+superseded_note: >-
+  本块是 M2-EP03 自检完成时的如实收尾态，**值一律保留不改写**。M2-EP04 收口修复后当前态改由
+  m2_ep04/m2_ep04_delivery_receipt.yaml 描述。改写历史块等于篡改当时的记录，
+  因此这里只标注它已被取代。
+status: FREEZE_CANDIDATE_PENDING_UNIFIED_REVIEW
+self_reference_limitation: 本回执无法记录包含它自身的那个 Commit 的哈希——回执一旦写入哈希，文件内容即改变，哈希随之失效。因此本回执只钉基线 Commit、M1 批准 Commit 与各产物的
+  artifact SHA256；最终候选 Commit 完整 40 位哈希在交付答复中输出，并由 Guardian 以 live git 复核。本回执自身的 SHA256 同样不在下方清单内，原因相同；同理，m2_freeze_candidate_record
+  的冻结清单也不含它自己。
+ep03_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_ep01_status: SELF_CHECKED
+  m2_ep02_status: SELF_CHECKED
+  m2_ep03_status: SELF_CHECKED
+  m2_evaluation_profile_status: FINAL_BOUND
+  m2_benchmark_assets_status: CONTRACT_AND_DRYRUN_ONLY
+  m2_hidden_assets_status: BLOCKED_HIDDEN_STORAGE_NOT_PROVISIONED
+  m2_frozen: false
+  m1_final_binding: BOUND_TO_2df11012da46ace0de7b7bce6d199a578d32d341
+  knowledge_distillation_started: false
+  production_servable: false
+  next_authorized_action: UNIFIED_CLOSEOUT_GUARDIAN_THEN_ADVISOR_THEN_FOUNDER
+m2_frozen_note: m2_frozen 保持 false 是刻意的，不是遗漏：冻结自 Founder 收口签署起正式生效，本包只形成候选。提前置 true 属禁止产出。
+self_check:
+  command: python3 ci/run_all_checks.py
+  exit_code: 0
+  checkers_total: 32
+  checkers_passed: 32
+  checkers_failed: 0
+  predicate_fixtures_total: 276
+  predicate_fixtures_behaved_as_declared: 276
+  m1_schema_fixtures_total: 36
+  m1_schema_fixtures_behaved_as_declared: 36
+  evidence_level: runtime_verified
+  is_this_a_review: false
+  is_this_a_review_note: 全绿只是执行侧自检，不代替 Guardian、总顾问或 Founder 任何一方的审查。
+review_status:
+  guardian_review: NOT_PERFORMED
+  advisor_review: NOT_PERFORMED
+  founder_decision: NOT_MADE
+  basis: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第六节：两包完成后统一进行一次 Guardian → 一次总顾问 → 一次 Founder 裁决。
+  merged_into_main: false
+  merge_preconditions_met: false
+  merge_performed_by_execution_side: false
+stop_conditions:
+  triggered:
+  - HIDDEN_STORAGE_NOT_PROVISIONED
+  not_triggered:
+  - FROZEN_PATH_MERGE_CONFLICT
+  - M1_FROZEN_ARTIFACT_DRIFT
+  - HIDDEN_CONTENT_WRITTEN_TO_MAIN_REPOSITORY
+  - DUPLICATE_HIDDEN_BOUNDARY_IMPLEMENTATION
+  - KNOWLEDGE_STATE_APPLIED_TO_RUNTIME_OBJECT
+  - CHECKER_NOT_REGISTERED_IN_FULL_SUITE
+  - ANY_CHECKER_OR_FIXTURE_FAILS
+  - NEW_TOP_LEVEL_INPUT_OR_OUTPUT_OBJECT_REQUIRED
+  - FACT_PRIORITY_CHANGE_REQUIRED
+  - CATEGORY_CONTRACT_CHANGE_REQUIRED
+  circuit_breaker_triggered: false
+forbidden_outputs_produced:
+  real_model_api_calls: 0
+  distillation_calls: 0
+  hidden_content_in_main_repository: 0
+  m2_frozen_set_true: false
+  knowledge_distillation_started_set_true: false
+  production_servable_set_true: false
+  billing_or_developer_portal_or_marketplace: 0
+  face_identity_capabilities: 0
+  in_place_modification_of_m1_frozen_artifacts: 0
+  verification: check_m2_hidden_assets / check_m2_tournament / check_m2_identity_isolation / check_m2_envelope_contract
+    各自实跑核对
+open_items:
+- id: OI-M2-HIDDEN
+  priority: 1
+  item: 隐藏评测资产被 HIDDEN_STORAGE_NOT_PROVISIONED 阻断
+  blocks: M2 完整冻结（M2 冻结 Brief 第 6 节「隐藏集须在 M2 冻结前建成」未满足）
+  execution_side_can_resolve: false
+  recommendation: OPT-1：Founder 侧 provision STORE-A 后授权生成
+  record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+- id: OD-M2-01
+  priority: 2
+  item: 真实基线运行未执行
+  detail: 估算 15-120 USD / 2-8 小时，evidence_level=inferred（非实测），不得当预算承诺
+  recommendation: 收口时裁决是否执行、何时执行
+- id: OI-01
+  priority: 3
+  item: 三层哈希退役
+  detail: 前置清单结论：L1 可由 artifact SHA256 替代，L2/L3 无现成替代
+  recommendation: 维持现状，或只退 L1 保留 L2/L3
+  record: 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+- id: COND-011
+  priority: 4
+  item: 隐藏存储 provision 条件未关闭
+  recommendation: 随 OI-M2-HIDDEN 一并处置
+- id: COND-007
+  priority: 5
+  item: 全部评测阈值仍为 M2_FREEZE_REQUIRED
+  recommendation: 收口时由 Founder 裁决
+- id: OI-02
+  priority: 6
+  item: execution_run_id 未纳入 check_execution_uuid 守卫
+  detail: 纳入需改既有 checker，不在允许更新面
+  recommendation: 作为独立治理动作单独授权
+- id: OI-03
+  priority: 7
+  item: README-MOD-01 列表排版错位
+  detail: 编号不重复不跳号，仅 M0 期顺序遗留
+  recommendation: 不动 M0 期历史
+commits_on_candidate_branch:
+- commit: 8ce001293202d33dad59ba535f6d518b6723f01d
+  subject: M2-EP02 Phase 5-8 收口：隐藏资产 STOP 上报、两项结转判据落地、EP02 自检全绿
+- commit: 30109bb85695f37234b68548e582d2edd9673646
+  subject: M2-EP02 Phase 3-4：D-28 三层评分卡 + 基线锦标赛四维度与 dry-run 骨架
+- commit: 751a62a93f65057bef5589e992caed1c8e43bb08
+  subject: M2-EP02 Phase 1-2：两条裁决落盘 + M1→M2 最终绑定 FINAL
+- commit: 5572c7c6c6230b5f39b4a9b66849b25b5605d3cb
+  subject: M2-EP02 Phase 0：受控合并 main（M1 PASS）至 candidate/m2
+- commit: 43251b21a32fc9a3fee375675a611577babca570
+  subject: M2-EP01：M1→M2 信封与 Profile、六份最小 ADR、身份识别永久隔离、评测治理基础
+commit_count: 5
+amend_or_force_push_used: false
+amend_discipline_note: 任何角色开始审查某 head 之后，补充一律新增提交，不 amend、不强制推送。
+artifact_count_added: 13
+artifact_count_modified: 6
+added_artifacts:
+- path: 03_m2_evaluation_foundation/m2_freeze_candidate_record.v0.1.yaml
+  sha256: be8239c386a79315856d74fc3652ca2eae4f0872dfcd7e8d76941aca5d53de5a
+- path: 03_m2_evaluation_foundation/m2_interface_handoff.v0.1.yaml
+  sha256: 0c7d7696a0498e4694a132a6e286b19badb2c9a5c9fe85aa02fe351d0615f8fb
+- path: 11_reports_and_receipts/m2_delivery_report.md
+  sha256: 3267a604401ae0ba2baf1b03dc33154f8c921847f43c919b678db4943d846e9c
+- path: ci/checkers/check_m2_cross_package_consistency.py
+  sha256: fb3b23137b0a93a3aa732f0158e0cc99acde81963d21e015926b8af7bd458340
+- path: ci/fixtures/m2/negative/m2_n127.yaml
+  sha256: a18bef909e074da9737aee91beb4fc545563fa3d386b3c5413a2e8dcfe5e0705
+- path: ci/fixtures/m2/negative/m2_n128.yaml
+  sha256: c8ef3e1b65f081b22c063ec8ec44a6fd5f12d49b57ed9aae8d4873e7342f185d
+- path: ci/fixtures/m2/negative/m2_n129.yaml
+  sha256: db52df2e5034b6a68b98800513b8d98e21c43a4d322ebe6f6ae8b6cd6db6804d
+- path: ci/fixtures/m2/negative/m2_n130.yaml
+  sha256: 250de30c0fad5f85e7578fc1c4ce3eb687482b6bb767b1f5e2e8bd0d22ff59eb
+- path: ci/fixtures/m2/negative/m2_n131.yaml
+  sha256: 26c30c2829af46d2580ddf788b0a452efee7f9d22206fe5b5f0de089e72733ff
+- path: ci/fixtures/m2/negative/m2_n132.yaml
+  sha256: deb0830f0ea651733ca643054fba0af4025d5379f16e75409a395c40cc801ade
+- path: ci/fixtures/m2/negative/m2_n133.yaml
+  sha256: 774ee3bd116c2ff293508d97ae5d2ea33c660541675c657b2fb819d7e20ed364
+- path: ci/fixtures/m2/negative/m2_n134.yaml
+  sha256: 26b6b1e25339ffa7bd8de00ce1e80cb19453e37c249f07989593f26a22c3b1f0
+- path: ci/fixtures/m2/positive/m2_p11.yaml
+  sha256: 2452f7852eed4d1e26f243998fbc030a3a73acbbd889551ff94692281af669fb
+modified_artifacts:
+- path: 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_receipt.yaml
+  sha256: 8dd9a673937415fc4397923bba921ec848177485b779c4cf58849e24ef94149f
+- path: README.md
+  sha256: f6b44aa79a845423cf84a8d47d18af029fa3544bd0667a4b5f2fd67165d87f45
+- path: ci/checkers/check_m2_governance_landing.py
+  sha256: 98a4d02438f93316b85058ac86bbdc008d6126b714ba7a9ea3eb5b27adb3dfa3
+- path: ci/run_all_checks.py
+  sha256: 3ecc3ddaea725a607979804980792029245004765573469e2eed97811fdd38d8
+- path: governance/baseline/founder_pinned_baseline.v0.1.yaml
+  sha256: 88a393398dd73ae4599643256c6baddaad01424339b09920cde3481af21d8ae1
+- path: governance/gates/live_gate_roster.v0.1.yaml
+  sha256: 49531282199cc5a5f1a98b2327bf35baec44bc3ecd7b4e3bce6dc9e6a403a9ff
+milestone_report: 11_reports_and_receipts/m2_delivery_report.md
+package_reports:
+- 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md
+- 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_report.md
+
+execution_run_id: null
+execution_run_id_status: NOT_RECORDED_AT_EXECUTION_TIME
+execution_run_id_note: >-
+  M2 里程碑（EP01+EP02+EP03） 执行当时没有登记 execution_run_id。A-5 把 UUID 守卫改为自动发现之后这个缺口才暴露出来。
+  执行侧**不追记也不推断**一个值——追记出来的批次标识无法与任何实际运行对应，比空着更有害。
+  本字段如实置 null 并具名登记状态；check_execution_uuid 的 RUN_ID_ABSENT_WITHOUT_DECLARATION
+  判据要求这类缺口必须显式声明，不得静默留空。

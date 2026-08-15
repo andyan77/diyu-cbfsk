@@ -1,0 +1,15 @@
+# 身份行：两侧只有这一行不同，正文完全相同。
+schema_version: "0.1"
+sides:
+  - side_id: GPT
+    reviewer_role: ISOLATED_GPT_REVIEWER
+    identity_line: "reviewer_role: ISOLATED_GPT_REVIEWER"
+    output_file: gpt_calibration_review.jsonl
+  - side_id: CLAUDE
+    reviewer_role: ISOLATED_CLAUDE_REVIEWER
+    identity_line: "reviewer_role: ISOLATED_CLAUDE_REVIEWER"
+    output_file: claude_calibration_review.jsonl
+isolation_rules:
+  - 两侧不得共享对方结果；任一侧的输出文件只能由该侧写入。
+  - 两侧不得在同一工作面执行。
+  - 组织方不得代任一侧作答——自己写两份，测出来的不是分歧，是想象力。

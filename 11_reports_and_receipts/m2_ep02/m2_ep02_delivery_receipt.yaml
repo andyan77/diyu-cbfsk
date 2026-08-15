@@ -1,0 +1,267 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-EP02-RECEIPT-001
+task_id: DIYU-CBFSK-M2-EP02-001
+package_id: M2-EP02
+plan_id: MILESTONE_PLAN_M2
+plan_version: 1.1.0
+project_id: DIYU-CBFSK-001
+task_class: L2
+recorded_by: CODEX_EXECUTION_ENGINEER
+recorded_at: '2026-08-13'
+authorization: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001
+baseline_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+baseline_commit_role: Founder 恢复执行授权第一节第 2 条指定的新基线 main
+m1_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+m1_approval_ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+branch: candidate/m2
+worktree: /home/faye/diyu-cbfsk-m2
+describes_current_state: false
+status: SELF_CHECKED
+self_reference_limitation: 本回执无法记录包含它自身的那个 Commit 的哈希——回执一旦写入哈希，文件内容即改变，哈希随之失效。因此本回执只钉基线 Commit 与各产物的 artifact SHA256；候选
+  Commit 完整哈希在交付答复中输出，并由 Guardian 以 live git 复核。
+merge:
+  method: merge
+  rebase_used: false
+  rebase_forbidden_reason: 必须保留 main 为祖先，最终 main 才能快进到 candidate/m2 顶端
+  merged_ref: origin/main
+  merged_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  merge_base: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  conflicted_files: 14
+  frozen_path_conflict: false
+  frozen_path_conflict_note: 01_contracts_and_schemas/ 与 00_charter/ 均未出现冲突，FROZEN_PATH_MERGE_CONFLICT 未触发。
+  resolution_rules_applied:
+  - rule: M1 相关状态位以 main 为准
+    applied_to:
+    - project_state.m1_status=FOUNDER_ACCEPTED
+    - value_basis.M1_COMPLETE
+    - README M1 PASS 段
+    - README-MOD-10 / README-MOD-11
+  - rule: M2 相关状态位以 candidate/m2 为准
+    applied_to:
+    - project_state.m2_started=true
+    - flags.m2_started 授权条目
+    - README M2 段
+  - rule: execution_status 一律取 M2_IN_PROGRESS
+    applied_to:
+    - role_operating_model.project_state
+    - PRD_v1.2_change_map.resulting_state
+    - README 状态块
+    - founder_signoff_receipt authorized_values（新增该值）
+  - rule: 顺序登记类撞号则将 M2-EP01 条目重编为下一个空号
+    applied_to:
+    - README-MOD-10 → README-MOD-12（11 已被 main 的 M1 PASS 条目占用）
+  both_sides_kept:
+  - ci/run_all_checks.py：check_m1_category_adapters（main）与四个 check_m2_*（candidate）全部保留
+  - founder_signoff_receipt：M1_M2_PARALLEL_IN_PROGRESS / M1_COMPLETE / M2_IN_PROGRESS 三个取值并存，各带 value_basis
+  projections_regenerated: 12 份投影冲突不逐行手工解决——投影是派生件，解决规范源后由 ci/compile_role_instructions.py --write 重生成，drift=0（EQ-1）。
+ep02_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_ep01_status: SELF_CHECKED
+  m2_ep02_status: SELF_CHECKED
+  m2_evaluation_profile_status: FINAL_BOUND
+  m2_benchmark_assets_status: CONTRACT_AND_DRYRUN_ONLY
+  m2_hidden_assets_status: BLOCKED_HIDDEN_STORAGE_NOT_PROVISIONED
+  m2_frozen: false
+  m1_final_binding: BOUND_TO_2df11012da46ace0de7b7bce6d199a578d32d341
+  knowledge_distillation_started: false
+  production_servable: false
+  next_authorized_action: PROCEED_TO_M2_EP03
+ep02_end_state_note: EP02 自检完成时的状态。SELF_CHECKED 只表示包内确定性 Checker 全绿，不表示已通过 Guardian、总顾问或 Founder 审查——按授权，两包完成后统一收口。
+phase_1_adjudications:
+  ruling_landed: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001.yaml
+  transcription_only: true
+  OI-01:
+    status: ADJUDICATED_NOT_IMPLEMENTED
+    closed: false
+    gate_removed_or_weakened: false
+    landed:
+    - governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
+    - 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+    general_rule_enforced_by: ci/checkers/check_m2_gate_retirement_guard.py
+  OI-06:
+    status: CLOSED
+    closed: true
+    general_rule: 凡「允许更新 X」自动包含仓库机制强制要求的联动登记项，须在报告中列明联动项
+phase_5_stop:
+  stop_condition: HIDDEN_STORAGE_NOT_PROVISIONED
+  triggered: true
+  record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+  assets_generated: 0
+  hidden_content_written_to_main_repository: false
+  storage_contract_modified: false
+  founder_disposition_required: true
+  recommended_option: OPT-1（Founder 侧 provision STORE-A 后授权生成）
+  blocking_for:
+  - M2 冻结的隐藏资产部分
+  - COND-011 关闭
+  not_blocking_for:
+  - EP02 其余 Phase
+  - EP03 全部 Phase
+self_check:
+  command: python3 ci/run_all_checks.py
+  exit_code: 0
+  checkers_total: 31
+  checkers_passed: 31
+  checkers_failed: 0
+  predicate_fixtures_total: 267
+  predicate_fixtures_behaved_as_declared: 267
+  m1_schema_fixtures_total: 36
+  m1_schema_fixtures_behaved_as_declared: 36
+  new_checkers_this_package:
+  - check_sequential_registration
+  - check_m2_gate_retirement_guard
+  - check_m2_scoring_cards
+  - check_m2_tournament
+  - check_m2_hidden_assets
+  - check_m2_main_state_guard
+  new_negative_fixtures: 72
+  evidence_level: runtime_verified
+  guardian_review: NOT_REQUESTED
+  advisor_review: NOT_REQUESTED
+  founder_review: NOT_REQUESTED
+  review_deferral_basis: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 第一节第 4 条：两包完成后统一收口。
+forbidden_outputs_produced:
+  real_model_api_calls: 0
+  distillation_calls: 0
+  hidden_content_in_main_repository: 0
+  m2_frozen_set_true: false
+  knowledge_distillation_started_set_true: false
+  production_servable_set_true: false
+  billing_or_portal_or_marketplace: 0
+  face_identity_capabilities: 0
+  in_place_modification_of_m1_frozen_artifacts: 0
+linked_updates:
+- primary: README.md
+  linked:
+  - governance/baseline/founder_pinned_baseline.v0.1.yaml (post_change_binary_sha256 + README-MOD-12)
+  basis: GR-LINKED-01
+- primary: governance/bootstrap/role_operating_model.v0.2.yaml
+  linked:
+  - 12 份投影由 ci/compile_role_instructions.py --write 重生成
+  basis: GR-LINKED-01
+- primary: 新增 Checker
+  linked:
+  - ci/run_all_checks.py 注册表
+  - governance/gates/live_gate_roster.v0.1.yaml
+  basis: GR-GATE-01 + CHECKER_NOT_REGISTERED_IN_FULL_SUITE
+- primary: execution_status 迁移至 M2_IN_PROGRESS
+  linked:
+  - founder_signoff_receipt authorized_values + value_basis
+  - PRD_v1.2_change_map.resulting_state
+  - README 状态块
+  basis: GR-LINKED-01
+open_items:
+- id: OD-M2-01
+  item: 真实基线运行未执行
+  detail: 需 API Key 与实际成本；估算 15-120 USD / 2-8 小时，evidence_level=inferred（非实测）
+  routed_to: M2 收口 Founder 裁决
+- id: OI-M2-HIDDEN
+  item: 隐藏评测资产被 HIDDEN_STORAGE_NOT_PROVISIONED 阻塞
+  detail: STORE-A 未 provision；执行侧不可自行创建（会天然获得读权限，隔离失效）
+  routed_to: M2 收口 Founder 裁决（首要）
+- id: OI-01
+  item: 三层哈希退役
+  detail: ADJUDICATED_NOT_IMPLEMENTED；前置清单显示 L1 可替代、L2/L3 无现成替代
+  routed_to: M2 收口 Founder 裁决
+- id: COND-011
+  item: 隐藏存储 provision 条件未关闭
+  detail: 随 OI-M2-HIDDEN 一并处置
+  routed_to: M2 收口 Founder 裁决
+- id: OI-02
+  item: execution_run_id 未纳入 check_execution_uuid 守卫
+  detail: 纳入需改既有 checker，不在允许更新面
+  routed_to: M2 收口
+artifact_count_added: 37
+artifact_count_modified: 2
+added_artifacts:
+- path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml
+  sha256: 2f16d9400d33ae790bf093bd7232a5fe927f2c1acd49f038e5fab858b47e7724
+- path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+  sha256: 8411de859b3b061f9378d90d1f2c5e2b86557c16c125f040535f8374008bf56d
+- path: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+  sha256: 1f88a9fe38ae6585b148e6d09dc0543844e2ad9ae00da06097e24dba0460de6d
+- path: 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_report.md
+  sha256: 282481efa2f65e7d68bb63cb0fea997cc2f3543a117ceef967b9b9d4151db86d
+- path: ci/checkers/check_m2_hidden_assets.py
+  sha256: e5c59157d3090ff4258586efa04e42e1391436e558a110168fdb28732b458d29
+- path: ci/checkers/check_m2_main_state_guard.py
+  sha256: 7b0ee063de12727adc00bd2e744f7d3a80444b5ad6cada0d115c81adbe3ef8f8
+- path: ci/fixtures/m2/negative/m2_n100.yaml
+  sha256: 2625296f21758e5a2339284729f10f8b4c4ee9b053b5502a8caeff6f0406b2c4
+- path: ci/fixtures/m2/negative/m2_n101.yaml
+  sha256: 6a4fa7a67e3a41d8af643945bc82ac58a15ed7fb5f476ec9646df6bb3c7f3571
+- path: ci/fixtures/m2/negative/m2_n102.yaml
+  sha256: a62a598bb504a5f787e50977b6e73351e64a58a9238a2525e3e44a44313a0dd8
+- path: ci/fixtures/m2/negative/m2_n103.yaml
+  sha256: c150586a74f8c8c29fc3081498c1660b3b1e596da969f85239cab196459fc106
+- path: ci/fixtures/m2/negative/m2_n104.yaml
+  sha256: c885d2ff188831740b3539fbfa3d4fec1c79b562a25b8f2bf90fa2fcdb8caab1
+- path: ci/fixtures/m2/negative/m2_n105.yaml
+  sha256: 31447f26b6a927c95c52670ef2be3ec1e94809b79a5c2187c69c177e234a4331
+- path: ci/fixtures/m2/negative/m2_n106.yaml
+  sha256: 51871c920e3e5f85bd699e1c84ed57f8b980fc326f722d767a0deab6735d7f5c
+- path: ci/fixtures/m2/negative/m2_n107.yaml
+  sha256: 4aa76f6e2d6cbd301c538b6767b08ddbcb0536471f589a3043385cb47f1ebfe6
+- path: ci/fixtures/m2/negative/m2_n108.yaml
+  sha256: 571c343933f3ab90fb174a4012d9c2349197d0e4b54a0a61047d565b68427320
+- path: ci/fixtures/m2/negative/m2_n109.yaml
+  sha256: dc6d46349f37324fc5c1d4bbe9c7d2301aee3aed4d211388dfa97a3e361d52b0
+- path: ci/fixtures/m2/negative/m2_n110.yaml
+  sha256: ee6e57e70242c2256615f105176896d3d26e4495018ab23f56547cc423f4817e
+- path: ci/fixtures/m2/negative/m2_n111.yaml
+  sha256: cf910f0f69a938a156160e829fc0ea1c411af369e29888a1c57bab2f1472db19
+- path: ci/fixtures/m2/negative/m2_n112.yaml
+  sha256: f489794858a7394ab4cbf8907e8068cb91ef06dd81dda34543d2ad957b690765
+- path: ci/fixtures/m2/negative/m2_n113.yaml
+  sha256: 043eba9cab39ae0ce248b9b0812c09b6a7cd9524de860fa7846a77059f022b18
+- path: ci/fixtures/m2/negative/m2_n114.yaml
+  sha256: 24865a7431a00034a56f86e5f54c1af25a6118dfa5dd374c7b434407ceaeb16b
+- path: ci/fixtures/m2/negative/m2_n115.yaml
+  sha256: ab82fca151f2a61a9e6eacae51f48cdf3d8db0c28b94e714fef18f8ab7a3d901
+- path: ci/fixtures/m2/negative/m2_n116.yaml
+  sha256: 9207ade39c539270e20b596d301188e99f0402b235bc7145368aed72ce348422
+- path: ci/fixtures/m2/negative/m2_n117.yaml
+  sha256: 33a5535faec9b1437b36df6e4234e2af7093d8781d2faef27a10bca3782676e6
+- path: ci/fixtures/m2/negative/m2_n118.yaml
+  sha256: d6709a820105db6c8ed8be4aa31de96451255826d4a9758d803862ddb07d39e2
+- path: ci/fixtures/m2/negative/m2_n119.yaml
+  sha256: 2627bf91ce8906960d4d17b687cbdfa5d785d7967233e69551325756d72fd1d2
+- path: ci/fixtures/m2/negative/m2_n120.yaml
+  sha256: 666735502e714b92a98de3bc9b16495b4161e01bf8aa56e8b4ef728c466d02d1
+- path: ci/fixtures/m2/negative/m2_n121.yaml
+  sha256: faf3ed251745f35896e414ffdeed16287893d8de22de8c37f3df02bfaf8c67cf
+- path: ci/fixtures/m2/negative/m2_n122.yaml
+  sha256: 340b9907803856f4e129b73400aeb970e76511acd820bf0336e0b9e44b81c166
+- path: ci/fixtures/m2/negative/m2_n123.yaml
+  sha256: 745639b4aff6b2f6d0ce1f5d70e7f70d4687ffc6d4fe4a04f9bf0bd7f42f0497
+- path: ci/fixtures/m2/negative/m2_n124.yaml
+  sha256: d73889f30875be8c69362b1f227cd4eed841ace0b065f37177ea0fe44048595f
+- path: ci/fixtures/m2/negative/m2_n125.yaml
+  sha256: 0e704d4f39ae81b24be2dad7ecea55ce4dd8073419f7db737a15dc78f6dbb7e1
+- path: ci/fixtures/m2/negative/m2_n126.yaml
+  sha256: 14cb8aba4441e227351b49a8d59fb44af3ef739b881cd770a6e3fc06e49ea62d
+- path: ci/fixtures/m2/negative/m2_n99.yaml
+  sha256: 6012a3d2398a24f878872e9dfbb2c4b5d9ea18fc193fae5137f187d673657982
+- path: ci/fixtures/m2/positive/m2_p09.yaml
+  sha256: 43c3d724e77fba006894f35b1bc0d37b54b6bedf3d2ebe4f3ff77c33034316ac
+- path: ci/fixtures/m2/positive/m2_p10.yaml
+  sha256: ba397caa7d4f56c8cf060ed96a92adc12c85f8e85973eea92d9ba18c320112fe
+- path: governance/gates/main_state_coverage.v0.1.yaml
+  sha256: 1dc636b56052e07a23dda19af6feddd2c8e810f7b911487ca4fe095f5dd265d6
+modified_artifacts:
+- path: ci/run_all_checks.py
+  sha256: 506af0b019596bafcc5ac75bbd36352b3a69fbf13853e5deef73733146fe1e7d
+- path: governance/gates/live_gate_roster.v0.1.yaml
+  sha256: 32f0fefe73146b620aa0f572c152fc42b30c43560417f8cd5e846f8c0ebb9b2d
+superseded_by: M2-EP03
+supersession_note: ep02_end_state 是 EP02 自检完成那一刻的如实记录，不因后续推进而改写。当前态见 M2-EP03 回执。
+
+execution_run_id: null
+execution_run_id_status: NOT_RECORDED_AT_EXECUTION_TIME
+execution_run_id_note: >-
+  M2-EP02 执行当时没有登记 execution_run_id。A-5 把 UUID 守卫改为自动发现之后这个缺口才暴露出来。
+  执行侧**不追记也不推断**一个值——追记出来的批次标识无法与任何实际运行对应，比空着更有害。
+  本字段如实置 null 并具名登记状态；check_execution_uuid 的 RUN_ID_ABSENT_WITHOUT_DECLARATION
+  判据要求这类缺口必须显式声明，不得静默留空。

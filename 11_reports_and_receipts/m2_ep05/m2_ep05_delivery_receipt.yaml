@@ -1,0 +1,230 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-EP05-DELIVERY-RECEIPT
+project_id: DIYU-CBFSK-001
+milestone: M2
+package_id: M2-EP05
+task_id: DIYU-CBFSK-M2-EP05-INTEGRATION-001
+task_class: L3_CRITICAL_EVALUATION_CLOSEOUT
+execution_run_id: 6220d220-6756-466f-85ab-1d1a2ba19caa
+parent_execution_run_id: fe461abf-c4cc-46a3-9780-c4eca9a7f9c1
+resume_candidate_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+branch: candidate/m2
+authority: DIYU-CBFSK-FOUNDER-M2-EP05-001
+describes_current_state: false
+superseded_by: 11_reports_and_receipts/m2_ep05_correction/m2_ep05_correction_delivery_receipt.yaml
+self_reference_limitation: 本回执无法记录包含它自身的那个提交的哈希——回执与提交无法互相先于对方。 最终候选哈希在交付报告中以命令行实测值给出，本字段声明该限制而不用占位符冒充。
+ep05_end_state:
+  execution_status: M2_IN_PROGRESS
+  m2_started: true
+  m1_status: FOUNDER_ACCEPTED
+  m2_ep04_status: SELF_CHECKED
+  m2_ep05_status: SELF_CHECKED
+  m2_milestone_decision: BLOCK_M2_FREEZE_AND_MERGE
+  m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  m2_deliverables_ready: 14
+  m2_deliverables_total: 18
+  m2_public_blueprint_status: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
+  public_blueprint_stable_for_hidden_generation: false
+  m2_hidden_assets_status: NOT_STARTED
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m2_frozen: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+  pr_3_merged: false
+  next_authorized_action: FOUNDER_DISTRIBUTES_CALIBRATION_PACK_AND_RETURNS_STORE_A_EVIDENCE
+self_check:
+  checkers: 45
+  predicate_fixtures: 487
+  schema_fixtures: 36
+  exit_code: 0
+  evidence_level: runtime_verified
+  measured_by: python3 ci/run_all_checks.py
+  note: 全绿只表示确定性判据与夹具按声明行为，不表示 M2 已交付、不表示已通过任何一方审查。
+  error_code_fixture_coverage:
+    declared_codes: 573
+    covered_codes: 426
+    uncovered_registered: 147
+    new_checker_debt: 0
+    ratchet_cap: 147
+    ratchet_direction: 只降不升
+  frozen_path_diff_vs_origin_main: 0
+  real_model_calls: 0
+  hidden_assets_generated: 0
+ruling_landing:
+  ruling: DIYU-CBFSK-FOUNDER-M2-EP05-001
+  file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP05-001.yaml
+  anchors_landed: 4
+  sections_landed: 9
+anchor_effects:
+- anchor: ANCHOR-1
+  subject: 多模态边界
+  landed_at: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml scope_boundary
+  machine_predicates:
+  - MULTIMODAL_SCOPE_ANCHOR_NOT_IN_PRD
+  - MULTIMODAL_EVIDENCE_ORDER_DRIFT
+  - MULTIMODAL_SCOPE_EXCEEDS_AUTHORITATIVE_FACT_BOUNDARY
+  - MULTIMODAL_FORBIDDEN_ATTRIBUTE_IN_SCOPE
+  - MULTIMODAL_ERRONEOUS_ANCHOR_REUSED
+  closes: OI-M2-ANCHOR
+- anchor: ANCHOR-2
+  subject: 命名
+  landed_at: governance/identifiers/identifier_registry.v0.1.yaml
+  closes: OI-M2-NAMING
+- anchor: ANCHOR-3
+  subject: Guardian 报告
+  landed_at: governance/reports/guardian_report_registry.v0.1.yaml ep05_ruling
+  closes: OI-M2-GUARDIAN-REPORT
+  residual_obligation: 最终 Head 的 Guardian 报告全文
+- anchor: ANCHOR-4
+  subject: 指标分组
+  landed_at: 03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml metric_ownership
+  closes: OI-M2-METRIC-GROUPING
+new_checkers:
+  count: 4
+  items:
+  - check_identifier_resolution
+  - check_stop_code_enforcement
+  - check_report_number_traceability
+  - check_calibration_launch_pack
+  live_gate_count_after: 45
+  fixture_debt_added: 0
+stop_code_enforcement:
+  registry: governance/gates/stop_code_enforcement_registry.v0.1.yaml
+  total_codes: 147
+  machine_checked: 57
+  human_judgement: 35
+  future_runtime: 55
+  retired:
+  - MULTIMODAL_SCOPE_CONFLICT_WITH_D10
+calibration_launch_pack:
+  path: 03_m2_evaluation_foundation/calibration/launch_pack/
+  case_count: 90
+  batch_count: 9
+  batch_size: 10
+  independently_distributable: true
+  contains_governance_context: false
+  reviews_executed: false
+  gpt_side_records: 0
+  claude_side_records: 0
+  failure_state: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  execution_side_simulated_any_record: false
+steward:
+  prompt_version: 1.1.0
+  phase_count: 12
+  bundle_version: 1.1.0
+  bundle_file_count: 20
+  sha256_sidecar: 03_m2_evaluation_foundation/steward/steward_prompt.sha256
+  v1_0_0_deleted: true
+timing_gate:
+  contract: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  state: false
+  preconditions_met: 0
+  preconditions_total: 4
+  formal_batch_allowed: false
+  pilot_batch_allowed: true
+  pilot_brand_limit: 2
+entry_consistency:
+  pr_number: 3
+  pr_title_updated: true
+  pr_body_updated: true
+  pr_update_created_commit: false
+  pr_update_method: gh api -X PATCH repos/andyan77/diyu-cbfsk/pulls/3
+  pr_state_after: OPEN
+  pr_merged: false
+  top_level_m2_report: 11_reports_and_receipts/m2_delivery_report.md
+  top_level_m2_report_action: SUPERSEDED_BANNER_ADDED
+  two_conflicting_master_reports_remaining: false
+open_item_count: 9
+open_items:
+- id: OI-M2-HIDDEN
+  item: 隐藏评测资产未生成；STORE-A 净化 provision 证据两份未回传
+  status: AWAITING_FOUNDER
+  needed_from_founder: store_identity.yaml 与 access_matrix.yaml（最低字段见时序门合同）
+  blocking:
+  - M2 冻结
+  - 18 项交付中的 4 项
+  - 最终资产存在门 FG-06—FG-12
+- id: OI-M2-CALIBRATION
+  item: 两侧隔离评审仍未执行；启动包已就绪待分发
+  status: AWAITING_FOUNDER
+  ready_for_founder: 03_m2_evaluation_foundation/calibration/launch_pack/
+  blocking:
+  - COND-007 关闭
+  - 时序门 TG-01—TG-03
+  - 最终资产存在门 FG-03—FG-05
+  execution_side_must_not: 自行扮演任一侧评审并产出模拟分数
+- id: OI-M2-GUARDIAN-REPORT
+  item: 最终 Head 的 Guardian 报告全文仍未取得
+  status: CLOSED_AS_NON_BLOCKING_FOR_M2_CLOSEOUT
+  ruling: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_3_guardian_report
+  residual_obligation: 最终 Head 必须取得完整、可哈希、可落盘的报告原文
+- id: OI-M2-TIMING-GATE
+  item: 时序门第四项前置（Founder 确认能力矩阵/评分卡/边界无需修改）未到
+  status: AWAITING_FOUNDER
+  execution_side_must_not: 代填 founder_confirmation
+- id: OI-M2-FIXTURE-DEBT
+  item: 147 条已声明错误码尚无 expected=FAIL 夹具行使
+  status: REGISTERED_WITH_RATCHET
+  ruling: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_8_fixture_debt（维持现状处置）
+  mechanism: governance/gates/error_code_fixture_coverage_ledger.v0.1.yaml
+- id: OI-M2-LEGACY-REPORT-NUMBERS
+  item: 立规前的 7 份历史报告未模板化，其计数数字仍是手写值
+  status: REGISTERED
+  disposition: 按 EP05 裁决第三节生效包 M2-EP05 不追溯；逐份登记在报告数字绑定注册表内
+  execution_side_judgement: 回改历史报告等于用今天的口径重写昨天的现场
+- id: OI-M2-LEGACY-STOP-TABLE
+  item: 6 份既往报告的 STOP 表格未按三类分栏
+  status: REGISTERED
+  disposition: 分栏规则自 M2-EP05 生效，不追溯；豁免清单在 STOP 码 enforcement 注册表内逐份列名
+  not_grandfathered: 「未触发」通则不豁免——EP04 报告里那一条已当场撤回
+- id: COND-007
+  item: 阈值冻结
+  status: OPEN
+  blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+- id: COND-011
+  item: 隐藏存储 provision
+  status: EVIDENCE_SUBMITTED
+  still_missing:
+  - store_a_provisioning_attestation
+  - access_matrix
+not_authorized_and_not_done:
+- item: '合并 PR #3'
+  done: false
+- item: 置 m2_frozen=true
+  done: false
+- item: 40 品牌正式批（时序门开启前）
+  done: false
+- item: M3 正式执行
+  done: false
+- item: M4 知识蒸馏
+  done: false
+- item: 隐藏内容进入主仓
+  done: false
+- item: production_servable
+  done: false
+stop_point:
+  branch: candidate/m2
+  review_initiated: false
+  section_14_scope: 本轮结论仅对本回执 resume_candidate_commit 之后落地的候选提交有效。
+measurements_at_delivery:
+  added_by_package: M2-EP05-CORRECTION
+  added_reason: EP05 交付报告原本引用 STOP 登记册、输入包与门禁册的当前值。那些登记册是活的——EP05-CORRECTION 一改，EP05 的报告数字就跟着变，读到的人会以为 EP05 当时就是这个数。报告是某一时刻的记录，不是仪表盘。因此把
+    EP05 交付当时的实测值冻在这里，报告改引本区块。
+  measured_at_commit: 41f621810dd0f1f035ca88b05daea4321fbeb01f
+  evidence_level: runtime_verified
+  stop_code_registry:
+    total_codes: 147
+    machine_checked: 57
+    human_judgement: 35
+    future_runtime: 55
+  hidden_generation_input_bundle:
+    file_count: 20
+    steward_prompt_phase_count: 12
+  live_gate_roster:
+    live_gate_count: 45
+  identifier_registry:
+    entry_count: 48

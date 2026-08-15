@@ -1,0 +1,111 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-BASELINE-TOURNAMENT-CONTRACT
+artifact_id: baseline_tournament_contract.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+adr_ref: ADR-005
+ruling_anchors: [DIYU-CBFSK-FOUNDER-M2-CHARTER-001]
+
+scope:
+  this_package_delivers: [四维度字段定义与聚合口径, 最小可运行 dry-run 骨架]
+  this_package_does_not_deliver: [真实模型调用, 观测平台, 正式基线运行结果]
+  real_model_api_calls: 0
+  distillation_calls: 0
+  forbidden_in_this_package:
+    - 任何真实模型 API 调用
+    - 任何蒸馏调用
+
+dimensions:
+  count: 4
+  all_required: true
+  all_required_reason: 任何一个维度缺席，比较结果都不成立。
+  items:
+    - dimension_id: quality
+      name: 质量
+      fields:
+        - {field: per_item_score, type: number, range: [0, 1], source: 三层评分卡}
+        - {field: hard_gate_results, type: object, semantics: 逐条硬门 pass/fail}
+      aggregation: mean_of_per_item_score
+      hard_gate_aggregation: any_fail_means_arm_fails
+      hard_gate_aggregation_note: >-
+        硬门不参与平均。一条硬门失败，该臂即失败——把硬门混进平均分等于允许用其他题的高分
+        把安全违规抵消掉。
+      threshold_status: M2_FREEZE_REQUIRED
+    - dimension_id: cost
+      name: 成本
+      fields:
+        - {field: per_item_cost, type: number, unit: USD, minimum: 0}
+      aggregation: sum_and_mean
+      threshold_status: M2_FREEZE_REQUIRED
+    - dimension_id: latency
+      name: 延迟
+      fields:
+        - {field: per_item_latency_ms, type: integer, unit: ms, minimum: 0}
+      aggregation: mean_p50_p95
+      aggregation_note: 只报均值会掩盖长尾；p95 与均值一起报才看得出「偶尔很慢」。
+      threshold_status: M2_FREEZE_REQUIRED
+    - dimension_id: human_intervention
+      name: 人工干预
+      fields:
+        - {field: intervention_required, type: boolean}
+        - {field: intervention_severity, type: string, enum: [none, minor_edit, rework, reject]}
+      aggregation: intervention_rate_and_severity_histogram
+      aggregation_note: >-
+        只报干预率会把「改个错别字」和「整套重做」算成同一件事，因此必须同时报严重度分布。
+      relates_to_prd_metric: 人工可发布率 ≥75%
+      threshold_status: M2_FREEZE_REQUIRED
+      why_easily_omitted: >-
+        这一维最容易被省。省了会把「模型很好」和「有人在后面一直补」混为一谈——
+        前者可交付，后者只是把成本转移到人身上。
+
+no_single_composite_score:
+  enforced: true
+  statement: 四维度并列记录，不合成单一总分。
+  reason: >-
+    合成总分需要权重，而权重就是取舍本身。在 Founder 冻结权重之前由执行侧选权重，
+    等于执行侧替 Founder 做了「质量换成本」的决定。排序须待 M2 冻结时 Founder 裁决权重。
+  failure_state: COMPOSITE_SCORE_WITHOUT_FROZEN_WEIGHTS
+
+run_record_contract:
+  required_fields: [run_id, arm, dimensions, hard_gate_results, item_count, deterministic_seed]
+  arm_semantics: 一次对比中的一个参赛方案（模型/配置/提示策略）
+  determinism:
+    required: true
+    basis: 同一输入与同一 seed 必须产出字节相同的结果记录
+    verified_by: ci/checkers/check_m2_tournament.py 连跑两次比对
+  observability_platform_built: false
+  observability_note: 不建观测平台；先用运行时产出的结构化记录。
+
+dry_run:
+  runner: 03_m2_evaluation_foundation/tournament/run_tournament_dryrun.py
+  input: ci/fixtures/m2/tournament/
+  data_kind: 夹具数据（合成，非真实模型输出）
+  network_access: false
+  model_api_access: false
+  replayable: true
+  purpose: 证明四维度的记录与聚合口径真的能跑通，而不是只写在合同里。
+
+real_baseline_run:
+  open_decision_id: OD-M2-01
+  status: NOT_EXECUTED
+  requires: [模型 API Key, 实际调用成本]
+  decision_owner: FOUNDER_PRODUCT_AUTHORITY
+  decision_point: M2 收口
+  decision_question: 是否执行真实基线运行、何时执行
+  cost_estimate:
+    basis: 估算，非实测；按 M2 冻结 Brief 的评测规模区间与公开模型定价量级推算
+    evidence_level: inferred
+    item_count_range: [200, 500]
+    arms_range: [2, 4]
+    total_calls_range: [400, 2000]
+    cost_range_usd: [15, 120]
+    cost_range_note: >-
+      区间跨度大是因为单次调用成本随模型档位与输出长度变化一个数量级以上。
+      未实测，不得据此写成预算承诺。
+  time_estimate:
+    wall_clock_hours_range: [2, 8]
+    basis: 按串行调用与限速重试估算，未实测
+  not_authorized_by_this_package: true

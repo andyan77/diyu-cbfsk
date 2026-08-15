@@ -1,0 +1,106 @@
+schema_version: "0.1"
+card_id: DIYU-CBFSK-M2-CAPABILITY-CARD-EXPERT
+artifact_id: expert_scoring_rubric.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+card_axis: vertical_capability
+capability_dimension: professional_explanation
+capability_dimension_cn: 专业解释
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 4 项
+prd_anchors: [PRD-10.2, PRD-7-FR, PRD-3.3-P-14]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+axis_relation:
+  horizontal_cards_are_task_class_cards: true
+  horizontal_cards:
+    - 03_m2_evaluation_foundation/scoring/scorecard_constraint_correctness.v0.1.yaml
+    - 03_m2_evaluation_foundation/scoring/scorecard_mechanism_correctness.v0.1.yaml
+    - 03_m2_evaluation_foundation/scoring/scorecard_open_decision.v0.1.yaml
+  relation: >-
+    横向卡回答「这道题按哪一类判」，纵向卡回答「这道题考哪种能力」。同一道题两轴各取一个坐标，
+    不是两套评分——纵向卡不得自设与横向卡冲突的判定模式。
+  rewritten_horizontal_cards: false
+
+owned_metrics:
+  - metric_id: 专业解释平均分
+    prd_suggested_threshold: ≥ 4.0/5
+    threshold_status: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 冻结口径与阈值；冻结后不得因失败降标。
+  - metric_id: 严重风格错位率
+    prd_suggested_threshold: < 5%
+    threshold_status: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 同上。含「把品牌搭成系统自己的固定审美」这一形态。
+
+evaluation_task_class_applicability:
+  constraint_correctness: true
+  mechanism_correctness: true
+  open_decision: true
+  note: >-
+    专业解释横跨三类：硬约束题考「是否说出被触发的约束」，机制题考「机制链是否成立」，
+    开放题考「取舍理由是否站得住」。因此三类都适用，但判定模式一律取横向卡的模式，本卡不另设。
+
+gold_answer_allowed_by_task_class:
+  constraint_correctness: true
+  mechanism_correctness: false
+  open_decision: false
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+  restated_here_note: 取值随横向合同，本卡不另立口径（EQ-1）。
+
+scored_elements:
+  - id: EXP-01
+    element: 选择
+    statement: 说明为什么选这一件／这一组，而不是只描述结果。
+  - id: EXP-02
+    element: 排除
+    statement: 说明被舍弃的合法候选族及舍弃理由，不得只给一个答案当成唯一解。
+    d28_relation: 排除理由缺席会让开放题退化成单一答案题（R-22）。
+  - id: EXP-03
+    element: 副作用
+    statement: 指出该方案带来的代价与适用边界。
+  - id: EXP-04
+    element: 替代
+    statement: 给出条件变化时的替代路径。
+  - id: EXP-05
+    element: 机制而非口号
+    statement: 说明视觉作用机制、适用条件与例外，不得以「显高显瘦」一类口号替代机制。
+    prd_anchor: PRD-6 视觉机制
+
+binding_kind: m1_object_and_constraint_ids
+bound_schema_ids:
+  - https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/styling_task_context.schema.v0.1.json
+bound_conflict_priority_rule_ids: [CP-01, CP-02, CP-03, CP-04, CP-05, CP-06]
+bound_hard_gate_ids: [HG-05]
+bound_hard_gate_note: 专业解释的可审计性由 HG-05 决策轨迹承接；本卡不重新定义 HG-05。
+
+machine_checkable_fields:
+  explanation_element_coverage:
+    type: array
+    item_enum: [EXP-01, EXP-02, EXP-03, EXP-04, EXP-05]
+    required_minimum_elements: 4
+  excluded_candidate_family_count: {type: integer, minimum: 1}
+  slogan_only_explanation: {type: boolean, required_value: false}
+  decision_trace_present: {type: boolean, required_value: true}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 缺 DecisionTrace 时判 fail-closed，不得凭输出文本回推解释成立。
+
+failure_states:
+  - EXPLANATION_ELEMENT_MISSING
+  - EXCLUSION_REASONING_ABSENT
+  - SLOGAN_SUBSTITUTED_FOR_MECHANISM
+  - DECISION_TRACE_ABSENT
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

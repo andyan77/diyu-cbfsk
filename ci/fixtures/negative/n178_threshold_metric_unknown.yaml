@@ -1,0 +1,64 @@
+fixture_id: N178-threshold-metric-unknown
+description: 决策文件多出一条 PRD 没有的指标。
+checker: check_m2_calibration_review
+expected: FAIL
+payload:
+  failure_state: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  declared_prompt_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  actual_prompt_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  sides:
+  - side_id: GPT
+    reviewer_role: ISOLATED_GPT_REVIEWER
+    declared_record_count: 0
+    actual_record_count: 0
+    executed: false
+    produced_by_workspace: null
+    produced_by_main_execution_side: false
+    records: []
+  - side_id: CLAUDE
+    reviewer_role: ISOLATED_CLAUDE_REVIEWER
+    declared_record_count: 0
+    actual_record_count: 0
+    executed: false
+    produced_by_workspace: null
+    produced_by_main_execution_side: false
+    records: []
+  known_case_ids:
+  - CAL-001
+  aggregation_computed: false
+  aggregation_execution_side_adjudicated: false
+  prd_metrics:
+    metric_a: M2_FREEZE_REQUIRED
+    metric_b: ≥ 80%
+    high_risk_founder_full_review_rate: 100%
+  threshold_items:
+  - metric: metric_a
+    threshold_kind: M2_FREEZE_REQUIRED
+    threshold_recommendation: null
+    evidence_source: null
+    founder_decision: null
+    founder_decision_commit: null
+    blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  - metric: metric_b
+    threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_recommendation: ≥ 80%
+    evidence_source: PRD v1.2 10.2
+    founder_decision: null
+    founder_decision_commit: null
+    blocked_by: null
+  - metric: high_risk_founder_full_review_rate
+    threshold_kind: NOT_ADJUSTABLE
+    threshold_recommendation: 100%
+    evidence_source: PRD v1.2 10.2
+    founder_decision: null
+    founder_decision_commit: null
+    blocked_by: null
+  - metric: invented_metric
+    threshold_kind: M2_FREEZE_REQUIRED
+    threshold_recommendation: null
+    evidence_source: null
+    founder_decision: null
+    founder_decision_commit: null
+    blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  declared_metric_count: 3
+  hidden_set_tuning_forbidden: true

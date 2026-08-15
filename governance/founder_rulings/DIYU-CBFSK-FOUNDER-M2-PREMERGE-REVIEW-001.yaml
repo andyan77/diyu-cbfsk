@@ -1,0 +1,260 @@
+schema_version: "0.1"
+ruling_id: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001
+project_id: DIYU-CBFSK-001
+milestone: M2
+issued_by: FOUNDER_PRODUCT_AUTHORITY
+ruling_kind: premerge_review_conclusion_and_targeted_patch
+headline: M2 并入前审查结论与定点修复 v1.0
+version: v1.0
+supersedes: []
+builds_on: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001
+
+identifier_assignment:
+  assigned_by: TEMPORARY_EXECUTION_WRITER
+  why: 裁决原文未自带编号；仓内每一个编号都必须可寻址才能被引用与解析。
+  rule: 按既有命名规范分配，不改动裁决任何一个字。
+  founder_may_rename: true
+
+article_1_merge_decision:
+  headline: 并入裁定
+  review_target: 9b60bda06f372467243de36982c16d4bd6afea8d
+  answer_to_question_stem: YES（会）
+  decision: DO_NOT_MERGE_AS_IS
+  rollback_required: false
+  targeted_patch_required: true
+  two_conclusions_relationship:
+    purpose: 写入记录，避免后人误读。
+    guardian:
+      role: CLAUDE_INDEPENDENT_GUARDIAN
+      conclusion: APPROVE_WITH_CONDITIONS
+      blocking_count: 0
+      condition_count: 1
+    advisor:
+      role: CHATGPT_CHIEF_ADVISOR
+      conclusion: BLOCK
+      blocking_count: 4
+    why_not_contradictory: 各自覆盖了对方未查的对象，合并计四问答案为「会」。
+    preservation: 两份结论均作为历史证据保留，不删除、不改写。
+
+article_2_b01_zero_byte_claim_false:
+  headline: B-01 「零字节改动」声明失真
+  finding_id: B-01
+  requirements:
+  - id: B-01-1
+    verbatim: "撤销全部「自 a4be75e 起零字节改动」「artifacts_rewritten: 0」类绝对表述"
+  - id: B-01-2
+    verbatim: 改为精确事实，至少含以下四个字段
+    required_fields:
+    - delivery_semantics_changed_since_a4be75e: false
+    - existing_m2_files_byte_changed_since_a4be75e: true
+    - changed_existing_m2_files: 逐个列出
+    - change_nature: runtime_measurement_record_update
+  - id: B-01-3
+    verbatim: >-
+      两个审查方对同一字段实测值不同（Guardian 757、总顾问 790）——执行侧须现场复算并如实登记实测值，
+      同时记录「两方读数不同」这一事实及其成因（很可能是两方读的提交不同）
+  - id: B-01-4
+    verbatim: >-
+      将 scan_coverage_record.current 从产品合同移出，另立治理测量台账。
+      冻结合同不得随仓库新增文件而必须改数字——那不是合同，是伪装成合同的实时仪表盘
+
+article_3_b02_two_definitions_of_review_target:
+  headline: B-02 审查对象两套定义
+  finding_id: B-02
+  requirements:
+  - id: B-02-1
+    verbatim: >-
+      review_target.commit 回填为本轮实际审查对象 9b60bda06f372467243de36982c16d4bd6afea8d；
+      此后每轮以实际 head 绑定，禁用 RESOLVED_AT_REPORT_TIME 之类占位
+  - id: B-02-2
+    verbatim: >-
+      回填 m2_package_commit_ledger 的 M2-SEAL 条目；删除或更正 binding_consumers 中
+      「审查对象尚未产生 / resolvable_now: false」的旧说明
+  - id: B-02-3
+    verbatim: 判据须逐字比对四处并要求全等
+    four_sites:
+    - 审查报告 reviewed_commit
+    - 审查请求 review_target.commit
+    - package ledger 当前条目
+    - 实际 head
+  - id: B-02-4
+    verbatim: >-
+      更正名实不符：REVIEW_TARGET_HASH_NOT_FULL_40 当前检查的是 delivery_state_frozen_at，
+      须改为检查真正的审查对象；配负例夹具
+
+article_4_b03_self_reported_fields_forgeable:
+  headline: B-03 审查结论、缺口处置与解封可由自述字段伪造
+  finding_id: B-03
+  requirements:
+  - id: B-03-1
+    verbatim: 审查记录字段至少
+    required_fields: [reviewer_role, reviewed_commit, conclusion, report_path, report_sha256, issued_at]
+    checker_duty: >-
+      判据须读取真实报告文件、重算 sha256，并核对报告内声明的 role、reviewed_commit、结论与 YAML 记录一致；
+      Guardian 记录还须核对其隔离工作区已登记
+  - id: B-03-2
+    verbatim: 缺口处置与解封记录字段至少
+    required_fields:
+    - ruling_ref
+    - ruling_file
+    - clause_path
+    - signature_base_commit
+    - chosen_branch_id
+    - affected_item
+    - authorized_new_value
+    checker_duty: >-
+      判据除核验条款存在外，还须核验条款内容点名：该缺口 ID 或封存项 ID ＋ 所选分支或新值 ＋ 生效 Commit
+  - id: B-03-3
+    kind: general_rule
+    permanence: 永久生效
+    verbatim: >-
+      「有一份 Founder 裁决」不等于「这份裁决授权了眼前这件事」。
+      凡引用裁决作为授权依据者，须证明该条款点名了本次动作
+
+article_5_b04_mainline_guard_hardcoded:
+  headline: B-04 主线冻结守卫硬编码空结果
+  finding_id: B-04
+  requirements:
+  - id: B-04-1
+    verbatim: 撤销 unregistered_main_commits 硬编码空列表
+  - id: B-04-2
+    verbatim: >-
+      改为现场推导：读 origin/main 实际值、以 ancestry 判定合并是否发生、列出冻结点之后的全部提交、
+      按允许的治理与裁决路径分类、任一功能性路径变化即 FAIL、tag 由 Git 实测
+  - id: B-04-3
+    verbatim: pr_merged ／ tag_applied ／ frozen_observation_entered 一律由 Git 现场推导，不得读台账自述
+  - id: B-04-4
+    kind: general_rule
+    permanence: 永久生效
+    same_origin_as: STORE-A locator_present 硬编码
+    verbatim: >-
+      凡判据用作事实源的字段，必须由 collect() 现场推导；硬编码常量或自述值充当事实源，一律 FAIL。
+      全仓横扫同类，逐处整改或登记
+
+article_6_cond_guard_m2_01:
+  headline: COND-GUARD-M2-01（Guardian 条件，合并前必须满足）
+  condition_id: COND-GUARD-M2-01
+  raised_by: CLAUDE_INDEPENDENT_GUARDIAN
+  must_be_satisfied_before: 合并
+  requirements:
+  - id: COND-GUARD-M2-01-1
+    verbatim: >-
+      README 状态块补 m2_status: SUSPENDED_BY_FOUNDER；抬头由「M2 BLOCK（交付未闭环，收口修复中）」
+      改为如实表述：已由 Founder 主动挂起，等待三项 Founder 动作，执行侧不得自行推进
+  - id: COND-GUARD-M2-01-2
+    verbatim: >-
+      第 151 行「校准评审启动包已可独立分发」加限定或改写——当前 calibration_pack_distribution_allowed: false、
+      pack_distribution_status: NOT_DISTRIBUTED，分发是明令禁止的动作
+  - id: COND-GUARD-M2-01-3
+    verbatim: >-
+      新增判据：比对 README 状态块与规范源 project_state，README 纳入漂移守卫
+      （本处漂移是靠人读出来的，不是判据抓到的）
+
+article_7_nb1_transmittal_number:
+  headline: NB-1 转达件数字
+  finding_id: NB-1
+  verbatim: 转达件「47 个判据」更正为实测值；转达件 .md 纳入 report_number_binding_registry 覆盖面
+
+article_8_oi_seal_01_ruling:
+  headline: OI-SEAL-01 裁定：不迁移枚举，改加派生字段
+  open_item: OI-SEAL-01
+  requirements:
+  - id: OI-SEAL-01-1
+    verbatim: >-
+      execution_status 枚举不扩展，M2_SUSPENDED 不加入；
+      理由：execution_status 答「哪个里程碑在飞」，m2_status 答「它现在什么状态」，
+      两者正交，混用会导致 M3 挂起时再加一个值
+  - id: OI-SEAL-01-2
+    verbatim: >-
+      新增派生字段 execution_permitted（布尔），由 execution_status 与各里程碑 status 计算得出，
+      不得手工填写；消费者只需读该字段即可判断能否继续执行，无需记忆隐含优先级
+  - id: OI-SEAL-01-3
+    verbatim: 判据：execution_permitted 必须由 collect() 现场推导；手工赋值即 FAIL；配负例夹具
+  - id: OI-SEAL-01-4
+    verbatim: OI-SEAL-01 关闭为 NO_ENUM_MIGRATION_WITH_DERIVED_FIELD
+    closure_status: NO_ENUM_MIGRATION_WITH_DERIVED_FIELD
+
+article_9_pr_body:
+  headline: PR 正文（不产生新 Commit）
+  produces_new_commit: false
+  verbatim: 更新为当前 head、当前判据与夹具数、当前状态；删除「a4be75e 为最新候选」与旧五步闸叙述
+
+article_10_re_review_arrangement:
+  headline: 复审安排
+  requirements:
+  - id: RR-1
+    verbatim: >-
+      修复形成新 head 后，一次 Guardian 窄范围 Delta ＋ 一次总顾问窄范围 Delta，
+      范围限于 B-01~B-04、COND-GUARD-M2-01、NB-1、OI-SEAL-01；不重审已验通过部分
+    scope: [B-01, B-02, B-03, B-04, COND-GUARD-M2-01, NB-1, OI-SEAL-01]
+  - id: RR-2
+    verbatim: 两侧独立：任一方在形成自己结论前，不得读取另一方的报告
+  - id: RR-3
+    kind: general_rule
+    permanence: 永久生效
+    verbatim: >-
+      总顾问结论为 BLOCK 时，Founder 若要推翻，必须逐条具名回应每一项阻断发现；
+      不得以「已收到顾问意见，故三门齐备」带过
+
+article_11_guardian_permanent_discipline:
+  headline: 给 Guardian 的永久检查纪律（写入 Guardian 角色合同）
+  written_into: governance/roles/claude_independent_guardian.md
+  canonical_source: governance/bootstrap/role_operating_model.v0.2.yaml
+  verbatim: >-
+    凡用作证据的机器字段，须先确认其由 collect() 现场推导，而非硬编码常量或自述值；
+    确认不了的，标为 unverified，不得计入通过证据。
+  recorded_instance: >-
+    本轮 unregistered_main_commits: [] 被作为合规证据引用，即为该纪律缺失的实例，记录在案。
+
+article_12_unchanged:
+  headline: 维持不变
+  not_authorized:
+  - 合并 PR #3
+  - 分发校准包
+  - 任何隐藏批次含试产
+  - 置 m2_frozen 为真
+  - 置 founder_signature_eligible 为真
+  - 置 downstream_consumption_allowed 为真
+  - M3
+  - M4
+  - 知识蒸馏
+  - production_servable
+  red_line_flags_held_false:
+    count: 7
+    items:
+    - m2_frozen
+    - founder_signature_eligible
+    - downstream_consumption_allowed
+    - m3_started
+    - m4_started
+    - knowledge_distillation_started
+    - production_servable
+  m2_status: SUSPENDED_BY_FOUNDER
+  section_14_unchanged: true
+
+machine_checkable_fields:
+  article_count: 12
+  decision: DO_NOT_MERGE_AS_IS
+  rollback_required: false
+  targeted_patch_required: true
+  review_target: 9b60bda06f372467243de36982c16d4bd6afea8d
+  guardian_conclusion: APPROVE_WITH_CONDITIONS
+  guardian_blocking_count: 0
+  guardian_condition_count: 1
+  advisor_conclusion: BLOCK
+  advisor_blocking_count: 4
+  blocking_finding_count: 4
+  cond_guard_requirement_count: 3
+  re_review_scope_count: 7
+  not_authorized_count: 10
+  red_line_flag_count: 7
+  execution_status_enum_extended: false
+  oi_seal_01_closure: NO_ENUM_MIGRATION_WITH_DERIVED_FIELD
+  m2_status: SUSPENDED_BY_FOUNDER
+  m2_frozen: false
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false

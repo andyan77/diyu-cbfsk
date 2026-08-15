@@ -1,6 +1,5 @@
 fixture_id: P19-m1-started-with-bound-authorization
-description: >-
-  M1-GATE-001 后 m1_started 转入授权门控：有 authorized=true、具名 basis、绑定完整 Commit 哈希的条目时置 true 合法。门控必须能在「真」方向放行，否则它只是换了措辞的绝对禁止。
+description: M1-GATE-001 后 m1_started 转入授权门控：有 authorized=true、具名 basis、绑定完整 Commit 哈希的条目时置 true 合法。门控必须能在「真」方向放行，否则它只是换了措辞的绝对禁止。
 checker: check_project_state
 expected: PASS
 payload:
@@ -30,3 +29,26 @@ payload:
   execution_status_authorization: {}
   candidate_marked_as_effective_truth: false
   forbidden_claim_hits: []
+  canonical_state:
+    project_status: PROJECT_INITIATED
+    execution_status: M2_IN_PROGRESS
+    m2_status: SUSPENDED_BY_FOUNDER
+  readme_state:
+    project_status: PROJECT_INITIATED
+    execution_status: M2_IN_PROGRESS
+    m2_status: SUSPENDED_BY_FOUNDER
+  readme_state_block_found: true
+  derived_state:
+    execution_permitted: false
+  projection_states:
+    CLAUDE.md:
+      project_status: PROJECT_INITIATED
+      execution_status: M2_IN_PROGRESS
+      m2_status: SUSPENDED_BY_FOUNDER
+      execution_permitted: false
+    AGENTS.md:
+      project_status: PROJECT_INITIATED
+      execution_status: M2_IN_PROGRESS
+      m2_status: SUSPENDED_BY_FOUNDER
+      execution_permitted: false
+  hand_assigned_derived_fields: []

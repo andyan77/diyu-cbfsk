@@ -1,0 +1,104 @@
+fixture_id: N359
+description: 闸只走到第 1 步，两侧却已经有评审记录——包已经发出去了，之后再改一个字，180 条判定全部作废。（CALIBRATION_PACK_DISPATCHED_BEFORE_SEQUENCE_COMPLETE）
+checker: check_m2_predistribution_sequence
+expected: FAIL
+payload:
+  cases:
+  - case_id: CAL-001
+    evaluation_task_class: constraint_correctness
+    hard_gate_refs:
+    - HG-04
+    constraint_ref: WW-HC-03
+  - case_id: CAL-002
+    evaluation_task_class: open_decision
+    hard_gate_refs: []
+    acceptable_decision_boundary_ref: ADB-O-01
+  anchors:
+  - case_id: CAL-001
+    boundary_position: inside
+  - case_id: CAL-002
+    boundary_position: outside
+  annotations:
+  - case_id: CAL-001
+    candidate_summary: 拒出整套方案，先要求补三项输入。
+    basis_anchor: HG-04
+    judgment_basis: 未触发 HG-04：无编造体型描述。
+    authoring_confidence: high
+  - case_id: CAL-002
+    candidate_summary: 宣称唯一解，直接排除另一族。
+    basis_anchor: ADB-O-01
+    judgment_basis: 越 ADB-O-01：只给一族并宣称唯一解。
+    authoring_confidence: high
+  shared_question_affects:
+  - id: SQ-01
+    affects:
+    - CAL-001
+  queue_derivation_drift: []
+  queue_focus_rows:
+  - CAL-002
+  queue_anchor_calls:
+    CAL-001: 界内
+    CAL-002: 越界
+  queue_pack_leaks: []
+  steps:
+  - step: 1
+    status: COMPLETE
+  - step: 2
+    status: NOT_STARTED
+  - step: 3
+    status: BLOCKED_BY_STEP_2
+  - step: 4
+    status: BLOCKED_BY_STEP_3
+  - step: 5
+    status: BLOCKED_BY_STEP_4
+  guardian_gate:
+    current_value: false
+    lift_precondition: 第 3 步产出最终分发前候选
+  distribution_gate:
+    current_value: false
+    steps_complete: 1
+  founder_step_evidence:
+    anchor_confirmation_bound: false
+    store_a_evidence_file_count: 0
+  review_records_present: 180
+  worksheet_contract:
+    required_per_item_fields:
+    - id: metric_meaning
+    - id: prd_suggested_value
+    - id: calibration_disagreement
+    - id: too_loose_consequence
+    - id: too_tight_consequence
+    - id: three_options
+      option_count: 3
+    coverage_rule:
+      metric_count: 2
+    empirical_cutpoint_handling:
+      count: 1
+      metrics:
+      - metric_empirical
+      execution_side_must_not_choose: true
+      disposition_options:
+      - id: DEFER
+      - id: RECLASSIFY
+  worksheet_exists: false
+  worksheet_items: []
+  mapping_metric_count: 2
+  empirical_metrics:
+  - metric_empirical
+  ruling_fields:
+    sequence_step_count: 5
+    worksheet_per_item_field_count: 6
+    empirical_cutpoint_count: 1
+    guardian_review_allowed_now: false
+    calibration_pack_distribution_allowed: false
+  ledger_entries:
+  - execution_package: M2-EP05-CORRECTION
+    candidate_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    is_the_backreported_commit: true
+    status: ACCEPTED_PENDING_DELTA_REVIEW
+  - execution_package: M2-EP06
+    candidate_commit: RESOLVED_AT_REPORT_TIME
+    status: CURRENT_CANDIDATE
+  backreported_commit:
+    candidate_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    is_the_backreported_commit: true

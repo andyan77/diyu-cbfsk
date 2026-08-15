@@ -1,0 +1,21 @@
+fixture_id: N185-ruling-cited-without-clause-path
+description: 只写裁决编号不写条款路径——指得出文件不等于文件里真有那一条。
+checker: check_project_state
+expected: FAIL
+payload:
+  ruling_claims:
+  - where: state_flag_authorizations.flags.m2_started
+    reference: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+    ruling_id: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+    kind: founder_ruling
+    file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml
+    file_exists: true
+    clause_path: null
+    clause_resolves: true
+  flags: {}
+  authorizations: {}
+  never_authorizable_declared: []
+  execution_status: M2_IN_PROGRESS
+  execution_status_authorization: {}
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []

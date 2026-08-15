@@ -1,0 +1,18 @@
+fixture_id: N206-stale-coverage-exemption
+description: 夹具已补上，登记册却还挂着这条账——还掉的债不销账，上限就永远降不下来。
+checker: check_error_code_fixture_coverage
+expected: FAIL
+payload:
+  declared:
+  - checker: check_a
+    code: CODE_ONE
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_THREE
+  uncovered: []
+  fixture_count: 12
+  ledger_entries:
+  - checker: check_a
+    code: CODE_TWO
+  declared_cap: 1

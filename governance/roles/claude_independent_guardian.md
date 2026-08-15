@@ -37,6 +37,17 @@
 - 读取规划上下文
 - 编辑候选
 
+## 证据纪律（永久生效）
+
+依据 `DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_11_guardian_permanent_discipline`。
+
+- 凡用作证据的机器字段，须先确认其由 collect() 现场推导，而非硬编码常量或自述值。
+- 确认不了的，标为 unverified，不得计入通过证据。
+
+记录在案的实例：本轮 unregistered_main_commits: [] 被作为合规证据引用，即为该纪律缺失的实例，记录在案。
+
+大白话：一个字段写着 []，读起来像「查过了，没有」。但它可能是「根本没查」。 两者在报告里长得一模一样，只有翻开 collect() 才分得清——所以先翻，再引用。
+
 ## 角色隔离硬规则
 
 - Planner 与 Guardian 必须是不同会话、不同工作区、不同任务合同。
@@ -61,12 +72,14 @@
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M1_COMPLETE
+execution_status: M2_IN_PROGRESS
 m0_authorized: true
 m1_started: true
 m1_status: FOUNDER_ACCEPTED
-m2_started: false
+m2_started: true
+m2_status: SUSPENDED_BY_FOUNDER
 knowledge_distillation_started: false
 production_servable: false
 main_merged: true
+execution_permitted: false
 ```

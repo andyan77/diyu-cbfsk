@@ -1,0 +1,94 @@
+schema_version: "0.1"
+receipt_id: DIYU-CBFSK-FOUNDER-M2-KICKOFF-SIGNATURE-001
+task_id: DIYU-CBFSK-M2-EP01-001
+project_id: DIYU-CBFSK-001
+plan_id: MILESTONE_PLAN_M2
+plan_version: 1.1.0
+package_id: M2-EP01
+task_class: L2
+signed_by: FOUNDER_PRODUCT_AUTHORITY
+signed_at: "2026-08-13"
+signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+signature_base_commit_basis: >-
+  M2 启动包 v1.1 §0 控制头 signed_baseline_commit＝M1-EP01 收口 Commit，位于 main。
+  Founder 签署仅授权该完整哈希；签署后 main 继续前进不影响本包基线，执行侧不得自动改用新 HEAD。
+recorded_by: CODEX_EXECUTION_ENGINEER
+transcription_only: >-
+  本回执逐字转录 Founder 粘贴的签署声明原文，执行侧不得新增、扩张或解释性改写任何一条。
+
+supersedes:
+  - id: M2 启动包 v1.0
+    disposition: 未派发、未签署，由 v1.1 完整替换后即时作废
+    landed_in_repository: false
+    note: v1.0 从未落盘，此处仅记录其作废事实，不追述为曾经生效。
+
+signature_declaration_verbatim: |-
+  本块由 Founder 亲自粘贴，构成对以下五项的签署授权：
+  1) 采纳 MILESTONE_PLAN_M2 v1.1（信封见 §2）
+  2) FOUNDER-M2-CHARTER-001 裁决原文（§3）落盘为 M2 章程
+  3) FR-CALIBRATION-004 定稿文本（附件A）落盘为 Founder 裁决文件。说明：该裁决此前仅以会话方式交付并经 Founder 确认，从未形成仓库文件；自本签署起，附件A 为唯一有效版本
+  4) 状态位与状态机：m2_started 置 true（授权条目结构见 Phase 0）；execution_status 枚举新增合法值 M1_M2_PARALLEL_IN_PROGRESS 并切换至该值
+  5) 并行安排：仅 M2-EP01 与 M1 并行（全项目并行上限 2 已满额）；M2-EP02 严禁在 M1 收口合入 main 前启动
+  执行侧须在首个 commit 落盘签署条目：本声明全文 + signed_baseline_commit + 日期。
+
+authorized_items:
+  - id: SIG-M2-01
+    subject: MILESTONE_PLAN_M2 v1.1
+    landed_in: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml milestone_plan_m2
+  - id: SIG-M2-02
+    subject: FOUNDER-M2-CHARTER-001 裁决原文落盘为 M2 章程
+    landed_in: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml verbatim_ruling
+  - id: SIG-M2-03
+    subject: FR-CALIBRATION-004 定稿文本（附件A）落盘为 Founder 裁决文件
+    landed_in: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
+    first_time_in_repository: true
+    prior_delivery_mode: 仅以会话方式交付并经 Founder 确认，从未形成仓库文件
+    prior_reference_without_file:
+      - file: governance/founder_rulings/DIYU-CBFSK-FR-GRANULARITY-005.yaml
+        field: amendments[修正②].ruling
+        text: 全部机器件按最小实现落地，只服务 FR-CALIBRATION-004 七类硬门
+        note: 该引用在本次落盘前指向一份不存在的文件；本签署补齐真源，不追述为早已落盘。
+  - id: SIG-M2-04
+    subject: 状态位与状态机
+    landed_in:
+      - governance/receipts/founder_signoff_receipt.yaml state_flag_authorizations.flags.m2_started
+      - governance/receipts/founder_signoff_receipt.yaml state_flag_authorizations.execution_status
+      - governance/bootstrap/role_operating_model.v0.2.yaml project_state
+      - PRD_v1.2_change_map.yaml resulting_state
+  - id: SIG-M2-05
+    subject: 并行安排
+    landed_in: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml parallel_constraint
+
+baseline_binding_precheck:
+  performed_at: M2-EP01 Phase 0
+  checks:
+    - id: PRE-01
+      condition: signed_baseline_commit 存在于本地 main 历史且为 M1-EP01 收口
+      method: git merge-base --is-ancestor 6499431c66f7bf4a234bd830ee4c810e1ac78694 main
+      result: PASS
+      evidence: main HEAD 即 6499431c66f7bf4a234bd830ee4c810e1ac78694，subject「M1-EP01 收口：Guardian 四项非阻塞发现全部关闭，交付报告落盘」
+      stop_condition_not_triggered: BASELINE_BINDING_MISMATCH
+    - id: PRE-02
+      condition: /home/faye/diyu-cbfsk-m2 不存在
+      result: PASS
+      stop_condition_not_triggered: WORKTREE_PATH_ALREADY_EXISTS
+      enforcement: human_judgement
+      verified_by: 执行侧在 M2-EP01 Phase 0 现场核对路径存在性
+      enforcement_annotation_added_at_package: M2-EP05
+      enforcement_annotation_note: >-
+        本码无 CI 检测器：它判的是「动作发生前那一刻路径存不存在」，事后不可复检。
+        按 EP05 裁决第二节补标注，原判定文字未改。
+    - id: PRE-03
+      condition: 分支 candidate/m2 不存在
+      result: PASS
+      stop_condition_not_triggered: CANDIDATE_M2_BRANCH_ALREADY_EXISTS
+      enforcement: human_judgement
+      verified_by: 执行侧在 M2-EP01 Phase 0 现场核对分支引用
+      enforcement_annotation_added_at_package: M2-EP05
+      enforcement_annotation_note: >-
+        同 PRE-02：判的是执行前既存的他方分支，动作发生后该分支必然存在，无法用 CI 复检。
+  worktree_creation_note: >-
+    首次 git worktree add 因执行环境沙箱对仓库外路径只读而失败，但 git 已先行创建 candidate/m2 分支引用；
+    执行侧确认该引用为本次失败动作的残留（reflog 仅一条 "branch: Created from 6499431…"、零提交、指向基线），
+    随即 git worktree prune + git branch -D 清除后按原参数重建。该残留由本次执行动作产生，
+    不构成 CANDIDATE_M2_BRANCH_ALREADY_EXISTS——该停止条件判的是执行前既存的他方分支，PRE-03 已在动作前验过为不存在。

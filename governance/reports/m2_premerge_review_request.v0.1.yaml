@@ -1,0 +1,235 @@
+schema_version: '0.1'
+request_id: DIYU-CBFSK-M2-PREMERGE-REVIEW-REQUEST-001
+artifact_id: m2_premerge_review_request.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-PREMERGE-FIX
+status: ROUND_1_CONCLUDED_ROUND_2_AWAITING_BOTH_SIDES
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_3_premerge_review
+amended_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_3_b02_two_definitions_of_review_target
+transmittal_document: governance/reports/m2_premerge_review_request.md
+
+relay_discipline:
+  rule: 执行侧原样转达两侧。
+  meaning: >-
+    问题由 Founder 改写过，执行侧不得润色、不得补充、不得拆条、不得替换措辞。
+    转达件里的四问与不在范围内四项，逐字等于裁决原文。
+  machine_enforced: true
+  failure_state: REVIEW_QUESTION_NOT_VERBATIM
+
+review_target:
+  what: 结扎落盘后形成的候选 Commit
+  branch: candidate/m2
+  commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+  commit_backfilled_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_3_b02_two_definitions_of_review_target B-02-1
+  full_hash_required: true
+  abbreviation_forbidden: true
+  placeholder_forbidden: true
+  placeholder_forbidden_verbatim: 此后每轮以实际 head 绑定，禁用 RESOLVED_AT_REPORT_TIME 之类占位
+  what_was_wrong_before: >-
+    本字段此前写 RESOLVED_AT_REPORT_TIME，而判据 REVIEW_TARGET_HASH_NOT_FULL_40 检查的是
+    delivery_state_frozen_at（a4be75e，交付态）。于是仓里同时存在两个「审查对象」：
+    文件里写着「待定」，判据却在核另一个字段，且核得通过。名实不符的判据比没有判据更坏——
+    它让人以为这件事已经被守住了。
+  registered_in_package_ledger_as: M2-SEAL
+  delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
+  main_at_request: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+
+four_way_equality:
+  rule: 一轮审查的对象只能有一个值，四处必须全等。
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_3_b02_two_definitions_of_review_target B-02-3
+  sites:
+  - 审查报告 reviewed_commit
+  - 审查请求 review_target.commit
+  - package ledger 当前条目
+  - 实际 head（现场 git 推导）
+  live_head_semantics: >-
+    「实际 head」对一轮**已结束**的审查，指该提交必须在本分支现有历史上（ancestry 实测）；
+    对**待审**的那一轮，指 `git rev-parse HEAD` 现算值，且请求文件里不得存该值——
+    存下来的那一刻它就开始过期。
+  disclosed_reading: >-
+    裁决原文写「全等」。已结束那一轮的对象是 9b60bda，而本次修复形成新 head 后，
+    live head 不再等于 9b60bda。执行侧按「该轮进行时的 head」理解：已结束的轮次核 ancestry，
+    待审的轮次核现算 head。这是执行侧的读法，如与 Founder 原意不符请指正（OI-FIX-01）。
+  failure_state: REVIEW_TARGET_MISMATCH
+
+question_stem: 本候选原样并入 main，是否会在主线上造成以下任一情形——
+question_count: 4
+questions:
+- id: Q1
+  name: 虚假状态
+  text: 任何声称完成而实际未完成的记录
+- id: Q2
+  name: 越权授权
+  text: 任何未经 Founder 绑定的状态位或条件被置真
+- id: Q3
+  name: 红线松动
+  text: 六位红线旗、隐藏内容入仓、知识状态链
+- id: Q4
+  name: 误导性基线
+  text: 对将来从 main 起步的工作构成误导
+
+question_wording_note:
+  about: Q3 的「六位红线旗」
+  fact: >-
+    后续裁决（DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 第十二节）把口径写作「七位红线旗」，
+    并逐条列出：m2_frozen／founder_signature_eligible／downstream_consumption_allowed／
+    m3_started／m4_started／knowledge_distillation_started／production_servable。
+  why_this_file_still_says_six: >-
+    Q3 的措辞是挂起裁决第三节的原文，本文件负责**原样转达**，改一个字就不再是原样。
+    数字口径的更正记在这里，不动被转达的问句。
+  count_now_authoritative: 7
+  counted_where: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml article_12_unchanged.red_line_flags_held_false
+
+out_of_scope:
+  rule: 已知为否，且已由机器状态如实记录，不需再确认。
+  count: 4
+  items:
+  - M2 能否冻结
+  - 18 项是否闭环
+  - 隐藏资产是否存在
+  - 阈值是否已定
+  why_out_of_scope: >-
+    这四件的答案都是「否」，而且否在哪里、否成什么样，仓内都有可复算的字段。
+    再问一遍只会得到一份重复的否定结论，占掉本该用来找假状态与误导性基线的注意力。
+
+review_record_contract:
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_4_b03_self_reported_fields_forgeable B-03-1
+  required_fields: [reviewer_role, reviewed_commit, conclusion, report_path, report_sha256, issued_at]
+  checker_duty_verbatim: >-
+    判据须读取真实报告文件、重算 sha256，并核对报告内声明的 role、reviewed_commit、结论与 YAML 记录一致；
+    Guardian 记录还须核对其隔离工作区已登记
+  evidence_kinds:
+    reviewer_authored_report: 评审方自己写的报告原文落盘于本仓。
+    founder_ruling_transcription: >-
+      报告原文未交到执行侧，仓内唯一可核的载体是 Founder 裁决对该结论的转录。
+      这类记录不得被表述为「已取得报告原文」；判据核的是裁决文件里那一条款确实点名了
+      该角色、该提交与该结论。
+  what_this_replaces: >-
+    此前 reviewers[] 只有 conclusion_received / conclusion / report 三个字段，
+    判据只检查「有结论就得有非空 report 字符串」。一个自述字符串就能开门——
+    填 conclusion: PASS、report: 「见邮件」，判据全绿。
+
+review_rounds:
+  count: 2
+  items:
+  - round_id: R1
+    scope: 并入前审查（四问全量）
+    target_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+    status: CONCLUDED
+    combined_answer_to_question_stem: YES（会）
+    combined_decision: DO_NOT_MERGE_AS_IS
+    conclusions_received: 2
+    records:
+    - reviewer_role: CLAUDE_INDEPENDENT_GUARDIAN
+      reviewed_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+      conclusion: APPROVE_WITH_CONDITIONS
+      blocking_count: 0
+      condition_count: 1
+      conditions: [COND-GUARD-M2-01]
+      report_path: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml
+      report_sha256: ddef766c07e2ca08422be22ce42a989a4a01c95ad19b925ee976aff72f4357be
+      issued_at: '2026-08-14'
+      evidence_kind: founder_ruling_transcription
+      evidence_clause_path: article_1_merge_decision.two_conclusions_relationship.guardian
+      reviewer_authored_fulltext_landed: false
+      must_not_be_described_as: 已取得 Guardian 报告原文
+      workspace_attested: false
+      workspace_attestation_gap: >-
+        Guardian 在独立工作区完成本轮审查，但该工作区的见证记录未交到执行侧：
+        governance/workspaces/ 下没有 role=CLAUDE_INDEPENDENT_GUARDIAN 且 base_commit=9b60bda 的条目。
+        依裁决第十一节纪律，确认不了的标 unverified，不得计入通过证据。
+      counts_as_independent_verification: false
+      open_item: OI-FIX-03
+    - reviewer_role: CHATGPT_CHIEF_ADVISOR
+      reviewed_commit: 9b60bda06f372467243de36982c16d4bd6afea8d
+      conclusion: BLOCK
+      blocking_count: 4
+      blocking_findings: [B-01, B-02, B-03, B-04]
+      report_path: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001.yaml
+      report_sha256: ddef766c07e2ca08422be22ce42a989a4a01c95ad19b925ee976aff72f4357be
+      issued_at: '2026-08-14'
+      evidence_kind: founder_ruling_transcription
+      evidence_clause_path: article_1_merge_decision.two_conclusions_relationship.advisor
+      reviewer_authored_fulltext_landed: false
+      must_not_be_described_as: 已取得总顾问报告原文
+      counts_as_independent_verification: false
+      open_item: OI-FIX-03
+    relationship_verbatim: 各自覆盖了对方未查的对象，合并计四问答案为「会」。
+    preservation_verbatim: 两份结论均作为历史证据保留，不删除、不改写。
+  - round_id: R2
+    scope: 窄范围 Delta
+    scope_items: [B-01, B-02, B-03, B-04, COND-GUARD-M2-01, NB-1, OI-SEAL-01]
+    scope_excludes: 不重审已验通过部分
+    status: AWAITING_BOTH_SIDES
+    target_commit: null
+    target_commit_binding: derived_from_git_head
+    target_commit_binding_note: >-
+      本轮的对象是承载本次修复的那个提交，其哈希由提交内容算出，写不进被提交的内容。
+      因此本字段留空并声明推导方式——判据现算 `git rev-parse HEAD` 得到它。
+      留空不是占位：占位是写一个看起来像值的字符串（RESOLVED_AT_REPORT_TIME），
+      留空 ＋ 声明推导方式是把这件事交给唯一能答对的人（git）。
+    conclusions_received: 0
+    records: []
+    independence_rule_verbatim: 两侧独立：任一方在形成自己结论前，不得读取另一方的报告
+    reviewers: [CLAUDE_INDEPENDENT_GUARDIAN, CHATGPT_CHIEF_ADVISOR]
+
+re_review:
+  commissioned: true
+  authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_10_re_review_arrangement
+  round_id: R2
+  why: 修复形成新 head，先前两侧结论按角色隔离硬规则对新 Commit 一律失效。
+  block_override_rule:
+    permanence: 永久生效
+    verbatim: >-
+      总顾问结论为 BLOCK 时，Founder 若要推翻，必须逐条具名回应每一项阻断发现；
+      不得以「已收到顾问意见，故三门齐备」带过
+    machine_enforced_by: ci/checkers/check_m2_suspension_seal.py ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE
+
+reviewers:
+  count: 2
+  each_produces: 一次结论
+  items:
+  - role: CLAUDE_INDEPENDENT_GUARDIAN
+    workspace_rule: 不同工作区、不同会话、不同任务合同；不得读规划上下文
+  - role: CHATGPT_CHIEF_ADVISOR
+    workspace_rule: 独立于 Guardian；形成自己结论前不得读取对方报告
+
+what_reviewers_should_know:
+  candidate_is_not_a_merge_request: 本候选目前不请求合并；合并须三门齐备后另行授权。
+  m2_is_suspended: M2 已由 Founder 主动挂起，既非通过亦非失败。
+  self_check_is_not_review: 确定性判据全绿是执行侧自检，不代替任何一方审查。
+  what_changed_since_a4be75e:
+    delivery_semantics_changed_since_a4be75e: false
+    existing_m2_files_byte_changed_since_a4be75e: true
+    change_nature: runtime_measurement_record_update
+    detail_lives_in: governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml
+    retracted_claim: 自 a4be75e 以来只加封条与本转达件，未改任何 M2 交付物字节
+    retraction_reason: >-
+      该表述是绝对的，而事实不是。既有文件的字节确实变了——交付语义没变，
+      但「未改任何字节」这句话本身不成立，已撤销。
+
+machine_checkable_fields:
+  question_count: 4
+  out_of_scope_count: 4
+  reviewer_count: 2
+  round_count: 2
+  round_1_conclusions_received: 2
+  round_2_conclusions_received: 0
+  merge_requested_by_this_request: false
+  review_target_is_full_hash: true
+  review_target_placeholder_used: false
+
+failure_states:
+- REVIEW_QUESTION_NOT_VERBATIM
+- REVIEW_QUESTION_COUNT_MISSTATED
+- REVIEW_CONCLUSION_SELF_FILLED
+- REVIEW_TARGET_HASH_NOT_FULL_40
+- REVIEW_TARGET_MISMATCH
+- REVIEW_TARGET_PLACEHOLDER_USED
+- REVIEW_RECORD_FIELD_MISSING
+- REVIEW_REPORT_HASH_STALE
+- REVIEW_REPORT_DOES_NOT_NAME_ITS_CLAIM
+- GUARDIAN_WORKSPACE_UNATTESTED
+- ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE

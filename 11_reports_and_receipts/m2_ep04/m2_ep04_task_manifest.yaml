@@ -1,0 +1,49 @@
+schema_version: "0.1"
+manifest_id: DIYU-CBFSK-M2-EP04-TASK-MANIFEST
+project_id: DIYU-CBFSK-001
+
+control_header:
+  task_id: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001
+  task_class: L3_CRITICAL_EVALUATION_CLOSEOUT
+  milestone: M2
+  execution_package: M2-EP04
+  execution_run_id: fe461abf-c4cc-46a3-9780-c4eca9a7f9c1
+  parent_execution_run_id: 41f5cb93-1a3f-4e77-a8e1-142d5ac9de39
+  parent_execution_run_id_note: >-
+    父批次取「最近一个有登记 run_id 的祖先」＝M2-EP01。M2-EP02 与 M2-EP03 当时未登记
+    execution_run_id，执行侧不为它们追记或推断一个（见 A-5 的 NOT_RECORDED_AT_EXECUTION_TIME 登记）。
+  resume_candidate_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+  branch: candidate/m2
+  base_main_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1（Founder 裁决，工作面 A 执行任务）
+
+frozen_paths:
+  - 00_charter/**
+  - 01_contracts_and_schemas/m1_object_model/**
+  - 01_contracts_and_schemas/category_adapter_contracts/**
+  - 11_reports_and_receipts/m1_delivery_receipt.yaml
+  - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml
+  - 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+
+allowed_updates:
+  - 03_m2_evaluation_foundation/**
+  - 02_benchmark_manifests/**
+  - 11_reports_and_receipts/**
+  - ci/**
+  - governance/conditions/**
+  - governance/gates/**
+  - governance/workspaces/**
+  - governance/receipts/**
+  - governance/founder_rulings/（仅新增本轮裁决落盘文件）
+  - governance/bootstrap/role_operating_model.v0.2.yaml（状态真源）
+  - governance/baseline/founder_pinned_baseline.v0.1.yaml（机械投影联动登记）
+  - README.md（机械投影）
+
+forbidden:
+  - hidden_content_in_main
+  - m2_frozen_true
+  - m3_started
+  - m4_started
+  - knowledge_distillation_started
+  - production_servable

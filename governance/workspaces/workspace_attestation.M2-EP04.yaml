@@ -1,0 +1,47 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001
+covers_milestone: M2
+covers_packages: [M2-EP04]
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+created_by_finding: NB-M2-05
+
+scope_note: >-
+  Guardian 发现工作面见证被硬编码成单一文件，新里程碑的工作面因此没有落脚处。
+  本文件是「按里程碑维护」的第一份分册；判据改为自动发现目录下全部见证文件，
+  新增一个里程碑＝加一份文件，不再改 checker。
+
+records:
+  - workspace_id: diyu-cbfsk-m2-repair
+    workspace_path: /home/faye/diyu-cbfsk-m2
+    conversation_or_session_id: null
+    session_id_available: false
+    session_id_unavailable_reason: >-
+      本执行面无法读取自身会话标识；执行侧不得代为构造一个标识填进去。
+    session_started_at: "2026-08-13T21:00:00-07:00"
+    base_commit: 3008f56b2c200324b2f2cd1babafdef1950b5bc6
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: M2_CLOSEOUT_REPAIR_A1_TO_A8
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 控制头（工作面 A 执行任务）
+    founder_manual_attestation_required: true
+
+guardian_record_absent:
+  reason: 本执行包（M2-EP04）的 Guardian 审查尚未进行——这是尚未发生的事件，不是待填字段。
+  prior_package_guardian_note: >-
+    对 3008f56b 的 Guardian 审查已由 Founder 转达结论（APPROVE_WITH_CONDITIONS，阻断 0），
+    但该轮 Guardian 的工作区路径、会话标识与报告全文均未交到执行侧，因此**不在本文件伪造一条记录**。
+    该轮报告的落盘阻塞见 governance/reports/guardian_review_report.3008f56b.PENDING.md。
+  must_not_be_read_as: 本包已通过 Guardian 审查
+
+founder_workspace_attestation:
+  status: NOT_YET_ATTESTED
+  attested_by: null
+  attested_at: null
+  reason: >-
+    见证的对象是「规划面与 Guardian 面是两个不同会话与工作区」。本包的 Guardian 尚未开始，
+    没有可见证的对象。收口时由 Founder 补出具。
+  execution_side_must_not_fill: true

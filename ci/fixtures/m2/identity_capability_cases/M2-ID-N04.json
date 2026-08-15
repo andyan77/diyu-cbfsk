@@ -1,0 +1,21 @@
+{
+  "case_id": "M2-ID-N04",
+  "description": "枚举值里混进 1:1 人脸验证——枚举同样是系统会执行的取值面。",
+  "expected_hits": 1,
+  "note": "",
+  "documents": {
+    "fake/verification_mode.schema.json": {
+      "$id": "https://example.invalid/fake/verification_mode.schema.json",
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "user_authorized_account_identity",
+            "face_verification_1_to_1"
+          ]
+        }
+      }
+    }
+  }
+}

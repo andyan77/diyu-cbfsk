@@ -1,0 +1,11 @@
+fixture_id: N204-sequential-registry-empty
+description: 登记册存在但一条编号也没有——判据读到空不等于没问题。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries:
+  - registry: README.md.authorized_modification_history
+    numbers: []
+    prefixes: []
+    malformed_ids: []
+    entries: []

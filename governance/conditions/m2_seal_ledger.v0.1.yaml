@@ -1,0 +1,260 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-SEAL-LEDGER
+artifact_id: m2_seal_ledger.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-SEAL
+status: SUSPENDED_BY_FOUNDER
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_2_sealing SEAL-7
+enforced_by: ci/checkers/check_m2_suspension_seal.py
+
+prior_version:
+  landed_at_commit: f71617eee44a6008d8180fe81aeea901efc54816
+  form: DOC_ONLY
+  new_checker_added: false
+  wrote_verbatim: 本台账没有机器守卫。
+  why_replaced: >-
+    那一版按当时的口头指令做成 doc-only，自述「封存靠人遵守，不靠判据拦阻」。
+    本裁决第二节把口径改成「一律以机器状态封存，不以意图封存」，并在 SEAL-1 明文要求判据，
+    因此本版补上 ci/checkers/check_m2_suspension_seal.py，doc-only 形态就此作废。
+  what_was_kept: 该版记录的事实（被封各项的状态、四项 PARTIAL 的阻断源、封存时的自检与远程 CI 结果）经复核属实，予以保留并扩写。
+  what_was_corrected:
+    field: review_status_at_seal.why_review_cannot_start_now
+    old_claim: 分发前五步闸中 Guardian Delta 是第 4 步，第 3 步的最终分发前候选尚不存在，Delta 没有审查对象。
+    why_now_wrong: >-
+      本裁决第三节把审查对象改为「本次结扎落盘后形成的最终候选 Commit」——该对象在本包提交后即存在。
+      旧结论对旧对象成立，对新对象不成立；留着不改会让人以为审查仍然启动不了。
+
+suspension_reason:
+  headline: Founder 主动挂起，既非通过、亦非失败。
+  verbatim: 性质：既非通过、亦非失败，为 Founder 主动挂起。M2 冻结门维持关闭。
+  what_it_is_not:
+  - 不是 M2 失败——18 项里 14 项 READY，无一项被判不合格
+  - 不是 M2 通过——4 项 PARTIAL、0 项 FROZEN、阈值一条未冻、三方审查均未进行
+  - 不是放弃——封的是推进动作，不是结论
+  plain: >-
+    M2 的图纸基本画完了，实物差一批，而差的那批全卡在同一个前置上（隐藏侧存储未 provision）。
+    Founder 选择在这里停手、把当前状态钉死、把主线封存，而不是硬推到冻结。
+
+frozen_hashes:
+  rule: 一律完整 40 位，禁止以「最新版」代指。
+  main:
+    branch: main
+    head: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+    state: M1 PASS（FOUNDER_ACCEPTED）
+    changed_by_this_seal: false
+  candidate:
+    branch: candidate/m2
+    delivery_state_frozen_at: a4be75e5ee723fe552a293d40632405711920554
+    delivery_state_note: >-
+      a4be75e 是被封存的**交付态**：M2 的全部产物字节以该 Commit 为准。
+      其后的提交只加封条，不改任何交付物。
+    seal_commit_chain:
+    - {commit: f71617eee44a6008d8180fe81aeea901efc54816, what: 第一版 doc-only 封口台账}
+    - {commit: 9b60bda06f372467243de36982c16d4bd6afea8d, what: 七项结扎、判据与审查转达件（并入前审查 R1 的对象）}
+    - {commit: null, what: 本版——按并入前审查结论定点修复 B-01~B-04 / COND-GUARD-M2-01 / NB-1 / OI-SEAL-01,
+       commit_binding: derived_from_git_head}
+    placeholder_forbidden: true
+    placeholder_forbidden_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_3_b02_two_definitions_of_review_target B-02-1
+    self_reference_handling: >-
+      本文件所在的那个提交，其哈希由本文件的内容算出，写不进来。此前这里写 RESOLVED_AT_REPORT_TIME——
+      一个看起来像值的字符串，读者与判据都可能把它当成已解析。现在改为 commit: null ＋
+      声明 commit_binding: derived_from_git_head，由判据现算 `git rev-parse HEAD` 补上。
+      留空是「这里没有值，去问 git」；占位是「这里有个值，只是还没算」——后者会骗人。
+  pr:
+    number: 3
+    state: OPEN
+    must_not_merge_before_three_gates: true
+
+sealed_state:
+  rule: 每一项的取值都指向自己的真源文件，本台账不复述、不另立一套值。
+  seal_1_calibration_pack:
+    distribution_status: NOT_DISTRIBUTED
+    state_source: 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml
+    sealed_file_count: 17
+    review_records_per_side: 0
+    machine_enforced: true
+    restore_rule: 恢复时若包内任一文件哈希变化，一律判为需重新确认，不得直接分发。
+  seal_2_known_design_gaps:
+    gap_count: 3
+    disposed: 0
+    affected_review_units: 5
+    state_source: 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml
+    rule: 恢复前必须先处置，不得直接分发。
+  seal_3_hidden_assets:
+    store_a_provisioned: false
+    cond_011: EVIDENCE_SUBMITTED
+    asset_count: 0
+    manifest_status: EMPTY_BLOCKED
+    steward_prompt_and_input_bundle: 封存但不启用
+    state_source: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+  seal_4_thresholds:
+    cond_007: OPEN
+    metric_count: 34
+    frozen_count: 0
+    worksheet_contract_kept: true
+    worksheet_content_generated: false
+    state_source: 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml
+  seal_5_timing_gate:
+    precondition_count: 5
+    satisfied_count: 0
+    founder_confirmation_bound_fields_filled: 0
+    founder_confirmation_bound_fields_required: 5
+    state_source: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  seal_6_deliverable_matrix:
+    total: 18
+    ready: 14
+    partial: 4
+    absent: 0
+    frozen: 0
+    common_blocker: HIDDEN_STORAGE_NOT_PROVISIONED
+    common_blocker_note: 四项不是四个独立缺口，是同一个缺口的四处露头。
+    state_source: 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml
+    partial_items:
+    - {id: D-M2-02, name: unseen_brand_split.v0.1.yaml, missing: 未见品牌实例 0 个, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {id: D-M2-03, name: unseen_category_edge_cases.v0.1.yaml, missing: 边缘任务实例 0 个, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {id: D-M2-07, name: benchmark leakage checker / frozen manifest / receipt, missing: 冻结清单资产数 0 且未冻结, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+    - {id: D-M2-11, name: 泄漏 ＋ 同质性双检查报告, missing: 同质性侧无可比较对象（两池均为 0）, blocker: HIDDEN_STORAGE_NOT_PROVISIONED, owner: FOUNDER_PRODUCT_AUTHORITY}
+
+state_flags_at_seal:
+  m2_status: SUSPENDED_BY_FOUNDER
+  m2_freeze_gate_open: false
+  m2_frozen: false
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false
+  pr_3_merged_derivation: git merge-base --is-ancestor <candidate head> origin/main
+  pr_3_merged_stored_here: false
+  pr_3_merged_stored_here_why_not: >-
+    B-04-3：合并有没有发生是 Git 说了算。此前本台账自述 pr_3_merged: false，
+    而判据直接读这一位——main 上真出现合并，它也照样说没有。
+  execution_status: M2_IN_PROGRESS
+  execution_status_note: >-
+    Founder 已裁定不迁移（DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 第八节）：
+    execution_status 答「哪个里程碑在飞」，m2_status 答「它现在什么状态」，两者正交。
+    挂起状态由 m2_status 承载；「现在还能不能继续施工」由派生字段 execution_permitted 回答，
+    该字段由 ci/derived_state.py 现算，不得手工填写。OI-SEAL-01 就此关闭为
+    NO_ENUM_MIGRATION_WITH_DERIVED_FIELD。
+  execution_permitted_derivation: ci/derived_state.py execution_permitted(project_state)
+  execution_permitted_stored_here: false
+
+review_status_at_seal:
+  guardian_review: NOT_PERFORMED
+  advisor_review: NOT_PERFORMED
+  founder_m2_decision: NOT_MADE
+  premerge_review_commissioned_by_this_ruling: true
+  premerge_review_target: 本次结扎落盘后形成的最终候选 Commit
+  transmittal: governance/reports/m2_premerge_review_request.v0.1.yaml
+  question_count: 4
+  out_of_scope_count: 4
+  note: >-
+    本轮审查问的不是「M2 能不能冻结」，是「这份候选原样并入 main 会不会在主线上留下假状态、越权授权、
+    红线松动或误导性基线」。前者已知为否且已如实记录，不在范围内。
+
+restore:
+  authority: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_5_restore_conditions
+  ordered_sequence:
+  - {step: 1, action: 处置第二节第 2 项三个已知缺口, owner: FOUNDER_PRODUCT_AUTHORITY, state_source: 03_m2_evaluation_foundation/calibration/known_design_gaps.v0.1.yaml}
+  - {step: 2, action: 校准包哈希复核通过, owner: 执行侧, state_source: 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml}
+  - {step: 3, action: 分发并回收两侧评审, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 4, action: 聚合, owner: 执行侧}
+  - {step: 5, action: Founder 冻结阈值（COND-007 关闭）, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 6, action: Founder 确认公开蓝图未变（绑定 Commit）, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 7, action: STORE-A provision 与证据 intake, owner: FOUNDER_PRODUCT_AUTHORITY}
+  - {step: 8, action: 40 品牌正式批, owner: 执行侧}
+  - {step: 9, action: 统一收口, owner: 执行侧}
+  step_count: 9
+  minimum_actions_note: >-
+    这是**最小**动作清单——每一步都不可跳过，也没有任何一步可以由执行侧代替 Founder 完成。
+    第 1、3、5、6、7 步归 Founder；第 2、4、8、9 步归执行侧，且各自都以前一步为前置。
+  must_not_assume_true_on_restore:
+    count: 2
+    items:
+    - id: MNA-1
+      verbatim: 任何一条上述前置
+      meaning: 恢复时不得因为「上次好像做过了」而跳过任何一步；每一步都要重新取现场证据。
+    - id: MNA-2
+      verbatim: 挂起期间主线的任何变化不自动使输入包保持有效
+      meaning: >-
+        主线在挂起期间即使只落了治理登记，隐藏生成输入包的血统基线也可能已经不再对得上。
+        恢复时必须重算输入包哈希并重新确认，不得沿用挂起前的那一份。
+      state_source: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
+
+unseal:
+  authority: FOUNDER_PRODUCT_AUTHORITY
+  rule: 任一项解封须 Founder 裁决具名该项；执行侧不得自行判定解封条件已满足。
+  record_contract:
+    authority: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_4_b03_self_reported_fields_forgeable B-03-2
+    required_fields:
+    - ruling_ref
+    - ruling_file
+    - clause_path
+    - signature_base_commit
+    - chosen_branch_id
+    - affected_item
+    - authorized_new_value
+    checker_duty_verbatim: >-
+      判据除核验条款存在外，还须核验条款内容点名：该缺口 ID 或封存项 ID ＋ 所选分支或新值 ＋ 生效 Commit
+    what_was_wrong: >-
+      此前解封记录只要 ruling_ref ＋ clause_path 能解析出一个非空节点就放行。
+      随便指一份真实裁决里的任意一条，判据都说「有授权」——而那一条可能讲的是完全另一件事。
+      「有一份 Founder 裁决」不等于「这份裁决授权了眼前这件事」。
+  records: {}
+  failure_state: UNSEAL_WITHOUT_FOUNDER_RULING
+  failure_state_note: >-
+    本块只声明一个 STOP 码（单数键是 stop_code_enforcement_registry 的射程）。
+    本轮新增的 UNSEAL_RECORD_FIELD_MISSING 与 UNSEAL_RULING_DOES_NOT_NAME_ITEM
+    进文件末尾的 failure_states 词表，由 error_code_fixture_coverage_ledger 承接——
+    两册不互相复述，避免同一件事两套口径。
+
+what_this_seal_does_not_mean:
+- 不表示 M2 已交付——18 项中 4 项 PARTIAL、0 项 FROZEN
+- 不表示 M2 已通过任何一方审查——Guardian／总顾问／Founder 三方均未出结论
+- 不表示已落盘 14 项可被下游消费——m2_frozen 仍为 false，阈值一条未冻
+- 不表示被封各项已被放弃——封的是推进动作，不是结论
+- 不表示主线已合并——三门未齐备，PR #3 仍 OPEN
+
+open_items:
+  count: 1
+  items:
+  - id: OI-SEAL-01
+    what: execution_status 是否随挂起迁移至 M2_SUSPENDED
+    status: CLOSED
+    closure: NO_ENUM_MIGRATION_WITH_DERIVED_FIELD
+    closed_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_8_oi_seal_01_ruling
+    decision_verbatim: >-
+      execution_status 枚举不扩展，M2_SUSPENDED 不加入；
+      理由：execution_status 答「哪个里程碑在飞」，m2_status 答「它现在什么状态」，
+      两者正交，混用会导致 M3 挂起时再加一个值
+    replacement: 派生字段 execution_permitted，由 ci/derived_state.py 现算，手工赋值即 FAIL。
+    owner: FOUNDER_PRODUCT_AUTHORITY
+    execution_side_must_not_do: true
+
+premerge_review_round_1:
+  target: 9b60bda06f372467243de36982c16d4bd6afea8d
+  guardian: {conclusion: APPROVE_WITH_CONDITIONS, blocking: 0, conditions: [COND-GUARD-M2-01]}
+  advisor: {conclusion: BLOCK, blocking: 4, findings: [B-01, B-02, B-03, B-04]}
+  combined_answer: YES（会）
+  combined_decision: DO_NOT_MERGE_AS_IS
+  rollback_required: false
+  targeted_patch_required: true
+  both_conclusions_preserved_verbatim: 两份结论均作为历史证据保留，不删除、不改写。
+  record: governance/reports/m2_premerge_review_request.v0.1.yaml review_rounds.items[0]
+  what_this_seal_did_not_catch: >-
+    七项结扎全绿、189 条断言全过、48 个判据全绿——而四项阻断仍然存在。
+    B-04 尤其说明问题：守卫本身写着 unregistered_main_commits: []，
+    于是「主线上有没有未登记提交」这条判据永远回答「没有」。
+    自检全绿从来不是审查通过；本轮是这句话的一次实证。
+
+failure_states:
+- SEAL_LEDGER_STALE
+- SEALED_ITEM_ADVANCED_WITHOUT_UNSEAL
+- UNSEAL_WITHOUT_FOUNDER_RULING
+- UNSEAL_RECORD_FIELD_MISSING
+- UNSEAL_RULING_DOES_NOT_NAME_ITEM
+- SEAL_HASH_NOT_FULL_40
+- SEAL_RESTORE_SEQUENCE_MISSTATED

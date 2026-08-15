@@ -1,0 +1,45 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-M2-EP05-INTEGRATION-001
+covers_milestone: M2
+covers_packages: [M2-EP05]
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+created_by_finding: NB-M2-05
+
+scope_note: >-
+  按里程碑维护的工作面见证分册。判据自动发现本目录下全部见证文件，
+  新增一个执行包＝加一份文件，不改 checker。
+
+records:
+  - workspace_id: diyu-cbfsk-m2-repair
+    workspace_path: /home/faye/diyu-cbfsk-m2
+    conversation_or_session_id: null
+    session_id_available: false
+    session_id_unavailable_reason: >-
+      本执行面无法读取自身会话标识；执行侧不得代为构造一个标识填进去。
+    session_started_at: "2026-08-14T09:00:00-07:00"
+    base_commit: cffa6ccba2abf3c67b06e358dc33aa5d051e7868
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: M2_EP05_INTEGRATION_AND_PARALLEL_START
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: DIYU-CBFSK-FOUNDER-M2-EP05-001（工作面 A 执行任务）
+    founder_manual_attestation_required: true
+
+guardian_record_absent:
+  reason: 本执行包（M2-EP05）的 Guardian 审查尚未进行——这是尚未发生的事件，不是待填字段。
+  prior_package_guardian_note: >-
+    对 3008f56b 的 Guardian 结论已依 EP05 裁决第零节 ANCHOR-3 按 §14 失效；
+    其占位记录保留，且不得被表述为已落盘原文。最终 Head 仍须取得报告全文。
+  must_not_be_read_as: 本包已通过 Guardian 审查
+
+founder_workspace_attestation:
+  status: NOT_YET_ATTESTED
+  attested_by: null
+  attested_at: null
+  reason: >-
+    见证的对象是「规划面与 Guardian 面是两个不同会话与工作区」。本包的 Guardian 尚未开始，
+    没有可见证的对象。收口时由 Founder 补出具。
+  execution_side_must_not_fill: true

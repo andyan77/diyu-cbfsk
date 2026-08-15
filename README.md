@@ -1,6 +1,6 @@
 # 笛语跨品牌服装搭配专家内核 · 文档索引
 
-> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1 `PASS`（`FOUNDER_ACCEPTED`）｜M2 未开工
+> 项目编号 DIYU-CBFSK-001｜基线日期 2026-08-13｜产品真源 PRD v1.2（`SIGNED`）｜M0 `PASS`｜M1 `PASS`（`FOUNDER_ACCEPTED`）｜M2 `SUSPENDED_BY_FOUNDER`（Founder 主动挂起，非通过亦非失败；等待三项 Founder 动作，执行侧不得自行推进）
 
 ## 当前活基线
 
@@ -19,7 +19,7 @@ PRD v1.2 是当前唯一产品真源，由 Founder 于 2026-08-13 签署生效�
 
 ```yaml
 project_status: PROJECT_INITIATED
-execution_status: M1_COMPLETE
+execution_status: M2_IN_PROGRESS
 production_servable: false
 m0_authorized: true
 current_active_baseline: PRD_v1.2
@@ -39,12 +39,30 @@ m0_founder_decision_original: CONDITIONAL
 m0_guardian_delta_review: APPROVE
 m1_started: true
 m1_status: FOUNDER_ACCEPTED
-m2_started: false
+m2_started: true
+m2_status: SUSPENDED_BY_FOUNDER
+m2_ep01_status: SELF_CHECKED
+m2_ep02_status: SELF_CHECKED
+m2_ep03_status: SELF_CHECKED
+m2_ep04_status: SELF_CHECKED
+m2_ep05_status: SUPERSEDED_BY_CORRECTION
+m2_ep05_correction_status: SELF_CHECKED
+m2_evaluation_profile_status: FINAL_BOUND
+m2_milestone_decision: BLOCK_M2_FREEZE_AND_MERGE
+m2_candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+m2_deliverables_ready: 14/18
+m2_public_blueprint_status: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
+public_blueprint_stable_for_hidden_generation: false
+calibration_pack_distribution_allowed: false
+m2_hidden_assets_status: NOT_STARTED
+founder_signature_eligible: false
+m2_frozen: false
 knowledge_distillation_started: false
 pending_active_baseline_switch: false
+execution_permitted: false
 ```
 
-状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权。`production_servable` 与 `knowledge_distillation_started` 属红线位，**任何签署都不得授权**（分别至 M12 发布、M2 冻结后另行裁决）。`m1_started` 与 `m2_started` 依 [`DIYU-CBFSK-FOUNDER-M1-GATE-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml) 转入授权门控。门控要求授权条目绑定完整 Commit 哈希且具名 `basis`，缺一即拦；`m2_started` 当前**无授权条目**，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`。但要说清楚：这**是**一次屏障降级——改造前即使补上一条完美授权，`m2_started` 也点不亮（须改 checker 源码）；改造后往签署回执加一条合规条目即可放行。m2 当前的锁靠的是「没有条目」，不是「不可授权」，两者不是一回事。这是 Founder 知情裁决，屏障层数对照见回执 `barrier_layer_delta`。
+状态位不是随手改的：任何一位置 `true`，都必须在 `governance/receipts/founder_signoff_receipt.yaml` 的 `state_flag_authorizations` 里存在一条绑定完整 Commit 哈希的 Founder 授权。`production_servable` 与 `knowledge_distillation_started` 属红线位，**任何签署都不得授权**（分别至 M12 发布、M2 冻结后另行裁决）。`m1_started` 与 `m2_started` 依 [`DIYU-CBFSK-FOUNDER-M1-GATE-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-GATE-001.yaml) 转入授权门控。门控要求授权条目绑定完整 Commit 哈希且具名 `basis`，缺一即拦；`m2_started` 已由 Founder 于 [`DIYU-CBFSK-FOUNDER-M2-CHARTER-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml) 具名签署补上授权条目（绑定 `6499431c66f7bf4a234bd830ee4c810e1ac78694`），随 M2-EP01 实际开工置 `true`——授权存在 ≠ 事件已发生，两者本批同时成立。此前它的锁靠的是「没有条目」而不是「不可授权」（屏障层数对照见回执 `barrier_layer_delta`），本次正是那条路径被 Founder 走了一次，**不是**执行侧自行放宽，也未触碰 `never_authorizable` 两条红线位。
 
 M0 已按里程碑单包模式落盘十四项交付物。Founder 裁决 `CONDITIONAL`（[`DIYU-CBFSK-FOUNDER-M0-DECISION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M0-DECISION-001.yaml)）→ 四项必修落盘于 `f01e45b4ca4d7416feaec4177f4f8aad2ce35458` → Guardian delta 复核 `APPROVE`、无阻塞发现（[报告](governance/reports/guardian_review_report.f01e45b.delta.md)）→ 依裁决 `upgrade_rule` **自动升级为 M0 `PASS`**。总顾问 delta 复核由 Founder 豁免，**记录在案，不记为已完成**。
 
@@ -98,14 +116,54 @@ M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_
 
 **M1 已通过**：Founder 裁决 [`DIYU-CBFSK-FOUNDER-M1-PASS-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml) `decision: PASS`，批准哈希 `2df11012da46ace0de7b7bce6d199a578d32d341`，三项前置齐备（Guardian `APPROVE` 阻断 0 / 总顾问 Delta 复核 `PASS` / Founder 裁决）。已按 FF-ONLY 合并 main，`origin/main` 实测等于该批准哈希，未产生任何合并提交。
 
-`PASS` 只表示 M1 里程碑通过：**不**表示可服务生产，**不**表示 M2 已启动，**也不**表示知识蒸馏可开始。M2 维持暂停——`candidate/m2` 停在 `43251b21a32fc9a3fee375675a611577babca570` 不动，主线 `m2_started` 仍为 `false` 且无授权条目，置 `true` 判 `UNAUTHORIZED_TRUE_FLAG`。M2-EP02／EP03、M3、知识蒸馏、隐藏资产进入主仓均须 Founder 另行裁决。
+`PASS` 只表示 M1 里程碑通过：**不**表示可服务生产，**也不**表示知识蒸馏可开始。M1 收口后 Founder 已下达恢复执行授权（`DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001`）：M2 解除暂停，`execution_status` 迁移至 `M2_IN_PROGRESS`，EP02 与 EP03 连续执行。M3、知识蒸馏、隐藏资产进入主仓仍须 Founder 另行裁决。
+
+## M2 评测治理基础（M2-EP01 已自检）
+
+M2-EP01 曾与 M1 并行执行，基线钉死在 M1-EP01 收口 Commit `6499431c66f7bf4a234bd830ee4c810e1ac78694`。M1 已于 `c3f6ad372306cc12f139cf38624e9a5cea2cf329` 收口合入 `main`，并行窗口关闭；EP02 已按受控合并（`merge`，非 `rebase`，保留 `main` 为祖先）承接 M1 全部产物。
+
+`03_m2_evaluation_foundation/` 下四组产物：
+
+| 目录 | 内容 |
+|---|---|
+| `envelope/` | M1→M2 公共元数据信封与 Profile 组合视图；`m1_source_binding.v0.1.yaml` 是 M1 产物 SHA256 的唯一记录处 |
+| `adr/` | 六份最小 ADR，每份声明最小实现／落地里程碑／当前不建设／激活条件 |
+| `architecture/` | ADR-001 的落地件：12 输入 + 15 输出对象逐一归到六层 |
+| `evaluation_governance/` | 评分者校准、抽样设计、基线修订三件套合同 ＋ 评测资产分类 Profile |
+| `identity_isolation/` | 禁止／允许能力两份精确清单（`check_m2_identity_isolation` 的唯一取数处） |
+
+**只包装、不复制、不修改**：M2 一律经 Envelope/Profile 引用 M1 冻结物，`in_place_modification_allowed` 常量 `false`。既有 M1 冻结物字节变了判 `M1_FROZEN_ARTIFACT_DRIFT`（熔断）；只是新增产物则属 `REBIND_AND_RETEST`（正常前进），两者不可混为一谈。
+
+**造型理解与身份识别永久解耦**（ADR-004，红线）：五项禁止能力的激活条件是**永不**，不是「暂缓」。检测走结构化能力面（Schema property 与枚举、能力/组件/服务登记、依赖清单），**不扫散文**——裁决原文里必然写着「不建设人脸身份识别」，全文关键词扫描会把这句话本身判成违规。
+
+隐藏边界执行全部委派既有 `check_hidden_benchmark_boundary`，未新建第二套实现。
+
+M2 前三包形成候选后，Founder 收口裁决为 **`BLOCK_M2_FREEZE_AND_MERGE`**（[`DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001.yaml)）：Guardian `APPROVE_WITH_CONDITIONS`、阻断 0（东西是真的），总顾问 `BLOCK`（该有的没齐）。两者不冲突，里程碑完整性以上位合同为准。M2-EP04 据此执行收口修复。
+
+**评测体系**：D-28 三分类合同 ＋ 三张评分卡（`constraint_correctness` 0/1 硬判、`mechanism_correctness` 可接受推理区间、`open_decision` 解族判定），②③类**禁设唯一 Gold Answer**、合法分歧必须保全；25 条 M1 品类硬约束双向全覆盖，绑定 ID 一律解析到 M1 真源，禁悬空表述。基线锦标赛四维度（质量／成本／延迟／人工干预）并列记录、**不合成单一总分**——权重就是取舍本身，须待 Founder 冻结。dry-run 骨架零真实模型调用、连跑两次字节相同。
+
+**交付闭环（M2-EP04 新增）**：`03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml` 按 M2 冻结 Brief 第 2 节逐项生成 18 项覆盖矩阵，四态（`ABSENT`／`PARTIAL`／`READY`／`FROZEN`）冻结为合同——**`READY` 不等于「文件存在」**。当前 **14 项 `READY`、4 项 `PARTIAL`**，四项全部卡在同一个条件上：隐藏侧存储未就绪。清单读自 Brief 而非候选自述，判据 `check_m2_deliverable_closure` 直接解析 Brief 表格取数。
+
+**双轴评测矩阵（M2-EP04 新增）**：横轴三张任务类型卡不动，纵轴补齐七类能力卡（专业／叙事／人设连续性／自媒体语感／多模态属性／多模态置信度校准／五品类就绪），四轴（能力 × 任务类型 × 品类 × 风险级别）可寻址 195 格；PRD 10.2 的 **34 条指标逐条归属且唯一**，判据从 DOCX 表格独立提取比对。11 条硬门逐条映射到八道发布门，无硬门无承接。
+
+**公开校准集（M2-EP04 新增）**：90 例，5 品类 × 3 任务类型 × 3 风险等级 = 45 格**无一为空**，每格 2 例。硬约束题带 0/1 两侧条件，机制题带可接受推理区间，开放题带至少两个合法解族与可接受边界——只出题干不合格。两侧隔离评审的 Prompt 已落盘并记哈希，**评审结果为 0 条**，状态如实置 `CALIBRATION_REVIEW_EVIDENCE_MISSING`：主执行侧不得自行扮演「隔离 GPT」与「隔离 Claude」。
+
+**隐藏评测资产未生成**：Founder 已声明 provision `STORE-A` 并设 Steward 角色，但访问矩阵与仓库标识未交到执行侧，`COND-011` 推进至 `EVIDENCE_SUBMITTED` 而非 `CLOSED`。一件资产未产、一个字节未进主仓。A→B 输入包（20 份文件带哈希）与 Steward 执行 Prompt（`DIYU-CBFSK-M2-HIDDEN-STOREA-001` v1.1.0，十二阶段）已就位，任一输入文件哈希变化即判 `STALE` 并连带作废已生成资产。
+
+**M2-EP05 整合与并行启动**：四项定锚裁决落盘（多模态边界／命名／Guardian 报告／指标分组），Guardian 三条发现全闭——编号锚点改由[标识符注册表](governance/identifiers/identifier_registry.v0.1.yaml)承接（任务 ID 不是裁决 ID，两者不得互相改名）；杜撰的停止码 `MULTIMODAL_SCOPE_CONFLICT_WITH_D10` 作废删除，全仓 STOP 声明位逐条标 `enforcement`（`machine_checked` / `human_judgement` / `future_runtime`），**无检测器的码一律不得表述为「未触发」**；报告的计数数字改为模板引用机器记录字段、生成时现读，判据重渲染逐字节比对。[校准评审启动包](03_m2_evaluation_foundation/calibration/launch_pack/)已具备独立分发所需的结构（90 例 / 9 批），但**分发是当前明令禁止的动作**——`calibration_pack_distribution_allowed` 为 `false`，`distribution_status` 为 `NOT_DISTRIBUTED`，且三条已知设计缺口未处置。包已按[封存清单](03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml)逐文件钉哈希；任一文件哈希变化即强制转为需重新确认。两侧评审记录各 0 条。[隐藏生成时序门](governance/conditions/hidden_generation_timing_gate.v0.1.yaml)已装：`public_blueprint_stable_for_hidden_generation` 为 `false` 时，允许 STORE-A provision、私有工具链与 2 个品牌试产批，**禁止 40 品牌正式批**。
+
+`m2_frozen` 仍为 `false`，`founder_signature_eligible` 为 `false`。最终资产存在门 12 条判据当前满足 1 条；条件与状态语义已分离（`COND-011` 管存储、`m2_hidden_assets_status` 管资产、`COND-007` 管阈值且无「隐藏侧」），STOP 分五型，本轮三个 STOP 各自归型见 [`m2_condition_state_semantics.v0.1.yaml`](governance/conditions/m2_condition_state_semantics.v0.1.yaml)。
+
+**M2-EP05-CORRECTION 定向补丁**（裁决 [`DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001.yaml)，`BLOCK_CALIBRATION_DISPATCH`）：校准包此前**没有被评对象**——评审员对着题干打分，判的是空气。本包给 90 个评审单元各挂一份[候选输出](03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml)（机制题与开放题另带决策轨迹），全部标 `non_candidate_knowledge`：禁止进入知识状态链与任何候选知识池；预期标签只进[边界锚点真源](03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml)，**不进分发包**。判定语言拆成两个字段——`judgment` 答「算不算」、`score` 答「算的那些做得多好」，②③ 类分数钉到[五档锚点](03_m2_evaluation_foundation/calibration/numeric_scoring_anchors.v0.1.yaml)上，聚合直接比较 `judgment`，严禁用尚未冻结的阈值把分数转成成立与否。阈值[证据分型](03_m2_evaluation_foundation/calibration/metric_review_unit_mapping.v0.1.yaml)：`POLICY_THRESHOLD` 是 Founder 的产品裁决，不得装成统计估计；`EMPIRICAL_CUTPOINT` 必须有 estimator、样本下限与映射到的评审单元，输入不齐时不出建议值。[时序门](governance/conditions/hidden_generation_timing_gate.v0.1.yaml)前置由四项改五项（加「阈值全部冻结且 COND-007 关闭」与「Founder 在指定冻结 Commit 上确认公开蓝图」）。STORE-A 证据改为[文件级 intake](03_m2_evaluation_foundation/hidden_assets/store_a_evidence/)——判据读那两份真实 YAML 并扫描全部标量拒绝定位符，台账只记推导结果，不再充当证据。新增全仓判据 [`check_founder_confirmation_binding`](ci/checkers/check_founder_confirmation_binding.py)：凡声称「Founder 已确认／已批准／已授权／已签署」的布尔位，为真时必须挂具名文件＋可解析条款＋完整 40 位 Commit＋签署人＋签署时点——**被守的一方自己就能开门，这是本轮堵的洞**。
+
+M2 当前现状以 [`11_reports_and_receipts/m2_ep05_correction/`](11_reports_and_receipts/m2_ep05_correction/) 为准；[`m2_delivery_report.md`](11_reports_and_receipts/m2_delivery_report.md) 已标 `SUPERSEDED`，作为 EP03 时点的历史记录保留。各包报告见 [`m2_ep01/`](11_reports_and_receipts/m2_ep01/)、[`m2_ep02/`](11_reports_and_receipts/m2_ep02/)、[`m2_ep04/`](11_reports_and_receipts/m2_ep04/)。
 
 ## 治理（governance/）
 
 | 目录 | 内容 |
 |---|---|
 | `governance/baseline/` | Founder 钉死的基线 Manifest、迁移记录 |
-| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001、FOUNDER-M1-RUNTHROUGH-001） |
+| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-CALIBRATION-004、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001、FOUNDER-M1-RUNTHROUGH-001、FOUNDER-M1-PASS-001、FOUNDER-RD-M1-01、FOUNDER-M2-CHARTER-001） |
 | `governance/bootstrap/` | `role_operating_model.v0.2.yaml`：角色与执行治理的**唯一规范源** |
 | `governance/roles/` `governance/prompts/` | 角色合同与角色 Prompt（由规范源生成） |
 | `governance/conditions/` | `CONDITIONAL` 条件关闭台账 |
@@ -126,7 +184,8 @@ M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配共 21 个确定性 Checker。
+- `ci/checkers/`：共 **49 个**确定性 Checker——M0／M1 既有 21 个，M2-EP01～EP03 新增 11 个，M2-EP04 再增 9 个（十八项交付闭环、里程碑闭环通则、能力矩阵、校准集、评审证据、错误码夹具覆盖棘轮、披露纪律、Guardian 报告绑定、隐藏生成就绪度），M2-EP05 再增 4 个（编号解析、STOP 码 enforcement、报告数字溯源、校准启动包），M2-EP05-CORRECTION 再增 1 个（Founder 确认类字段绑定，永久生效），M2-EP06 再增 1 个（分发前序列），M2-SEAL 再增 1 个（挂起封存），M2-PREMERGE-FIX 再增 1 个（`collect()` 硬编码事实源横扫，永久生效）。现役门禁清单以 [`governance/gates/live_gate_roster.v0.1.yaml`](governance/gates/live_gate_roster.v0.1.yaml) 为准，与本行双向比对。
+- `ci/tools/`：报告渲染器（模板里的 `{{ref:路径#字段}}` 生成时现读机器记录）与校准启动包生成器（题目由题库派生，不写第二份）。
 - `ci/run_fixtures.py`：判据层 fixture——用字面量 payload 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_schema_fixtures.py`：结构层 fixture——用字面量实例驱动 M1 对象 JSON Schema 本身；每份 Schema 正负各一，只证明「对的能过」不算验证过。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

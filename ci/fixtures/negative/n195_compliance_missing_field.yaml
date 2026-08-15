@@ -1,0 +1,100 @@
+fixture_id: N195-compliance-missing-field
+description: 某条合规项缺 next_review_milestone 字段。
+checker: check_compliance_ledger
+expected: FAIL
+payload:
+  blanket_self_assessment_allowed: false
+  external_legal_opinion: false
+  legal_review_type: founder_compliance_self_assessment
+  items:
+  - compliance_item_id: CMP-01
+    issue: 未满 14 周岁个人信息与监护人同意机制
+    applicable_stage: M0
+    founder_decision: MITIGATE
+    rationale: 童装内容不采集可识别个体信息，个体适配只用中性字段。
+    evidence:
+    - PRD 9.4
+    - PRD 10.1
+    required_controls:
+    - 中性字段
+    - 品类安全合同
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-02
+    issue: AIGC 标识义务
+    applicable_stage: M7
+    founder_decision: DEFER
+    rationale: 平台标注规则待形态裁决后核验。
+    evidence:
+    - PRD 10.4
+    required_controls:
+    - 发布前标识检查
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-03
+    issue: 个人信息授权与保存期限
+    applicable_stage: M9
+    founder_decision: MITIGATE
+    rationale: 完整顾客档案模式须取得顾客有效授权，门店意愿不能代替授权。
+    evidence:
+    - PRD 6.1
+    - D-11
+    required_controls:
+    - 授权状态字段
+    - 删除流程 checker
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-04
+    issue: 数据出境
+    applicable_stage: M12
+    founder_decision: DEFER
+    rationale: 境外模型 API 处理个体资料须先过出境核验；生产选型在 M12 前裁决。
+    evidence:
+    - D-07 第三项
+    - D-10
+    required_controls:
+    - 出境核验清单
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-05
+    issue: 去标识化不等于匿名化
+    applicable_stage: M9
+    founder_decision: ACCEPT
+    rationale: 去掉姓名仍可关联到具体顾客的档案属个人信息，按个人信息处理。
+    evidence:
+    - D-11 法务警示条款
+    required_controls:
+    - 敏感信息处理流程
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-06
+    issue: 商品图片权利
+    applicable_stage: M8
+    founder_decision: MITIGATE
+    rationale: 商品图片只取品牌授权来源，不抓取网络图片。
+    evidence:
+    - PRD 10.4 RG-07
+    required_controls:
+    - 图片来源登记
+    - 合成资产标记
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false
+  - compliance_item_id: CMP-07
+    issue: 法律、医疗与性能承诺边界
+    applicable_stage: M7
+    founder_decision: MITIGATE
+    rationale: 运动与功能类表述不得构成伤病预防或医疗效果承诺。
+    evidence:
+    - SP-HC-02
+    - SP-HC-03
+    required_controls:
+    - 硬约束判定
+    - 高风险全审
+    next_review_milestone: M2
+    decision_date: '2026-08-13'
+    external_legal_opinion_obtained: false

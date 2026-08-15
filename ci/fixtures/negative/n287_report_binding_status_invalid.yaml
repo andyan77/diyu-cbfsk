@@ -1,0 +1,24 @@
+fixture_id: N287
+description: 报告登记了一个既非 templated 也非 legacy_untemplated 的状态。（REPORT_BINDING_STATUS_INVALID）
+checker: check_report_number_traceability
+expected: FAIL
+payload:
+  reports:
+  - report: 11_reports_and_receipts/sample/sample_delivery_report.md
+    status: templated
+    template: 11_reports_and_receipts/sample/sample_delivery_report.md.tmpl
+    template_exists: true
+    report_exists: true
+    ref_errors: []
+    rendered: '本包共 147 条挂账。
+
+      '
+    on_disk: '本包共 147 条挂账。
+
+      '
+    untraced_counts: []
+  - report: 11_reports_and_receipts/m0_delivery_report.md
+    status: maybe_later
+    reason: 立规前的历史报告；回改等于用今天的口径重写昨天的现场。
+  declared_report_count: 2
+  unregistered_reports: []

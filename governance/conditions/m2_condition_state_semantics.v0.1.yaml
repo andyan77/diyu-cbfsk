@@ -1,0 +1,249 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-CONDITION-STATE-SEMANTICS
+artifact_id: m2_condition_state_semantics.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第十一节（条件与状态语义分离）
+corrects: v1.0 把「条件」与「状态」混为一谈
+
+principle: >-
+  条件（COND-*）问的是「某个前置动作做了没有」，状态问的是「东西现在到哪一步了」。
+  把两者绑在一起，就会出现「存储明明已经就绪，却因为资产还没生成而不能关条件」这种死锁——
+  或者反过来，为了关条件而谎报资产状态。
+
+cond_011:
+  id: COND-011
+  is: 隐藏存储 Provision 条件
+  is_not: 隐藏资产就绪条件
+  closable_before_asset_generation: true
+  closure_requires:
+    - store_a_provisioning_attestation
+    - access_matrix
+    - founder_attestation
+  current_status: EVIDENCE_SUBMITTED
+  current_status_basis: >-
+    Founder 在收口裁决第三节第 1 项声明：已在另一账号、另一台电脑 provision 私有隐藏资产仓库
+    （STORE-A），并设任务级角色 FOUNDER_HIDDEN_BENCHMARK_STEWARD。该声明构成三项要件中的
+    founder_attestation。
+  still_missing_for_closure:
+    - id: store_a_provisioning_attestation
+      what: STORE-A 的仓库标识与 provision 证明（不需要内容，只需要标识与创建事实）
+      owner: FOUNDER_PRODUCT_AUTHORITY
+    - id: access_matrix
+      what: 访问控制矩阵——须显示 Planner / Codex / 知识引出工作面均不可读
+      owner: FOUNDER_PRODUCT_AUTHORITY
+  why_execution_side_did_not_close_it: >-
+    三项要件里执行侧只拿到了一项（Founder 声明）。凭一项关掉一个三要件条件，
+    等于把「Founder 说做了」记成「已核验做了」——而 COND-011 的全部意义就在于核验隔离是否真的生效。
+    执行侧因此把状态推进到 EVIDENCE_SUBMITTED（台账允许的合法状态），不推进到 CLOSED。
+  execution_side_did_not_modify_storage_contract: true
+
+m2_hidden_assets_status:
+  purpose: 隐藏资产就绪度单列，不与 COND-011 混用。
+  allowed_values:
+    - NOT_STARTED
+    - STORAGE_READY
+    - GENERATED
+    - PRIVATE_REVIEWED
+    - PRIVATE_FROZEN
+    - PUBLIC_MANIFEST_IMPORTED
+  current_value: NOT_STARTED
+  value_semantics:
+    NOT_STARTED: 尚未生成任何隐藏资产。
+    STORAGE_READY: COND-011 三项要件齐备并关闭，可以开始生成。
+    GENERATED: 已生成，尚未私有审查。
+    PRIVATE_REVIEWED: Founder 侧私有审查完成。
+    PRIVATE_FROZEN: 私有清单已冻结。
+    PUBLIC_MANIFEST_IMPORTED: 净化 Manifest 已通过边界检查并导入主仓。
+  why_not_storage_ready: >-
+    STORAGE_READY 的门槛是 COND-011 关闭，而 COND-011 现在是 EVIDENCE_SUBMITTED。
+    Founder 已声明 provision 完成，但访问矩阵与仓库标识尚未交到执行侧，无法核验隔离是否生效。
+  advance_rule: 状态只能在其前置条件被核验后推进，不得因「应该已经好了」提前推进。
+  failure_state: HIDDEN_ASSET_STATUS_AHEAD_OF_EVIDENCE
+
+cond_007:
+  id: COND-007
+  is: 阈值冻结条件
+  has_hidden_side: false
+  has_hidden_side_note: >-
+    COND-007 不存在「隐藏侧」。工作面 B（Steward）无权关闭它——阈值冻结的依据是公开校准，
+    不是隐藏集表现；用隐藏集定阈值就是让考生先看考卷再定及格线。
+  closable_by: FOUNDER_PRODUCT_AUTHORITY
+  closure_sequence:
+    - 工作面 A 完成公开校准（90 例校准集已落盘）
+    - 两侧隔离评审实际执行并产出记录
+    - 工作面 A 给出阈值建议（带证据来源）
+    - Founder 最终冻结
+  current_status: OPEN
+  current_blocker: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  workface_b_may_close: false
+  failure_state: THRESHOLD_CLOSED_BY_WRONG_ROLE
+
+stop_taxonomy:
+  purpose: STOP 不是一种东西。分型之后才能说清「停的是什么，什么还能继续」。
+  types:
+    - id: GLOBAL_STOP
+      scope: 全项目
+      allowed_to_continue: []
+      example: 命中不可逆红线
+    - id: MILESTONE_BLOCK
+      scope: 该里程碑不得收口
+      allowed_to_continue: [该里程碑内不依赖阻塞项的其余工作, 其他里程碑的规划]
+      example: 里程碑强制交付未闭环
+    - id: PACKAGE_BLOCK
+      scope: 该执行包不得完成
+      allowed_to_continue: [其他执行包]
+    - id: SUBSYSTEM_BLOCK
+      scope: 某个子系统不得推进
+      allowed_to_continue: [其他子系统, 该子系统的合同与规则落盘]
+      example: 隐藏资产子系统因存储未就绪而不得生成
+    - id: DEPENDENCY_WAIT
+      scope: 等待外部输入
+      allowed_to_continue: [不依赖该输入的一切工作]
+      example: 等待 Founder 提供 Guardian 报告全文
+  current_stops:
+    - stop_id: HIDDEN_STORAGE_NOT_PROVISIONED
+      types: [SUBSYSTEM_BLOCK, MILESTONE_BLOCK]
+      subsystem: 隐藏评测资产
+      milestone_effect: M2 不得冻结（18 项交付中的 4 项因此不到 READY）
+      allowed_to_continue: 公开侧全部工作（本包即在此授权下完成 A-1—A-8）
+      record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+    - stop_id: CALIBRATION_REVIEW_EVIDENCE_MISSING
+      types: [DEPENDENCY_WAIT]
+      waiting_for: 两侧隔离评审实际执行
+      allowed_to_continue: 校准集、Prompt、聚合与阈值决策文件的落盘（已完成）
+      record: 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml
+    - stop_id: GUARDIAN_REPORT_FULLTEXT_NOT_PROVIDED
+      types: [DEPENDENCY_WAIT]
+      waiting_for: 最终 Head 的 Guardian 报告全文
+      allowed_to_continue: 六条非阻塞发现的处置（已完成）＋ M2 收口其余全部工作
+      record: governance/reports/guardian_report_registry.v0.1.yaml
+      blocking_for_m2_closeout: false
+      blocking_for_m2_closeout_authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_3_guardian_report
+      ruling_effect: >-
+        旧 Guardian 结论已依 §14 失效，占位记录保留且不得被表述为已落盘原文；
+        该项不再作为 M2 收口阻断项。最终 Head 仍必须取得完整、可哈希、可落盘的报告原文——
+        「不阻断收口」与「可以没有」是两件事。
+
+candidate_status:
+  value: M2_PARTIAL_DELIVERY_BLOCKED
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  downstream_note: >-
+    m2_interface_handoff 在 Founder 冻结前仅为候选接口；M3/M4 不得作为正式基线消费。
+  m2_frozen: false
+  m2_frozen_note: >-
+    founder_signature_eligible=true 也不等于 m2_frozen=true。后者只由 Founder 最终签署翻转。
+
+ruleset_hardening:
+  owner: FOUNDER_PRODUCT_AUTHORITY
+  scope: 主仓 main 分支保护规则（禁 force push / 禁删除 / 线性历史 / 三个 workflow 必须成功）
+  founder_must_be_bypass_actor: true
+  founder_must_be_bypass_actor_reason: 否则命令行 FF-ONLY 合并会被规则本身拦下。
+  blocking_for_m2: false
+  counted_in_eighteen_deliverables: false
+  in_repo_evidence_role: 仓库内 main 状态判据继续作为二次证据（check_m2_main_state_guard）。
+
+final_asset_existence_gate:
+  purpose: 进入 Guardian 的前置。以下全部成立方可。
+  all_required: true
+  items:
+    - {id: FG-01, criterion: 18 项交付全 READY, current: false, blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED}
+    - {id: FG-02, criterion: 校准 90 例且 45 格无空, current: true}
+    - {id: FG-03, criterion: 两侧评审结果均实际存在, current: false, blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING}
+    - {id: FG-04, criterion: 高风险 Founder 审查 100%, current: false, blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING}
+    - {id: FG-05, criterion: 阈值建议非 null, current: false, blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING}
+    - {id: FG-06, criterion: STORE-A 已 provision, current: false, blocked_by: COND-011 三要件未齐}
+    - {id: FG-07, criterion: 隐藏品牌数落在 30—50 且按最低构成计数, current: false, blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED}
+    - {id: FG-08, criterion: 评测题数达下限, current: false, blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED}
+    - {id: FG-09, criterion: 图像实际存在, current: false, blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED}
+    - {id: FG-10, criterion: 私有清单已冻结, current: false, blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED}
+    - {id: FG-11, criterion: 泄漏与同质性双检查 PASS, current: false, blocked_by: 同质性侧无可比较对象}
+    - {id: FG-12, criterion: 净化 Manifest 已导入主仓, current: false, blocked_by: HIDDEN_STORAGE_NOT_PROVISIONED}
+  satisfied_count: 1
+  total_count: 12
+  gate_open: false
+
+hidden_generation_timing_gate:
+  contract: governance/conditions/hidden_generation_timing_gate.v0.1.yaml
+  state_field: public_blueprint_stable_for_hidden_generation
+  current_value: false
+  relation_to_blueprint_status: >-
+    m2_public_blueprint_status 说的是「输入包可用了」，时序门说的是「可以开始正式生产了」。
+    前者为真而后者为假，正是当前状态：Steward 可以建工具链、可以做 2 个品牌的试产批，
+    但不得开 40 品牌正式批——蓝图还可能被校准结果改动。
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_7_hidden_generation_timing_gate
+
+merge_readiness_statement:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001 article_c8_four_non_blocking NB-3
+  required_wording: 当前候选满足快进前提，最终在合并瞬间重新核验。
+  must_not_be_stated_as: 平台已保证
+  why: >-
+    「当前可快进」是一个观测结果，观测发生在观测的那一刻。main 在此之后前进一步，
+    这句话就不再成立，而说过这句话的报告不会自己更新。
+    把它写成「平台已保证」，读的人会以为有人在合并那一刻替他挡着——没有人挡着。
+  single_definition: true
+  consumed_by: 各交付报告以 ref 引用本字段，不各自复述一句。
+
+correction_open_items:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-CORRECTION-001
+  items:
+    - open_item: OI-M2-CALIBRATION-CANDIDATES
+      what: 90 个候选输出由主执行侧撰写，属评测刺激材料，尚未经 Founder 确认边界锚点。
+      status: OPEN
+      owner: FOUNDER_PRODUCT_AUTHORITY
+      blocks: 校准包分发
+    - open_item: OI-M2-ANCHOR-TRUTH-CONFIRMATION
+      what: founder_boundary_anchor_truth.v0.1 由执行侧起草，founder_confirmation 五个绑定字段全部为空。
+      status: OPEN
+      owner: FOUNDER_PRODUCT_AUTHORITY
+    - open_item: OI-M2-EMPIRICAL-CUTPOINT-INPUTS
+      what: 2 条 EMPIRICAL_CUTPOINT 指标的估计输入尚不存在（两侧记录为 0、Founder 审查队列为空），因此不出建议值。
+      status: OPEN
+      blocked_by: [CALIBRATION_REVIEW_EVIDENCE_MISSING, FOUNDER_REVIEW_QUEUE_EMPTY]
+
+anchor_closures:
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors
+  items:
+    - open_item: OI-M2-ANCHOR
+      closed_by: ANCHOR-1
+      how: 多模态边界以 PRD v1.2 分层视觉推断条款定锚；D-10 认定为 Founder 侧编号笔误，真实编号 D-12／D-23 已绑定并登记。
+      status: CLOSED
+    - open_item: OI-M2-NAMING
+      closed_by: ANCHOR-2
+      how: 现存 FR-* 保留为历史合法命名，不批量重命名；FOUNDER- 前缀规则对本裁决之后新建文件生效。
+      status: CLOSED
+    - open_item: OI-M2-GUARDIAN-REPORT
+      closed_by: ANCHOR-3
+      how: 旧结论依 §14 失效、占位记录保留、不再作为 M2 收口阻断项；最终 Head 仍须取得全文。
+      status: CLOSED_AS_NON_BLOCKING
+      residual_obligation: 最终 Head 的 Guardian 报告全文
+    - open_item: OI-M2-METRIC-GROUPING
+      closed_by: ANCHOR-4
+      how: PRD 10.2 逐项 metric ID 为机器真源；Brief 分组说法不具覆盖数量真源地位。
+      status: CLOSED
+
+m2_public_blueprint_status:
+  value: M2_PUBLIC_BLUEPRINT_READY_FOR_HIDDEN_GENERATION
+  authorized_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第八节第 1 项
+  meaning: >-
+    公开侧蓝图已齐备，可以作为隐藏侧生成的输入。**只表示输入包可用**，
+    不表示 M2 已交付、不表示可以冻结、不表示隐藏资产已开始生成。
+  is_not_execution_status: true
+  is_not_execution_status_note: >-
+    本状态不进 execution_status 枚举。execution_status 仍为 M2_IN_PROGRESS——
+    往那个枚举里加值需要单独的状态位授权，本裁决授权的是一个新状态字段，不是改那条枚举。
+  bundle: 03_m2_evaluation_foundation/steward/hidden_generation_input_bundle.v1.1.0.yaml
+  preconditions_met:
+    - 18 项交付覆盖矩阵已生成且逐项有证据哈希
+    - 能力矩阵四轴可寻址
+    - 三张横向卡 + 七类纵向合同齐备
+    - 可接受决策边界注册表齐备
+    - 隐藏资产生成合同含数量下限与最低构成
+    - 硬门定义含 11→8 映射
+  does_not_imply:
+    - M2 已交付
+    - 可以冻结 M2
+    - 隐藏资产已开始生成
+    - COND-011 已关闭

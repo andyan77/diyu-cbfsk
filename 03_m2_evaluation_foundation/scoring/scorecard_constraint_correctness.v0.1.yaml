@@ -1,0 +1,210 @@
+schema_version: '0.1'
+scorecard_id: DIYU-CBFSK-M2-SCORECARD-CONSTRAINT-CORRECTNESS
+artifact_id: scorecard_constraint_correctness.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+evaluation_task_class: constraint_correctness
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+scoring_mode: binary_0_1
+gold_answer_allowed: true
+gold_answer_allowed_reason: 硬约束题只有违反与不违反两种事实状态，不存在合法多解。
+acceptable_interval_used: false
+solution_family_used: false
+must_not_score_disagreement_as_error: false
+must_not_score_disagreement_as_error_note: 本类不适用——硬约束上的分歧不是合法分歧，是有一方错了。
+verdict_values:
+- 0
+- 1
+partial_credit_allowed: false
+partial_credit_forbidden_reason: 给硬约束打半分等于承认「违反了一半安全约束」，这不是可接受状态。
+binding_kind: m1_hard_constraint_id
+bound_hard_constraint_ids:
+- FT-HC-01
+- FT-HC-02
+- FT-HC-03
+- FT-HC-04
+- KW-HC-01
+- KW-HC-02
+- KW-HC-03
+- KW-HC-04
+- KW-HC-05
+- SP-HC-01
+- SP-HC-02
+- SP-HC-03
+- SP-HC-04
+- SP-HC-05
+- SP-HC-06
+- TT-HC-01
+- TT-HC-02
+- TT-HC-03
+- TT-HC-04
+- TT-HC-05
+- TT-HC-06
+- WW-HC-01
+- WW-HC-02
+- WW-HC-03
+- WW-HC-04
+bound_conflict_priority_rule_ids:
+- CP-01
+- CP-02
+- CP-06
+conflict_rule_role:
+  CP-01: 品类安全硬约束优先——多条约束冲突时先判它
+  CP-02: 多品类命中取更严——组合场景下判定基准
+  CP-06: 无默认品类——不得因未识别品类而套用女装规则
+coverage:
+  hard_constraints_bound: 25
+  categories_covered:
+  - CAT-FAMILY-TREND
+  - CAT-KIDSWEAR
+  - CAT-SPORT-TREND
+  - CAT-TEEN-TREND
+  - CAT-WOMENSWEAR
+  must_cover_all_m1_hard_constraints: true
+bindings:
+- hard_constraint_id: FT-HC-01
+  category_id: CAT-FAMILY-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: FT-HC-02
+  category_id: CAT-FAMILY-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: FT-HC-03
+  category_id: CAT-FAMILY-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: FT-HC-04
+  category_id: CAT-FAMILY-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: KW-HC-01
+  category_id: CAT-KIDSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: KW-HC-02
+  category_id: CAT-KIDSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: KW-HC-03
+  category_id: CAT-KIDSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: KW-HC-04
+  category_id: CAT-KIDSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: KW-HC-05
+  category_id: CAT-KIDSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: SP-HC-01
+  category_id: CAT-SPORT-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: SP-HC-02
+  category_id: CAT-SPORT-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: SP-HC-03
+  category_id: CAT-SPORT-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: SP-HC-04
+  category_id: CAT-SPORT-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: SP-HC-05
+  category_id: CAT-SPORT-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: SP-HC-06
+  category_id: CAT-SPORT-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: TT-HC-01
+  category_id: CAT-TEEN-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: TT-HC-02
+  category_id: CAT-TEEN-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: TT-HC-03
+  category_id: CAT-TEEN-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: TT-HC-04
+  category_id: CAT-TEEN-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: TT-HC-05
+  category_id: CAT-TEEN-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: TT-HC-06
+  category_id: CAT-TEEN-TREND
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: WW-HC-01
+  category_id: CAT-WOMENSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: WW-HC-02
+  category_id: CAT-WOMENSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: WW-HC-03
+  category_id: CAT-WOMENSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+- hard_constraint_id: WW-HC-04
+  category_id: CAT-WOMENSWEAR
+  source: 01_contracts_and_schemas/category_adapter_contracts/*.adapter.v0.1.yaml
+  verdict_if_violated: 0
+  verdict_if_respected: 1
+fail_closed_on_missing_input: true
+fail_closed_note: 输入不足时判 fail-closed 而不是猜——猜出来的合规判定比不判更危险。
+machine_checkable_fields:
+  verdict:
+    type: integer
+    enum:
+    - 0
+    - 1
+  violated_hard_constraint_id:
+    type: string
+    nullable: true
+    must_resolve_to: m1_hard_constraint_id
+  applied_conflict_priority_rule_id:
+    type: string
+    nullable: true
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null

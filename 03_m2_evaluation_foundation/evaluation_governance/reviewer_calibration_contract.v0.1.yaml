@@ -1,0 +1,78 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-REVIEWER-CALIBRATION-CONTRACT
+artifact_id: reviewer_calibration_contract.v0.1
+canonical_name: reviewer_calibration_contract
+legacy_compatible_name: rater_calibration_contract
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_CONTRACT_LANDED
+artifact_lifecycle_state: draft
+adr_ref: ADR-005
+prd_anchors: [PRD-10.2, PRD-15.3, PRD-15.4, PRD-8.4]
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 8 项
+canonical_name_source: governance/bootstrap/role_operating_model.v0.2.yaml review_mode.reviewer_calibration_contract
+
+scope_note:
+  this_package_delivers: 合同与最小机器可检字段
+  this_package_does_not_deliver:
+    - 评测执行框架
+    - 任何评分数据
+    - 任何标定锚点题内容
+  freeze_status: NOT_FROZEN
+  freeze_at: M2 冻结（Founder 精确 Prompt 批准的不可逆包）
+
+required_elements:
+  source: governance/bootstrap/role_operating_model.v0.2.yaml review_mode.reviewer_calibration_contract.must_contain
+  items:
+    - id: RC-01
+      element: Founder 标定锚点题
+      machine_field: anchor_item_count
+      landed_content_in_this_package: false
+      landed_in_later_package: M2-EP04
+      anchor_item_source: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+      anchor_item_count_now: 90
+      anchor_item_note: >-
+        90 例公开校准集在 M2-EP04 落盘，充当本合同的标定锚点题。锚点题必须对评审员可见，
+        因此只能取自公开侧——用隐藏集当锚点，评审员标定完就等于看过考卷。
+    - id: RC-02
+      element: AI 评审员盲评
+      machine_field: blind_review_enabled
+    - id: RC-03
+      element: AI 评审分歧率
+      machine_field: ai_reviewer_disagreement_rate
+    - id: RC-04
+      element: Founder 覆盖与推翻记录
+      machine_field: founder_override_rate
+    - id: RC-05
+      element: 模型版本变化后重新标定
+      machine_field: recalibration_required_on_model_version_change
+
+machine_checkable_fields:
+  anchor_item_count: {type: integer, minimum: 1, current_value: 90, frozen_at: M2}
+  blind_review_enabled: {type: boolean, current_value: true}
+  ai_reviewer_disagreement_rate: {type: number, threshold_status: M2_FREEZE_REQUIRED, current_value: null}
+  founder_override_rate: {type: number, threshold_status: M2_FREEZE_REQUIRED, current_value: null}
+  founder_sample_review_rate: {type: number, threshold_status: M2_FREEZE_REQUIRED, current_value: null}
+  high_risk_founder_full_review_rate:
+    type: number
+    required_value: 1.0
+    threshold_status: NOT_ADJUSTABLE
+    note: 高风险 Founder 全审覆盖率＝100%，不可抽样，不是可调阈值。
+  recalibration_required_on_model_version_change: {type: boolean, current_value: true}
+
+review_statement_discipline:
+  internal_panel_members: [隔离 GPT, 隔离 Claude, 规则 Checker, Founder]
+  must_not_be_stated_as:
+    - 外部专家共识
+    - 外部专家通过率
+    - 独立第三方验证
+  existing_guard: ci/checkers/check_external_review_claims.py
+  external_human_review: false
+  external_legal_opinion: false
+
+failure_states:
+  - CALIBRATION_ANCHOR_MISSING
+  - RECALIBRATION_SKIPPED_AFTER_MODEL_CHANGE
+  - HIGH_RISK_COVERAGE_BELOW_100
+  - EXTERNAL_REVIEW_MISREPRESENTED

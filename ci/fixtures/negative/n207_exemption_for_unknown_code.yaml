@@ -1,0 +1,22 @@
+fixture_id: N207-exemption-for-unknown-code
+description: 登记册挂着一条 checker 早已不再声明的码。
+checker: check_error_code_fixture_coverage
+expected: FAIL
+payload:
+  declared:
+  - checker: check_a
+    code: CODE_ONE
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_THREE
+  uncovered:
+  - checker: check_a
+    code: CODE_TWO
+  fixture_count: 12
+  ledger_entries:
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_GONE
+  declared_cap: 1

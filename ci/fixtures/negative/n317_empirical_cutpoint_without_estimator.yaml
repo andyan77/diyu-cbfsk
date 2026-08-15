@@ -1,0 +1,165 @@
+fixture_id: N317
+description: 某条指标声称是经验切点，却没有 estimator——没有算法的「实测值」，只是换个说法的政策取值。（EMPIRICAL_CUTPOINT_WITHOUT_ESTIMATOR）
+checker: check_m2_calibration_review
+expected: FAIL
+payload:
+  failure_state: null
+  declared_prompt_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  actual_prompt_sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  expected_records_per_side: 2
+  required_record_fields:
+  - case_id
+  - candidate_id
+  - reviewer_role
+  - model
+  - model_version
+  - review_prompt_hash
+  - judgment
+  - score
+  - hard_gate_result
+  - disagreement_code
+  - review_note
+  - reviewed_at
+  allowed_judgments:
+  - ACCEPT
+  - REJECT
+  - AMBIGUOUS
+  allowed_hard_gate_values:
+  - PASS
+  - FAIL
+  - NOT_APPLICABLE
+  allowed_disagreement_codes:
+  - AMBIGUOUS_SCENARIO
+  - BOUNDARY_TOO_WIDE
+  - BOUNDARY_TOO_NARROW
+  - CLASS_MISASSIGNED
+  - HARD_GATE_NOT_APPLICABLE
+  - MISSING_INPUT_OBJECT
+  constraint_judgment_score_binding:
+    ACCEPT: 1.0
+    REJECT: 0.0
+    AMBIGUOUS: 0.0
+  cases:
+  - case_id: CAL-001
+    evaluation_task_class: constraint_correctness
+    hard_gate_refs:
+    - HG-04
+    candidate_id: CAND-CAL-001
+    has_candidate_output: true
+  - case_id: CAL-003
+    evaluation_task_class: mechanism_correctness
+    hard_gate_refs:
+    - HG-02
+    candidate_id: CAND-CAL-003
+    has_candidate_output: true
+  sides:
+  - side_id: GPT
+    reviewer_role: ISOLATED_GPT_REVIEWER
+    declared_record_count: 2
+    actual_record_count: 2
+    executed: true
+    produced_by_workspace: ws-gpt
+    produced_by_main_execution_side: false
+    records:
+    - case_id: CAL-001
+      candidate_id: CAND-CAL-001
+      reviewer_role: ISOLATED_GPT_REVIEWER
+      model: m
+      model_version: v1
+      review_prompt_hash: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      judgment: ACCEPT
+      score: 1.0
+      hard_gate_result:
+        HG-04: PASS
+      disagreement_code: null
+      review_note: null
+      reviewed_at: '2026-08-14T10:00:00Z'
+    - case_id: CAL-003
+      candidate_id: CAND-CAL-003
+      reviewer_role: ISOLATED_GPT_REVIEWER
+      model: m
+      model_version: v1
+      review_prompt_hash: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      judgment: ACCEPT
+      score: 0.75
+      hard_gate_result:
+        HG-02: PASS
+      disagreement_code: null
+      review_note: null
+      reviewed_at: '2026-08-14T10:00:00Z'
+  - side_id: CLAUDE
+    reviewer_role: ISOLATED_CLAUDE_REVIEWER
+    declared_record_count: 2
+    actual_record_count: 2
+    executed: true
+    produced_by_workspace: ws-claude
+    produced_by_main_execution_side: false
+    records:
+    - case_id: CAL-001
+      candidate_id: CAND-CAL-001
+      reviewer_role: ISOLATED_CLAUDE_REVIEWER
+      model: m
+      model_version: v1
+      review_prompt_hash: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      judgment: ACCEPT
+      score: 1.0
+      hard_gate_result:
+        HG-04: PASS
+      disagreement_code: null
+      review_note: null
+      reviewed_at: '2026-08-14T10:00:00Z'
+    - case_id: CAL-003
+      candidate_id: CAND-CAL-003
+      reviewer_role: ISOLATED_CLAUDE_REVIEWER
+      model: m
+      model_version: v1
+      review_prompt_hash: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      judgment: ACCEPT
+      score: 0.5
+      hard_gate_result:
+        HG-02: PASS
+      disagreement_code: null
+      review_note: null
+      reviewed_at: '2026-08-14T10:00:00Z'
+  aggregation_computed: true
+  aggregation_execution_side_adjudicated: false
+  aggregation_unfrozen_threshold_used: false
+  aggregation_declared_statistics:
+    total_cases_both_sided: 2
+    verdict_conflict_count: 0
+    verdict_conflict_rate: 0.0
+    legitimate_disagreement_count: 1
+    hard_gate_conflict_count: 0
+  aggregation_recomputed_statistics:
+    total_cases_both_sided: 2
+    verdict_conflict_count: 0
+    verdict_conflict_rate: 0.0
+    legitimate_disagreement_count: 1
+    hard_gate_conflict_count: 0
+  prd_metrics:
+    内部评审通过率: ≥ 80%
+  threshold_items:
+  - metric: 内部评审通过率
+    threshold_kind: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_recommendation: null
+    evidence_source: PRD v1.2 10.2
+    founder_decision: null
+    founder_decision_commit: null
+    blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  declared_metric_count: 1
+  hidden_set_tuning_forbidden: true
+  metric_mapping:
+  - metric_id: 内部评审通过率
+    evidence_kind: EMPIRICAL_CUTPOINT
+    estimator: null
+    minimum_sample_count: 90
+    estimator_inputs_available: false
+    recomputed_by_checker_from_raw_records: true
+    blocked_by: CALIBRATION_REVIEW_EVIDENCE_MISSING
+    false_acceptance_policy: 偏严
+    false_rejection_policy: 偏松
+  mapping_counts:
+    metrics: 1
+    policy_threshold: 0
+    empirical_cutpoint: 1
+    empirical_with_inputs_available: 0

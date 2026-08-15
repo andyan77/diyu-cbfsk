@@ -1,0 +1,29 @@
+fixture_id: N309
+description: Manifest 与评审状态记录对 Prompt 哈希各说各话，评审记录会绑到一份没人读过的正文上。（PACK_PROMPT_HASH_MISMATCH）
+checker: check_calibration_launch_pack
+expected: FAIL
+payload:
+  missing_files: []
+  derivation_drift: []
+  hash_drift: []
+  declared_case_count: 4
+  declared_batch_count: 2
+  declared_batch_size: 2
+  source_case_ids:
+  - CAL-001
+  - CAL-002
+  - CAL-003
+  - CAL-004
+  pack_case_ids:
+  - CAL-001
+  - CAL-002
+  - CAL-003
+  - CAL-004
+  batch_case_ids:
+  - - CAL-001
+    - CAL-002
+  - - CAL-003
+    - CAL-004
+  forbidden_hits: []
+  manifest_prompt_sha256: 3feb3b7f16ac49e0716227ebb7c1225b82ec9ccc477f513d6a10c94cdf838365
+  state_prompt_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

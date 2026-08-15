@@ -1,0 +1,150 @@
+schema_version: "0.1"
+founder_ruling_id: DIYU-CBFSK-FR-CALIBRATION-004
+project_id: DIYU-CBFSK-001
+title: 校验强度分级（定稿 v1.1）
+ruling_date: "2026-08-13"
+issued_by: Founder
+issued_via: founder_direct_dispatch
+ruling_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+signature_receipt: DIYU-CBFSK-FOUNDER-M2-KICKOFF-SIGNATURE-001
+signature_item: SIG-M2-03
+landed_in: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml（M2-EP01 首个 Commit）
+
+provenance:
+  prior_delivery_mode: 仅以会话方式交付并经 Founder 确认，从未形成仓库文件
+  first_time_in_repository: true
+  authoritative_version: 本文件（M2 启动包 v1.1 附件A 定稿文本）
+  authoritative_from: 本签署
+  not_retroactive: >-
+    本裁决自本签署起为唯一有效版本。此前 DIYU-CBFSK-FR-GRANULARITY-005 修正② 已引用
+    「FR-CALIBRATION-004 七类硬门」，但当时仓库中并无该文件；此处补齐真源，
+    不追述为早已落盘，也不追认此前任何按该裁决自称已合规的表述。
+
+principle: 验证强度与风险成正比。
+
+hard_gates:
+  count: 7
+  nature: 确定性机器检查
+  on_fail: 停止
+  items:
+    - id: HG-1
+      name: 隐藏集隔离与泄漏
+      statement: hidden 资产不得出现在可见面/主仓可见路径，引用只经许可通道
+      existing_checker: ci/checkers/check_hidden_benchmark_boundary.py
+      existing_negative_fixture: ci/fixtures/negative/n09_hidden_items_in_main_repo.yaml
+      m2_ep01_addition: 03_m2_evaluation_foundation/evaluation_governance/evaluation_asset_classification_profile.v0.1.yaml（分类与隔离断言，enforcement 委派既有实现）
+    - id: HG-2
+      name: 品类安全
+      statement: 童装/亲子/青少年等品类安全约束不得被覆盖或降级（含「女装规则不得默认覆盖」）
+      existing_checker: ci/checkers/check_m1_object_coverage.py
+      existing_negative_fixture: ci/fixtures/negative/n76_m1_womenswear_rule_overreach.yaml
+      m2_ep01_addition: null
+      note: 五类品类适配合同属 M1-EP02，不在本包范围。
+    - id: HG-3
+      name: 库存真值
+      statement: 货盘/库存事实不得虚构，来源可追溯
+      existing_checker: ci/checkers/check_m1_object_coverage.py
+      existing_negative_fixture: ci/fixtures/negative/n69_m1_runtime_fact_in_long_term_truth.yaml
+      m2_ep01_addition: Envelope temporal / source_snapshot_version 与 runtime_validity_state 字段合同
+    - id: HG-4
+      name: 知识状态链
+      statement: 七级状态只能按合同迁移，禁止跳级与回写
+      canonical_source: 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml
+      m2_ep01_addition: >-
+        Envelope 三态严格分离——七级知识状态禁止写到非知识单元对象
+        （KNOWLEDGE_STATE_APPLIED_TO_RUNTIME_OBJECT），由 ci/checkers/check_m2_envelope_contract.py 守卫
+    - id: HG-5
+      name: 客户个人数据
+      statement: 授权模式外不得留存；匿名模式不得含身份字段
+      existing_checker: ci/checkers/check_m1_object_coverage.py
+      m2_ep01_addition: ci/checkers/check_m2_identity_isolation.py（禁止能力精确清单，结构化能力检测）
+    - id: HG-6
+      name: 产品真值版本标识
+      statement: 品牌事实/商品属性必须绑定版本与来源快照
+      existing_checker: ci/checkers/check_active_product_truth.py
+      m2_ep01_addition: Envelope 必填 source_commit（完整哈希）+ source_artifact_sha256 + schema_version
+    - id: HG-7
+      name: 里程碑红线
+      statement: 签名门控状态位、never_authorizable 红线、冻结物不得原位修改
+      existing_checker: ci/checkers/check_project_state.py
+      existing_negative_fixture: ci/fixtures/negative/n62_m2_started_without_authorization_entry.yaml
+      m2_ep01_addition: M1 冻结物漂移断言（M1_FROZEN_ARTIFACT_DRIFT），由 ci/checkers/check_m2_envelope_contract.py 守卫
+
+outside_hard_gates:
+  verification_level: 语义级核验
+  scope: 关注对象/合同/行为的语义一致
+  explicitly_not_required:
+    - 字节级检查
+    - 标点级检查
+    - 逐字对齐检查
+
+three_layer_hash_mechanism:
+  ruling: 退役
+  replacement: 签署绑定 commit 哈希与 artifact SHA256
+  landing_status: NO_RETIREMENT_FINAL
+  final_adjudication:
+    ruling: DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 第三节 ADJ-3
+    decision: no_retirement
+    verbatim: >-
+      维持三层，正式改判 no_retirement，撤销 ADJUDICATED_NOT_IMPLEMENTED 的挂起状态
+      （理由：L2/L3 无等效替代）。
+    supersedes_landing_status: ADJUDICATED_NOT_IMPLEMENTED
+    supersession_note: >-
+      挂起态的含义是「Founder 已裁决暂不做，但退役这件事仍悬着」。本次改判把它落定：
+      三层哈希**不退役**，本文件顶部那句 ruling: 退役 自此为历史条文，不再是待办。
+      原文一字未改，只在此标注其已被 DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001 改判。
+    basis_evidence:
+      prerequisites_conclusion: L1 可由 artifact SHA256 替代；L2/L3 无可用替代
+      prerequisites_record: 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+      evidence_level: static_verified
+    checker_status: ci/checkers/check_docx_canonical_hashes.py 维持 LIVE，三层全部保留
+    oi_01_status: CLOSED
+  adjudication:
+    ruling: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 OI-01
+    ruling_base_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+    decision: check_docx_canonical_hashes 维持有效不摘除
+    retirement_authorized: false
+    weakening_authorized: false
+    prerequisites_list: 03_m2_evaluation_foundation/evaluation_governance/three_layer_hash_retirement_prerequisites.v0.1.yaml
+    general_rule: 任何现役门禁的摘除或降级均为独立治理动作，须 Founder 单独授权，永不作为其他任务的副作用。
+    note: >-
+      本字段的 ruling 仍写「退役」——那是 FR-CALIBRATION-004 原文，不改写。
+      landing_status 由 NOT_IMPLEMENTED_IN_M2_EP01 改为 ADJUDICATED_NOT_IMPLEMENTED：
+      从「执行侧未做且待裁决」变为「Founder 已裁决不做」。两者都不表示已退役。
+  implementation_gap:
+    statement: >-
+      本条尚未在仓库落地。截至 M2-EP01 候选，三层哈希机制仍在运行且为绿：
+      ci/checkers/_common.py 提供唯一实现（binary / canonical_docx_xml / semantic_text），
+      ci/checkers/check_docx_canonical_hashes.py 消费它守 DOCX 产品真源基线，
+      合同文字在 governance/baseline/founder_pinned_baseline.v0.1.yaml hash_contract。
+    why_not_done_in_this_package:
+      - id: R1
+        reason: >-
+          退役属「降低既有验收严格度」——check_docx_canonical_hashes 当前是产品真源基线的活门禁，
+          直接摘除会在无替代门禁的情况下放开 DOCX 语义漂移检出，不是执行侧可自行决定的事。
+      - id: R2
+        reason: >-
+          M2-EP01 路径权限（启动包 v1.1 §5）未把既有 checker 与 baseline manifest 列入 allowed_update；
+          执行该退役必须触碰三类之外的既有文件，按 §5 应「STOP 并报告」而非自行越界。
+      - id: R3
+        reason: >-
+          本包 Phase 6 要求既有 + 新增 Checker 全绿。摘除一个既有 checker 不是「使其通过」，
+          而是改变判据集合，属合同层变更，需单独授权。
+    disposition: OPEN_ITEM_ROUTED_TO_FOUNDER
+    routed_to: M2 收口裁决（或 Founder 单独裁决）
+    required_before_retirement:
+      - Founder 明示退役授权（绑定 Commit）
+      - 替代门禁落地：签署绑定 commit 哈希 + artifact SHA256 的确定性 Checker 与负例夹具
+      - 更新 governance/baseline/founder_pinned_baseline.v0.1.yaml hash_contract 与相关派生值
+    m2_ep01_partial_compliance: >-
+      本包自身的签署与引用已按新口径执行：签署绑定完整 commit 哈希
+      6499431c66f7bf4a234bd830ee4c810e1ac78694，M1 产物引用绑定 artifact SHA256。
+      即新机制在本包内已使用，旧机制未被摘除——两者并存是本包如实状态，不称已退役。
+
+checker_requirement:
+  statement: 每道硬门至少一个确定性 Checker + 负例夹具
+  basis: EQ-3
+  m2_ep01_conformance: 本包新增的每个 Checker 均配至少一份 expected=FAIL 夹具
+
+signed_by: Founder
+signed_at: "2026-08-13"

@@ -1,0 +1,165 @@
+schema_version: '0.1'
+roster_id: DIYU-CBFSK-LIVE-GATE-ROSTER
+artifact_id: live_gate_roster.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001 OI-01 general_rule GR-GATE-01
+established_at_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+contract:
+  general_rule: 任何现役门禁的摘除或降级均为独立治理动作，须 Founder 单独授权，永不作为其他任务的副作用。
+  purpose: 本册是「当前有哪些现役门禁」的唯一登记处。ci/checkers/check_m2_gate_retirement_guard.py 把它与 ci/run_all_checks.py 的注册表双向比对：册子里写着
+    LIVE 却不在注册表里，就是有门禁被摘掉了；在注册表里却没登记，就是有门禁没进册子。
+  why_needed: OI-01 之前，摘掉一个 checker 只需从 run_all_checks 删一行——没有任何判据会发现。「不得静默降级门禁」在此之前只是一句承诺，本册让它变成可被机器发现的事实。
+  retirement_procedure:
+  - 1. Founder 单独授权（独立治理动作，不得夹带在其他任务里）
+  - 2. 本册对应条目 status 改 RETIRED，并填 retirement_authorization（裁决 ID + 完整 Commit 哈希 + 替代覆盖）
+  - 3. 才可从 run_all_checks 注册表移除
+  downgrade_equals_retirement: 削弱判据（放宽阈值、去掉分支、改成只警告不失败）与摘除同等对待，一律须单独授权。
+live_gate_count: 49
+gates:
+- checker: check_execution_uuid
+  status: LIVE
+  retirement_authorization: null
+- checker: check_baseline_hashes
+  status: LIVE
+  retirement_authorization: null
+- checker: check_docx_canonical_hashes
+  status: LIVE
+  retirement_authorization: null
+- checker: check_active_product_truth
+  status: LIVE
+  retirement_authorization: null
+- checker: check_role_operating_model
+  status: LIVE
+  retirement_authorization: null
+- checker: check_workspace_attestation
+  status: LIVE
+  retirement_authorization: null
+- checker: check_task_classification
+  status: LIVE
+  retirement_authorization: null
+- checker: check_conditional_ledger
+  status: LIVE
+  retirement_authorization: null
+- checker: check_compliance_ledger
+  status: LIVE
+  retirement_authorization: null
+- checker: check_hidden_benchmark_boundary
+  status: LIVE
+  retirement_authorization: null
+- checker: check_external_review_claims
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m0_fourteen_items
+  status: LIVE
+  retirement_authorization: null
+- checker: check_project_state
+  status: LIVE
+  retirement_authorization: null
+- checker: check_effort_baseline_consistency
+  status: LIVE
+  retirement_authorization: null
+- checker: check_instruction_projection
+  status: LIVE
+  retirement_authorization: null
+- checker: check_ruling_coverage
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m0_contract_completeness
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m0_zero_contact
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m0_deliverable_closure
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m1_object_coverage
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m1_category_adapters
+  status: LIVE
+  retirement_authorization: null
+- checker: check_sequential_registration
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_gate_retirement_guard
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_governance_landing
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_envelope_contract
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_identity_isolation
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_evaluation_governance
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_scoring_cards
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_tournament
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_hidden_assets
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_main_state_guard
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_cross_package_consistency
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_deliverable_closure
+  status: LIVE
+  retirement_authorization: null
+- checker: check_milestone_closure_coverage
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_capability_matrix
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_calibration_set
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_calibration_review
+  status: LIVE
+  retirement_authorization: null
+- checker: check_error_code_fixture_coverage
+  status: LIVE
+  retirement_authorization: null
+- checker: check_disclosure_discipline
+  status: LIVE
+  retirement_authorization: null
+- checker: check_guardian_report_binding
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_hidden_generation_readiness
+  status: LIVE
+  retirement_authorization: null
+- checker: check_identifier_resolution
+  status: LIVE
+  retirement_authorization: null
+- checker: check_stop_code_enforcement
+  status: LIVE
+  retirement_authorization: null
+- checker: check_report_number_traceability
+  status: LIVE
+  retirement_authorization: null
+- checker: check_calibration_launch_pack
+  status: LIVE
+  retirement_authorization: null
+- checker: check_founder_confirmation_binding
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_predistribution_sequence
+  status: LIVE
+  retirement_authorization: null
+- checker: check_m2_suspension_seal
+  status: LIVE
+  retirement_authorization: null
+- checker: check_collect_derivation_discipline
+  status: LIVE
+  retirement_authorization: null

@@ -1,0 +1,69 @@
+{
+  "judgment_values": [
+    "ACCEPT",
+    "REJECT",
+    "AMBIGUOUS"
+  ],
+  "judgment_is_not_score": "「这份东西算不算数」和「算数的这份做得多好」是两个问题。 用一个连续分数同时回答两个问题，必然要在某处偷偷设一条及格线—— 而那条线正是本轮还没冻结、要靠本轮证据去定的东西。",
+  "constraint_correctness": {
+    "score_values_allowed": [
+      0.0,
+      1.0
+    ],
+    "judgment_score_binding": {
+      "ACCEPT": 1.0,
+      "REJECT": 0.0,
+      "AMBIGUOUS": 0.0
+    }
+  },
+  "mechanism_correctness": {
+    "anchors": [
+      {
+        "score": 1.0,
+        "behaviour": "推理落在可接受区间内，且区间要求的每一步都写了出来——取出约束、给出落点、说明为什么这样成立。"
+      },
+      {
+        "score": 0.75,
+        "behaviour": "落在区间内，但有一步只给了结论没给依据。"
+      },
+      {
+        "score": 0.5,
+        "behaviour": "落在区间内，但只给结论，机制说明基本缺失。"
+      },
+      {
+        "score": 0.25,
+        "behaviour": "越出区间，但仍引用了正确的约束来源。"
+      },
+      {
+        "score": 0.0,
+        "behaviour": "越出区间，且未引用约束来源，或用该例明令禁止的推断方式得出结论。"
+      }
+    ],
+    "intermediate_values_allowed": false
+  },
+  "open_decision": {
+    "anchors": [
+      {
+        "score": 1.0,
+        "behaviour": "给出至少两个合法解族，每族都先通过该例硬约束，并说明什么条件变化会交换优先级。"
+      },
+      {
+        "score": 0.75,
+        "behaviour": "两族齐备且都通过硬约束，但未说明优先级交换条件。"
+      },
+      {
+        "score": 0.5,
+        "behaviour": "只给一族且该族成立；或两族齐备但其中一族缺机制说明。"
+      },
+      {
+        "score": 0.25,
+        "behaviour": "给出多族，但其中任一族越过该例硬约束。"
+      },
+      {
+        "score": 0.0,
+        "behaviour": "宣称唯一解，或全部解族均越过硬约束。"
+      }
+    ],
+    "intermediate_values_allowed": false
+  }
+}

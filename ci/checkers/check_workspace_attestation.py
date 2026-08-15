@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Workspace attestation records must be complete and must not claim un-witnessed isolation."""
+"""工作面见证：记录必须完整，且不得声称尚未发生的隔离已被见证。
+
+NB-M2-05：原实现只读一个写死的文件名，于是新里程碑的工作面没有落脚处——
+要么塞进那份治理任务的文件里（张冠李戴），要么干脆不记（无人发现）。
+现在改为自动发现 governance/workspaces/ 下全部见证文件，逐份校验；
+新增一个里程碑＝加一份文件，不动 checker。
+"""
 
 from __future__ import annotations
 
-from _common import cli, load_yaml
+from _common import ROOT, cli, load_yaml
 
 LABEL = "check_workspace_attestation"
 
@@ -18,6 +24,30 @@ REQUIRED_FIELDS = [
 
 
 def validate(payload: dict) -> list[str]:
+    """payload 形如 {"files": [<每份见证文件>...]}；逐份走同一套判据。"""
+    files = payload.get("files")
+    if files is None:
+        # 兼容单份形态：老夹具直接给一份见证文件的内容。
+        files = [payload]
+    if not files:
+        return ["NO_ATTESTATION_FILES: no workspace attestation file was discovered at all"]
+
+    errors: list[str] = []
+    seen_ids: dict[str, str] = {}
+    for one in files:
+        source = one.get("source_path", "<inline>")
+        task_id = one.get("task_id")
+        if task_id in seen_ids:
+            errors.append(
+                f"ATTESTATION_TASK_ID_COLLISION: {source} and {seen_ids[task_id]} both claim task_id {task_id!r}"
+            )
+        elif task_id:
+            seen_ids[task_id] = source
+        errors.extend(f"{e} [{source}]" if source != "<inline>" else e for e in _validate_one(one))
+    return errors
+
+
+def _validate_one(payload: dict) -> list[str]:
     errors: list[str] = []
 
     if payload.get("is_cryptographic_independence_proof") is not False:
@@ -80,9 +110,14 @@ def validate(payload: dict) -> list[str]:
 
 
 def collect() -> dict:
-    return load_yaml(
-        "governance/workspaces/workspace_attestation.DIYU-CBFSK-GOV-ROLE-OPERATING-MODEL-002.yaml"
-    )
+    files = []
+    for path in sorted((ROOT / "governance" / "workspaces").glob("workspace_attestation.*.yaml")):
+        if path.name.endswith(".schema.yaml"):
+            continue
+        one = load_yaml(str(path.relative_to(ROOT)))
+        one["source_path"] = str(path.relative_to(ROOT))
+        files.append(one)
+    return {"files": files}
 
 
 if __name__ == "__main__":

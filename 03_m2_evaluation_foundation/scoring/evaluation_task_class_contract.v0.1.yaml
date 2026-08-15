@@ -1,0 +1,53 @@
+schema_version: '0.1'
+contract_id: DIYU-CBFSK-M2-EVALUATION-TASK-CLASS-CONTRACT
+artifact_id: evaluation_task_class_contract.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+ruling_anchors:
+- D-28
+prd_anchors:
+- PRD-3.3-P-14
+- PRD-10.2
+- PRD-16.2
+principle: 合理多解（Non-Uniqueness by Design）：每一道题必须归入且只归入一类。
+class_count: 3
+classes:
+- evaluation_task_class: constraint_correctness
+  index: 1
+  scores_what: 硬约束是否被违反
+  scoring_mode: binary_0_1
+  gold_answer_allowed: true
+  frozen_object: hard_constraint_set
+  scorecard: 03_m2_evaluation_foundation/scoring/scorecard_constraint_correctness.v0.1.yaml
+- evaluation_task_class: mechanism_correctness
+  index: 2
+  scores_what: 推理是否落在可接受区间内
+  scoring_mode: interval_membership
+  gold_answer_allowed: false
+  frozen_object: acceptable_decision_boundary
+  scorecard: 03_m2_evaluation_foundation/scoring/scorecard_mechanism_correctness.v0.1.yaml
+- evaluation_task_class: open_decision
+  index: 3
+  scores_what: 解族是否合法、族内质量如何
+  scoring_mode: solution_family_membership_and_quality
+  gold_answer_allowed: false
+  frozen_object: acceptable_decision_boundary
+  scorecard: 03_m2_evaluation_foundation/scoring/scorecard_open_decision.v0.1.yaml
+gold_answer_forbidden_for:
+- mechanism_correctness
+- open_decision
+single_class_per_item: true
+failure_states:
+- SINGLE_GOLD_ANSWER_ON_OPEN_TASK
+- EVALUATION_TASK_CLASS_MISSING
+- EVALUATION_TASK_CLASS_AMBIGUOUS
+stop_condition:
+  id: SC-20
+  statement: mechanism_correctness 或 open_decision 类任务被设置唯一 Gold Answer → 停止 M2 冻结，改回可接受决策边界后重跑。
+risk:
+  id: R-22
+  name: 唯一答案偏误
+  severity_peer: R-09 评测泄漏

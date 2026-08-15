@@ -1,0 +1,150 @@
+schema_version: "0.1"
+card_id: DIYU-CBFSK-M2-CAPABILITY-CARD-MULTIMODAL-ATTRIBUTE
+artifact_id: multimodal_attribute_benchmark.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP05_SCOPE_ANCHORED
+artifact_lifecycle_state: validated
+card_axis: vertical_capability
+capability_dimension: multimodal_attribute
+capability_dimension_cn: 多模态属性 Benchmark
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 14 项
+ruling_anchors: [D-23, D-12]
+ruling_anchors_note: D-10 曾被派发件误引，EP05 裁决第零节自认为笔误；本卡按 D-12 与 D-23 定锚，不沿用错误编号。
+prd_anchors: [PRD-10.2, PRD-3.2, PRD-5.6, PRD-6-证据优先级, PRD-10.1-HG-10]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+founder_approval:
+  required: true
+  required_by: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第二节「定义结果标记为待 Founder 收口批准」
+  status: ANCHORED_BY_RULING
+  anchored_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_1_multimodal_boundary
+  what_the_ruling_settled: 多模态评测的范围边界与证据优先级
+  what_the_ruling_did_not_settle: 本卡六项指标的具体阈值——阈值仍属 COND-007，须公开校准后由 Founder 冻结
+  approved_at_commit: null
+  approved_at_commit_note: 裁决以 Founder 派发原文形式给出，未绑定主仓 Commit；执行侧不代填一个哈希。
+
+scope_boundary:
+  anchored_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_0_anchors.anchor_1_multimodal_boundary
+  anchor_statement_verbatim: >-
+    品牌专属数据库/PIM/ERP 结构化事实为权威，人工确认视觉属性次之，
+    多模态视觉推断可作为有来源、有置信度的补充证据；推断不得覆盖权威事实，
+    不得仅凭图片断言成分、性能、库存、价格与安全认证。
+  evidence_order: [authoritative, human_confirmed, model_inferred]
+  inference_may_override_authoritative: false
+  forbidden_image_only_assertions: [成分, 性能, 库存, 价格, 安全认证]
+  prd_anchor:
+    document: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx
+    section: 3.2 非目标
+    verbatim: 品牌专属数据库仍为权威事实来源；多模态视觉推断按 D-23 分层引入（authoritative > human_confirmed > model_inferred），推断不得覆盖权威事实，不得推断成分、性能、库存与安全认证。
+    parsed_at_check_time: true
+    parsed_by: ci/checkers/check_m2_capability_matrix.py
+  number_correction:
+    erroneous_number: D-10
+    erroneous_number_source: Founder 侧派发件编号笔误（EP05 裁决第零节自认）
+    historical_clause_true_number: D-12
+    historical_clause_title: 商品属性来源
+    current_controlling_clause_true_number: D-23
+    current_controlling_clause_effect: 在 D-12 基础上分层引入视觉推断，权威事实仍不可被推断覆盖
+    erroneous_number_must_not_be_reused: true
+  retired_stop_code:
+    code: MULTIMODAL_SCOPE_CONFLICT_WITH_D10
+    status: RETIRED
+    reason: 无实现、无夹具，且码名内嵌错误编号；按 EP05 裁决第二节作废删除。
+    replaced_by_machine_predicates:
+      - MULTIMODAL_SCOPE_EXCEEDS_AUTHORITATIVE_FACT_BOUNDARY
+      - MULTIMODAL_EVIDENCE_ORDER_DRIFT
+      - MULTIMODAL_FORBIDDEN_ATTRIBUTE_IN_SCOPE
+    replacement_is_machine_checked: true
+    why_not_just_delete_the_claim: >-
+      作废一条杜撰的停止码不等于放弃那份保护。原本想守的事是「多模态评测别越界去当属性来源」——
+      这件事现在由三条现场解析 PRD 正文的判据守，边界从裁决正文来，不从码名来。
+  what_this_benchmark_does_not_test:
+    - 把图像识别当作商品属性来源的准确率（D-12：V1.0 不立项该工程线）
+    - 成分、性能、库存与安全认证的视觉推断（D-23 明文禁止推断）
+    - 任何用视觉推断覆盖权威结构化事实的场景被判为「可接受」
+  what_this_benchmark_tests:
+    - 证据等级标记是否正确（model_inferred 不得伪装成 authoritative 或 human_confirmed）
+    - 视觉推断与权威事实冲突时是否以权威事实为准
+    - 对禁止推断的属性类目是否弃权而不是硬猜
+    - 同一商品多张图之间的推断是否自洽
+    - 低质量图像是否走 fail-closed 而不是低置信度硬答
+    - 在允许范围内（廓形、颜色、结构、材质观感等搭配决策所需视觉属性）的推断准确率——
+      作为能力指标，不作为属性来源
+
+owned_metrics:
+  - {metric_id: visual_attribute_extraction_accuracy, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值；口径限定为允许范围内的视觉属性。}
+  - {metric_id: structured_fact_conflict_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: authoritative_fact_override_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值；硬门 HG-10 要求该率为 0。}
+  - {metric_id: unverifiable_attribute_claim_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: cross_image_consistency_score, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+  - {metric_id: low_quality_image_failure_close_rate, prd_suggested_threshold: null, threshold_status: M2_FREEZE_REQUIRED, threshold_value: null, measured_at_milestone: M7, m2_obligation: 由 M2 冻结口径与阈值。}
+
+metric_count_note:
+  brief_says: 「多模态六项」
+  prd_10_2_actually_lists: 7（visual_attribute_confidence_calibration 单列到置信度校准合同，本卡 6 项）
+  handling: 两份文件合计覆盖 7 项，无重复无遗漏；差异登记为 OI-M2-METRIC-GROUPING。
+  discrepancy_id: OI-M2-METRIC-GROUPING
+
+evidence_grading:
+  source: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json#/definitions/attributeProvenance
+  restated_here: false
+  restated_here_note: 证据等级枚举只有一个定义处，本卡引用不复述（EQ-1）。
+  fact_priority_source: 01_contracts_and_schemas/m1_object_model/common_defs.schema.v0.1.json#/definitions/factPriorityLevel
+  rule: 任何下层信息不得覆盖上层明确事实。
+
+forbidden_inference_classes:
+  source: PRD v1.2 3.2 非目标（D-23 改判后条文）
+  items: [成分, 性能, 库存, 安全认证]
+  required_behavior: 弃权并标记 unverifiable，不得输出推断值
+  failure_state: FORBIDDEN_ATTRIBUTE_INFERRED
+
+evaluation_task_class_applicability:
+  constraint_correctness: true
+  mechanism_correctness: true
+  open_decision: false
+  constraint_correctness_scope: >-
+    三条 0/1 事实：是否覆盖权威事实、是否推断了禁止类目、是否伪装证据等级。
+  open_decision_exclusion_reason: 视觉事实边界不是取舍题，不存在多个合法解族。
+
+gold_answer_allowed_by_task_class:
+  constraint_correctness: true
+  mechanism_correctness: false
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+
+binding_kind: m1_object_ids
+bound_schema_ids:
+  - https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+bound_object_ids: [OUT-12, IN-08, IN-04]
+bound_hard_gate_ids: [HG-10]
+bound_extension_ports: []
+bound_extension_ports_note: >-
+  VisualMerchandisingExtensionPort 与 RealtimeSalesAssistExtensionPort 均为 RESERVED_NOT_IMPLEMENTED，
+  按 m1_interface_handoff 的 what_m2_must_not_do 不得写成可评测能力。
+
+machine_checkable_fields:
+  authoritative_fact_overridden: {type: boolean, required_value: false}
+  forbidden_class_inferred: {type: boolean, required_value: false}
+  provenance_label_present: {type: boolean, required_value: true}
+  provenance_label_truthful: {type: boolean, required_value: true}
+  low_quality_image_failed_closed: {type: boolean, required_value: true}
+  attribute_source_is_brand_database: {type: boolean, required_value: true}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 图像缺失或不可解析时判 fail-closed；低质图像硬答比不答更危险。
+
+failure_states:
+  - AUTHORITATIVE_FACT_OVERRIDDEN
+  - FORBIDDEN_ATTRIBUTE_INFERRED
+  - PROVENANCE_LABEL_FALSIFIED
+  - LOW_QUALITY_IMAGE_ANSWERED_ANYWAY
+  - ATTRIBUTE_SOURCED_FROM_IMAGE_INSTEAD_OF_BRAND_DATABASE
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

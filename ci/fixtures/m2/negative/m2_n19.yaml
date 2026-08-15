@@ -1,0 +1,35 @@
+fixture_id: M2-N19
+description: 声明含 1 处违规的用例实际零命中——扫描器漏检，检出力已失效。
+checker: check_m2_identity_isolation
+expected: FAIL
+payload:
+  scan_cases:
+  - case_id: M2-ID-N01
+    expected_hits: 1
+    actual_hits: 0
+    detail: face_identification_1_to_n@services[1].capabilities
+  - case_id: M2-ID-P01
+    expected_hits: 0
+    actual_hits: 0
+    detail: <no hit>
+  contract:
+    activation_condition_is_never: true
+  forbidden_capabilities:
+  - face_identification_1_to_n
+  - face_verification_1_to_1
+  - persistent_face_embedding
+  - biometric_template_storage
+  - cross_session_face_linking
+  forbidden_capabilities_declared_count: 5
+  allowed_capabilities:
+  - face_region_localization_for_color_analysis
+  - task_scoped_non_identifying_visual_attributes
+  - ephemeral_image_processing
+  - user_authorized_account_identity
+  scanned_file_count: 235
+  forbidden_capability_declarations: []
+  current_state:
+    any_forbidden_capability_declared: false
+    any_face_recognition_dependency: false
+    any_biometric_template_store: false
+    scanned_at: M2-EP01

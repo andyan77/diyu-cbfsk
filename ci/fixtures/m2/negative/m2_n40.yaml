@@ -1,0 +1,188 @@
+fixture_id: M2-N40
+description: OUT-13 没有归属层——层映射漏一个对象即不成立。
+checker: check_m2_governance_landing
+expected: FAIL
+payload:
+  charter_declared_digest: 7dc570449527bd3c13d3e64086d0a725c8a8e2af9c5831dbfb8ecf4f1874a1de
+  charter_actual_digest: 7dc570449527bd3c13d3e64086d0a725c8a8e2af9c5831dbfb8ecf4f1874a1de
+  charter_transcription_only: true
+  baseline_commits:
+    charter.ruling_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    calibration.ruling_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    signature_receipt.signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+    manifest.signed_baseline_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+  rulings_landed:
+    DIYU-CBFSK-FOUNDER-M2-CHARTER-001: true
+    DIYU-CBFSK-FR-CALIBRATION-004: true
+  rulings_missing_from_readme_index: []
+  hard_gate_declared_count: 7
+  hard_gate_item_count: 7
+  hard_gates_without_statement: []
+  adr_ids:
+  - ADR-001
+  - ADR-002
+  - ADR-003
+  - ADR-004
+  - ADR-005
+  - ADR-006
+  adrs:
+  - adr_id: ADR-001
+    title: 六层架构与边界
+    minimal_implementation: 六层架构与边界 的最小实现声明
+    landing_milestone: M2
+    not_building_now:
+    - 示例：本期不建设项
+    activation_condition: 示例激活条件
+    activation_condition_is_never: null
+  - adr_id: ADR-002
+    title: Model Provider Abstraction
+    minimal_implementation: Model Provider Abstraction 的最小实现声明
+    landing_milestone: M2
+    not_building_now:
+    - 示例：本期不建设项
+    activation_condition: 示例激活条件
+    activation_condition_is_never: null
+  - adr_id: ADR-003
+    title: Tenant/Scope 与 M1→M2 组合消费
+    minimal_implementation: Tenant/Scope 与 M1→M2 组合消费 的最小实现声明
+    landing_milestone: M2
+    not_building_now:
+    - 示例：本期不建设项
+    activation_condition: 示例激活条件
+    activation_condition_is_never: null
+  - adr_id: ADR-004
+    title: 隐私与身份隔离
+    minimal_implementation: 隐私与身份隔离 的最小实现声明
+    landing_milestone: M2
+    not_building_now:
+    - 示例：本期不建设项
+    activation_condition: 示例激活条件
+    activation_condition_is_never: true
+  - adr_id: ADR-005
+    title: 评测锦标赛与最小可观测性
+    minimal_implementation: 评测锦标赛与最小可观测性 的最小实现声明
+    landing_milestone: M2
+    not_building_now:
+    - 示例：本期不建设项
+    activation_condition: 示例激活条件
+    activation_condition_is_never: null
+  - adr_id: ADR-006
+    title: Canonical Connector 边界
+    minimal_implementation: Canonical Connector 边界 的最小实现声明
+    landing_milestone: M2
+    not_building_now:
+    - 示例：本期不建设项
+    activation_condition: 示例激活条件
+    activation_condition_is_never: null
+  charter_adr_titles:
+    ADR-001: 六层架构与边界
+    ADR-002: Model Provider Abstraction
+    ADR-003: Tenant/Scope 与 M1→M2 组合消费
+    ADR-004: 隐私与身份隔离
+    ADR-005: 评测锦标赛与最小可观测性
+    ADR-006: Canonical Connector 边界
+  adr_004_activation_is_never: true
+  non_adr_records_present:
+    commercial_decision_record: true
+    competitive_evidence_policy: true
+  commercial_capabilities_listed:
+  - Billing
+  - 开发者门户
+  - Marketplace
+  commercial_capabilities_built: []
+  m1_object_ids:
+  - IN-01
+  - IN-02
+  - IN-03
+  - IN-04
+  - IN-05
+  - IN-06
+  - IN-07
+  - IN-08
+  - IN-09
+  - IN-10
+  - IN-11
+  - IN-12
+  - OUT-01
+  - OUT-02
+  - OUT-03
+  - OUT-04
+  - OUT-05
+  - OUT-06
+  - OUT-07
+  - OUT-08
+  - OUT-09
+  - OUT-10
+  - OUT-11
+  - OUT-12
+  - OUT-13
+  - OUT-14
+  - OUT-15
+  layer_mapped_object_ids:
+  - IN-01
+  - IN-02
+  - IN-03
+  - IN-04
+  - IN-05
+  - IN-06
+  - IN-07
+  - IN-08
+  - IN-09
+  - IN-10
+  - IN-11
+  - IN-12
+  - OUT-01
+  - OUT-02
+  - OUT-03
+  - OUT-04
+  - OUT-05
+  - OUT-06
+  - OUT-07
+  - OUT-08
+  - OUT-09
+  - OUT-10
+  - OUT-11
+  - OUT-12
+  - OUT-14
+  - OUT-15
+  layer_refs_unknown: []
+  layer_count: 6
+  fact_priority_changed_by_package: false
+  package_receipts:
+  - package_id: M2-EP01
+    path: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_receipt.yaml
+    end_state:
+      execution_status: M1_M2_PARALLEL_IN_PROGRESS
+      m2_started: true
+      m2_ep01_status: SELF_CHECKED
+      m2_evaluation_profile_status: PROVISIONAL_READY
+      m2_benchmark_assets_status: NOT_CREATED
+      m2_hidden_assets_status: NOT_CREATED
+      m2_frozen: false
+      m1_final_binding: PENDING_M1_CLOSEOUT
+      knowledge_distillation_started: false
+      production_servable: false
+      next_authorized_action: WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT
+    describes_current_state: false
+    superseded_by: M2-EP02
+    self_reference_limitation_recorded: true
+  - package_id: M2-EP02
+    path: 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_receipt.yaml
+    end_state:
+      execution_status: M2_IN_PROGRESS
+      m2_started: true
+      m1_status: FOUNDER_ACCEPTED
+      m2_ep01_status: SELF_CHECKED
+      m2_ep02_status: IN_PROGRESS
+      m2_frozen: false
+      knowledge_distillation_started: false
+      production_servable: false
+    describes_current_state: true
+    superseded_by: null
+    self_reference_limitation_recorded: true
+  canonical_state:
+    execution_status: M2_IN_PROGRESS
+    m2_started: true
+    knowledge_distillation_started: false
+    production_servable: false
+  unregistered_m2_checkers: []

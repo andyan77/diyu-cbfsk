@@ -1,0 +1,158 @@
+fixture_id: M2-N82
+description: 稳定率阈值被改动——更名不得改阈值。
+checker: check_m2_scoring_cards
+expected: FAIL
+payload:
+  contract_classes:
+  - constraint_correctness
+  - mechanism_correctness
+  - open_decision
+  contract_class_count: 3
+  contract_gold_answer_forbidden_for:
+  - mechanism_correctness
+  - open_decision
+  single_class_per_item: true
+  cards:
+  - evaluation_task_class: constraint_correctness
+    gold_answer_allowed: true
+    must_not_score_disagreement_as_error: false
+    frozen_object: hard_constraint_set
+    partial_credit_allowed: false
+    bound_hard_constraint_ids:
+    - FT-HC-01
+    - FT-HC-02
+    - FT-HC-03
+    - FT-HC-04
+    - KW-HC-01
+    - KW-HC-02
+    - KW-HC-03
+    - KW-HC-04
+    - KW-HC-05
+    - SP-HC-01
+    - SP-HC-02
+    - SP-HC-03
+    - SP-HC-04
+    - SP-HC-05
+    - SP-HC-06
+    - TT-HC-01
+    - TT-HC-02
+    - TT-HC-03
+    - TT-HC-04
+    - TT-HC-05
+    - TT-HC-06
+    - WW-HC-01
+    - WW-HC-02
+    - WW-HC-03
+    - WW-HC-04
+    bound_conflict_priority_rule_ids:
+    - CP-01
+    - CP-02
+    - CP-06
+    bound_combination_rule_ids: []
+    has_any_binding: true
+    gold_answer_field_is_null_const: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+  - evaluation_task_class: mechanism_correctness
+    gold_answer_allowed: false
+    must_not_score_disagreement_as_error: true
+    frozen_object: acceptable_decision_boundary
+    partial_credit_allowed: null
+    bound_hard_constraint_ids: []
+    bound_conflict_priority_rule_ids:
+    - CP-02
+    - CP-03
+    - CP-04
+    - CP-05
+    bound_combination_rule_ids: &id001
+    - COMBO-01
+    - COMBO-02
+    - COMBO-03
+    - COMBO-04
+    - COMBO-05
+    has_any_binding: true
+    gold_answer_field_is_null_const: true
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+  - evaluation_task_class: open_decision
+    gold_answer_allowed: false
+    must_not_score_disagreement_as_error: true
+    frozen_object: acceptable_decision_boundary
+    partial_credit_allowed: null
+    bound_hard_constraint_ids: []
+    bound_conflict_priority_rule_ids:
+    - CP-01
+    - CP-04
+    - CP-06
+    bound_combination_rule_ids: *id001
+    has_any_binding: true
+    gold_answer_field_is_null_const: true
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+  constraint_card_bound_ids:
+  - FT-HC-01
+  - FT-HC-02
+  - FT-HC-03
+  - FT-HC-04
+  - KW-HC-01
+  - KW-HC-02
+  - KW-HC-03
+  - KW-HC-04
+  - KW-HC-05
+  - SP-HC-01
+  - SP-HC-02
+  - SP-HC-03
+  - SP-HC-04
+  - SP-HC-05
+  - SP-HC-06
+  - TT-HC-01
+  - TT-HC-02
+  - TT-HC-03
+  - TT-HC-04
+  - TT-HC-05
+  - TT-HC-06
+  - WW-HC-01
+  - WW-HC-02
+  - WW-HC-03
+  - WW-HC-04
+  valid_hard_constraint_ids:
+  - FT-HC-01
+  - FT-HC-02
+  - FT-HC-03
+  - FT-HC-04
+  - KW-HC-01
+  - KW-HC-02
+  - KW-HC-03
+  - KW-HC-04
+  - KW-HC-05
+  - SP-HC-01
+  - SP-HC-02
+  - SP-HC-03
+  - SP-HC-04
+  - SP-HC-05
+  - SP-HC-06
+  - TT-HC-01
+  - TT-HC-02
+  - TT-HC-03
+  - TT-HC-04
+  - TT-HC-05
+  - TT-HC-06
+  - WW-HC-01
+  - WW-HC-02
+  - WW-HC-03
+  - WW-HC-04
+  valid_conflict_priority_rule_ids:
+  - CP-01
+  - CP-02
+  - CP-03
+  - CP-04
+  - CP-05
+  - CP-06
+  valid_combination_rule_ids: *id001
+  stability_metric:
+    canonical_name: 核心决策逻辑稳定率
+    former_name: 核心判断重复一致率
+    threshold: '>= 70%'
+    threshold_changed_by_rename: false
+    solution_family_aware: true
+    logic_identity_basis: DecisionTrace 的 rule_attribution 与 priority_adjudications 是否一致

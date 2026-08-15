@@ -1,0 +1,22 @@
+fixture_id: M2-N58
+description: check_docx_canonical_hashes 被从注册表删掉、册子仍写 LIVE——正是 OI-01 要防的静默摘除。
+checker: check_m2_gate_retirement_guard
+expected: FAIL
+payload:
+  gates:
+  - checker: check_docx_canonical_hashes
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  - checker: check_hidden_benchmark_boundary
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  - checker: check_m2_gate_retirement_guard
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  live_gate_count: 3
+  registered_checkers:
+  - check_hidden_benchmark_boundary
+  - check_m2_gate_retirement_guard

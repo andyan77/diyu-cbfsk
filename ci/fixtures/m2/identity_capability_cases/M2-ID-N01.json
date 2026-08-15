@@ -1,0 +1,24 @@
+{
+  "case_id": "M2-ID-N01",
+  "description": "服务组件登记里声明 1:N 人脸身份识别——系统真的要建这项能力，必须命中。",
+  "expected_hits": 1,
+  "note": "",
+  "documents": {
+    "fake/service_registry.yaml": {
+      "services": [
+        {
+          "service_id": "styling_vision",
+          "capabilities": [
+            "ephemeral_image_processing"
+          ]
+        },
+        {
+          "service_id": "customer_recognizer",
+          "capabilities": [
+            "face_identification_1_to_n"
+          ]
+        }
+      ]
+    }
+  }
+}

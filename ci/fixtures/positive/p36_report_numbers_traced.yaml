@@ -1,0 +1,24 @@
+fixture_id: P36
+description: 模板重渲染与落盘报告逐字节一致，计数数字全部来自引用，历史报告的豁免写明了理由。
+checker: check_report_number_traceability
+expected: PASS
+payload:
+  reports:
+  - report: 11_reports_and_receipts/sample/sample_delivery_report.md
+    status: templated
+    template: 11_reports_and_receipts/sample/sample_delivery_report.md.tmpl
+    template_exists: true
+    report_exists: true
+    ref_errors: []
+    rendered: '本包共 147 条挂账。
+
+      '
+    on_disk: '本包共 147 条挂账。
+
+      '
+    untraced_counts: []
+  - report: 11_reports_and_receipts/m0_delivery_report.md
+    status: legacy_untemplated
+    reason: 立规前的历史报告；回改等于用今天的口径重写昨天的现场。
+  declared_report_count: 2
+  unregistered_reports: []

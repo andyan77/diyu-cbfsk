@@ -1,0 +1,291 @@
+fixture_id: N141-hard-gate-multiple-primary
+description: 同一条硬门把 primary 又写进 secondary。
+checker: check_m2_capability_matrix
+expected: FAIL
+payload:
+  axis_count: 4
+  declared_capability_count: 7
+  capabilities:
+  - code: EXP
+    card: cards/EXP.yaml
+    card_exists: true
+    per_item_scored: true
+    evaluation_task_class_annotated: true
+    declared_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+    - open_decision
+    card_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+    - open_decision
+  - code: NAR
+    card: cards/NAR.yaml
+    card_exists: true
+    per_item_scored: true
+    evaluation_task_class_annotated: true
+    declared_task_classes:
+    - mechanism_correctness
+    - open_decision
+    card_task_classes:
+    - mechanism_correctness
+    - open_decision
+  - code: PSC
+    card: cards/PSC.yaml
+    card_exists: true
+    per_item_scored: true
+    evaluation_task_class_annotated: true
+    declared_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+    card_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+  - code: NVO
+    card: cards/NVO.yaml
+    card_exists: true
+    per_item_scored: true
+    evaluation_task_class_annotated: true
+    declared_task_classes:
+    - mechanism_correctness
+    - open_decision
+    card_task_classes:
+    - mechanism_correctness
+    - open_decision
+  - code: MMA
+    card: cards/MMA.yaml
+    card_exists: true
+    per_item_scored: true
+    evaluation_task_class_annotated: true
+    declared_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+    card_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+  - code: MMC
+    card: cards/MMC.yaml
+    card_exists: true
+    per_item_scored: true
+    evaluation_task_class_annotated: true
+    declared_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+    card_task_classes:
+    - constraint_correctness
+    - mechanism_correctness
+  - code: FCR
+    card: cards/FCR.yaml
+    card_exists: true
+    per_item_scored: false
+    evaluation_task_class_annotated: true
+    declared_task_classes: []
+    card_task_classes: []
+  declared_addressable_cells: 195
+  prd_metrics:
+  - - metric_01
+    - M2_FREEZE_REQUIRED
+  - - metric_02
+    - M2_FREEZE_REQUIRED
+  - - metric_03
+    - M2_FREEZE_REQUIRED
+  - - metric_04
+    - M2_FREEZE_REQUIRED
+  - - metric_05
+    - M2_FREEZE_REQUIRED
+  - - metric_06
+    - M2_FREEZE_REQUIRED
+  - - metric_07
+    - M2_FREEZE_REQUIRED
+  - - metric_08
+    - M2_FREEZE_REQUIRED
+  - - metric_09
+    - M2_FREEZE_REQUIRED
+  - - metric_10
+    - M2_FREEZE_REQUIRED
+  - - metric_11
+    - M2_FREEZE_REQUIRED
+  - - metric_12
+    - M2_FREEZE_REQUIRED
+  - - metric_13
+    - M2_FREEZE_REQUIRED
+  - - metric_14
+    - M2_FREEZE_REQUIRED
+  - - metric_15
+    - M2_FREEZE_REQUIRED
+  - - metric_16
+    - M2_FREEZE_REQUIRED
+  - - metric_17
+    - M2_FREEZE_REQUIRED
+  - - metric_18
+    - M2_FREEZE_REQUIRED
+  - - metric_19
+    - M2_FREEZE_REQUIRED
+  - - metric_20
+    - M2_FREEZE_REQUIRED
+  - - metric_21
+    - M2_FREEZE_REQUIRED
+  - - metric_22
+    - M2_FREEZE_REQUIRED
+  - - metric_23
+    - M2_FREEZE_REQUIRED
+  - - metric_24
+    - M2_FREEZE_REQUIRED
+  - - metric_25
+    - M2_FREEZE_REQUIRED
+  - - metric_26
+    - M2_FREEZE_REQUIRED
+  - - metric_27
+    - M2_FREEZE_REQUIRED
+  - - metric_28
+    - M2_FREEZE_REQUIRED
+  - - metric_29
+    - M2_FREEZE_REQUIRED
+  - - metric_30
+    - M2_FREEZE_REQUIRED
+  - - metric_31
+    - M2_FREEZE_REQUIRED
+  - - metric_32
+    - M2_FREEZE_REQUIRED
+  - - metric_33
+    - M2_FREEZE_REQUIRED
+  - - high_risk_founder_full_review_rate
+    - 100%
+  metric_owners:
+    metric_01: some_artifact.v0.1
+    metric_02: some_artifact.v0.1
+    metric_03: some_artifact.v0.1
+    metric_04: some_artifact.v0.1
+    metric_05: some_artifact.v0.1
+    metric_06: some_artifact.v0.1
+    metric_07: some_artifact.v0.1
+    metric_08: some_artifact.v0.1
+    metric_09: some_artifact.v0.1
+    metric_10: some_artifact.v0.1
+    metric_11: some_artifact.v0.1
+    metric_12: some_artifact.v0.1
+    metric_13: some_artifact.v0.1
+    metric_14: some_artifact.v0.1
+    metric_15: some_artifact.v0.1
+    metric_16: some_artifact.v0.1
+    metric_17: some_artifact.v0.1
+    metric_18: some_artifact.v0.1
+    metric_19: some_artifact.v0.1
+    metric_20: some_artifact.v0.1
+    metric_21: some_artifact.v0.1
+    metric_22: some_artifact.v0.1
+    metric_23: some_artifact.v0.1
+    metric_24: some_artifact.v0.1
+    metric_25: some_artifact.v0.1
+    metric_26: some_artifact.v0.1
+    metric_27: some_artifact.v0.1
+    metric_28: some_artifact.v0.1
+    metric_29: some_artifact.v0.1
+    metric_30: some_artifact.v0.1
+    metric_31: some_artifact.v0.1
+    metric_32: some_artifact.v0.1
+    metric_33: some_artifact.v0.1
+    high_risk_founder_full_review_rate: some_artifact.v0.1
+  duplicate_metric_ids: []
+  declared_metric_count: 34
+  capability_to_hard_gate:
+    EXP:
+    - HG-05
+    NAR:
+    - HG-04
+    PSC:
+    - HG-08
+    NVO: []
+    MMA:
+    - HG-10
+    MMC:
+    - HG-10
+    FCR: []
+  gate_mappings:
+  - hard_gate_id: HG-01
+    primary_release_gate: RG-01
+    secondary_release_gates: []
+  - hard_gate_id: HG-02
+    primary_release_gate: RG-02
+    secondary_release_gates: []
+  - hard_gate_id: HG-03
+    primary_release_gate: RG-03
+    secondary_release_gates:
+    - RG-03
+  - hard_gate_id: HG-04
+    primary_release_gate: RG-04
+    secondary_release_gates: []
+  - hard_gate_id: HG-05
+    primary_release_gate: RG-05
+    secondary_release_gates: []
+  - hard_gate_id: HG-06
+    primary_release_gate: RG-06
+    secondary_release_gates: []
+  - hard_gate_id: HG-07
+    primary_release_gate: RG-07
+    secondary_release_gates: []
+  - hard_gate_id: HG-08
+    primary_release_gate: RG-08
+    secondary_release_gates: []
+  - hard_gate_id: HG-09
+    primary_release_gate: RG-01
+    secondary_release_gates: []
+  - hard_gate_id: HG-10
+    primary_release_gate: RG-02
+    secondary_release_gates: []
+  - hard_gate_id: HG-11
+    primary_release_gate: RG-03
+    secondary_release_gates: []
+  declared_hard_gate_count: 11
+  declared_release_gate_count: 8
+  upstream_hard_gate_ids:
+  - HG-01
+  - HG-02
+  - HG-03
+  - HG-04
+  - HG-05
+  - HG-06
+  - HG-07
+  - HG-08
+  - HG-09
+  - HG-10
+  - HG-11
+  upstream_release_gate_ids:
+  - RG-01
+  - RG-02
+  - RG-03
+  - RG-04
+  - RG-05
+  - RG-06
+  - RG-07
+  - RG-08
+  multimodal_scope:
+    anchor_verbatim_found_in_prd: true
+    prd_evidence_order:
+    - authoritative
+    - human_confirmed
+    - model_inferred
+    card_evidence_order:
+    - authoritative
+    - human_confirmed
+    - model_inferred
+    prd_forbidden_attributes:
+    - 成分
+    - 性能
+    - 库存
+    - 安全认证
+    card_forbidden_attributes:
+    - 成分
+    - 性能
+    - 库存
+    - 价格
+    - 安全认证
+    inference_may_override_authoritative: false
+    tested_items:
+    - 证据等级标记是否正确（model_inferred 不得伪装成 authoritative）
+    - 视觉推断与权威事实冲突时是否以权威事实为准
+    - 低质量图像是否走 fail-closed
+    ruling_anchors:
+    - D-23
+    - D-12
+    retired_stop_code_status: RETIRED

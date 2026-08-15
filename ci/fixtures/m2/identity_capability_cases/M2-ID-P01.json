@@ -1,0 +1,31 @@
+{
+  "case_id": "M2-ID-P01",
+  "description": "裁决与合同文本把五项能力列进 forbidden_capabilities——「禁止人脸识别」这句话本身不是违规。",
+  "expected_hits": 0,
+  "note": "这是全文关键词扫描会误报、结构化能力检测不会误报的那一类。",
+  "documents": {
+    "fake/ruling.yaml": {
+      "ruling_text": "项目永久坚持造型理解与身份识别解耦，不建设人脸身份识别、验证、模板存储或跨会话面部关联能力。",
+      "forbidden_capabilities": {
+        "count": 5,
+        "items": [
+          {
+            "capability_id": "face_identification_1_to_n"
+          },
+          {
+            "capability_id": "face_verification_1_to_1"
+          },
+          {
+            "capability_id": "persistent_face_embedding"
+          },
+          {
+            "capability_id": "biometric_template_storage"
+          },
+          {
+            "capability_id": "cross_session_face_linking"
+          }
+        ]
+      }
+    }
+  }
+}

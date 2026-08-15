@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://diyu-cbfsk.local/m2/m1_to_m2_envelope.schema.v0.1.json",
+  "title": "M1ToM2Envelope",
+  "artifact_id": "m1_to_m2_envelope.schema.v0.1",
+  "description": "M1→M2 公共元数据信封：只包装、不复制、不修改 M1 冻结对象。信封携带的是「这份产物是什么、从哪个 Commit 的哪个文件来、按什么方式消费」，被包装对象的内容一个字节都不进信封——复制即等于造出第二份真源（EQ-1）。三态严格分离：知识状态只属知识单元，运行时有效性只属运行时事实对象，产物生命周期属所有对象。",
+  "schema_version": "0.1",
+  "milestone": "M2",
+  "execution_package": "M2-EP01",
+  "binding_status": "PROVISIONAL",
+  "prd_anchors": ["PRD-6.1", "PRD-6.2", "PRD-6.3", "PRD-8.4", "D-27"],
+  "ruling_anchors": ["DIYU-CBFSK-FOUNDER-M2-CHARTER-001", "DIYU-CBFSK-FR-CALIBRATION-004"],
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "object_ref",
+    "object_kind",
+    "schema_id",
+    "schema_version",
+    "source_milestone",
+    "source_commit",
+    "source_artifact_sha256",
+    "data_classification",
+    "consumption_mode",
+    "in_place_modification_allowed",
+    "artifact_lifecycle_state"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "artifact_id": {
+      "description": "信封自身的标识，不是被包装对象的标识。",
+      "type": "string",
+      "minLength": 1
+    },
+    "object_ref": {
+      "description": "被包装对象在源里程碑中的定位：仓库相对路径，允许 # JSON Pointer 后缀指向 Bundle 内定义（如 StylingResultBundle.schema.v0.1.json#/definitions/OutfitPlan）。",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9A-Za-z_./\\u4e00-\\u9fff-]+(#/[0-9A-Za-z_/-]+)?$"
+    },
+    "object_kind": {
+      "description": "决定哪些条件必填字段合法。knowledge_unit 是唯一可携带 knowledge_state 的类别；runtime_fact_object 是唯一可携带 runtime_validity_state 的类别。",
+      "type": "string",
+      "enum": [
+        "knowledge_unit",
+        "runtime_fact_object",
+        "long_term_truth_object",
+        "contract_document",
+        "evaluation_asset"
+      ]
+    },
+    "schema_id": {
+      "description": "被包装对象所遵循的 Schema $id；契约文件类对象用其 contract_id。",
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": { "type": "string", "minLength": 1 },
+    "source_milestone": {
+      "type": "string",
+      "enum": ["M0", "M1"]
+    },
+    "source_commit": {
+      "description": "完整 40 位 Commit 哈希。缩写与「最新版」一律不接受——无法解析到唯一对象的引用不是引用。",
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "source_artifact_sha256": {
+      "description": "被包装文件在 source_commit 上的字节 SHA256。内容漂移即 M1_FROZEN_ARTIFACT_DRIFT。",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "data_classification": {
+      "type": "string",
+      "enum": ["public", "internal", "restricted_founder_only", "hidden_evaluation"]
+    },
+    "consumption_mode": {
+      "description": "M2 只能以引用方式消费 M1 冻结物。两种取值都不允许原位修改，区别只在是否允许生成不回写的派生视图。",
+      "type": "string",
+      "enum": ["by_reference_only", "by_reference_with_derived_view"]
+    },
+    "in_place_modification_allowed": {
+      "description": "常量 false。留成字段而不是省略，是为了让「不得原位修改」在每份实例上都可被机器读到，而不是只写在散文里。",
+      "const": false
+    },
+    "artifact_lifecycle_state": {
+      "description": "产物生命周期，适用于所有 object_kind。与知识状态链是两个正交维度：一份 draft 的产物可以包装一个 founder_accepted 的知识单元。",
+      "type": "string",
+      "enum": ["draft", "validated", "frozen", "superseded"]
+    },
+    "knowledge_state": {
+      "description": "知识状态链七级，唯一定义处 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml。仅 object_kind=knowledge_unit 可携带。",
+      "type": "string",
+      "enum": [
+        "model_elicited_candidate",
+        "cross_model_contested",
+        "source_or_case_checked",
+        "founder_ai_reviewed",
+        "benchmark_validated",
+        "founder_accepted",
+        "production_servable"
+      ]
+    },
+    "runtime_validity_state": {
+      "description": "运行时事实的时效状态。仅 object_kind=runtime_fact_object 可携带。",
+      "type": "string",
+      "enum": ["current", "stale", "expired", "revoked"]
+    },
+    "scope": {
+      "description": "租户与作用域。是否必填由 Profile 按对象类型声明，不在信封层全局强制。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": { "type": "string", "minLength": 1 },
+        "brand_scope": { "type": "string", "minLength": 1 },
+        "region_scope": { "type": "string", "minLength": 1 },
+        "store_scope": { "type": "string", "minLength": 1 }
+      }
+    },
+    "correlation": {
+      "description": "追踪与实验关联。是否必填由 Profile 声明。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision_id": { "type": "string", "minLength": 1 },
+        "trace_id": { "type": "string", "minLength": 1 },
+        "correlation_id": { "type": "string", "minLength": 1 },
+        "experiment_arm": { "type": "string", "minLength": 1 }
+      }
+    },
+    "temporal": {
+      "description": "时效与来源快照。是否必填由 Profile 声明；库存等运行时事实靠它满足 FR-CALIBRATION-004 HG-3 与 HG-6。",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valid_from": { "type": "string", "minLength": 1 },
+        "valid_to": { "type": ["string", "null"] },
+        "source_freshness_at": { "type": "string", "minLength": 1 },
+        "source_snapshot_version": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "description": "三态分离之一：knowledge_state 只属知识单元。非知识单元携带它即 KNOWLEDGE_STATE_APPLIED_TO_RUNTIME_OBJECT。",
+      "if": {
+        "properties": { "object_kind": { "not": { "const": "knowledge_unit" } } },
+        "required": ["object_kind"]
+      },
+      "then": { "not": { "required": ["knowledge_state"] } }
+    },
+    {
+      "description": "三态分离之二：runtime_validity_state 只属运行时事实对象。",
+      "if": {
+        "properties": { "object_kind": { "not": { "const": "runtime_fact_object" } } },
+        "required": ["object_kind"]
+      },
+      "then": { "not": { "required": ["runtime_validity_state"] } }
+    },
+    {
+      "description": "知识单元必须携带知识状态——省略等于让它绕过状态链。",
+      "if": {
+        "properties": { "object_kind": { "const": "knowledge_unit" } },
+        "required": ["object_kind"]
+      },
+      "then": { "required": ["knowledge_state"] }
+    }
+  ]
+}

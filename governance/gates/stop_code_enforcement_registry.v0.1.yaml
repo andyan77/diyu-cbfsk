@@ -1,0 +1,1146 @@
+schema_version: '0.1'
+registry_id: DIYU-CBFSK-STOP-CODE-ENFORCEMENT-REGISTRY
+artifact_id: stop_code_enforcement_registry.v0.1
+project_id: DIYU-CBFSK-001
+established_by: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_2_phantom_stop_code
+established_at_package: M2-EP05
+finding: NB-M2E4-02
+purpose: 每一条被当作 STOP 使用的错误码，都要说清它是「机器会抓」还是「人得判」还是「将来运行时才有得抓」。MULTIMODAL_SCOPE_CONFLICT_WITH_D10 之所以能作为一条 STOP 被写成「未触发」，正是因为此前没有任何地方要求它先证明自己有检测器。
+general_rule_permanent:
+  statement: 任何声明为 STOP 的错误码，若无检测器实现，一律不得表述为「未触发」。
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_2_phantom_stop_code
+  plain_language: 「未触发」是一句实测结论。没有检测器却说未触发，等于没考试就报及格分——真出了事，谁也说不出它是没发生还是没人看。
+  failure_state: PHANTOM_STOP_CODE_DECLARED_NOT_TRIGGERED
+enforcement_classes:
+- id: machine_checked
+  meaning: 有现役判据实现该码，可实测触发与否
+  requires:
+  - detectors 非空
+  - 每个 detector 必须在现役门禁册内 LIVE
+  - 码字符串必须真出现在该判据源码里
+- id: human_judgement
+  meaning: 须由人判断，机器只能记录判断结果
+  requires:
+  - detectors 必须为空
+  - 必须写明由谁判
+  must_not:
+  - 被表述为「判据实测未触发」
+- id: future_runtime
+  meaning: 要等产品或隐藏资产实际运行才有可检对象
+  requires:
+  - detectors 必须为空
+  - 必须写明何时才可检
+  must_not:
+  - 被表述为「判据实测未触发」
+report_presentation_rule:
+  statement: 报告与回执中的 STOP 表格必须按三类分栏呈现。
+  forbidden: 把「人工判断为真」与「判据实测为真」混在同一张表里
+  why: 两者的可靠度不同：一个错了会被下一次 CI 抓住，另一个错了只有下一个读到它的人可能发现。
+  effective_from_package: M2-EP05
+  not_retroactive_reason: 本规则自 EP05 起生效。既往报告是已发生事实的记录，为满足一条后立的格式规则去回改它们，等于用今天的口径重写昨天的现场——与「历史记录只可追加更正、不得静默改写」同一条纪律。
+  grandfathered_reports:
+  - 11_reports_and_receipts/m1_delivery_report.md
+  - 11_reports_and_receipts/m1_ep01_delivery_report.md
+  - 11_reports_and_receipts/m2_delivery_report.md
+  - 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md
+  - 11_reports_and_receipts/m2_ep02/m2_ep02_delivery_report.md
+  - 11_reports_and_receipts/m2_ep04/m2_ep04_delivery_report.md
+  grandfathering_does_not_cover: 「未触发」通则不豁免：任何报告都不得把无检测器的码写成未触发，EP04 报告里那一条按裁决第二节当场改掉。
+  failure_state: STOP_TABLE_NOT_PARTITIONED_BY_ENFORCEMENT
+retired_codes:
+- code: MULTIMODAL_SCOPE_CONFLICT_WITH_D10
+  retired_at_package: M2-EP05
+  authority: DIYU-CBFSK-FOUNDER-M2-EP05-001 article_2_phantom_stop_code
+  reason: Founder 侧派发件杜撰的停止码：无实现、无夹具，且码名里嵌着一个错误的裁决编号（D-10）。
+  replaced_by:
+  - MULTIMODAL_SCOPE_EXCEEDS_AUTHORITATIVE_FACT_BOUNDARY
+  - MULTIMODAL_EVIDENCE_ORDER_DRIFT
+  - MULTIMODAL_FORBIDDEN_ATTRIBUTE_IN_SCOPE
+  replacement_naming_rule: 替代码不得含错误编号；边界由 PRD v1.2 正文分层视觉推断条款现场解析。
+  must_not_appear_at_any_stop_site: true
+counts:
+  total_codes: 168
+  machine_checked: 77
+  human_judgement: 36
+  future_runtime: 55
+scan_scope:
+  keys:
+  - current_blocker
+  - failure_state
+  - single_blocker
+  - stop_condition_evaluated
+  - stop_condition_id
+  - stop_condition_if_violated
+  - stop_condition_not_triggered
+  - stop_condition_ref
+  - stop_id
+  note: 本册射程＝「被当作 STOP 使用」的声明位。各合同的 failure_states 词表（复数）由 error_code_fixture_coverage_ledger 另册承接，两册不得互相复述，避免同一件事两套口径。
+failure_states:
+- STOP_CODE_NOT_REGISTERED
+- STOP_CODE_ENFORCEMENT_UNCLASSIFIED
+- STOP_CODE_DETECTOR_MISSING
+- STOP_CODE_DETECTOR_NOT_LIVE
+- PHANTOM_STOP_CODE_DECLARED_NOT_TRIGGERED
+- RETIRED_STOP_CODE_STILL_DECLARED
+- STOP_CODE_REGISTRY_COUNT_MISSTATED
+- STOP_TABLE_NOT_PARTITIONED_BY_ENFORCEMENT
+- NON_MACHINE_CODE_WITH_DETECTOR
+entries:
+- code: ACCOUNTS_NOT_DIFFERENTIATED
+  sites:
+  - 03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: ADVISOR_BLOCK_OVERRIDDEN_WITHOUT_ITEMISED_RESPONSE
+  sites:
+  - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: AGE_CONTEXT_INSUFFICIENT
+  sites:
+  - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_scope_contract.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: AGGREGATION_NOT_RECOMPUTED_FROM_RECORDS
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: ANCHOR_ASSIGNMENT_RULE_VIOLATED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: AUTHORITATIVE_FACT_OVERRIDDEN
+  sites:
+  - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: AUTHORITATIVE_FACT_OVERRIDE
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: BASELINE_BINDING_MISMATCH
+  sites:
+  - governance/receipts/founder_m2_kickoff_signature_receipt.yaml#stop_condition_not_triggered
+  enforcement: machine_checked
+  detectors:
+  - check_m2_governance_landing
+- code: BINARY_DETERMINATION_INCOMPLETE
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: BLANKET_SELF_ASSESSMENT
+  sites:
+  - 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_compliance_ledger
+- code: BODY_EXPRESSION_VIOLATION
+  sites:
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: BOUNDARY_CONTRADICTS_FAMILY
+  sites:
+  - 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: BOUNDARY_RECHECK_SKIPPED_ON_INTAKE
+  sites:
+  - governance/conditions/hidden_generation_timing_gate.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_generation_readiness
+- code: BOUNDARY_REF_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: BOUNDARY_RELAXED_AFTER_FAILURE
+  sites:
+  - 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: BRAND_COUNTED_WITHOUT_MINIMUM_COMPOSITION
+  sites:
+  - 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: BRAND_SEEN_BY_GENERATION_CHAIN
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: BRAND_TRUTH_INSUFFICIENT
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CALIBRATION_PACK_DISPATCHED_BEFORE_SEQUENCE_COMPLETE
+  sites:
+  - governance/conditions/predistribution_sequence.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_predistribution_sequence
+- code: CALIBRATION_REVIEW_CROSS_CONTAMINATED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: CALIBRATION_REVIEW_EVIDENCE_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  - 11_reports_and_receipts/m2_ep05/m2_ep05_delivery_receipt.yaml#failure_state
+  - governance/conditions/m2_condition_state_semantics.v0.1.yaml#current_blocker
+  - governance/conditions/m2_condition_state_semantics.v0.1.yaml#stop_id
+  - governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CLOSEOUT-001.yaml#current_blocker
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: CALIBRATION_REVIEW_NOT_ISOLATED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: CALIBRATION_REVIEW_SELF_PLAYED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: CALIBRATION_REVIEW_STATE_CONTRADICTS_EVIDENCE
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: CALIBRATION_STATED_AS_CAPABILITY_BASELINE
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: CLAUDE_INDEPENDENT_GUARDIAN 与 Founder 在报告审查时判定
+- code: CANDIDATE_DECISION_TRACE_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: CANDIDATE_M2_BRANCH_ALREADY_EXISTS
+  sites:
+  - governance/receipts/founder_m2_kickoff_signature_receipt.yaml#stop_condition_not_triggered
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: CANDIDATE_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: CAPABILITY_NOT_APPLICABLE_TO_TASK_CLASS
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: CAPABILITY_WITHOUT_LANDING
+  sites:
+  - 01_contracts_and_schemas/capability_contract.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CASE_WITHOUT_EVALUATION_FORM
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: CATEGORY_CONFLICT_UNRESOLVED
+  sites:
+  - 01_contracts_and_schemas/category_adapter_contracts/cross_category_conflict_priority.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CATEGORY_ROUTING_ERROR
+  sites:
+  - 01_contracts_and_schemas/category_scope_contract.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CATEGORY_SAFETY_VIOLATION
+  sites:
+  - 01_contracts_and_schemas/category_adapter_contracts/family_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/teen_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_scope_contract.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CATEGORY_WITHOUT_UNSEEN_BRAND
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CLOSURE_CHECKER_NOT_REGISTERED
+  sites:
+  - governance/gates/milestone_closure_coverage_rule.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_milestone_closure_coverage
+- code: COMPOSITE_SCORE_WITHOUT_FROZEN_WEIGHTS
+  sites:
+  - 03_m2_evaluation_foundation/tournament/baseline_tournament_contract.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_tournament
+- code: CONDITIONAL_WITHOUT_LEDGER
+  sites:
+  - 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_conditional_ledger
+- code: CONFIDENCE_ABSENT
+  sites:
+  - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: CORPUS_OWNER_UNASSIGNED
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: COVERAGE_MAP_SELF_DECLARED
+  sites:
+  - governance/gates/milestone_closure_coverage_rule.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: COVERAGE_SOURCE_MISSING
+  sites:
+  - governance/gates/milestone_closure_coverage_rule.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_milestone_closure_coverage
+- code: CREDENTIAL_EXPOSURE
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m0_zero_contact
+- code: CUSTOMER_PROFILE_WITHOUT_CONSENT
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: DECISION_WITHOUT_RATIONALE
+  sites:
+  - 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_compliance_ledger
+- code: DEFAULT_CATEGORY_ASSUMED
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: DEFERRED_ITEM_WITHOUT_OWNER_OR_NODE
+  sites:
+  - 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: DELIVERY_ARTIFACT_SEMANTICS_CHANGED
+  sites:
+  - governance/gates/artifact_change_since_delivery_freeze.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: DEPENDENCY_VIOLATED
+  sites:
+  - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: DIAGNOSIS_SERVICE_SPRAWL
+  sites:
+  - 01_contracts_and_schemas/capability_contract.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: DIRECTORY_ADAPTATION_UNDOCUMENTED
+  sites:
+  - 00_charter/project_charter.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: DUPLICATE_HIDDEN_BOUNDARY_IMPLEMENTATION
+  sites:
+  - 03_m2_evaluation_foundation/evaluation_governance/evaluation_asset_classification_profile.v0.1.yaml#stop_condition_if_violated
+  - 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml#stop_condition_if_violated
+  enforcement: machine_checked
+  detectors:
+  - check_m2_evaluation_governance
+  - check_m2_hidden_assets
+- code: EDGE_CASE_FAMILY_EMPTY
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: EDGE_CASE_REMOVED_AFTER_FAILURE
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: EFFORT_BASELINE_CHANGED
+  sites:
+  - 00_charter/project_charter.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_effort_baseline_consistency
+- code: EVIDENCE_HASH_STALE
+  sites:
+  - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_deliverable_closure
+- code: EXTENSION_COMPATIBILITY_BREAK
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/capability_contract.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: EXTENSION_PORT_COMPATIBILITY_BROKEN
+  sites:
+  - 01_contracts_and_schemas/extension_port_contracts.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: EXTERNAL_REVIEW_MISREPRESENTED
+  sites:
+  - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml#failure_state
+  - 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: FAIL_CLOSED_BYPASSED
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: FEEDBACK_WROTE_TRUTH_DIRECTLY
+  sites:
+  - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: FIVE_CATEGORY_NOT_READY
+  sites:
+  - 01_contracts_and_schemas/category_scope_contract.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: FIXTURE_HIDDEN_POOL_CONTAMINATION
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: FORBIDDEN_ATTRIBUTE_INFERRED
+  sites:
+  - 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: FORMAL_BATCH_BEFORE_TIMING_GATE
+  sites:
+  - governance/conditions/hidden_generation_timing_gate.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_generation_readiness
+- code: FOUNDER_CONFIRMATION_UNBOUND
+  sites:
+  - governance/conditions/hidden_generation_timing_gate.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_founder_confirmation_binding
+  - check_m2_hidden_generation_readiness
+- code: FOUNDER_PACKAGE_IN_HIDDEN_SET
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_assets
+- code: FOUNDER_PACKAGE_SCOPE_VIOLATION
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: FUNCTIONAL_COMMIT_ON_FROZEN_MAINLINE
+  sites:
+  - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: GATE_DECISION_MISSING
+  sites:
+  - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: GUARDIAN_REPORT_FULLTEXT_NOT_PROVIDED
+  sites:
+  - governance/conditions/m2_condition_state_semantics.v0.1.yaml#stop_id
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: GUARDIAN_REPORT_GAP_UNDECLARED
+  sites:
+  - governance/reports/guardian_report_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_guardian_report_binding
+- code: GUARDIAN_REPORT_HASH_STALE
+  sites:
+  - governance/reports/guardian_report_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_guardian_report_binding
+- code: GUARDIAN_REVIEW_COMMIT_UNBOUND
+  sites:
+  - governance/reports/guardian_report_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_guardian_report_binding
+- code: GUARDIAN_UNBLOCK_CLAIMED_BEFORE_PRECONDITION
+  sites:
+  - governance/conditions/predistribution_sequence.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_predistribution_sequence
+- code: HARD_CONSTRAINT_RELAXED_UNDER_PRESSURE
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: HARD_GATE_MULTIPLE_PRIMARY
+  sites:
+  - 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_capability_matrix
+- code: HARD_GATE_WITHOUT_RELEASE_GATE
+  sites:
+  - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
+  - 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_capability_matrix
+- code: HARD_RULE_DENSITY_NOT_SPREAD
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: HIDDEN_ASSET_IN_MAIN_REPO
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: HIDDEN_ASSET_STATUS_AHEAD_OF_EVIDENCE
+  sites:
+  - governance/conditions/m2_condition_state_semantics.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_generation_readiness
+- code: HIDDEN_CONTENT_DISCLOSURE_REQUESTED
+  sites:
+  - 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: HIDDEN_SET_USED_FOR_TUNING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/threshold_freeze_decision.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: HIDDEN_STORAGE_NOT_PROVISIONED
+  sites:
+  - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#single_blocker
+  - governance/conditions/m2_condition_state_semantics.v0.1.yaml#stop_id
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_assets
+- code: HIGH_RISK_SAMPLED
+  sites:
+  - 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml#failure_state
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+  - check_m2_evaluation_governance
+- code: INDIVIDUAL_PROFILE_INSUFFICIENT
+  sites:
+  - 01_contracts_and_schemas/category_adapter_contracts/womenswear.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: INTERNAL_CONTRADICTION_BYPASSED
+  sites:
+  - 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: JUDGMENT_SCORE_INCONSISTENT
+  sites:
+  - 03_m2_evaluation_foundation/calibration/numeric_scoring_anchors.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: KNOWLEDGE_STATE_SKIPPED
+  sites:
+  - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: LEGACY_ASSET_CONTACT
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: LEGITIMATE_DISAGREEMENT_ERASED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: LEGITIMATE_DISAGREEMENT_SCORED_AS_ERROR
+  sites:
+  - 03_m2_evaluation_foundation/scoring/scorecard_open_decision.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_scoring_cards
+- code: LOOSER_CONSTRAINT_APPLIED_ON_OVERLAP
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: LOW_CONFIDENCE_ANSWERED_ANYWAY
+  sites:
+  - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: M0_DELIVERABLE_COUNT_DRIFT
+  sites:
+  - 00_charter/project_charter.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m0_deliverable_closure
+- code: M0_GATE_NOT_MACHINE_VERIFIED
+  sites:
+  - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: M0_RED_LINE_CROSSED
+  sites:
+  - 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: M1_FROZEN_ARTIFACT_DRIFT
+  sites:
+  - 03_m2_evaluation_foundation/envelope/m1_source_binding.v0.1.yaml#stop_condition_not_triggered
+  enforcement: machine_checked
+  detectors:
+  - check_m2_envelope_contract
+- code: M2_CANDIDATE_CLAIMED_WITH_INCOMPLETE_DELIVERY
+  sites:
+  - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_deliverable_closure
+- code: M2_FROZEN_WITH_UNFROZEN_DELIVERABLE
+  sites:
+  - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_deliverable_closure
+- code: M6_DEGENERATED_TO_PROMPT_RAG
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: MERGE_BEFORE_THREE_GATES
+  sites:
+  - governance/conditions/mainline_freeze_and_merge_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: MILESTONE_RECEIPT_WITHOUT_COVERAGE_ENTRY
+  sites:
+  - governance/gates/milestone_closure_coverage_rule.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_milestone_closure_coverage
+- code: MILESTONE_SEQUENCE_DRIFT
+  sites:
+  - 01_contracts_and_schemas/execution_critical_path_and_decision_gates.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: MILESTONE_WITHOUT_CLOSURE_CHECKER
+  sites:
+  - governance/gates/milestone_closure_coverage_rule.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_milestone_closure_coverage
+- code: MODEL_ASSERTION_TREATED_AS_MARKET_FACT
+  sites:
+  - 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: MODEL_OUTPUT_PROMOTED_WITHOUT_REVIEW
+  sites:
+  - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: MULTIMODAL_ATTRIBUTE_UNSAFE
+  sites:
+  - 01_contracts_and_schemas/capability_contract.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/kidswear.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: NARRATIVE_DISTORTED_DECISION
+  sites:
+  - 03_m2_evaluation_foundation/scoring/narrative_scoring_rubric.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: NARRATIVE_REAL_EVENT_ABSENT
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: NATIVE_VOICE_QUALITY_FAIL
+  sites:
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: NON_GOAL_MISREPRESENTED
+  sites:
+  - 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: NO_REAL_PRODUCT_LIST
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: OBJECT_COUNT_DRIFT
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m1_object_coverage
+- code: OVERCLAIMED_TRANSFER_STRENGTH
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: PACK_CONTAINS_ANCHOR_LABEL
+  sites:
+  - 03_m2_evaluation_foundation/calibration/founder_boundary_anchor_truth.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_calibration_launch_pack
+- code: PERSONA_DRIFT_WITHOUT_RECORD
+  sites:
+  - 03_m2_evaluation_foundation/scoring/persona_continuity_scoring_rubric.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: PERSONA_HARD_CONTRADICTION
+  sites:
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: PERSONA_STATE_INVALID
+  sites:
+  - 01_contracts_and_schemas/capability_contract.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: PHANTOM_STOP_CODE_DECLARED_NOT_TRIGGERED
+  sites:
+  - governance/gates/stop_code_enforcement_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_stop_code_enforcement
+- code: PLACEHOLDER_TREATED_AS_REPORT
+  sites:
+  - governance/reports/guardian_report_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_guardian_report_binding
+- code: PLANNER_GUARDIAN_NOT_ISOLATED
+  sites:
+  - 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: PREMATURE_ASSET_GENERATION
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: PREMATURE_EXTERNAL_CONNECTION
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: PREMATURE_FROZEN_CLAIM
+  sites:
+  - 00_charter/project_charter.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m0_contract_completeness
+- code: PROJECT_CI_INTEGRITY_FAIL
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: REASONING_INTERVAL_MISSING
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: RECALIBRATION_SKIPPED_AFTER_MODEL_CHANGE
+  sites:
+  - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: RELEASE_GATE_ID_UNKNOWN
+  sites:
+  - 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_capability_matrix
+- code: RESAMPLED_AFTER_FAILURE
+  sites:
+  - 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: RESPLIT_AFTER_FAILURE
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: REVIEW_QUESTION_NOT_VERBATIM
+  sites:
+  - governance/reports/m2_premerge_review_request.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: REVIEW_QUEUE_IN_DISTRIBUTION_PACK
+  sites:
+  - 03_m2_evaluation_foundation/calibration/founder_review_queue_annotations.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_predistribution_sequence
+- code: REVIEW_TARGET_MISMATCH
+  sites:
+  - governance/reports/m2_premerge_review_request.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: ROLE_SILENTLY_BYPASSED
+  sites:
+  - 01_contracts_and_schemas/role_and_decision_rights.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: SAFETY_BOUNDARY_CROSSED
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SAFETY_TASK_SCORED_AS_OPEN_DECISION
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SAMPLING_RATIO_NOT_FROZEN_AT_M2
+  sites:
+  - 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: SANITIZED_PACKAGE_REJECTED_ON_INTAKE
+  sites:
+  - 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SCORE_MUTATED_DURING_MERGE
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SCORE_USED_AS_JUDGMENT
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/calibration/calibration_review_state.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: SEALED_REVIEW_RECORDS_APPEARED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/launch_pack_seal_manifest.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: SILENT_DELIVERABLE_SUBSTITUTION
+  sites:
+  - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_deliverable_closure
+- code: SIMULATED_INVENTORY_MIXED_WITH_PRODUCTION
+  sites:
+  - 01_contracts_and_schemas/data_and_fixture_workflow.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: SINGLE_ARGMAX_OUTPUT
+  sites:
+  - 01_contracts_and_schemas/architecture_and_integration_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SINGLE_GOLD_ANSWER_ON_OPEN_TASK
+  sites:
+  - 01_contracts_and_schemas/knowledge_state_machine.v1.0.yaml#failure_state
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/evaluation_governance/benchmark_revision_protocol.v0.1.yaml#failure_state
+  - 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+  - check_m2_scoring_cards
+- code: SINGLE_SIDE_IMPUTED
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: SOLUTION_FAMILY_INSUFFICIENT
+  sites:
+  - 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: SPORT_FUNCTION_INSUFFICIENT
+  sites:
+  - 01_contracts_and_schemas/category_adapter_contracts/sport_trend.adapter.v0.1.yaml#failure_state
+  - 01_contracts_and_schemas/category_scope_contract.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: STATUS_CONTRADICTS_BLOCKERS
+  sites:
+  - 03_m2_evaluation_foundation/closure/m2_deliverable_coverage_map.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_deliverable_closure
+- code: STOP_CONDITION_BYPASSED
+  sites:
+  - 01_contracts_and_schemas/non_goals_and_stop_conditions.v1.0.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: STOP_TABLE_NOT_PARTITIONED_BY_ENFORCEMENT
+  sites:
+  - governance/gates/stop_code_enforcement_registry.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_stop_code_enforcement
+- code: STORE_INVENTORY_UNKNOWN
+  sites:
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: STRATUM_EMPTY
+  sites:
+  - 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_set
+- code: STYLE_DIMENSION_NOT_COVERED
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: STYLE_SPACE_DIMENSION_DRIFT
+  sites:
+  - 01_contracts_and_schemas/m1_object_model/brand_style_space.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m1_object_coverage
+- code: SYNTHETIC_ASSET_UNMARKED
+  sites:
+  - 03_m2_evaluation_foundation/hidden_assets/hidden_asset_generation_contract.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_assets
+- code: THRESHOLD_CLOSED_BY_WRONG_ROLE
+  sites:
+  - governance/conditions/m2_condition_state_semantics.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_hidden_generation_readiness
+- code: THRESHOLD_LOWERED_AFTER_FAILURE
+  sites:
+  - 03_m2_evaluation_foundation/evaluation_governance/benchmark_revision_protocol.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_evaluation_governance
+- code: UNAUTHORIZED_AUTO_PUBLISH
+  sites:
+  - 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml#failure_state
+  - 01_contracts_and_schemas/input_output_boundary.v1.0.yaml#failure_state
+  - PRD_v1.2_change_map.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: UNFROZEN_THRESHOLD_USED_IN_AGGREGATION
+  sites:
+  - 03_m2_evaluation_foundation/calibration/calibration_aggregation.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_calibration_review
+- code: UNSEAL_WITHOUT_FOUNDER_RULING
+  sites:
+  - governance/conditions/m2_seal_ledger.v0.1.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_m2_suspension_seal
+- code: UNSEEN_BRAND_COUNT_OUT_OF_RANGE
+  sites:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: UNSUPPORTED_LEGAL_OPINION_CLAIM
+  sites:
+  - 01_contracts_and_schemas/compliance_review_contract.v1.0.yaml#failure_state
+  enforcement: machine_checked
+  detectors:
+  - check_compliance_ledger
+- code: UNVERIFIED_COMPETITIVE_CLAIM_IN_PRODUCT_CONTRACT
+  sites:
+  - 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: UNVERIFIED_COMPETITIVE_CLAIM_STATED_PUBLICLY
+  sites:
+  - 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml#failure_state
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色
+- code: VOICE_REWRITE_CHANGED_CONCLUSION
+  sites:
+  - 03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml#failure_state
+  enforcement: future_runtime
+  detectors: []
+  detectable_when: 产品或隐藏资产实际运行后才有可检对象
+- code: WORKTREE_PATH_ALREADY_EXISTS
+  sites:
+  - governance/receipts/founder_m2_kickoff_signature_receipt.yaml#stop_condition_not_triggered
+  enforcement: human_judgement
+  detectors: []
+  judged_by: FOUNDER_PRODUCT_AUTHORITY 或审查角色

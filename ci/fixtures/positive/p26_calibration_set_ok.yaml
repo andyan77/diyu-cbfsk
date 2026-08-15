@@ -1,0 +1,2478 @@
+fixture_id: P26-calibration-set-ok
+description: 90 例填满 45 格，每例都带该类要求的判定形态；每例挂候选输出，锚点覆盖且格内两侧齐备。
+checker: check_m2_calibration_set
+expected: PASS
+payload:
+  cases:
+  - case_id: CAL-001
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 1
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-001
+      non_candidate_knowledge: true
+      candidate_output: CAL-001 的候选输出正文。
+  - case_id: CAL-002
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 2
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-002
+      non_candidate_knowledge: true
+      candidate_output: CAL-002 的候选输出正文。
+  - case_id: CAL-003
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 3
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-003
+      non_candidate_knowledge: true
+      candidate_output: CAL-003 的候选输出正文。
+  - case_id: CAL-004
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 4
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-004
+      non_candidate_knowledge: true
+      candidate_output: CAL-004 的候选输出正文。
+  - case_id: CAL-005
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 5
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-005
+      non_candidate_knowledge: true
+      candidate_output: CAL-005 的候选输出正文。
+  - case_id: CAL-006
+    category_id: CAT-A
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 6
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-006
+      non_candidate_knowledge: true
+      candidate_output: CAL-006 的候选输出正文。
+  - case_id: CAL-007
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 7
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-007
+      non_candidate_knowledge: true
+      candidate_output: CAL-007 的候选输出正文。
+      candidate_decision_trace: CAL-007 的决策轨迹。
+  - case_id: CAL-008
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 8
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-008
+      non_candidate_knowledge: true
+      candidate_output: CAL-008 的候选输出正文。
+      candidate_decision_trace: CAL-008 的决策轨迹。
+  - case_id: CAL-009
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 9
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-009
+      non_candidate_knowledge: true
+      candidate_output: CAL-009 的候选输出正文。
+      candidate_decision_trace: CAL-009 的决策轨迹。
+  - case_id: CAL-010
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 10
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-010
+      non_candidate_knowledge: true
+      candidate_output: CAL-010 的候选输出正文。
+      candidate_decision_trace: CAL-010 的决策轨迹。
+  - case_id: CAL-011
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 11
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-011
+      non_candidate_knowledge: true
+      candidate_output: CAL-011 的候选输出正文。
+      candidate_decision_trace: CAL-011 的决策轨迹。
+  - case_id: CAL-012
+    category_id: CAT-A
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 12
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-012
+      non_candidate_knowledge: true
+      candidate_output: CAL-012 的候选输出正文。
+      candidate_decision_trace: CAL-012 的决策轨迹。
+  - case_id: CAL-013
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 13
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-013
+      non_candidate_knowledge: true
+      candidate_output: CAL-013 的候选输出正文。
+      candidate_decision_trace: CAL-013 的决策轨迹。
+  - case_id: CAL-014
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 14
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-014
+      non_candidate_knowledge: true
+      candidate_output: CAL-014 的候选输出正文。
+      candidate_decision_trace: CAL-014 的决策轨迹。
+  - case_id: CAL-015
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 15
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-015
+      non_candidate_knowledge: true
+      candidate_output: CAL-015 的候选输出正文。
+      candidate_decision_trace: CAL-015 的决策轨迹。
+  - case_id: CAL-016
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 16
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-016
+      non_candidate_knowledge: true
+      candidate_output: CAL-016 的候选输出正文。
+      candidate_decision_trace: CAL-016 的决策轨迹。
+  - case_id: CAL-017
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 17
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-017
+      non_candidate_knowledge: true
+      candidate_output: CAL-017 的候选输出正文。
+      candidate_decision_trace: CAL-017 的决策轨迹。
+  - case_id: CAL-018
+    category_id: CAT-A
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 18
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-018
+      non_candidate_knowledge: true
+      candidate_output: CAL-018 的候选输出正文。
+      candidate_decision_trace: CAL-018 的决策轨迹。
+  - case_id: CAL-019
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 19
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-019
+      non_candidate_knowledge: true
+      candidate_output: CAL-019 的候选输出正文。
+  - case_id: CAL-020
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 20
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-020
+      non_candidate_knowledge: true
+      candidate_output: CAL-020 的候选输出正文。
+  - case_id: CAL-021
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 21
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-021
+      non_candidate_knowledge: true
+      candidate_output: CAL-021 的候选输出正文。
+  - case_id: CAL-022
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 22
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-022
+      non_candidate_knowledge: true
+      candidate_output: CAL-022 的候选输出正文。
+  - case_id: CAL-023
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 23
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-023
+      non_candidate_knowledge: true
+      candidate_output: CAL-023 的候选输出正文。
+  - case_id: CAL-024
+    category_id: CAT-B
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 24
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-024
+      non_candidate_knowledge: true
+      candidate_output: CAL-024 的候选输出正文。
+  - case_id: CAL-025
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 25
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-025
+      non_candidate_knowledge: true
+      candidate_output: CAL-025 的候选输出正文。
+      candidate_decision_trace: CAL-025 的决策轨迹。
+  - case_id: CAL-026
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 26
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-026
+      non_candidate_knowledge: true
+      candidate_output: CAL-026 的候选输出正文。
+      candidate_decision_trace: CAL-026 的决策轨迹。
+  - case_id: CAL-027
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 27
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-027
+      non_candidate_knowledge: true
+      candidate_output: CAL-027 的候选输出正文。
+      candidate_decision_trace: CAL-027 的决策轨迹。
+  - case_id: CAL-028
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 28
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-028
+      non_candidate_knowledge: true
+      candidate_output: CAL-028 的候选输出正文。
+      candidate_decision_trace: CAL-028 的决策轨迹。
+  - case_id: CAL-029
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 29
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-029
+      non_candidate_knowledge: true
+      candidate_output: CAL-029 的候选输出正文。
+      candidate_decision_trace: CAL-029 的决策轨迹。
+  - case_id: CAL-030
+    category_id: CAT-B
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 30
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-030
+      non_candidate_knowledge: true
+      candidate_output: CAL-030 的候选输出正文。
+      candidate_decision_trace: CAL-030 的决策轨迹。
+  - case_id: CAL-031
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 31
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-031
+      non_candidate_knowledge: true
+      candidate_output: CAL-031 的候选输出正文。
+      candidate_decision_trace: CAL-031 的决策轨迹。
+  - case_id: CAL-032
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 32
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-032
+      non_candidate_knowledge: true
+      candidate_output: CAL-032 的候选输出正文。
+      candidate_decision_trace: CAL-032 的决策轨迹。
+  - case_id: CAL-033
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 33
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-033
+      non_candidate_knowledge: true
+      candidate_output: CAL-033 的候选输出正文。
+      candidate_decision_trace: CAL-033 的决策轨迹。
+  - case_id: CAL-034
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 34
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-034
+      non_candidate_knowledge: true
+      candidate_output: CAL-034 的候选输出正文。
+      candidate_decision_trace: CAL-034 的决策轨迹。
+  - case_id: CAL-035
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 35
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-035
+      non_candidate_knowledge: true
+      candidate_output: CAL-035 的候选输出正文。
+      candidate_decision_trace: CAL-035 的决策轨迹。
+  - case_id: CAL-036
+    category_id: CAT-B
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 36
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-036
+      non_candidate_knowledge: true
+      candidate_output: CAL-036 的候选输出正文。
+      candidate_decision_trace: CAL-036 的决策轨迹。
+  - case_id: CAL-037
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 37
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-037
+      non_candidate_knowledge: true
+      candidate_output: CAL-037 的候选输出正文。
+  - case_id: CAL-038
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 38
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-038
+      non_candidate_knowledge: true
+      candidate_output: CAL-038 的候选输出正文。
+  - case_id: CAL-039
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 39
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-039
+      non_candidate_knowledge: true
+      candidate_output: CAL-039 的候选输出正文。
+  - case_id: CAL-040
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 40
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-040
+      non_candidate_knowledge: true
+      candidate_output: CAL-040 的候选输出正文。
+  - case_id: CAL-041
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 41
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-041
+      non_candidate_knowledge: true
+      candidate_output: CAL-041 的候选输出正文。
+  - case_id: CAL-042
+    category_id: CAT-C
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 42
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-042
+      non_candidate_knowledge: true
+      candidate_output: CAL-042 的候选输出正文。
+  - case_id: CAL-043
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 43
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-043
+      non_candidate_knowledge: true
+      candidate_output: CAL-043 的候选输出正文。
+      candidate_decision_trace: CAL-043 的决策轨迹。
+  - case_id: CAL-044
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 44
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-044
+      non_candidate_knowledge: true
+      candidate_output: CAL-044 的候选输出正文。
+      candidate_decision_trace: CAL-044 的决策轨迹。
+  - case_id: CAL-045
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 45
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-045
+      non_candidate_knowledge: true
+      candidate_output: CAL-045 的候选输出正文。
+      candidate_decision_trace: CAL-045 的决策轨迹。
+  - case_id: CAL-046
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 46
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-046
+      non_candidate_knowledge: true
+      candidate_output: CAL-046 的候选输出正文。
+      candidate_decision_trace: CAL-046 的决策轨迹。
+  - case_id: CAL-047
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 47
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-047
+      non_candidate_knowledge: true
+      candidate_output: CAL-047 的候选输出正文。
+      candidate_decision_trace: CAL-047 的决策轨迹。
+  - case_id: CAL-048
+    category_id: CAT-C
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 48
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-048
+      non_candidate_knowledge: true
+      candidate_output: CAL-048 的候选输出正文。
+      candidate_decision_trace: CAL-048 的决策轨迹。
+  - case_id: CAL-049
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 49
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-049
+      non_candidate_knowledge: true
+      candidate_output: CAL-049 的候选输出正文。
+      candidate_decision_trace: CAL-049 的决策轨迹。
+  - case_id: CAL-050
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 50
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-050
+      non_candidate_knowledge: true
+      candidate_output: CAL-050 的候选输出正文。
+      candidate_decision_trace: CAL-050 的决策轨迹。
+  - case_id: CAL-051
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 51
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-051
+      non_candidate_knowledge: true
+      candidate_output: CAL-051 的候选输出正文。
+      candidate_decision_trace: CAL-051 的决策轨迹。
+  - case_id: CAL-052
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 52
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-052
+      non_candidate_knowledge: true
+      candidate_output: CAL-052 的候选输出正文。
+      candidate_decision_trace: CAL-052 的决策轨迹。
+  - case_id: CAL-053
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 53
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-053
+      non_candidate_knowledge: true
+      candidate_output: CAL-053 的候选输出正文。
+      candidate_decision_trace: CAL-053 的决策轨迹。
+  - case_id: CAL-054
+    category_id: CAT-C
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 54
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-054
+      non_candidate_knowledge: true
+      candidate_output: CAL-054 的候选输出正文。
+      candidate_decision_trace: CAL-054 的决策轨迹。
+  - case_id: CAL-055
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 55
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-055
+      non_candidate_knowledge: true
+      candidate_output: CAL-055 的候选输出正文。
+  - case_id: CAL-056
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 56
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-056
+      non_candidate_knowledge: true
+      candidate_output: CAL-056 的候选输出正文。
+  - case_id: CAL-057
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 57
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-057
+      non_candidate_knowledge: true
+      candidate_output: CAL-057 的候选输出正文。
+  - case_id: CAL-058
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 58
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-058
+      non_candidate_knowledge: true
+      candidate_output: CAL-058 的候选输出正文。
+  - case_id: CAL-059
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 59
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-059
+      non_candidate_knowledge: true
+      candidate_output: CAL-059 的候选输出正文。
+  - case_id: CAL-060
+    category_id: CAT-D
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 60
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-060
+      non_candidate_knowledge: true
+      candidate_output: CAL-060 的候选输出正文。
+  - case_id: CAL-061
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 61
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-061
+      non_candidate_knowledge: true
+      candidate_output: CAL-061 的候选输出正文。
+      candidate_decision_trace: CAL-061 的决策轨迹。
+  - case_id: CAL-062
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 62
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-062
+      non_candidate_knowledge: true
+      candidate_output: CAL-062 的候选输出正文。
+      candidate_decision_trace: CAL-062 的决策轨迹。
+  - case_id: CAL-063
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 63
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-063
+      non_candidate_knowledge: true
+      candidate_output: CAL-063 的候选输出正文。
+      candidate_decision_trace: CAL-063 的决策轨迹。
+  - case_id: CAL-064
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 64
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-064
+      non_candidate_knowledge: true
+      candidate_output: CAL-064 的候选输出正文。
+      candidate_decision_trace: CAL-064 的决策轨迹。
+  - case_id: CAL-065
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 65
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-065
+      non_candidate_knowledge: true
+      candidate_output: CAL-065 的候选输出正文。
+      candidate_decision_trace: CAL-065 的决策轨迹。
+  - case_id: CAL-066
+    category_id: CAT-D
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 66
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-066
+      non_candidate_knowledge: true
+      candidate_output: CAL-066 的候选输出正文。
+      candidate_decision_trace: CAL-066 的决策轨迹。
+  - case_id: CAL-067
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 67
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-067
+      non_candidate_knowledge: true
+      candidate_output: CAL-067 的候选输出正文。
+      candidate_decision_trace: CAL-067 的决策轨迹。
+  - case_id: CAL-068
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 68
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-068
+      non_candidate_knowledge: true
+      candidate_output: CAL-068 的候选输出正文。
+      candidate_decision_trace: CAL-068 的决策轨迹。
+  - case_id: CAL-069
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 69
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-069
+      non_candidate_knowledge: true
+      candidate_output: CAL-069 的候选输出正文。
+      candidate_decision_trace: CAL-069 的决策轨迹。
+  - case_id: CAL-070
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 70
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-070
+      non_candidate_knowledge: true
+      candidate_output: CAL-070 的候选输出正文。
+      candidate_decision_trace: CAL-070 的决策轨迹。
+  - case_id: CAL-071
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 71
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-071
+      non_candidate_knowledge: true
+      candidate_output: CAL-071 的候选输出正文。
+      candidate_decision_trace: CAL-071 的决策轨迹。
+  - case_id: CAL-072
+    category_id: CAT-D
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 72
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-072
+      non_candidate_knowledge: true
+      candidate_output: CAL-072 的候选输出正文。
+      candidate_decision_trace: CAL-072 的决策轨迹。
+  - case_id: CAL-073
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 73
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-073
+      non_candidate_knowledge: true
+      candidate_output: CAL-073 的候选输出正文。
+  - case_id: CAL-074
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 74
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-074
+      non_candidate_knowledge: true
+      candidate_output: CAL-074 的候选输出正文。
+  - case_id: CAL-075
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 75
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-075
+      non_candidate_knowledge: true
+      candidate_output: CAL-075 的候选输出正文。
+  - case_id: CAL-076
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 76
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-076
+      non_candidate_knowledge: true
+      candidate_output: CAL-076 的候选输出正文。
+  - case_id: CAL-077
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 77
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-077
+      non_candidate_knowledge: true
+      candidate_output: CAL-077 的候选输出正文。
+  - case_id: CAL-078
+    category_id: CAT-E
+    evaluation_task_class: constraint_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 78
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: true
+    constraint_ref: HG-01
+    binary_fact_determination:
+      question: 问？
+      verdict_1_condition: 成立
+      verdict_0_condition: 不成立
+    candidate:
+      candidate_id: CAND-CAL-078
+      non_candidate_knowledge: true
+      candidate_output: CAL-078 的候选输出正文。
+  - case_id: CAL-079
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 79
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-079
+      non_candidate_knowledge: true
+      candidate_output: CAL-079 的候选输出正文。
+      candidate_decision_trace: CAL-079 的决策轨迹。
+  - case_id: CAL-080
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 80
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-080
+      non_candidate_knowledge: true
+      candidate_output: CAL-080 的候选输出正文。
+      candidate_decision_trace: CAL-080 的决策轨迹。
+  - case_id: CAL-081
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 81
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-081
+      non_candidate_knowledge: true
+      candidate_output: CAL-081 的候选输出正文。
+      candidate_decision_trace: CAL-081 的决策轨迹。
+  - case_id: CAL-082
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 82
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-082
+      non_candidate_knowledge: true
+      candidate_output: CAL-082 的候选输出正文。
+      candidate_decision_trace: CAL-082 的决策轨迹。
+  - case_id: CAL-083
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 83
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-083
+      non_candidate_knowledge: true
+      candidate_output: CAL-083 的候选输出正文。
+      candidate_decision_trace: CAL-083 的决策轨迹。
+  - case_id: CAL-084
+    category_id: CAT-E
+    evaluation_task_class: mechanism_correctness
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 84
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-M-01
+    acceptable_reasoning_interval: 区间描述
+    candidate:
+      candidate_id: CAND-CAL-084
+      non_candidate_knowledge: true
+      candidate_output: CAL-084 的候选输出正文。
+      candidate_decision_trace: CAL-084 的决策轨迹。
+  - case_id: CAL-085
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 85
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-085
+      non_candidate_knowledge: true
+      candidate_output: CAL-085 的候选输出正文。
+      candidate_decision_trace: CAL-085 的决策轨迹。
+  - case_id: CAL-086
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: high
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 86
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    founder_review_coverage: 1.0
+    sampling_allowed: false
+    candidate:
+      candidate_id: CAND-CAL-086
+      non_candidate_knowledge: true
+      candidate_output: CAL-086 的候选输出正文。
+      candidate_decision_trace: CAL-086 的决策轨迹。
+  - case_id: CAL-087
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 87
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-087
+      non_candidate_knowledge: true
+      candidate_output: CAL-087 的候选输出正文。
+      candidate_decision_trace: CAL-087 的决策轨迹。
+  - case_id: CAL-088
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: medium
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 88
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-088
+      non_candidate_knowledge: true
+      candidate_output: CAL-088 的候选输出正文。
+      candidate_decision_trace: CAL-088 的决策轨迹。
+  - case_id: CAL-089
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 89
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-089
+      non_candidate_knowledge: true
+      candidate_output: CAL-089 的候选输出正文。
+      candidate_decision_trace: CAL-089 的决策轨迹。
+  - case_id: CAL-090
+    category_id: CAT-E
+    evaluation_task_class: open_decision
+    risk_tier: low
+    capability_dimensions:
+    - professional_explanation
+    input_object_refs:
+    - https://example/x.json
+    scenario: 情景 90
+    hard_gate_refs:
+    - HG-01
+    gold_answer_allowed: false
+    single_gold_answer_present: false
+    acceptable_decision_boundary_ref: ADB-O-01
+    legal_solution_families:
+    - 族一
+    - 族二
+    acceptance_boundary: 边界描述
+    candidate:
+      candidate_id: CAND-CAL-090
+      non_candidate_knowledge: true
+      candidate_output: CAL-090 的候选输出正文。
+      candidate_decision_trace: CAL-090 的决策轨迹。
+  declared_grid:
+    total_cases: 90
+    empty_cells: 0
+  declared_anchor_item_count: 90
+  consumer_anchor_item_count: 90
+  categories:
+  - CAT-A
+  - CAT-B
+  - CAT-C
+  - CAT-D
+  - CAT-E
+  capability_classes:
+    professional_explanation:
+    - constraint_correctness
+    - mechanism_correctness
+    - open_decision
+    narrative_quality:
+    - mechanism_correctness
+    - open_decision
+  boundary_families:
+    ADB-M-01: mechanism_correctness
+    ADB-O-01: open_decision
+  families_without_out_of_boundary: []
+  registry_counts:
+    declared_total: 2
+    actual_total: 2
+  hard_gate_ids:
+  - HG-01
+  - HG-05
+  constraint_ids:
+  - HG-01
+  - WW-HC-01
+  anchors:
+  - case_id: CAL-001
+    candidate_id: CAND-CAL-001
+    cell: CAT-A|constraint_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-002
+    candidate_id: CAND-CAL-002
+    cell: CAT-A|constraint_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-003
+    candidate_id: CAND-CAL-003
+    cell: CAT-A|constraint_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-004
+    candidate_id: CAND-CAL-004
+    cell: CAT-A|constraint_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-005
+    candidate_id: CAND-CAL-005
+    cell: CAT-A|constraint_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-006
+    candidate_id: CAND-CAL-006
+    cell: CAT-A|constraint_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-007
+    candidate_id: CAND-CAL-007
+    cell: CAT-A|mechanism_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-008
+    candidate_id: CAND-CAL-008
+    cell: CAT-A|mechanism_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-009
+    candidate_id: CAND-CAL-009
+    cell: CAT-A|mechanism_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-010
+    candidate_id: CAND-CAL-010
+    cell: CAT-A|mechanism_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-011
+    candidate_id: CAND-CAL-011
+    cell: CAT-A|mechanism_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-012
+    candidate_id: CAND-CAL-012
+    cell: CAT-A|mechanism_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-013
+    candidate_id: CAND-CAL-013
+    cell: CAT-A|open_decision|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-014
+    candidate_id: CAND-CAL-014
+    cell: CAT-A|open_decision|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-015
+    candidate_id: CAND-CAL-015
+    cell: CAT-A|open_decision|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-016
+    candidate_id: CAND-CAL-016
+    cell: CAT-A|open_decision|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-017
+    candidate_id: CAND-CAL-017
+    cell: CAT-A|open_decision|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-018
+    candidate_id: CAND-CAL-018
+    cell: CAT-A|open_decision|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-019
+    candidate_id: CAND-CAL-019
+    cell: CAT-B|constraint_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-020
+    candidate_id: CAND-CAL-020
+    cell: CAT-B|constraint_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-021
+    candidate_id: CAND-CAL-021
+    cell: CAT-B|constraint_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-022
+    candidate_id: CAND-CAL-022
+    cell: CAT-B|constraint_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-023
+    candidate_id: CAND-CAL-023
+    cell: CAT-B|constraint_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-024
+    candidate_id: CAND-CAL-024
+    cell: CAT-B|constraint_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-025
+    candidate_id: CAND-CAL-025
+    cell: CAT-B|mechanism_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-026
+    candidate_id: CAND-CAL-026
+    cell: CAT-B|mechanism_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-027
+    candidate_id: CAND-CAL-027
+    cell: CAT-B|mechanism_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-028
+    candidate_id: CAND-CAL-028
+    cell: CAT-B|mechanism_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-029
+    candidate_id: CAND-CAL-029
+    cell: CAT-B|mechanism_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-030
+    candidate_id: CAND-CAL-030
+    cell: CAT-B|mechanism_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-031
+    candidate_id: CAND-CAL-031
+    cell: CAT-B|open_decision|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-032
+    candidate_id: CAND-CAL-032
+    cell: CAT-B|open_decision|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-033
+    candidate_id: CAND-CAL-033
+    cell: CAT-B|open_decision|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-034
+    candidate_id: CAND-CAL-034
+    cell: CAT-B|open_decision|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-035
+    candidate_id: CAND-CAL-035
+    cell: CAT-B|open_decision|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-036
+    candidate_id: CAND-CAL-036
+    cell: CAT-B|open_decision|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-037
+    candidate_id: CAND-CAL-037
+    cell: CAT-C|constraint_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-038
+    candidate_id: CAND-CAL-038
+    cell: CAT-C|constraint_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-039
+    candidate_id: CAND-CAL-039
+    cell: CAT-C|constraint_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-040
+    candidate_id: CAND-CAL-040
+    cell: CAT-C|constraint_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-041
+    candidate_id: CAND-CAL-041
+    cell: CAT-C|constraint_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-042
+    candidate_id: CAND-CAL-042
+    cell: CAT-C|constraint_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-043
+    candidate_id: CAND-CAL-043
+    cell: CAT-C|mechanism_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-044
+    candidate_id: CAND-CAL-044
+    cell: CAT-C|mechanism_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-045
+    candidate_id: CAND-CAL-045
+    cell: CAT-C|mechanism_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-046
+    candidate_id: CAND-CAL-046
+    cell: CAT-C|mechanism_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-047
+    candidate_id: CAND-CAL-047
+    cell: CAT-C|mechanism_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-048
+    candidate_id: CAND-CAL-048
+    cell: CAT-C|mechanism_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-049
+    candidate_id: CAND-CAL-049
+    cell: CAT-C|open_decision|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-050
+    candidate_id: CAND-CAL-050
+    cell: CAT-C|open_decision|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-051
+    candidate_id: CAND-CAL-051
+    cell: CAT-C|open_decision|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-052
+    candidate_id: CAND-CAL-052
+    cell: CAT-C|open_decision|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-053
+    candidate_id: CAND-CAL-053
+    cell: CAT-C|open_decision|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-054
+    candidate_id: CAND-CAL-054
+    cell: CAT-C|open_decision|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-055
+    candidate_id: CAND-CAL-055
+    cell: CAT-D|constraint_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-056
+    candidate_id: CAND-CAL-056
+    cell: CAT-D|constraint_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-057
+    candidate_id: CAND-CAL-057
+    cell: CAT-D|constraint_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-058
+    candidate_id: CAND-CAL-058
+    cell: CAT-D|constraint_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-059
+    candidate_id: CAND-CAL-059
+    cell: CAT-D|constraint_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-060
+    candidate_id: CAND-CAL-060
+    cell: CAT-D|constraint_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-061
+    candidate_id: CAND-CAL-061
+    cell: CAT-D|mechanism_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-062
+    candidate_id: CAND-CAL-062
+    cell: CAT-D|mechanism_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-063
+    candidate_id: CAND-CAL-063
+    cell: CAT-D|mechanism_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-064
+    candidate_id: CAND-CAL-064
+    cell: CAT-D|mechanism_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-065
+    candidate_id: CAND-CAL-065
+    cell: CAT-D|mechanism_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-066
+    candidate_id: CAND-CAL-066
+    cell: CAT-D|mechanism_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-067
+    candidate_id: CAND-CAL-067
+    cell: CAT-D|open_decision|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-068
+    candidate_id: CAND-CAL-068
+    cell: CAT-D|open_decision|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-069
+    candidate_id: CAND-CAL-069
+    cell: CAT-D|open_decision|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-070
+    candidate_id: CAND-CAL-070
+    cell: CAT-D|open_decision|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-071
+    candidate_id: CAND-CAL-071
+    cell: CAT-D|open_decision|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-072
+    candidate_id: CAND-CAL-072
+    cell: CAT-D|open_decision|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-073
+    candidate_id: CAND-CAL-073
+    cell: CAT-E|constraint_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-074
+    candidate_id: CAND-CAL-074
+    cell: CAT-E|constraint_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-075
+    candidate_id: CAND-CAL-075
+    cell: CAT-E|constraint_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-076
+    candidate_id: CAND-CAL-076
+    cell: CAT-E|constraint_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-077
+    candidate_id: CAND-CAL-077
+    cell: CAT-E|constraint_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-078
+    candidate_id: CAND-CAL-078
+    cell: CAT-E|constraint_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-079
+    candidate_id: CAND-CAL-079
+    cell: CAT-E|mechanism_correctness|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-080
+    candidate_id: CAND-CAL-080
+    cell: CAT-E|mechanism_correctness|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-081
+    candidate_id: CAND-CAL-081
+    cell: CAT-E|mechanism_correctness|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-082
+    candidate_id: CAND-CAL-082
+    cell: CAT-E|mechanism_correctness|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-083
+    candidate_id: CAND-CAL-083
+    cell: CAT-E|mechanism_correctness|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-084
+    candidate_id: CAND-CAL-084
+    cell: CAT-E|mechanism_correctness|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-085
+    candidate_id: CAND-CAL-085
+    cell: CAT-E|open_decision|high
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-086
+    candidate_id: CAND-CAL-086
+    cell: CAT-E|open_decision|high
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-087
+    candidate_id: CAND-CAL-087
+    cell: CAT-E|open_decision|medium
+    boundary_position: outside
+    constructed_judgment: REJECT
+  - case_id: CAL-088
+    candidate_id: CAND-CAL-088
+    cell: CAT-E|open_decision|medium
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-089
+    candidate_id: CAND-CAL-089
+    cell: CAT-E|open_decision|low
+    boundary_position: inside
+    constructed_judgment: ACCEPT
+  - case_id: CAL-090
+    candidate_id: CAND-CAL-090
+    cell: CAT-E|open_decision|low
+    boundary_position: outside
+    constructed_judgment: REJECT
+  declared_anchor_counts:
+    anchors: 90
+    cells: 45
+    inside: 45
+    outside: 45
+    boundary_high_value: 0
+    constructed_accept: 45
+    constructed_reject: 45
+  anchor_distributed_to_reviewers: false

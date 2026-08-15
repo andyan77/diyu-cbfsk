@@ -1,0 +1,332 @@
+schema_version: '0.1'
+map_id: DIYU-CBFSK-M2-DELIVERABLE-COVERAGE-MAP
+artifact_id: m2_deliverable_coverage_map.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: validated
+authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第一节 A-1
+upstream_source:
+  file: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md
+  section: 第 2 节「M2 必须交付（PRD 13 节 M2 原清单，18 项）」
+  rule: 清单读自 Brief，禁止由候选自行声明应交什么。
+  checker_reads_brief_directly: true
+  checker_reads_brief_directly_note: ci/checkers/check_m2_deliverable_closure.py 直接解析 Brief 的 18 行表格取得序号与
+    canonical_name，不读本文件的自述清单——否则就是候选自己给自己出考纲。
+four_state_contract:
+  frozen_as_contract: true
+  ready_is_not_file_exists: true
+  states:
+  - state: ABSENT
+    definition: 文件不存在。
+  - state: PARTIAL
+    definition: 文件存在但缺内容、实例、证据或测试。
+  - state: READY
+    definition: 文件与实际内容均存在 ＋ 满足最低数量 ＋ Schema 校验通过 ＋ 正负例通过 ＋ 引用可解析 ＋ 证据哈希完整，但尚未 Founder 冻结。
+  - state: FROZEN
+    definition: READY 全部满足 ＋ Founder 签署具体 Commit 与资产版本。
+  ready_requirements:
+  - artifacts_exist
+  - minimum_count_met
+  - schema_valid
+  - positive_and_negative_fixtures_pass
+  - references_resolvable
+  - evidence_hashes_complete
+  frozen_requirements:
+  - ready_satisfied
+  - founder_freeze_commit_full_hash
+  - asset_version_recorded
+closure_rules:
+- id: CL-1
+  statement: 形成 M2 候选须 18 项全 READY（或 FROZEN）。
+  failure_state: M2_CANDIDATE_CLAIMED_WITH_INCOMPLETE_DELIVERY
+- id: CL-2
+  statement: m2_frozen=true 须 18 项全 FROZEN。
+  failure_state: M2_FROZEN_WITH_UNFROZEN_DELIVERABLE
+- id: CL-3
+  statement: 任何以等价物顶替原清单项或降级处理，必须填 founder_supersession_ruling，禁止静默缩减。
+  failure_state: SILENT_DELIVERABLE_SUBSTITUTION
+- id: CL-4
+  statement: 非 READY/FROZEN 的项必须至少记一个 blocker；READY/FROZEN 的项不得带 blocker。
+  failure_state: STATUS_CONTRADICTS_BLOCKERS
+- id: CL-5
+  statement: evidence_hashes 必须与磁盘现算哈希一致。
+  failure_state: EVIDENCE_HASH_STALE
+current_closure_state:
+  deliverable_count: 18
+  ready_count: 14
+  partial_count: 4
+  absent_count: 0
+  frozen_count: 0
+  all_ready: false
+  all_frozen: false
+  m2_candidate_formed: false
+  m2_frozen: false
+  founder_signature_eligible: false
+  candidate_status: M2_PARTIAL_DELIVERY_BLOCKED
+  single_blocker: HIDDEN_STORAGE_NOT_PROVISIONED
+  single_blocker_note: 四个未 READY 项（第 2、3、7、11 项）全部卡在同一个条件上——隐藏侧存储未 provision。不是四个独立缺口，是一个缺口的四处露头。
+universal_rule:
+  id: GR-CLOSURE-01
+  scope: 今后每个里程碑收口
+  statement: 每个里程碑收口都必须有一张由上位真源生成的交付覆盖矩阵与对应 closure checker；执行包不得以自身交付清单证明自身完整。
+  authority: DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第一节通则（永久）
+  registry: governance/gates/milestone_closure_coverage_rule.v0.1.yaml
+  enforced_by: ci/checkers/check_milestone_closure_coverage.py
+machine_checkable_fields:
+  deliverable_count:
+    type: integer
+    required_value: 18
+  ready_count:
+    type: integer
+    current_value: 14
+  all_ready:
+    type: boolean
+    current_value: false
+  m2_candidate_formed:
+    type: boolean
+    current_value: false
+  silent_substitution_count:
+    type: integer
+    required_value: 0
+failure_states:
+- M2_DELIVERABLE_COUNT_DRIFT
+- M2_DELIVERABLE_NAME_DRIFT
+- M2_DELIVERABLE_INDEX_COLLISION
+- M2_CANDIDATE_CLAIMED_WITH_INCOMPLETE_DELIVERY
+- M2_FROZEN_WITH_UNFROZEN_DELIVERABLE
+- SILENT_DELIVERABLE_SUBSTITUTION
+- STATUS_CONTRADICTS_BLOCKERS
+- EVIDENCE_HASH_STALE
+- READY_WITHOUT_ARTIFACT
+- INVALID_DELIVERABLE_STATUS
+- FROZEN_WITHOUT_FOUNDER_COMMIT
+items:
+- deliverable_id: D-M2-01
+  brief_index: 1
+  canonical_name: benchmark_capability_matrix.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 1 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/capability_matrix/benchmark_capability_matrix.v0.1.yaml: 2e849acd69a902c8a8e1202f47537cad5a4bc58b004eca3b4eab8f619bfbb727
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 四轴可寻址 195 格；34 条 PRD 10.2 指标逐条归属，每条能力项均标注 evaluation_task_class。
+- deliverable_id: D-M2-02
+  brief_index: 2
+  canonical_name: unseen_brand_split.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 2 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml
+  status: PARTIAL
+  evidence_hashes:
+    03_m2_evaluation_foundation/splits/unseen_brand_split.v0.1.yaml: 66b74c9d4bc9295ac2d351223d3545c7c9086c715a2aa52c82ff7cc66ec99bca
+  blockers:
+  - &id001
+    blocker_id: HIDDEN_STORAGE_NOT_PROVISIONED
+    record: 03_m2_evaluation_foundation/hidden_assets/hidden_asset_stop_record.v0.1.yaml
+    owner: FOUNDER_PRODUCT_AUTHORITY
+  founder_supersession_ruling: null
+  assessment_note: 切分规则与三个切分维度已定义；未见品牌实例为 0，属隐藏侧，被存储条件阻断。
+- deliverable_id: D-M2-03
+  brief_index: 3
+  canonical_name: unseen_category_edge_cases.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 3 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml
+  status: PARTIAL
+  evidence_hashes:
+    03_m2_evaluation_foundation/splits/unseen_category_edge_cases.v0.1.yaml: e8c21d2a4e06ce5040d4412e584fa224a2b1779d89ead1fcb1507dd62e26ee29
+  blockers:
+  - *id001
+  founder_supersession_ruling: null
+  assessment_note: 四个边缘任务族与切分规则已定义；边缘任务实例为 0，属隐藏侧，被存储条件阻断。
+- deliverable_id: D-M2-04
+  brief_index: 4
+  canonical_name: expert_scoring_rubric.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 4 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/expert_scoring_rubric.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/expert_scoring_rubric.v0.1.yaml: d522b4f4581e8566279a493bc943498449f6b3e7762e6f139aa7c7aadeda8232
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 五个评分要素、三类任务适用性、M1 对象绑定与四个失败态齐备。
+- deliverable_id: D-M2-05
+  brief_index: 5
+  canonical_name: narrative_scoring_rubric.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 5 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/narrative_scoring_rubric.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/narrative_scoring_rubric.v0.1.yaml: 2ff3141b6bd532b9ef3a72a248712c5b77ecab934e63e5907468c58391a42352
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 六个评分要素、P-02 叙事源于决策、HG-04 绑定齐备。
+- deliverable_id: D-M2-06
+  brief_index: 6
+  canonical_name: hard_gate_definitions.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 6 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/gates/hard_gate_definitions.v0.1.yaml: 7416f5de65859f9e53a897860443ea16256585e57204ea79cf9ac78d7d9e410f
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 11 条硬门逐条映射到八道发布门，无硬门无承接。
+- deliverable_id: D-M2-07
+  brief_index: 7
+  canonical_name: benchmark leakage checker / frozen manifest / receipt
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 7 项
+  equivalent_artifacts:
+  - ci/checkers/check_hidden_benchmark_boundary.py
+  - 03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml
+  - 02_benchmark_manifests/benchmark_freeze_receipt.v0.1.yaml
+  status: PARTIAL
+  evidence_hashes:
+    ci/checkers/check_hidden_benchmark_boundary.py: bd4a93069394f363debf163155b2378fb21ea08071c5d11ef4b2d96da71ae901
+    03_m2_evaluation_foundation/hidden_assets/hidden_asset_manifest.v0.1.yaml: 8411de859b3b061f9378d90d1f2c5e2b86557c16c125f040535f8374008bf56d
+    02_benchmark_manifests/benchmark_freeze_receipt.v0.1.yaml: 4b5b53d7318022884d20310bc57582c747151c74e19ac98ebf177464bdb4dc4c
+  blockers:
+  - *id001
+  founder_supersession_ruling: null
+  assessment_note: 检查器实跑 PASS；冻结清单存在但资产数为 0 且未冻结；回执如实记录未冻结状态。
+- deliverable_id: D-M2-08
+  brief_index: 8
+  canonical_name: reviewer_calibration_contract.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 8 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/evaluation_governance/reviewer_calibration_contract.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/evaluation_governance/reviewer_calibration_contract.v0.1.yaml: 2035b3101c4ae52baaac318584ea4676a048426cc5e3bfe0bd81f4ab5ca81e81
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: RC-01—RC-05 齐备，锚点题由 90 例公开校准集承接；阈值待 Founder 冻结属预期状态。
+- deliverable_id: D-M2-09
+  brief_index: 9
+  canonical_name: evaluation_sampling_design.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 9 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml: fffa5992d7a437fb460b4b9f1eba224ddb6659843847098b6b55b908594c0597
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 三个分层维度与四条抽样规则齐备；45 个分层格子已由公开校准集填满，空格子为 0。
+- deliverable_id: D-M2-10
+  brief_index: 10
+  canonical_name: benchmark_revision_protocol.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 10 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/evaluation_governance/benchmark_revision_protocol.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/evaluation_governance/benchmark_revision_protocol.v0.1.yaml: 92fa029ea11ec2f26a712be3c755399612d9999bd8b29a9ef0b082c89a584a71
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 冻结后唯一合法修订通道已定义，因失败而降标永久禁止。
+- deliverable_id: D-M2-11
+  brief_index: 11
+  canonical_name: 泄漏 ＋ 同质性双检查报告
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 11 项
+  equivalent_artifacts:
+  - 02_benchmark_manifests/leakage_and_homogeneity_double_check_report.v0.1.md
+  status: PARTIAL
+  evidence_hashes:
+    02_benchmark_manifests/leakage_and_homogeneity_double_check_report.v0.1.md: ab88f38b4a754759789846340cba89a6e71853982952f586e3effdc64597da73
+  blockers:
+  - *id001
+  founder_supersession_ruling: null
+  assessment_note: 泄漏侧实跑 PASS；同质性侧无可比较对象（夹具池与隐藏池均为 0），双检查合并结论为 PARTIAL。
+- deliverable_id: D-M2-12
+  brief_index: 12
+  canonical_name: persona_continuity_scoring_rubric.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 12 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/persona_continuity_scoring_rubric.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/persona_continuity_scoring_rubric.v0.1.yaml: 62d2596422af5c4e23cb38a363e628f9a1d459d8445c5c3d3a4eadb92f9c3b00
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: D-20 五对象全部绑定，六个评分要素与 HG-08/HG-09 齐备。
+- deliverable_id: D-M2-13
+  brief_index: 13
+  canonical_name: social_media_native_voice_scoring_rubric.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 13 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml: 7d10781d2a9249ee068f7a601117f38ada3cb503b30949589aad41321b516ec0
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 八个评分要素、账号差异化与「语感改写不得改变专业结论」不变式齐备。
+- deliverable_id: D-M2-14
+  brief_index: 14
+  canonical_name: multimodal_attribute_benchmark.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 14 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml: 7c3ed5293064a139e5c9732343d0654243adc451b3c660d3073cedf543a6313b
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 边界核对已完成（D-12 与 D-23 交集），六条指标与 HG-10 绑定齐备；待 Founder 收口批准边界。
+- deliverable_id: D-M2-15
+  brief_index: 15
+  canonical_name: multimodal_confidence_calibration_contract.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 15 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/multimodal_confidence_calibration_contract.v0.1.yaml: d069229332edc1bb61342ca1cc96ec80517cfd5d474efb058eb376b36ce55a2a
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 校准定义、分箱、过自信不对称与五条必须行为齐备；待 Founder 收口批准边界。
+- deliverable_id: D-M2-16
+  brief_index: 16
+  canonical_name: five_category_readiness_definition.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 16 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/five_category_readiness_definition.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/five_category_readiness_definition.v0.1.yaml: d667f99e0ee7363c6bf3017af84310bb979ae1c72738812412a36234328d6158
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 七条就绪判据与五品类逐类评估齐备。判据本身完备＝本交付物 READY；五类当前均未就绪是判据给出的结论，不是交付缺口。
+- deliverable_id: D-M2-17
+  brief_index: 17
+  canonical_name: evaluation_task_class_contract.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 17 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml: 6ffa4996af2738a44737a143ad644c66e86bce4e31744d0126cd0963ddd8af53
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: D-28 三分类、SC-20 与 R-22 齐备。
+- deliverable_id: D-M2-18
+  brief_index: 18
+  canonical_name: acceptable_decision_boundary_registry.v0.1.yaml
+  required_by: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 18 项
+  equivalent_artifacts:
+  - 03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml
+  status: READY
+  evidence_hashes:
+    03_m2_evaluation_foundation/scoring/acceptable_decision_boundary_registry.v0.1.yaml: 4e374540690771e38c76f9e92bce19f13e2212924d6bf62ae24b1f830ef51c58
+  blockers: []
+  founder_supersession_ruling: null
+  assessment_note: 15 个边界族（机制 8 / 开放 7），每族均有 out_of_boundary；公开校准集 60 道 ②③ 题全部引用其中一族。

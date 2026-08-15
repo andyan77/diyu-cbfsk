@@ -1,0 +1,62 @@
+fixture_id: M2-N27
+description: open_decision 类不再禁设唯一 Gold Answer——违反 D-28，触发 SC-20。
+checker: check_m2_evaluation_governance
+expected: FAIL
+payload:
+  contracts_present:
+    reviewer_calibration_contract.v0.1: true
+    evaluation_sampling_design.v0.1: true
+    benchmark_revision_protocol.v0.1: true
+  prematurely_frozen_thresholds: []
+  canonical_high_risk_coverage: 100%
+  canonical_high_risk_sampling_allowed: false
+  canonical_risk_tiers:
+  - high
+  - medium
+  - low
+  canonical_calibration_name: reviewer_calibration_contract
+  sampling_high_risk_coverage: 1.0
+  sampling_high_risk_sampling_allowed: false
+  sampling_high_risk_adjustable: false
+  sampling_risk_tiers:
+  - high
+  - medium
+  - low
+  sampling_dimension_count: 3
+  calibration_canonical_name: reviewer_calibration_contract
+  missing_calibration_elements: []
+  tournament_dimensions:
+  - quality
+  - cost
+  - latency
+  - human_intervention
+  tournament_declared_count: 4
+  threshold_lowered_after_failure: false
+  revision_requires_founder_ruling: true
+  gold_answer_forbidden_for:
+  - mechanism_correctness
+  enforcement_delegated_to: ci/checkers/check_hidden_benchmark_boundary.py
+  delegated_checker_exists: true
+  delegated_checker_registered: true
+  second_implementation_declared: false
+  m2_checkers_reimplementing_hidden_boundary: []
+  profile_classification_values:
+  - public
+  - internal
+  - restricted_founder_only
+  - hidden_evaluation
+  envelope_classification_values:
+  - public
+  - internal
+  - restricted_founder_only
+  - hidden_evaluation
+  hidden_values_marked_main_repo_storable: []
+  asset_counts:
+    public_assets_created: 0
+    internal_assets_created: 0
+    restricted_founder_only_assets_created: 0
+    hidden_evaluation_assets_created: 0
+    benchmark_items_created: 0
+    fixture_brands_created: 0
+    hidden_brands_created: 0
+  any_hidden_content_written_to_main_repository: false

@@ -1,0 +1,43 @@
+schema_version: "0.1"
+schema_ref: governance/workspaces/workspace_attestation.schema.yaml
+task_id: DIYU-CBFSK-M2-EP06-001
+covers_milestone: M2
+covers_packages: [M2-EP06]
+evidence_strength: procedural_corroboration_only
+is_cryptographic_independence_proof: false
+created_by_finding: NB-M2-05
+
+scope_note: >-
+  按里程碑维护的工作面见证分册。判据自动发现本目录下全部见证文件，
+  新增一个执行包＝加一份文件，不改 checker。
+
+records:
+  - workspace_id: diyu-cbfsk-m2-repair
+    workspace_path: /home/faye/diyu-cbfsk-m2
+    conversation_or_session_id: null
+    session_id_available: false
+    session_id_unavailable_reason: >-
+      本执行面无法读取自身会话标识；执行侧不得代为构造一个标识填进去。
+    session_started_at: "2026-08-14T21:00:00-07:00"
+    base_commit: 61be9b47bd3f4c74c9db102df577c5cf6aa334d2
+    role: TEMPORARY_EXECUTION_WRITER
+    scope: M2_EP06_INTAKE_AND_PREDISTRIBUTION_SEQUENCE
+    status: ACTIVE
+    is_task_guardian: false
+    is_task_planner: false
+    founder_designation_basis: DIYU-CBFSK-FOUNDER-M2-EP06-001（第二节：在本包内完成审阅队列，不另开包）
+    founder_manual_attestation_required: true
+
+guardian_record_absent:
+  reason: 本执行包（M2-EP06）的 Guardian 审查尚未进行——这是尚未发生的事件，不是待填字段。
+  prior_package_guardian_note: >-
+    EP06 第三节把 guardian_review_allowed 从 false 解除，但只限本轮 Delta，且第 4 步排在第 2、3 步之后。
+    Founder 尚未给出队列确认与 STORE-A 证据，最终分发前候选就不存在，Delta 没有审查对象。
+    因此本包完成后仍不得发起审查——解除禁令不等于现在可以发起。
+  must_not_be_read_as: 本包已通过 Guardian 审查
+
+founder_workspace_attestation:
+  status: NOT_YET_ATTESTED
+  attested_by: null
+  attested_at: null
+  note: 见证由 Founder 手工补签；执行侧不得代填。

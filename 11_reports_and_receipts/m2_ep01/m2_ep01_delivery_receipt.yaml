@@ -1,0 +1,375 @@
+schema_version: '0.1'
+receipt_id: DIYU-CBFSK-M2-EP01-RECEIPT-001
+task_id: DIYU-CBFSK-M2-EP01-001
+package_id: M2-EP01
+plan_id: MILESTONE_PLAN_M2
+plan_version: 1.1.0
+project_id: DIYU-CBFSK-001
+task_class: L2
+execution_run_id: 41f5cb93-1a3f-4e77-a8e1-142d5ac9de39
+recorded_by: CODEX_EXECUTION_ENGINEER
+recorded_at: '2026-08-13'
+baseline_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+baseline_commit_role: M2 启动包 v1.1 signed_baseline_commit / M1-EP01 收口 Commit（位于 main）
+branch: candidate/m2
+worktree: /home/faye/diyu-cbfsk-m2
+self_reference_limitation: 本回执无法记录包含它自身的那个 Commit 的哈希——回执一旦写入哈希，文件内容即改变，哈希随之失效。因此本回执只钉基线 Commit 与各产物的 artifact SHA256；候选
+  Commit 完整哈希在交付答复中输出，并由 Guardian 在审查时以 live git 复核。本回执自身的 SHA256 同样不在下方清单内，原因相同。
+digest_recipe: sha256(file_bytes)
+artifact_count_added: 100
+artifact_count_modified: 14
+added_artifacts:
+- path: 03_m2_evaluation_foundation/adr/ADR-001-six-layer-architecture-and-boundary.md
+  sha256: 090b199d40f56de6e1363f65d2914d7cf06b393c369237c7113c87fbef25d49a
+- path: 03_m2_evaluation_foundation/adr/ADR-002-model-provider-abstraction.md
+  sha256: 43401d5771f86f8235340275a71207bc75d6b9ba616385ec04be7c32da91fb1e
+- path: 03_m2_evaluation_foundation/adr/ADR-003-tenant-scope-and-composed-consumption.md
+  sha256: b76f493e6c0440937e829c20833096207be43387cb768fb99cbbfaa94ccd1362
+- path: 03_m2_evaluation_foundation/adr/ADR-004-privacy-and-identity-isolation.md
+  sha256: 0917db64bf81691f76e1fba816665d0b037eeaa614701bb9fe5eace6e8c45dc7
+- path: 03_m2_evaluation_foundation/adr/ADR-005-benchmark-tournament-and-observability.md
+  sha256: e8029c6e59dbb0d9cf3b277c84711ebb3a58a54cf394d12557edaa9916a5749c
+- path: 03_m2_evaluation_foundation/adr/ADR-006-canonical-connector-boundary.md
+  sha256: 1c4b987e9c96749d1edd20cd16d06d8d2366858ce65f24810b582d48c04a9812
+- path: 03_m2_evaluation_foundation/architecture/m1_object_layer_map.v0.1.yaml
+  sha256: 213dd61d5327ea5d5cdb699949793a449a4b5ec634e966c738201f8154c97d41
+- path: 03_m2_evaluation_foundation/commercial_decision_record.v0.1.yaml
+  sha256: 4f5b8fd35cb65efde6196f1d1f925b050e4ea4c300948a47ec726b7dccfbe561
+- path: 03_m2_evaluation_foundation/competitive_evidence_policy.v0.1.yaml
+  sha256: 4cae3ea623e0b8e07d39c78cdd143d10f3a29cfa9c40c54db5094cd195a8a1f7
+- path: 03_m2_evaluation_foundation/envelope/m1_source_binding.v0.1.yaml
+  sha256: 7ced698752e3d1ab64d609561400460c5a272c0c7f3da507c012c10c4cc93360
+- path: 03_m2_evaluation_foundation/envelope/m1_to_m2_envelope.schema.v0.1.json
+  sha256: 027965002e93e8e92e694f74ec651277b7bf9937bb209157997059c73a976888
+- path: 03_m2_evaluation_foundation/envelope/profile_composition.schema.v0.1.json
+  sha256: 165de3f4ecd6badeea57a91fdc5294761c48dcd74e6da7df8b9dc7740ddc4927
+- path: 03_m2_evaluation_foundation/envelope/profiles/m2_evaluation_provisional_profile.v0.1.yaml
+  sha256: 3291451f2a0727e07669c36171820e58346d883346f05ca911cd971b653c7e85
+- path: 03_m2_evaluation_foundation/evaluation_governance/benchmark_revision_protocol.v0.1.yaml
+  sha256: 92fa029ea11ec2f26a712be3c755399612d9999bd8b29a9ef0b082c89a584a71
+- path: 03_m2_evaluation_foundation/evaluation_governance/evaluation_asset_classification_profile.v0.1.yaml
+  sha256: 42a103a1364076bb71f70e7a8d8a77be0fc0424a11db80fdd066b9315fbd4f36
+- path: 03_m2_evaluation_foundation/evaluation_governance/evaluation_sampling_design.v0.1.yaml
+  sha256: 83bd40e9f65c3f56b7cadd00b6ab4d9924b4e1a64babce06c4406d122a186188
+- path: 03_m2_evaluation_foundation/evaluation_governance/reviewer_calibration_contract.v0.1.yaml
+  sha256: 0c62d83cde0368fc69090a5ae2fa555e576425e5c21e7dc5528f8158e053d08b
+- path: 03_m2_evaluation_foundation/identity_isolation/identity_capability_isolation_contract.v0.1.yaml
+  sha256: 2d666d61e79b0262d456c039d3b2ce29300920e733e5f7c5c1873faf5bdff140
+- path: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md
+  sha256: 47c45abbca07fdce53fe84bd76aeb5371988e99789c04094c501f10e07dc49f9
+- path: 11_reports_and_receipts/m2_ep01/m2_ep01_task_manifest.yaml
+  sha256: 7f42268ad401766abb9a636d31bbaf75874b5f5f27cbf87979b1021c03244a68
+- path: ci/checkers/check_m2_envelope_contract.py
+  sha256: f7ab71a0326b933fce0ba3811474bf871150b9d4bf563adafd5d026938ba1d42
+- path: ci/checkers/check_m2_evaluation_governance.py
+  sha256: 06d05f59e057ce0f603208873ec3ce728caea1daa5cb079d38c0e315405ff4b8
+- path: ci/checkers/check_m2_governance_landing.py
+  sha256: 29c947f7bc13f7b5eb5e5345d759c401085ab1a4a8b6cbc34967b86f2f77bcda
+- path: ci/checkers/check_m2_identity_isolation.py
+  sha256: 1424b1fcf895e34880b2bf18c50b1c3823463dfec29c2b3fd2a1a60578f5d038
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N01.json
+  sha256: b8c28b7e2f8953bfc5d081ddaad71981ee71321dfc2d7cbf7550edbd6e779efe
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N02.json
+  sha256: 395668d35360e44aff35c6520b41bf763b814ec9b70d23b3964ebec6ac98abf0
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N03.json
+  sha256: ab5e135fc78c5db93422ef6263302adba97e226347409a34edce197f9f395427
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N04.json
+  sha256: 425ca1d72f712c243e03e9655ac121bc27aa48dbc18f4f256232072c37193128
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N05.json
+  sha256: 0c72ae2023eb190401ca12fb8ced243d0ee8c07ad595e3a4cfe513f218363a8e
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N06.json
+  sha256: 64655a83d31bf29e2a5aca273b11e67a3de931cf6e7c79614494e5b6a03c9518
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N07.json
+  sha256: 098bdeab361170e6b151a1a008700f208491387c2999f352d50aebbb1262dca4
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N08.json
+  sha256: 8c881afdcc68917b3be7da82c53b5ae6e9d7a3075a29b773a26a34c5040863a7
+- path: ci/fixtures/m2/envelope_instances/invalid/M2-ENV-N09.json
+  sha256: 632ad546421ccd0d4a9ee9e97abe71f8a984c035ba803667b7329347ecf46fcf
+- path: ci/fixtures/m2/envelope_instances/valid/M2-ENV-P01.json
+  sha256: 46fe6c0afc16868bf4705fb5bd687021a4ff00c1ecd92deeb3ebeefd096922a3
+- path: ci/fixtures/m2/envelope_instances/valid/M2-ENV-P02.json
+  sha256: 31a5a9fed39c490bd5f407b221ec425278c4abb305249a2e16755ec2703ef859
+- path: ci/fixtures/m2/envelope_instances/valid/M2-ENV-P03.json
+  sha256: f8d38ac0f61912ad49ad092a5484e4661f6c9d486405fd50b638430e4df5efac
+- path: ci/fixtures/m2/envelope_instances/valid/M2-ENV-P04.json
+  sha256: 32fad319abede66d758cc12e20d3167c747c5cd7262938313d18af4c119b658f
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-N01.json
+  sha256: 7a3b6df542aafa122d1787049f05ff4f4391d32e80d51c7ba1851f627cac4f1c
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-N02.json
+  sha256: 4a19083185edc72aa39af5cb4082ddc2fdedba7b6e9a48c7c8ef83c7bfdccdf8
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-N03.json
+  sha256: 9f4d7c1a7c1a531bb8dee5d44f70c4eec71703b0df47c7ed3e9e5dd88751b7b9
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-N04.json
+  sha256: 148504982d2d94bac7ea66276d00732c163b60b93c2cd0b1a3ce24adad3e4bcd
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-P01.json
+  sha256: 934abb076508173a4d2cd253b6ba0805abff7ba62f22bf0feabc73977cd733ef
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-P02.json
+  sha256: d05ac6daeec9ed656b1d91ea28200c6bd167fe6921dcc1bd5b54f1d8c770d987
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-P03.json
+  sha256: 374b0291d10f5828071d2afda59add2f2b93c017c9695dbc7fd0e8b83a86d77a
+- path: ci/fixtures/m2/identity_capability_cases/M2-ID-P04.json
+  sha256: 39b4a1a7333e3328fe8ffa0980bad31cec610ecc6bed0c92c23626999a91921c
+- path: ci/fixtures/m2/negative/m2_n01.yaml
+  sha256: 5f39bcd931a1687139b6257cf3313946f8eeaa941fffdd78e91caff69b8b9a4b
+- path: ci/fixtures/m2/negative/m2_n02.yaml
+  sha256: 808203e9d32a7c17aac70d098c10d6824552937caac6bb63f02682429567b8ca
+- path: ci/fixtures/m2/negative/m2_n03.yaml
+  sha256: abcb39ed0a3af30aefc08014329445382b37d48cef8250027adbb6cea00617ae
+- path: ci/fixtures/m2/negative/m2_n04.yaml
+  sha256: d2778a280c1b88baa1b8917d6d7b1432a6162759589f4d32167932ed9e9233c8
+- path: ci/fixtures/m2/negative/m2_n05.yaml
+  sha256: dfbc223e0b4ac03f292ac7cb068e411b185d64e82ab5f5733e2d112956b87bd5
+- path: ci/fixtures/m2/negative/m2_n06.yaml
+  sha256: 45b14a1d8e032163de7f8dc5439ea2cf535e3e39252a0be20285e9529f90cc76
+- path: ci/fixtures/m2/negative/m2_n07.yaml
+  sha256: 27af05fe0d14109e7c1892d59189a1ea15b84f358d02e3f9738644b21f24543e
+- path: ci/fixtures/m2/negative/m2_n08.yaml
+  sha256: 943bf7729f0f00f3e745ff5374c6072733ca31085a6021a2d937a988d3f48d39
+- path: ci/fixtures/m2/negative/m2_n09.yaml
+  sha256: da0ad5d5eaab302cca8437fcd3ee259dd4421043d74bcdbcab91f1350fd9dfdd
+- path: ci/fixtures/m2/negative/m2_n10.yaml
+  sha256: ca6c8ef7663f9a1260520bac7538a9ccb7ae72d73cb0fc3ee3299b3d845897d9
+- path: ci/fixtures/m2/negative/m2_n11.yaml
+  sha256: 04e42be13bfa327597e3b3f8cd6c7a15c64d4f79b46e5edeed72402b521845cd
+- path: ci/fixtures/m2/negative/m2_n12.yaml
+  sha256: d1fd14de638ab433cd82ee96d4b6573d6a4c95d89b9fc8e76dbf6588c84d8f8c
+- path: ci/fixtures/m2/negative/m2_n13.yaml
+  sha256: bdf3f4f0f9dcd41eb00babe2c4ce39303d700b942fad58182a87f289fe4bf148
+- path: ci/fixtures/m2/negative/m2_n14.yaml
+  sha256: 8adb7ae6b4496c79ec700703e1c46fbe4f9c43f50a5a6514f1b4fe3e83cfa667
+- path: ci/fixtures/m2/negative/m2_n15.yaml
+  sha256: 4948a35178e559de63537d10ea943ea8002eacd4a11bd99719b17a9f18cd4d9e
+- path: ci/fixtures/m2/negative/m2_n16.yaml
+  sha256: e31e071cde846f44566ee94224e2eb2540289ddc86501b003d07b4f670111760
+- path: ci/fixtures/m2/negative/m2_n17.yaml
+  sha256: 958d472ff9d957dad8de26fca8145198353d7628cabc4ec0921956dcfad58698
+- path: ci/fixtures/m2/negative/m2_n18.yaml
+  sha256: 52efc7180d365c0fa1bedcb17582a1d836ccbba87da34b826ed33cc7e4e6ea6e
+- path: ci/fixtures/m2/negative/m2_n19.yaml
+  sha256: 8197a184d9cc65d3194e97e3620bff3208348eab13fb7ab125454c9cd0da4a8e
+- path: ci/fixtures/m2/negative/m2_n20.yaml
+  sha256: 5fc03a482de716616b56486398dc58b595b5be2f985ee2fef6fcc33448335bc3
+- path: ci/fixtures/m2/negative/m2_n21.yaml
+  sha256: ff8fcbba7d8fa11720cf961e8a385a5b87a64210d43e936ddf8016484571bb30
+- path: ci/fixtures/m2/negative/m2_n22.yaml
+  sha256: 08303fe4150346241a627ae418142392d7ee9e879c071b37f98741923208ba51
+- path: ci/fixtures/m2/negative/m2_n23.yaml
+  sha256: 48463cad9516cbd11b9230af31cc5d4c909755e359845493fc228a813d1a5ebd
+- path: ci/fixtures/m2/negative/m2_n24.yaml
+  sha256: 04d4718746a41a39ba572f1d7beb2167dd1e584c0b068cfce3a62cd16d9f1471
+- path: ci/fixtures/m2/negative/m2_n25.yaml
+  sha256: a25e984589d9563060bb2597ba915ff8493a1741e1a7d463824ea5649c61fdc8
+- path: ci/fixtures/m2/negative/m2_n26.yaml
+  sha256: 858c31ce2566561256ee92b9d1d2aba9a99b13aa09662e301b5cb0fbba7d8cf9
+- path: ci/fixtures/m2/negative/m2_n27.yaml
+  sha256: 61c809a77ada1f69e9ffff8485fe253576667f5d4bb371e72eca8b0b259f6fec
+- path: ci/fixtures/m2/negative/m2_n28.yaml
+  sha256: d3ba37dc533a6c7b73a512440200eb5e0d1ea7a3db9070b35fc49b9ac7ed9ed4
+- path: ci/fixtures/m2/negative/m2_n29.yaml
+  sha256: 370e30d38f00b807de02eee354d59e4760cf948f2d5f172b546e64181f62310b
+- path: ci/fixtures/m2/negative/m2_n30.yaml
+  sha256: 58e9deb50749fefbe552525a403805e0efeb3acd73cebc7298091887d05b85dd
+- path: ci/fixtures/m2/negative/m2_n31.yaml
+  sha256: 85b172843fc49b6e06bc2fbd0018339470d165074cb090cff71ac6dcc8fe41e2
+- path: ci/fixtures/m2/negative/m2_n32.yaml
+  sha256: dd6cc27023e4dadf2d4e57c44ec1d7fefd81b94a72756290dfd5c383456388df
+- path: ci/fixtures/m2/negative/m2_n33.yaml
+  sha256: 2cd7d8e2f5fd34606c3ded0a91a1f4904f66597fec9903f227a0e33015e6b0fc
+- path: ci/fixtures/m2/negative/m2_n34.yaml
+  sha256: f2fefcc864dea156ba5200593875fd2e5b1999f50245910d43acf5a5bbd7bcdb
+- path: ci/fixtures/m2/negative/m2_n35.yaml
+  sha256: 91553b055ec92a20394e8b33bd21b7b117d1d18270c5b7f3281306bc6a9de8b0
+- path: ci/fixtures/m2/negative/m2_n36.yaml
+  sha256: 5e670b25a392cfa5fa50cd5cb48fa5516aae01a3c19772c1dc049b3ae1370939
+- path: ci/fixtures/m2/negative/m2_n37.yaml
+  sha256: c3cb19dbe3971519037143a788f76c9870de0092d0b5c06a40183e1a9e0f2d8d
+- path: ci/fixtures/m2/negative/m2_n38.yaml
+  sha256: 6a9557b5ab5dae6a7045e64a6b1ae3e248deffc448056b2f39f09997c70be32f
+- path: ci/fixtures/m2/negative/m2_n39.yaml
+  sha256: 8532134c596c3e2ebaa7134b4fb8872176af1e9679ef967dc82cc06ca9eaba69
+- path: ci/fixtures/m2/negative/m2_n40.yaml
+  sha256: 9c12d2a36e3ec299128893cf8965d22b9f49927d03cd539e0f42528150b1f1ee
+- path: ci/fixtures/m2/negative/m2_n41.yaml
+  sha256: 92aa7e3f9221e202886220ef946db6e10b3009333bd80c272c0b41160aa2c5ed
+- path: ci/fixtures/m2/negative/m2_n42.yaml
+  sha256: 3995dcae2c62a07750710a72d1f104c1e81f783976744d3edd519b8ceabfeb42
+- path: ci/fixtures/m2/negative/m2_n43.yaml
+  sha256: 7c9153563cd446929065ed899f01fab97c7a185a183d617b361263a5629a001c
+- path: ci/fixtures/m2/negative/m2_n44.yaml
+  sha256: 2d98319db24a487d8df5bab737f744f5cb71f87868e3d209fc0cb2a51b8da0d3
+- path: ci/fixtures/m2/negative/m2_n45.yaml
+  sha256: 3ba723ab50541ac433ba079bc024cc545cda21b02cde7557e77a9efa41a0f464
+- path: ci/fixtures/m2/negative/m2_n46.yaml
+  sha256: 5b1084bbf8fb18949963639f78bb570b79b5484b468a88e92eeae9f3e33d0850
+- path: ci/fixtures/m2/negative/m2_n47.yaml
+  sha256: 6509da9017a05398e8370f58b4466c6d8cf04cae6b93eb15e2e3a870604dfe47
+- path: ci/fixtures/m2/negative/m2_n48.yaml
+  sha256: 8682bac189085d78a5f2f6935c3d4699ad80b9ad1c4d1b32169bd1c2de93b2e9
+- path: ci/fixtures/m2/positive/m2_p01.yaml
+  sha256: b0791e90015a9d257388aaa4ad0029f715ab7f770847a5f060a83e4de002c4ef
+- path: ci/fixtures/m2/positive/m2_p02.yaml
+  sha256: 305e9bd4cdcba08cb7980f5038cebc1e52767bf936396db8bfadbaef2a8aeebf
+- path: ci/fixtures/m2/positive/m2_p03.yaml
+  sha256: 904b5cb225972f005705d741268f2578e55943b92fc4e264cb6dfe8881330a0a
+- path: ci/fixtures/m2/positive/m2_p04.yaml
+  sha256: 1fc1a42ff8e37b0f5c0dc8b00ba47a4bb70a2ed03699dc3476fcff4c2a068c01
+- path: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml
+  sha256: 513f8010c5ddaccd7441da061cad871d5ec4579aa779efde8afb1f779c612e8a
+- path: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml
+  sha256: 009aeae4cbff8d1f1d63beec97105db4b39281f9a0ef96aeb8e64f728a77a57f
+- path: governance/receipts/founder_m2_kickoff_signature_receipt.yaml
+  sha256: 0c8f4c0de2809d80fd932639472453790d4cff91871e500c2e307b6e1bbc8a38
+modified_artifacts:
+- path: .github/copilot-instructions.md
+  sha256: 9d378ca4feb8a2126aa0628765eca36202dc5dbcc519aa9053fa9ff746179ba5
+- path: AGENTS.md
+  sha256: 5f5891145194a4ebdac138be2dd80ba8b494db704d56c7d2690daf43cd7c65ea
+- path: CLAUDE.md
+  sha256: 09a66a8c380331784f9aca8d657bbc2048bd65945da22959a1266907ebdd1044
+- path: PRD_v1.2_change_map.yaml
+  sha256: 77bd2483abd365d7e1e67a5d48e77ccbc204377f4b2d084b0fb0e75b8346a888
+- path: README.md
+  sha256: b12a1581413c01ccd8223b7d2f55117debf4b19fd0f96efff0659f7d0aeb82bc
+- path: ci/run_all_checks.py
+  sha256: f95a4bbfb96a2e7c08a4410eaa369a63700192c5edfcc796f2743836bb0f28c9
+- path: governance/baseline/founder_pinned_baseline.v0.1.yaml
+  sha256: 1ba0874f6dfda992ae1d9956c0a62eb04ffd344466f7946d582249019b107a54
+- path: governance/bootstrap/role_operating_model.v0.2.yaml
+  sha256: 5099b10d2b1cce1a77eeca881d98e0149e304198e5f1eb628fc6ff67cbce6ae6
+- path: governance/receipts/founder_signoff_receipt.yaml
+  sha256: 939f19cc248892b748eaea90ae0436b97717d1e9f4dae3b33996d09f1c24c087
+- path: governance/roles/chatgpt_chief_advisor.md
+  sha256: 92eabfeae9f3dbefe914ed12acab6b476acd0a212e4ed6c9fb8c996d362f6de6
+- path: governance/roles/claude_execution_planner.md
+  sha256: b1db247ac9d7fad3a8b1f994d357d4334045420ca2f6cd54a8e5fe8fdb3276e5
+- path: governance/roles/claude_independent_guardian.md
+  sha256: 64ecd887ba57a4a46751bf35767e2f90060ee23692c87c6e6eccd4de1f1ee861
+- path: governance/roles/codex_execution_engineer.md
+  sha256: 39793c51aeca465678ebdaf40b145244136886b4b13218cdc33074f96e480589
+- path: governance/roles/founder_decision_charter.md
+  sha256: 213975deca77541d2d211f96962bc2a32914ee81cf8dfa4370a5c6d464bc311a
+modified_artifacts_scope_note: 以上修改全部落在 M2 启动包 v1.1 §5 allowed_update（状态位/状态机枚举、Founder 签署回执登记、PRD change map、README、AGENTS/CLAUDE
+  投影、run_all_checks 注册表），唯一例外是 governance/baseline/founder_pinned_baseline.v0.1.yaml——它不在 §5 明文清单内，但仓库既有机制要求任何授权的
+  README 改写必须同时更新其 post_change_binary_sha256 并追加一条 README-MOD-NN，否则 check_baseline_hashes 当场判 AUTHORIZED_FILE_CHANGED_AFTER_FREEZE。本包按
+  §5「实际路径与语义对应不一致时按语义对应执行并在报告注明」处理：只追加 README-MOD-10 并改该一个哈希值，未动其他条目、未放宽任何判据，并在交付报告 §6-7 提请 Guardian 与 Founder 复核。12
+  份投影由 ci/compile_role_instructions.py --write 确定性重生成，未手工编辑；governance/prompts/ 四份重生成后字节未变，因此不在变更清单内。
+frozen_paths_untouched:
+  m1_object_model: true
+  m0_contracts: true
+  prd_v1_2_and_signature_artifacts: true
+  existing_m1_ep01_reports_and_receipts: true
+  existing_checkers: true
+  verification: git status 显示 01_contracts_and_schemas/ 与 00_charter/ 下零改动；ci/checkers/ 下只新增 4 个 check_m2_*.py，既有
+    20 个 checker 一字未动。
+ep01_end_state:
+  execution_status: M1_M2_PARALLEL_IN_PROGRESS
+  m2_started: true
+  m2_ep01_status: SELF_CHECKED
+  m2_evaluation_profile_status: PROVISIONAL_READY
+  m2_benchmark_assets_status: NOT_CREATED
+  m2_hidden_assets_status: NOT_CREATED
+  m2_frozen: false
+  m1_final_binding: PENDING_M1_CLOSEOUT
+  knowledge_distillation_started: false
+  production_servable: false
+  next_authorized_action: WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT
+ep01_end_state_note: SELF_CHECKED 只表示本包内部确定性 Checker 全绿，**不**表示已通过 Guardian、总顾问或 Founder 审查——按 Charter，三个执行包全部完成后才统一进行一次
+  Guardian、一次总顾问审查与一次 Founder 裁决。
+self_check:
+  command: python3 ci/run_all_checks.py
+  exit_code: 0
+  checkers_total: 24
+  checkers_passed: 24
+  checkers_failed: 0
+  predicate_fixtures_total: 161
+  predicate_fixtures_behaved_as_declared: 161
+  m1_schema_fixtures_total: 34
+  m1_schema_fixtures_behaved_as_declared: 34
+  evidence_level: runtime_verified
+  guardian_review: NOT_REQUESTED
+  advisor_review: NOT_REQUESTED
+  founder_review: NOT_REQUESTED
+  review_deferral_basis: DIYU-CBFSK-FOUNDER-M2-CHARTER-001：EP01 完成后只运行确定性内部 Checker。
+  new_negative_fixtures: 48
+  new_positive_fixtures: 4
+forbidden_outputs_produced:
+  hidden_brand_content: 0
+  hidden_benchmark_questions: 0
+  hidden_answers: 0
+  fixture_brand_data: 0
+  candidate_knowledge: 0
+  real_brand_data: 0
+  real_customer_data: 0
+  multimodal_model_calls: 0
+  knowledge_distillation_calls: 0
+stop_conditions_triggered: []
+circuit_breaker_triggered: false
+circuit_breaker_note: M1 顶层对象、核心语义、七级事实优先级与品类合同均未改变；本包只新增引用层，未打开任何 M1 Schema 文件写入。
+open_items:
+- id: OI-01
+  item: 三层哈希机制退役未落地
+  detail: FR-CALIBRATION-004 裁定退役，check_docx_canonical_hashes 仍在运行且为绿；退役属降低既有验收严格度且越 §5 路径权限。
+  routed_to: Founder / M2 收口
+  recorded_in: governance/founder_rulings/DIYU-CBFSK-FR-CALIBRATION-004.yaml three_layer_hash_mechanism
+- id: OI-02
+  item: execution_run_id 未纳入 check_execution_uuid 守卫
+  detail: 纳入需改既有 checker，不在 allowed_update；M1-EP01 批次同样未被覆盖。
+  routed_to: M2 收口
+  recorded_in: 11_reports_and_receipts/m2_ep01/m2_ep01_task_manifest.yaml execution_run_id_guard_status
+- id: OI-03
+  item: Profile 绑定仍为 PROVISIONAL
+  detail: M1 未整体收口；最终绑定与重测属 M2-EP02（REBIND_AND_RETEST）。
+  routed_to: M2-EP02
+  recorded_in: 03_m2_evaluation_foundation/envelope/m1_source_binding.v0.1.yaml rebind_rule
+- id: OI-04
+  item: STORE-A 未 provision
+  detail: 隐藏资产选址已定未落地（COND-011）；M2-EP02 启动隐藏资产建设前须先确认。
+  routed_to: M2-EP02
+  recorded_in: 03_m2_evaluation_foundation/evaluation_governance/evaluation_asset_classification_profile.v0.1.yaml
+    IA-3
+- id: OI-05
+  item: 「D-09」无仓库锚点
+  detail: 启动包称三件套为 D-09，仓库内不存在该编号；按语义对应落到 M2 冻结 Brief 第 2 节第 8/9/10 项，未凭空创造 D-09 裁决。
+  routed_to: 报告注明即可
+  recorded_in: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md §6
+- id: OI-06
+  item: founder_pinned_baseline.v0.1.yaml 的 README 指纹登记越出 §5 明文清单
+  detail: §5 允许更新 README，但仓库既有机制使「改 README」与「改其指纹登记」不可分割；本包仅追加 README-MOD-10 与更新 post_change_binary_sha256，未动其他条目。
+  routed_to: Guardian 复核 / Founder 裁决
+  recorded_in: 11_reports_and_receipts/m2_ep01/m2_ep01_delivery_report.md §6-7
+next_authorized_action: WAIT_FOR_M1_CLOSEOUT_AND_M2_EP02_PROMPT
+not_authorized_by_this_package:
+- M2-EP02 启动（须待 M1 收口合入 main）
+- M2-EP03 启动（不可逆包，另需 Founder 精确 Prompt 批准）
+- M2 冻结
+- 推送远程
+- 合并 main
+- 知识蒸馏
+- 任何隐藏或夹具资产生成
+describes_current_state: false
+superseded_by: M2-EP02
+supersession_note: ep01_end_state 是 M2-EP01 收尾那一刻的如实记录，不因后续推进而改写。M1 已于 c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  收口合入 main，execution_status 随之迁移至 M2_IN_PROGRESS，因此本块不再描述当前态——当前态见标记 describes_current_state 的那份回执。
+
+d09_anchor_correction_note:
+  finding: A-6（DIYU-CBFSK-M2-CLOSEOUT-REPAIR-001 v1.1 第六节）
+  corrects: open_items 中 OI-05「「D-09」无仓库锚点」的 detail 表述
+  original_text_preserved: true
+  original_text_preserved_note: 原文一字未改，本块只追加更正，不改写历史记录。
+  what_was_inaccurate: >-
+    原 detail 称「仓库内不存在该编号」。该说法不准确。
+  verified_truth:
+    statement: D-09 是真实编号，含义为「M2 评测治理三件套」。
+    source: 归档_v1.0/笛语跨品牌服装搭配专家内核_PRD_v1.1_Delta.docx 第二部分
+    verbatim_heading: D-09　M2 评测治理三件套　【已裁决】
+    covers: [rater_calibration_contract, evaluation_sampling_design, benchmark_revision_protocol]
+    evidence_level: runtime_verified
+    method: 解析该 DOCX 正文文本并定位标题行
+  why_it_was_missed: >-
+    当时只在 PRD v1.2 正文与 governance/founder_rulings/ 内检索；
+    D-01—D-16 这批编号来自已归档的 v1.1 Delta，不在检索面内。属检索面不足，非启动包写错。
+  disposition_now:
+    action: 活合同、活报告与机器引用改为指向 M2 冻结 Brief 第 2 节第 8/9/10 项与三个合同 ID
+    reason: >-
+      理由不是「D-09 是假的」，而是该编号空间属已归档文档；活判据引用它会指向一份不再是产品真源的文件。
+    historical_records: 只追加更正，不改写

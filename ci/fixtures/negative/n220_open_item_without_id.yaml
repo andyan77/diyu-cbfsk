@@ -1,0 +1,14 @@
+fixture_id: N220-open-item-without-id
+description: 未决项没有编号，无从核对是否被披露。
+checker: check_disclosure_discipline
+expected: FAIL
+payload:
+  pairs:
+  - receipt: r.yaml
+    report: r.md
+    open_items:
+    - id: null
+      disclosed_in_report: true
+    - id: OI-02
+      disclosed_in_report: true
+    declared_open_item_count: 2

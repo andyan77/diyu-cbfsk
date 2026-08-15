@@ -1,0 +1,122 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-MULTIMODAL-CONFIDENCE-CALIBRATION
+artifact_id: multimodal_confidence_calibration_contract.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED_PENDING_FOUNDER_APPROVAL
+artifact_lifecycle_state: draft
+card_axis: vertical_capability
+capability_dimension: multimodal_confidence_calibration
+capability_dimension_cn: 多模态置信度校准
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 15 项
+ruling_anchors: [D-23, D-12]
+prd_anchors: [PRD-10.2, PRD-5.6, PRD-3.2]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本合同不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+founder_approval:
+  required: true
+  status: PENDING
+  approved_at_commit: null
+  scope_boundary_shared_with: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
+  scope_boundary_restated_here: false
+  scope_boundary_restated_here_note: >-
+    D-12/D-23 边界核对只有一个定义处（多模态属性 Benchmark 的 scope_boundary_check），
+    本合同引用不复述——同一段边界写两遍，改一处漏一处就变成两套口径（EQ-1）。
+
+purpose: >-
+  校准回答的不是「推断准不准」，而是「模型说自己有多准，是不是真的那么准」。
+  一个 0.9 置信度的错误推断，比一个 0.5 置信度的错误推断危险得多——因为下游会照单全收。
+
+owned_metrics:
+  - metric_id: visual_attribute_confidence_calibration
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+
+calibration_definition:
+  statement: >-
+    在置信度分箱内，自报置信度的均值与实测正确率之差不超过冻结阈值。
+  binning:
+    method: equal_width
+    bin_count: 10
+    bin_range: [0.0, 1.0]
+  error_metric:
+    name: expected_calibration_error
+    abbreviation: ECE
+    formula_note: 各分箱按样本量加权的 |自报置信度均值 − 实测正确率| 之和。
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+  overconfidence_asymmetry:
+    statement: >-
+      高估比低估更危险，冻结时须分别给阈值，不得只给一个对称阈值。
+      低估只是浪费能力；高估会让下游把猜测当事实用。
+    overconfidence_threshold_status: M2_FREEZE_REQUIRED
+    underconfidence_threshold_status: M2_FREEZE_REQUIRED
+
+required_behaviors:
+  - id: MCC-01
+    behavior: 每个视觉推断属性必须带置信度数值
+    failure_state: CONFIDENCE_ABSENT
+  - id: MCC-02
+    behavior: 置信度低于冻结的弃权线时必须弃权，不得输出推断值
+    failure_state: LOW_CONFIDENCE_ANSWERED_ANYWAY
+    abstention_threshold_status: M2_FREEZE_REQUIRED
+    abstention_threshold_value: null
+  - id: MCC-03
+    behavior: 置信度不得随模型版本变化而不重新校准
+    failure_state: RECALIBRATION_SKIPPED_AFTER_MODEL_CHANGE
+    relation: 与 reviewer_calibration_contract 的 RC-05 同源规则，适用对象不同（此处是视觉模型，那里是评审模型）
+  - id: MCC-04
+    behavior: 置信度再高也不得覆盖权威结构化事实
+    failure_state: AUTHORITATIVE_FACT_OVERRIDDEN
+    hard_gate_ref: HG-10
+    detection_owner: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
+    second_implementation_created: false
+  - id: MCC-05
+    behavior: 对 D-23 禁止推断的类目，不得以「高置信度」为由输出
+    failure_state: FORBIDDEN_ATTRIBUTE_INFERRED
+    detection_owner: 03_m2_evaluation_foundation/scoring/multimodal_attribute_benchmark.v0.1.yaml
+    second_implementation_created: false
+
+evaluation_task_class_applicability:
+  constraint_correctness: true
+  mechanism_correctness: true
+  open_decision: false
+  constraint_correctness_scope: 是否带置信度、是否在弃权线下仍作答——两条 0/1 事实。
+
+gold_answer_allowed_by_task_class:
+  constraint_correctness: true
+  mechanism_correctness: false
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+
+binding_kind: m1_object_ids
+bound_schema_ids:
+  - https://diyu-cbfsk.local/m1/visual_attribute_extraction_result.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/product_image_asset_bundle.schema.v0.1.json
+bound_object_ids: [OUT-12, IN-08]
+bound_hard_gate_ids: [HG-10]
+
+machine_checkable_fields:
+  confidence_present: {type: boolean, required_value: true}
+  confidence_in_unit_interval: {type: boolean, required_value: true}
+  abstained_below_threshold: {type: boolean, required_value: true}
+  calibration_bin_count: {type: integer, required_value: 10}
+  expected_calibration_error: {type: number, current_value: null, threshold_status: M2_FREEZE_REQUIRED}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 没有置信度就没有校准对象；缺字段判 fail-closed，不得默认 1.0。
+
+failure_states:
+  - CONFIDENCE_ABSENT
+  - LOW_CONFIDENCE_ANSWERED_ANYWAY
+  - RECALIBRATION_SKIPPED_AFTER_MODEL_CHANGE
+  - CALIBRATION_NOT_MEASURED
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

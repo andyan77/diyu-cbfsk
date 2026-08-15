@@ -1,0 +1,29 @@
+fixture_id: N228-guardian-report-hash-stale
+description: 报告改过了，登记的哈希还是旧的。
+checker: check_guardian_report_binding
+expected: FAIL
+payload:
+  entries:
+  - reviewed_commit: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    status: LANDED
+    report: governance/reports/r1.md
+    report_exists: true
+    declared_sha256: hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+    actual_sha256: zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    placeholder: null
+    placeholder_exists: false
+    reason: null
+    blocker_id: null
+  - reviewed_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    status: FULLTEXT_NOT_PROVIDED
+    report: null
+    report_exists: false
+    declared_sha256: null
+    actual_sha256: null
+    placeholder: governance/reports/r2.PENDING.md
+    placeholder_exists: true
+    reason: 报告全文未交到执行侧。
+    blocker_id: OI-M2-GUARDIAN-REPORT
+  declared_counts:
+    total: 2
+    landed: 1

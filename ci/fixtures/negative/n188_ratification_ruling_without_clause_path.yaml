@@ -1,0 +1,39 @@
+fixture_id: N188-ratification-ruling-without-clause-path
+description: 追认条目只写裁决编号，没给可解析的条款路径。
+checker: check_m2_main_state_guard
+expected: FAIL
+payload:
+  git_available: true
+  main_ref: origin/main
+  last_guardian_reviewed_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
+  last_guardian_decision: PASS
+  reviewed_commit_exists: true
+  uncovered_main_commits:
+  - c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  known_commits:
+  - c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  - 2df11012da46ace0de7b7bce6d199a578d32d341
+  ratified_commits:
+  - c3f6ad372306cc12f139cf38624e9a5cea2cf329
+  ratification_entries:
+  - commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+    ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+    reason: 记录本批准的提交无法先于本批准接受审查（无限回归）。
+    sets_precedent: false
+    ruling_clause_path: article_3_ruling_landing_commit.authorization
+    ruling_evidence:
+      reference: DIYU-CBFSK-FOUNDER-M1-PASS-001
+      ruling_id: DIYU-CBFSK-FOUNDER-M1-PASS-001
+      kind: founder_ruling
+      file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M1-PASS-001.yaml
+      file_exists: true
+      clause_path: null
+      clause_resolves: true
+  fail_closed_on_missing_git: true
+  requirements_present: true
+  pinned_packages:
+  - jsonschema
+  declared_packages:
+  - jsonschema
+  - PyYAML
+  - python-docx

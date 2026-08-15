@@ -1,0 +1,104 @@
+schema_version: "0.1"
+card_id: DIYU-CBFSK-M2-CAPABILITY-CARD-NARRATIVE
+artifact_id: narrative_scoring_rubric.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+card_axis: vertical_capability
+capability_dimension: narrative_quality
+capability_dimension_cn: 叙事质量
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 5 项
+prd_anchors: [PRD-10.2, PRD-8.2, PRD-3.3-P-02]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+axis_relation:
+  horizontal_cards_are_task_class_cards: true
+  relation: 纵向能力卡与横向任务类型卡两轴独立取值；判定模式取横向卡。
+  rewritten_horizontal_cards: false
+
+owned_metrics:
+  - metric_id: 叙事质量平均分
+    prd_suggested_threshold: ≥ 4.0/5
+    threshold_status: SUGGESTED_ADJUSTABLE_BEFORE_M2_FREEZE
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 冻结口径与阈值；冻结后不得因失败降标。
+
+evaluation_task_class_applicability:
+  constraint_correctness: false
+  mechanism_correctness: true
+  open_decision: true
+  constraint_correctness_exclusion_reason: >-
+    叙事质量不存在 0/1 事实状态。把它塞进硬约束类，等于给「讲得好不好」发一个唯一正确答案——
+    正是 D-28 要禁的那件事。
+
+gold_answer_allowed_by_task_class:
+  mechanism_correctness: false
+  open_decision: false
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+
+scored_elements:
+  - id: NAR-01
+    element: 人
+    statement: 有具体的人物处境，而不是泛指人群。
+  - id: NAR-02
+    element: 冲突
+    statement: 有真实存在的矛盾（身体条件与品牌语法、场景与货盘、期望与现实）。
+  - id: NAR-03
+    element: 变化
+    statement: 有可被指认的前后变化，而不是罗列知识点。
+  - id: NAR-04
+    element: 品牌
+    statement: 叙事落在该品牌的语法内，不脱离品牌真源。
+  - id: NAR-05
+    element: 货品
+    statement: 叙事指向有效货盘内的真实商品，不虚构单品。
+  - id: NAR-06
+    element: 真实性
+    statement: 不编造真实人物、真实事件、真实顾客或真实经历。
+    hard_gate_ref: HG-04
+
+narrative_from_decision:
+  principle: P-02
+  statement: 先形成专业判断再提取叙事；不得为故事效果扭曲搭配结论。
+  failure_state: NARRATIVE_DISTORTED_DECISION
+
+not_narrative_structure_alone:
+  statement: >-
+    「有叙事结构」不等于「具备自媒体原生语感」——后者由 social_media_native_voice_scoring_rubric
+    单独评。标准叙事骨架是思考检查项，不得变成每条内容的固定文案模板。
+  prd_anchor: PRD-8.2
+  sibling_card: 03_m2_evaluation_foundation/scoring/social_media_native_voice_scoring_rubric.v0.1.yaml
+
+binding_kind: m1_object_and_constraint_ids
+bound_schema_ids:
+  - https://diyu-cbfsk.local/m1/styling_decision_trace.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/brand_truth_pack.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/garment_and_inventory.schema.v0.1.json
+bound_hard_gate_ids: [HG-04]
+
+machine_checkable_fields:
+  narrative_element_coverage:
+    type: array
+    item_enum: [NAR-01, NAR-02, NAR-03, NAR-04, NAR-05, NAR-06]
+    required_minimum_elements: 5
+  fabricated_real_person_or_event: {type: boolean, required_value: false}
+  referenced_sku_resolvable: {type: boolean, required_value: true}
+  narrative_changed_decision: {type: boolean, required_value: false}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 无法解析被引用商品时判 fail-closed，不得默认它存在。
+
+failure_states:
+  - NARRATIVE_ELEMENT_MISSING
+  - FABRICATED_REAL_PERSON_OR_EVENT
+  - UNRESOLVABLE_SKU_REFERENCE
+  - NARRATIVE_DISTORTED_DECISION
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

@@ -1,0 +1,144 @@
+schema_version: "0.1"
+card_id: DIYU-CBFSK-M2-CAPABILITY-CARD-PERSONA-CONTINUITY
+artifact_id: persona_continuity_scoring_rubric.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP04
+status: M2_EP04_DELIVERED
+artifact_lifecycle_state: draft
+card_axis: vertical_capability
+capability_dimension: persona_continuity
+capability_dimension_cn: 人设连续性
+brief_anchor: 01_contracts_and_schemas/m2_evaluation_freeze_brief.md 第 2 节第 12 项
+ruling_anchors: [D-20]
+prd_anchors: [PRD-10.2, PRD-13-M2, PRD-11.1]
+consumes_via_profile: m2_evaluation_profile
+consumes_via_profile_note: 本卡不复制任何 M1 内容，一律经 Profile 引用（EQ-1）。
+
+axis_relation:
+  horizontal_cards_are_task_class_cards: true
+  relation: 纵向能力卡与横向任务类型卡两轴独立取值；判定模式取横向卡。
+  rewritten_horizontal_cards: false
+
+owned_metrics:
+  - metric_id: persona_identity_consistency_score
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+  - metric_id: professional_value_consistency_score
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+  - metric_id: historical_viewpoint_contradiction_rate
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+  - metric_id: series_continuity_score
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+  - metric_id: persona_drift_rate
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+  - metric_id: topic_repetition_without_new_value_rate
+    prd_suggested_threshold: null
+    threshold_status: M2_FREEZE_REQUIRED
+    threshold_value: null
+    measured_at_milestone: M7
+    m2_obligation: 由 M2 冻结口径与阈值。
+
+metric_count_note:
+  brief_says: 「人设四项」（M2 冻结 Brief 第 5 节的概述性说法）
+  prd_10_2_actually_lists: 6
+  handling: >-
+    以 PRD 10.2 表格逐行列出的 metric id 为准（判据从 DOCX 表格独立提取，不读本文件自述）。
+    Brief 第 5 节是概述口径，不是逐项清单；两者不一致时按产品真源。差异已在交付报告列明，
+    未改写 Brief 任何字句。
+  discrepancy_id: OI-M2-METRIC-GROUPING
+
+evaluation_task_class_applicability:
+  constraint_correctness: true
+  mechanism_correctness: true
+  open_decision: false
+  constraint_correctness_scope: >-
+    仅限两条 0/1 事实：是否编造人设资历（HG-08）、是否与已发布观点硬矛盾（HG-08）。
+  open_decision_exclusion_reason: >-
+    人设可以演进，但演进不是开放取舍题——它由 PersonaConflictRecord 走冲突记录通道，
+    而不是让评测在多个「合法人设族」之间打分。
+
+gold_answer_allowed_by_task_class:
+  constraint_correctness: true
+  mechanism_correctness: false
+  source: 03_m2_evaluation_foundation/scoring/evaluation_task_class_contract.v0.1.yaml
+  restated_here: false
+
+scored_elements:
+  - id: PC-01
+    element: 身份一致
+    statement: 专业身份、资历表述在长期内容中一致，且不得编造资历。
+    hard_gate_ref: HG-08
+  - id: PC-02
+    element: 价值观一致
+    statement: 审美立场与专业价值观不得无依据反转。
+  - id: PC-03
+    element: 历史观点不矛盾
+    statement: 与 PublishedViewpointLedger 中已发布观点不得硬矛盾；观点演进须留冲突记录。
+  - id: PC-04
+    element: 栏目连续
+    statement: SeriesContinuityState 所记栏目的承接关系成立。
+  - id: PC-05
+    element: 不覆盖真源
+    statement: 人设不得压过品牌真源与权威商品事实。
+    hard_gate_ref: HG-09
+  - id: PC-06
+    element: 重复不产新价值
+    statement: 同一主题重复出现而未带来新信息，计入 topic_repetition_without_new_value_rate。
+
+evolution_is_not_drift:
+  statement: >-
+    观点演进与人设漂移的区别在于有没有留下依据。演进＝有 PersonaConflictRecord 记录触发条件与新旧立场；
+    漂移＝同条件下立场无依据反转。判据只认记录，不认解释。
+  failure_state: PERSONA_DRIFT_WITHOUT_RECORD
+
+binding_kind: m1_object_ids
+bound_schema_ids:
+  - https://diyu-cbfsk.local/m1/stylist_persona_profile.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/persona_memory_snapshot.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/published_viewpoint_ledger.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/series_continuity_state.schema.v0.1.json
+  - https://diyu-cbfsk.local/m1/persona_conflict_record.schema.v0.1.json
+bound_object_ids: [IN-09, IN-10, D-20-03, D-20-04, D-20-05]
+bound_object_count: 5
+bound_object_count_source: D-20 五对象
+bound_hard_gate_ids: [HG-08, HG-09]
+
+machine_checkable_fields:
+  fabricated_persona_credential: {type: boolean, required_value: false}
+  published_persona_hard_contradiction: {type: boolean, required_value: false}
+  brand_truth_overridden_by_persona: {type: boolean, required_value: false}
+  persona_conflict_record_present_when_viewpoint_changed: {type: boolean, required_value: true}
+  bound_d20_object_count: {type: integer, required_value: 5}
+
+fail_closed_on_missing_input: true
+fail_closed_note: 缺 PublishedViewpointLedger 时判 fail-closed——查不到历史观点不等于没有矛盾。
+
+failure_states:
+  - FABRICATED_PERSONA_CREDENTIAL
+  - PUBLISHED_PERSONA_HARD_CONTRADICTION
+  - BRAND_TRUTH_OVERRIDDEN_BY_PERSONA
+  - PERSONA_DRIFT_WITHOUT_RECORD
+
+threshold_status: M2_FREEZE_REQUIRED
+threshold_value: null
+threshold_frozen_by: FOUNDER_PRODUCT_AUTHORITY

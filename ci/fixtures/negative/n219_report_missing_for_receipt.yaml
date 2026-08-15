@@ -1,0 +1,14 @@
+fixture_id: N219-report-missing-for-receipt
+description: 回执有未决项，旁边却没有交付报告。
+checker: check_disclosure_discipline
+expected: FAIL
+payload:
+  pairs:
+  - receipt: r.yaml
+    report: null
+    open_items:
+    - id: OI-01
+      disclosed_in_report: true
+    - id: OI-02
+      disclosed_in_report: true
+    declared_open_item_count: 2

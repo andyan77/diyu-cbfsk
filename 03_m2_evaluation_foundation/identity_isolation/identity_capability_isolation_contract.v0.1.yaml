@@ -1,0 +1,107 @@
+schema_version: "0.1"
+contract_id: DIYU-CBFSK-M2-IDENTITY-CAPABILITY-ISOLATION-CONTRACT
+artifact_id: identity_capability_isolation_contract.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP01
+status: M2_EP01_DELIVERED
+artifact_lifecycle_state: draft
+adr_ref: ADR-004
+ruling_anchors: [DIYU-CBFSK-FOUNDER-M2-CHARTER-001]
+is_red_line: true
+
+contract:
+  purpose: >-
+    禁止能力与允许能力两份精确清单的**唯一**定义处。ci/checkers/check_m2_identity_isolation.py
+    从本文件读清单，不在代码里再抄一份——抄一份就等于执行侧可以自己改自己的判据（EQ-1 / EQ-4）。
+  principle: 造型理解与身份识别永久解耦。
+  decisive_test: >-
+    分界点是「是否产生可跨会话比对的持久身份标识」。产生了即禁止能力，不论它叫什么名字；
+    没产生则属任务内视觉处理，允许。名字可以换，这条判据不换。
+  activation_condition: 永不
+  activation_condition_is_never: true
+
+forbidden_capabilities:
+  count: 5
+  on_hit: FAIL
+  items:
+    - capability_id: face_identification_1_to_n
+      name: 1:N 人脸身份识别
+      why_forbidden: 从一张脸检索出「这是谁」，是身份识别本身。
+    - capability_id: face_verification_1_to_1
+      name: 1:1 人脸验证
+      why_forbidden: 确认「这张脸是不是某人」，同样是身份判定。
+    - capability_id: persistent_face_embedding
+      name: 持久化人脸特征向量
+      why_forbidden: 特征向量一旦留存即可跨会话比对，等同于身份标识。
+    - capability_id: biometric_template_storage
+      name: 生物识别模板存储
+      why_forbidden: 模板是可复用的生物标识载体。
+    - capability_id: cross_session_face_linking
+      name: 跨会话面部关联
+      why_forbidden: 把不同会话的同一张脸串起来，即便不知道姓名也已构成身份。
+
+allowed_capabilities:
+  count: 4
+  items:
+    - capability_id: face_region_localization_for_color_analysis
+      name: 面部区域定位（用于色彩分析）
+      why_allowed: 只算区域几何位置服务肤色与色彩判断，不产生可跨会话比对的标识。
+      boundary: 结果仅在本次任务内使用，处理完即丢弃。
+    - capability_id: task_scoped_non_identifying_visual_attributes
+      name: 任务内非身份性视觉属性
+      why_allowed: 肩线、比例、廓形等造型属性与身份无关。
+      boundary: 不得组合出可用于再识别的稳定指纹。
+    - capability_id: ephemeral_image_processing
+      name: 临时图像处理
+      why_allowed: 不留存即无从关联。
+      boundary: 不得写入任何持久化存储。
+    - capability_id: user_authorized_account_identity
+      name: 用户授权的账号身份
+      why_allowed: 普通账号登录与 API 鉴权由用户主动提供，与生物识别无关。
+      boundary: >-
+        账号身份不得与任何面部或生物特征绑定。「登录了账号」不构成「认得这张脸」。
+
+detection_contract:
+  method: 结构化能力检测
+  scanned_surfaces:
+    - id: SS-1
+      surface: JSON/YAML Schema 的 property 名与枚举值
+    - id: SS-2
+      surface: 能力登记与服务组件声明（capabilities / components / services 等结构化字段）
+    - id: SS-3
+      surface: 依赖清单中的生物识别实现（requirements / dependencies 等结构化字段）
+  not_scanned:
+    - id: NS-1
+      surface: 散文与裁决文本
+      why: >-
+        本合同、ADR-004 与 Founder 裁决原文必然写出「人脸识别」「身份验证」这些词——
+        它们出现在**禁止**的语境里。全文关键词扫描会把「我们禁止人脸识别」判成违规，
+        于是被迫加白名单，白名单大到最后什么也拦不住。
+    - id: NS-2
+      surface: Markdown 正文
+      why: 同 NS-1。
+  false_positive_stance: >-
+    宁可只扫结构化面也不扫散文：结构化字段是「系统真的会去做的事」，散文是「人在讨论这件事」。
+    判据要拦的是前者。
+
+current_state:
+  any_forbidden_capability_declared: false
+  any_face_recognition_dependency: false
+  any_biometric_template_store: false
+  scanned_at: M2-EP01
+
+scan_coverage_record:
+  finding: NB-M2-03
+  rule: >-
+    覆盖面数字一律是记录值，不是文中随手写的数。当前值由判据现算比对，历史值绑定它被测出来的那个提交。
+  guarded_by: ci/checkers/check_m2_identity_isolation.py SCAN_COVERAGE_COUNT_MISSTATED
+  values_live_in: governance/gates/scan_coverage_measurement_ledger.v0.1.yaml
+  values_moved_out_at_package: M2-PREMERGE-FIX
+  values_moved_out_by: DIYU-CBFSK-FOUNDER-M2-PREMERGE-REVIEW-001 article_2_b01_zero_byte_claim_false B-01-4
+  why_moved_out: >-
+    本文件是冻结的产品合同——它规定哪五项能力永不建设、扫描扫什么面不扫什么面。
+    覆盖面数字每加一个文件就要改一次，于是每次例行施工都表现为一次合同修订。
+    「冻结合同不得随仓库新增文件而必须改数字——那不是合同，是伪装成合同的实时仪表盘。」
+    数字已搬进治理测量台账；本块只留规则与指针，本文件不再随扫描面变动而改。
+  no_numbers_here_on_purpose: true

@@ -1,0 +1,53 @@
+fixture_id: N261
+description: finding 引用位引了一个未登记编号——射程扩到 finding 之后才抓得到。（RULING_REFERENCE_UNRESOLVED）
+checker: check_identifier_resolution
+expected: FAIL
+payload:
+  entries:
+  - id: DIYU-CBFSK-FOUNDER-M1-PASS-001
+    kind: founder_ruling
+  - id: DIYU-CBFSK-M2-EP01-001
+    kind: task_id
+    dispatched_by: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  declared_entry_count: 2
+  declared_scan_dirs:
+  - governance
+  - ci
+  actual_scan_dirs:
+  - ci
+  - governance
+  required_reference_keys:
+  - basis
+  - established_by
+  - finding
+  actual_reference_keys_supported:
+  - basis
+  - established_by
+  - finding
+  occurrences:
+  - id: DIYU-CBFSK-FOUNDER-M1-PASS-001
+    count: 3
+    files:
+    - governance/sample.yaml
+    first_file: governance/sample.yaml
+  - id: DIYU-CBFSK-M2-EP01-001
+    count: 1
+    files:
+    - governance/sample.yaml
+    first_file: governance/sample.yaml
+  reference_sites:
+  - file: governance/sample.yaml
+    key: established_by
+    id: DIYU-CBFSK-FOUNDER-M1-PASS-001
+  - file: governance/sample.yaml
+    key: finding
+    id: DIYU-CBFSK-FIXTURE-UNREGISTERED-SAMPLE-001
+  ruling_files:
+    DIYU-CBFSK-FOUNDER-M1-PASS-001: true
+  ruling_file_ids:
+  - DIYU-CBFSK-FOUNDER-M1-PASS-001
+  naming_corrections:
+  - renamed_from: DIYU-CBFSK-M2-RESUME-AUTHORIZATION-001
+    renamed_to: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001
+    content_unchanged: true
+    authorized_by: DIYU-CBFSK-FOUNDER-M1-PASS-001 article_1

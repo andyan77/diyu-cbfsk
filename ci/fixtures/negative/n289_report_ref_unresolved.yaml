@@ -1,0 +1,25 @@
+fixture_id: N289
+description: 模板引用的机器记录字段解析不出来。（REPORT_REF_UNRESOLVED）
+checker: check_report_number_traceability
+expected: FAIL
+payload:
+  reports:
+  - report: 11_reports_and_receipts/sample/sample_delivery_report.md
+    status: templated
+    template: 11_reports_and_receipts/sample/sample_delivery_report.md.tmpl
+    template_exists: true
+    report_exists: true
+    ref_errors:
+    - '''governance/gates/x.yaml#measurement.nope'': ''nope'' does not resolve'
+    rendered: '本包共 147 条挂账。
+
+      '
+    on_disk: '本包共 147 条挂账。
+
+      '
+    untraced_counts: []
+  - report: 11_reports_and_receipts/m0_delivery_report.md
+    status: legacy_untemplated
+    reason: 立规前的历史报告；回改等于用今天的口径重写昨天的现场。
+  declared_report_count: 2
+  unregistered_reports: []

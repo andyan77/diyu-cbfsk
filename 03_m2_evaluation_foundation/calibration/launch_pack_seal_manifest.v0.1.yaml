@@ -1,0 +1,104 @@
+schema_version: '0.1'
+manifest_id: DIYU-CBFSK-M2-CALIBRATION-PACK-SEAL-MANIFEST
+artifact_id: launch_pack_seal_manifest.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-SEAL
+status: SEALED
+artifact_lifecycle_state: validated
+established_by: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_2_sealing SEAL-1
+what_this_file_is:
+  is: 校准包在挂起那一刻的逐文件哈希快照。
+  is_not: 派生物。
+  why_not_regenerated: 这份清单一旦按现场重算，包里改了什么都会被悄悄吸收进新快照，封存就退化成「永远与自己一致」。因此它只生成一次，此后由判据现算包内实际哈希与它比对——不一致就是不一致。
+  enforced_by: ci/checkers/check_m2_suspension_seal.py
+distribution_status: NOT_DISTRIBUTED
+distribution_status_vocabulary:
+  NOT_DISTRIBUTED: 未分发，且包内容与封存快照逐字节一致。
+  REQUIRES_RECONFIRMATION: 包内至少一个文件的哈希与封存快照不一致，或文件集有增删。恢复时须重新确认，不得直接分发。
+  DISTRIBUTED: 已分发。分发即被评审记录锚定，此后改任何一个字都要作废整批证据。
+restore_rule:
+  statement: 恢复时若包内任一文件哈希变化，一律判为需重新确认，不得直接分发。
+  source: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001 article_2_sealing SEAL-1
+  machine_enforced: true
+  failure_states:
+  - SEALED_PACK_FILE_CHANGED
+  - SEALED_PACK_FILE_SET_CHANGED
+  - SEALED_PACK_DISTRIBUTED_WHILE_SUSPENDED
+  - SEALED_PACK_STATUS_INVALID
+  why: 哈希变了而状态还写着 NOT_DISTRIBUTED，等于说「包没动过」——恢复的人会照着这句话直接发出去，发出去的却是另一份包。
+pack_root: 03_m2_evaluation_foundation/calibration/launch_pack
+file_count: 17
+pack_content_digest: 061a7539e247250f46beb76f35c1b7babedb1f7e7856a8e5e024f22f8b0746fe
+pack_content_digest_recipe: sha256 over concatenated '<path>:<sha256>\n' lines, files sorted by path
+files:
+- path: README_分发说明.md
+  sha256: 8f69352bd09bebb09bbfdf5d8f5d4d3ce088ec25f1de0f15ef9ba2758d80c84c
+  bytes: 2318
+- path: batches/batch_01.jsonl
+  sha256: be9ba4217d6d043102c437bb227eaf200420b46ed6d22c4cba0ec1cb4c8845b5
+  bytes: 14593
+- path: batches/batch_02.jsonl
+  sha256: 8e05dd44e53c677832d005af6db52d3ac1ca6ae3655779bde177890cf866a24b
+  bytes: 12930
+- path: batches/batch_03.jsonl
+  sha256: 86f7e0229f720f4d2fcbe9f87769038772f3c3d7907af27139f0e468d2442a09
+  bytes: 13545
+- path: batches/batch_04.jsonl
+  sha256: 96cf9f5746b7eac7ac59aa7339f026d6ba2e40ba45a6befc272aa7605fcbdea6
+  bytes: 12414
+- path: batches/batch_05.jsonl
+  sha256: 6ca318fff52d28003ecba9fa4a9d0a4c3c515f08d7397575e82245f9841e208e
+  bytes: 11895
+- path: batches/batch_06.jsonl
+  sha256: dba7842de557e0424a46fe03698755cd38cfd2573990cf961808a751eac8747a
+  bytes: 13246
+- path: batches/batch_07.jsonl
+  sha256: 1dd2bc881b2556bfbc968e153fad4e043c6f611e27b30e4ce18c62bc08c24a75
+  bytes: 11936
+- path: batches/batch_08.jsonl
+  sha256: 83af62fa30a76696fd93c2a72495b3da878cd06506e5fbf5c86a93ce3f09e08b
+  bytes: 12944
+- path: batches/batch_09.jsonl
+  sha256: 6949ccbb144c301c973fcec41a0250c5da74ed0a0f13b94cc1f46dcf5fc21282
+  bytes: 12022
+- path: cases/public_calibration_cases.jsonl
+  sha256: 376ac9929941b2c2310d41932cc1db5c074c0555a07339f92640277967fd5557
+  bytes: 115525
+- path: hard_gates.json
+  sha256: 390b18efe5afbf05f5d3a7447f208db7eb242014532123720e868c0f4b10f49e
+  bytes: 1510
+- path: identity_lines.yaml
+  sha256: e84919f6da9615d2c2f34d22bcdf9fdf0f5da7a2ff0aadf8c740ea887c351756
+  bytes: 682
+- path: output_format.md
+  sha256: f0cd25ea6e0eb72fa69f779aad20e048c91f9fef94d2de4cf52a14b74a5ed046
+  bytes: 3110
+- path: pack_manifest.yaml
+  sha256: a69aa68507a2950f3a688227dd4210c53d7cd0f8e08407db91d0993809ec84ff
+  bytes: 3420
+- path: review_prompt.shared.v1.1.0.md
+  sha256: 3cf282afc7c007a9b48c758d7fc23e9c7747ed1a22bfd921b47d7874529d73a7
+  bytes: 6533
+- path: scoring_anchors.json
+  sha256: d4903e723b1f48e3d241f0f6734fa3146f3b4cf9f417011bf01e310f7c95a567
+  bytes: 2173
+review_sinks:
+  sides: 2
+  sealed_record_count_per_side: 0
+  items:
+  - side_id: GPT
+    sink: 03_m2_evaluation_foundation/calibration/reviews/gpt_calibration_review.jsonl
+    sealed_record_count: 0
+  - side_id: CLAUDE
+    sink: 03_m2_evaluation_foundation/calibration/reviews/claude_calibration_review.jsonl
+    sealed_record_count: 0
+  rule: 两侧评审记录维持各 0 条；出现任何记录即意味着包已经发出去了。
+  failure_state: SEALED_REVIEW_RECORDS_APPEARED
+failure_states:
+- SEALED_PACK_FILE_CHANGED
+- SEALED_PACK_FILE_SET_CHANGED
+- SEALED_PACK_DIGEST_MISSTATED
+- SEALED_PACK_DISTRIBUTED_WHILE_SUSPENDED
+- SEALED_PACK_STATUS_INVALID
+- SEALED_REVIEW_RECORDS_APPEARED

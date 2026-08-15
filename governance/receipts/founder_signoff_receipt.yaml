@@ -203,6 +203,7 @@ state_flag_authorizations:
       authorized: true
       basis: DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条（合并完成后 M1-EP01 立即开工）／已批准 MILESTONE_PLAN_M1
       signature_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+      ruling_clause_path: article_4_m1_start
       flag_became_true_at: M1-EP01 开工（本批）
       flag_became_true_basis: >-
         DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条「合并 main 完成后 M1-EP01 立即开工，
@@ -211,6 +212,25 @@ state_flag_authorizations:
       note: >-
         **在 m2_started 无授权条目的前提下**，置 m2_started=true 判 UNAUTHORIZED_TRUE_FLAG；
         一旦为其补上一条合规授权条目即可放行。详见 barrier_layer_delta。
+    m2_started:
+      authorized: true
+      basis: DIYU-CBFSK-FOUNDER-M2-CHARTER-001 / MILESTONE_PLAN_M2 v1.1（Founder 签署声明第 4 项）
+      signature_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+      ruling_clause_path: milestone_plan_m2
+      signature_receipt: DIYU-CBFSK-FOUNDER-M2-KICKOFF-SIGNATURE-001
+      flag_became_true_at: M2-EP01 开工（本批）
+      flag_became_true_basis: >-
+        Founder 签署声明第 4 项「m2_started 置 true」。与 m1_started / main_merged /
+        m0_execution_started 同一口径：授权存在 ≠ 事件已发生，本位只在 M2-EP01 实际开工后才置 true，
+        本批即开工批次。
+      scope_limit: >-
+        本条只授权 m2_started 与 M2-EP01 开工。不授权 M2-EP02（须待 M1 收口合入 main）、
+        不授权 M2-EP03（不可逆包，另需 Founder 精确 Prompt 批准）、不授权 M2 冻结、
+        不授权 knowledge_distillation_started 或 production_servable——后两者仍在 never_authorizable。
+      barrier_note: >-
+        本条正是 barrier_layer_delta 描述的那一步：改造后「往本文件加一条合规授权条目即可放行」。
+        m2_started 此前的锁靠的是「没有条目」，本次由 Founder 具名签署补上条目，
+        不是执行侧自行放宽，也未触碰 never_authorizable 两条红线位。
     chatgpt_remote_review_completed:
       authorized: false
       basis: advisor_review.advisor_review_status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
@@ -225,12 +245,15 @@ state_flag_authorizations:
       - M0_IN_PROGRESS
       - M0_COMPLETE
       - M1_IN_PROGRESS
+      - M1_M2_PARALLEL_IN_PROGRESS
       - M1_COMPLETE
+      - M2_IN_PROGRESS
     basis: m0_request_signature.founder_m0_request_decision=PASS
     signature_base_commit: 9335180f9e1fd3d480f9b39e0a23597ee52079c7
     value_basis:
       M0_COMPLETE:
         ruling: DIYU-CBFSK-FOUNDER-M0-DECISION-001
+        ruling_clause_path: m0_decision
         ruling_reviewed_commit: 2780e65dc32b20576635b887bd7634663afe531b
         basis: >-
           m0_decision=CONDITIONAL 且 repair_flow.on_pass 明令「M0 PASS 生效 / README 与状态位随之更新」；
@@ -240,12 +263,36 @@ state_flag_authorizations:
           M1_IN_PROGRESS 另有 value_basis 条目（DIYU-CBFSK-FOUNDER-M1-GATE-001 第 4 条）。
       M1_IN_PROGRESS:
         ruling: DIYU-CBFSK-FOUNDER-M1-GATE-001
+        ruling_clause_path: article_4_m1_start
         ruling_base_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
         merge_commit: 8eaf5f25987d787a546096b6a60a4e6a6b5a30f4
         basis: 第 4 条「合并 main 完成后 M1-EP01 立即开工」；合并已完成，前置成立。
         scope_limit: 不授权任何 M2 取值；m2_started 无授权条目，照样锁死。
+        superseded_by_value: M1_M2_PARALLEL_IN_PROGRESS
+        superseded_note: >-
+          本条 scope_limit 的「m2_started 无授权条目」自 DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+          签署起不再成立——条目已由 Founder 具名补上（见 flags.m2_started）。
+          原文保留不改写，仅标注其被后续签署取代，不追述为当时就已授权。
+      M1_M2_PARALLEL_IN_PROGRESS:
+        ruling: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+        ruling_clause_path: milestone_plan_m2
+        ruling_base_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+        signature_receipt: DIYU-CBFSK-FOUNDER-M2-KICKOFF-SIGNATURE-001
+        basis: >-
+          Founder 签署声明第 4 项「execution_status 枚举新增合法值 M1_M2_PARALLEL_IN_PROGRESS
+          并切换至该值」＋第 5 项并行安排（仅 M2-EP01 与 M1 并行）。
+        meaning: >-
+          M1 执行链与 M2-EP01 同时在跑，两者各自的里程碑均未收口。本取值既不表示 M1 已完成，
+          也不表示 M2 已冻结——M1 收口与 M2 冻结各自另有裁决。
+        scope_limit: >-
+          全项目并行执行包上限 2（DIYU-CBFSK-FR-GRANULARITY-005 limits）已由 M1 链 + M2-EP01 占满；
+          本取值不授权启动第三个并行包，不授权 M2-EP02 在 M1 收口合入 main 前启动。
+        superseded_by_value: M2_IN_PROGRESS
+        superseded_note: >-
+          并行窗口已随 M1 收口合入 main 关闭，本取值不再描述当前态，保留为历史。
       M1_COMPLETE:
         ruling: DIYU-CBFSK-FOUNDER-M1-PASS-001
+        ruling_clause_path: article_1_m1_decision
         ruling_approved_commit: 2df11012da46ace0de7b7bce6d199a578d32d341
         basis: >-
           Founder M1 收口裁决 decision=PASS，三项前置齐备（Guardian APPROVE 阻断 0 /
@@ -256,6 +303,27 @@ state_flag_authorizations:
           m2_started 仍无授权条目，置 true 判 UNAUTHORIZED_TRUE_FLAG。
         m1_status: FOUNDER_ACCEPTED
         landed_by: 裁决落盘提交（DIYU-CBFSK-FOUNDER-M1-PASS-001 第三条一次性预授权）
+        scope_limit_superseded_clause:
+          text: m2_started 仍无授权条目，置 true 判 UNAUTHORIZED_TRUE_FLAG。
+          why_superseded: >-
+            该分句写于 M1 收口链上，当时该分支未见 M2 侧的签署。m2_started 的授权条目实际早在
+            DIYU-CBFSK-FOUNDER-M2-CHARTER-001（绑定 6499431c66f7bf4a234bd830ee4c810e1ac78694）
+            即已由 Founder 具名补上，见 flags.m2_started。原文保留不改写，仅标注该分句已不成立，
+            不追述为两边当时就一致。
+          superseded_at: M2-EP02 受控合并
+      M2_IN_PROGRESS:
+        ruling: DIYU-CBFSK-FOUNDER-M2-RESUME-AUTHORIZATION-001
+        ruling_clause_path: resume_authorization
+        ruling_base_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+        basis: >-
+          Founder 恢复执行授权第一节第 3 条「授权 execution_status 新增合法值 M2_IN_PROGRESS，
+          并授权本轮由 M1_M2_PARALLEL_IN_PROGRESS 迁移至该值（M1 已收口，并行状态不再成立）」。
+        meaning: >-
+          M1 里程碑已 FOUNDER_ACCEPTED 并合入 main；当前只有 M2 在执行。
+          本取值不表示 M2 已冻结——m2_frozen 仍为 false，冻结自 Founder 收口签署起生效。
+        scope_limit: >-
+          不授权 m2_frozen、knowledge_distillation_started 或 production_servable 置 true；
+          后两者仍在 never_authorizable。
   active_baseline_signature:
     authorized: true
     signed_baseline: 笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx

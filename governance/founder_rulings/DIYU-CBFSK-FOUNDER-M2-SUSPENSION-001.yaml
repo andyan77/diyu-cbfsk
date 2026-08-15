@@ -1,0 +1,215 @@
+schema_version: "0.1"
+ruling_id: DIYU-CBFSK-FOUNDER-M2-SUSPENSION-001
+project_id: DIYU-CBFSK-001
+milestone: M2
+issued_by: FOUNDER_PRODUCT_AUTHORITY
+ruling_kind: milestone_suspension_and_premerge_review
+headline: M2 挂起、主线封存与并入前审查
+supersedes: []
+builds_on: DIYU-CBFSK-FOUNDER-M2-EP06-001
+
+identifier_assignment:
+  assigned_by: TEMPORARY_EXECUTION_WRITER
+  why: 裁决原文未自带编号；仓内每一个编号都必须可寻址才能被引用与解析。
+  rule: 按既有命名规范分配，不改动裁决任何一个字。
+  founder_may_rename: true
+
+article_1_suspension:
+  headline: M2 挂起裁定
+  milestone: M2
+  status: SUSPENDED_BY_FOUNDER
+  nature: 既非通过、亦非失败，为 Founder 主动挂起。
+  m2_freeze_gate: 维持关闭
+  preservation:
+    keep_branch: candidate/m2
+    keep_all_existing_artifacts: true
+    must_not: [重写, 回退, 删除]
+
+article_2_sealing:
+  headline: 未落盘部分结扎
+  principle: 一律以机器状态封存，不以意图封存。
+  principle_meaning: >-
+    「以意图封存」是写一句「我们暂停推进」；「以机器状态封存」是把每一项的当前值钉成可复算的字段，
+    并让判据在有人推进时当场拦下。前者靠人记得，后者不靠。
+  items:
+  - id: SEAL-1
+    subject: 校准包
+    requirements:
+    - 置 distribution_status: NOT_DISTRIBUTED
+    - 生成全包文件哈希封存清单
+    - 两侧评审记录维持各 0 条
+    - 判据须保证——恢复时若包内任一文件哈希变化，一律判为需重新确认，不得直接分发
+    requires_checker: true
+  - id: SEAL-2
+    subject: 已知设计缺口登记
+    rule: 恢复前必须先处置，不得直接分发。
+    gaps:
+    - id: GAP-SQ-01
+      affects_count: 4
+      defect: 题干缺品牌色彩硬规则，导致「不编造就答不了」
+      disposition_rule: 恢复时按锚点真源登记的设计意图分流
+      branches:
+      - intent: 考联合色彩语法
+        action: 补题干
+      - intent: 考资料缺失
+        action: 锚点判界外，且须确保配对候选写的是「声明缺失」而非「编造」
+    - id: GAP-SQ-02
+      affects_count: 1
+      defect: 解族成员资格与指令遵循两个构念混在一题
+      disposition_rule: 恢复时二选一
+      branches:
+      - action: 移除「必须三个视角」的要求
+      - action: 改标为约束题
+    - id: GAP-CRITERION-A
+      defect: 判据 A 的宽读法／严读法分层方案未裁定
+      disposition_rule: 待 Founder 裁定
+  - id: SEAL-3
+    subject: 隐藏资产
+    requirements:
+    - STORE-A 未 provision
+    - COND-011 维持 EVIDENCE_SUBMITTED
+    - 资产计数 0
+    - manifest 维持 EMPTY_BLOCKED
+    - Steward Prompt 与输入包封存但不启用
+  - id: SEAL-4
+    subject: 阈值
+    requirements:
+    - COND-007 维持 OPEN
+    - 34 项指标全部 null
+    - 阈值裁决工作表合同保留、内容不生成
+  - id: SEAL-5
+    subject: 时序门
+    requirements:
+    - 五项维持满足 0 项
+    - founder_confirmation 五个绑定字段维持空
+  - id: SEAL-6
+    subject: 18 项覆盖矩阵
+    requirements:
+    - 14 READY / 4 PARTIAL 如实维持
+    - 各 PARTIAL 的 blockers 逐条记录
+  - id: SEAL-7
+    subject: 新增挂起记录文件
+    minimum_contents:
+    - 挂起原因
+    - 挂起时 main 与候选的完整 40 位哈希
+    - 上述每项资产的确切状态
+    - 恢复所需的最小动作清单
+    - 「恢复时不得假定为真」的清单
+
+article_3_premerge_review:
+  headline: 并入前审查
+  questions_rewritten_by_founder: true
+  execution_side_must_relay_verbatim: true
+  review_target: 本次结扎落盘后形成的最终候选 Commit
+  review_target_hash_reported_by: 执行侧
+  review_target_hash_must_be_full_40: true
+  review_question_stem: 本候选原样并入 main，是否会在主线上造成以下任一情形——
+  review_questions:
+  - id: Q1
+    name: 虚假状态
+    text: 任何声称完成而实际未完成的记录
+  - id: Q2
+    name: 越权授权
+    text: 任何未经 Founder 绑定的状态位或条件被置真
+  - id: Q3
+    name: 红线松动
+    text: 六位红线旗、隐藏内容入仓、知识状态链
+  - id: Q4
+    name: 误导性基线
+    text: 对将来从 main 起步的工作构成误导
+  out_of_scope:
+    rule: 已知为否，且已由机器状态如实记录，不需再确认。
+    items:
+    - M2 能否冻结
+    - 18 项是否闭环
+    - 隐藏资产是否存在
+    - 阈值是否已定
+  reviewers:
+  - CLAUDE_INDEPENDENT_GUARDIAN
+  - CHATGPT_CHIEF_ADVISOR
+  each_produces: 一次结论
+  supersedes_prior_blocking: >-
+    本条取代 DIYU-CBFSK-FOUNDER-M2-EP06-001 第三节的五步闸排序对本轮审查的阻断——
+    审查对象由「第 3 步产出的最终分发前候选」改为「本次结扎落盘后形成的最终候选」，该对象在本包提交后即存在。
+
+article_4_merge_and_mainline_seal:
+  headline: 审查通过后的合并与主线封存
+  three_gates:
+  - Guardian 无阻断
+  - 总顾问意见
+  - 本 Founder 裁决之后的合并授权
+  three_gates_rule: 三门齐备后方可合并。
+  merge_method:
+    inherits: M1 口径
+    ff_only: true
+    command_line_only: true
+    forbidden: PR 页面三个按钮
+    post_merge_verification: git rev-parse origin/main 必须等于被批准的完整哈希
+    on_mismatch: 停并报告
+  tag:
+    what: 对该 Commit 打标签作为「M2 挂起点」
+    recorded_in: 挂起文件
+  mainline_state_after_merge:
+    state: 冻结观察态
+    accepts: [治理登记, 裁决落盘]
+    rejects: 新的功能性提交
+    until: Founder 就新支线另行裁决
+
+article_5_restore_conditions:
+  headline: 恢复条件
+  why_written_down: 写清楚，免得将来靠回忆。
+  ordered_sequence:
+  - 处置第二节第 2 项三个已知缺口
+  - 校准包哈希复核通过
+  - 分发并回收两侧评审
+  - 聚合
+  - Founder 冻结阈值（COND-007 关闭）
+  - Founder 确认公开蓝图未变（绑定 Commit）
+  - STORE-A provision 与证据 intake
+  - 40 品牌正式批
+  - 统一收口
+  must_not_assume_true_on_restore:
+  - 任何一条上述前置
+  - 挂起期间主线的任何变化不自动使输入包保持有效
+
+article_6_not_authorized:
+  headline: 未授权
+  items:
+  - 分发校准包
+  - 任何隐藏批次含试产
+  - 置 m2_frozen 为真
+  - 置 founder_signature_eligible 为真
+  - 置 downstream_consumption_allowed 为真
+  - M3
+  - M4
+  - 知识蒸馏
+  - production_servable
+  - 在本裁决之外向 main 提交任何功能性内容
+
+machine_checkable_fields:
+  article_count: 6
+  seal_item_count: 7
+  design_gap_count: 3
+  review_question_count: 4
+  out_of_scope_count: 4
+  reviewer_count: 2
+  restore_step_count: 9
+  must_not_assume_count: 2
+  not_authorized_count: 10
+  merge_gate_count: 3
+  m2_status: SUSPENDED_BY_FOUNDER
+  m2_freeze_gate_open: false
+  calibration_pack_distribution_allowed: false
+  review_records_per_side: 0
+  threshold_frozen_count: 0
+  timing_gate_satisfied_count: 0
+  deliverables_ready: 14
+  deliverables_partial: 4
+  hidden_asset_count: 0
+  m2_frozen: false
+  founder_signature_eligible: false
+  downstream_consumption_allowed: false
+  m3_started: false
+  m4_started: false
+  knowledge_distillation_started: false
+  production_servable: false

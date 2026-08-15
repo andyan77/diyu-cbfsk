@@ -3,7 +3,9 @@
 
 from __future__ import annotations
 
-from _common import ROOT, cli, docx_all_text, docx_paragraph_texts, load_yaml
+import yaml
+
+from _common import FOUNDER_RULING_DIR, ROOT, cli, docx_all_text, docx_paragraph_texts, load_yaml
 
 LABEL = "check_ruling_coverage"
 
@@ -87,7 +89,24 @@ def validate(payload: dict) -> list[str]:
     return errors
 
 
+def _m6_acceptance_rulings() -> list[dict]:
+    """D-29 的验收状态现场从裁决目录推导，不写死 False。
+
+    此前这一位是 Python 字面量 False——M6 真被判过「纯 Prompt/RAG 直答可接受」，
+    判据也照样全绿（B-04-4，与 STORE-A locator_present 硬编码同源）。
+    现在改成：扫裁决目录，凡 milestone 为 M6 的裁决逐条取出，由 validate 判它接受了什么。
+    没有这样的裁决就是空列表——空是查出来的，不是写上去的。
+    """
+    out = []
+    for path in sorted((ROOT / FOUNDER_RULING_DIR).glob("*.yaml")):
+        doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if doc.get("milestone") == "M6":
+            out.append({"ruling_id": doc.get("ruling_id"), **{k: v for k, v in doc.items() if k.startswith("accepted_")}})
+    return out
+
+
 def collect() -> dict:
+    m6_rulings = _m6_acceptance_rulings()
     change_map = load_yaml("PRD_v1.2_change_map.yaml")
     prd_text = docx_all_text(ROOT / "笛语跨品牌服装搭配专家内核_PRD与执行里程碑_v1.2.docx")
     receipt_text = docx_all_text(ROOT / "PRD_v1.2_核验回执.docx")
@@ -107,7 +126,10 @@ def collect() -> dict:
         ],
         "metric_threshold": threshold,
         "rulings_in_receipt_matrix": [r for r in REQUIRED_RULINGS if r in receipt_text],
-        "prompt_rag_direct_answer_accepted_for_m6": False,
+        "m6_acceptance_rulings": m6_rulings,
+        "prompt_rag_direct_answer_accepted_for_m6": any(
+            r.get("accepted_implementation_kind") == "prompt_rag_direct_answer" for r in m6_rulings
+        ),
     }
 
 

@@ -1,0 +1,22 @@
+fixture_id: N205-error-code-without-fixture
+description: 有错误码既没夹具行使、也没进登记册——新债不允许无声存在。
+checker: check_error_code_fixture_coverage
+expected: FAIL
+payload:
+  declared:
+  - checker: check_a
+    code: CODE_ONE
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_THREE
+  uncovered:
+  - checker: check_a
+    code: CODE_TWO
+  - checker: check_b
+    code: CODE_THREE
+  fixture_count: 12
+  ledger_entries:
+  - checker: check_a
+    code: CODE_TWO
+  declared_cap: 1

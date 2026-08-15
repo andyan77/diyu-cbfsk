@@ -1,0 +1,23 @@
+fixture_id: M2-P06
+description: 册子与全量注册表双向一致，三道门禁均 LIVE 且有实现——没有任何门被静默摘掉。
+checker: check_m2_gate_retirement_guard
+expected: PASS
+payload:
+  gates:
+  - checker: check_docx_canonical_hashes
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  - checker: check_hidden_benchmark_boundary
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  - checker: check_m2_gate_retirement_guard
+    status: LIVE
+    retirement_authorization: null
+    implementation_exists: true
+  live_gate_count: 3
+  registered_checkers:
+  - check_docx_canonical_hashes
+  - check_hidden_benchmark_boundary
+  - check_m2_gate_retirement_guard

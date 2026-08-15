@@ -1,0 +1,59 @@
+schema_version: '0.1'
+metric_id: DIYU-CBFSK-M2-DECISION-LOGIC-STABILITY-RATE
+artifact_id: decision_logic_stability_rate.v0.1
+project_id: DIYU-CBFSK-001
+milestone: M2
+execution_package: M2-EP02
+status: M2_EP02_DELIVERED
+artifact_lifecycle_state: draft
+canonical_name: 核心决策逻辑稳定率
+canonical_name_en: Decision Logic Stability Rate
+former_name: 核心判断重复一致率
+former_name_status: RENAMED_BY_D28_MUST_NOT_BE_USED_AS_LIVE_METRIC
+rename_ruling: D-28
+threshold: '>= 85%'
+threshold_changed_by_rename: false
+threshold_status: FROZEN_IN_PRD_10_2
+definition: 同一输入条件下重复提问，**决策逻辑**是否稳定——不是输出文本是否雷同。衡量的是推理依据与取舍规则的一致性，不是措辞或方案外形的一致性。
+what_counts_as_instability:
+- id: INST-01
+  case: 同条件下先「弱化肩部」后「强化肩部」
+  why: 同一依据下给出方向相反的取舍，说明决策逻辑本身不稳定
+  counts: true
+what_does_not_count_as_instability:
+- id: STAB-01
+  case: 同条件下一次裤装方案、一次裙装方案且均成立
+  why: 两者落在不同的合法解族，属合理多解，不是不稳定（D-28）
+  counts: false
+- id: STAB-02
+  case: 措辞不同但推理依据与取舍规则一致
+  why: 本指标测逻辑不测文本
+  counts: false
+computation:
+  unit: per_question_repeated_trials
+  numerator: 决策逻辑一致的重复次数
+  denominator: 重复总次数
+  logic_identity_basis: DecisionTrace 的 rule_attribution 与 priority_adjudications 是否一致
+  logic_identity_basis_note: 以 DecisionTrace 的规则归因为准，不以输出文本比对为准——文本比对会把「换个说法」判成不稳定，把「换个依据」判成稳定，两个方向都错。
+  solution_family_aware: true
+  solution_family_aware_note: 落在不同合法解族不计入不稳定（STAB-01）。
+binding_kind: m1_conflict_priority_rule_id
+bound_conflict_priority_rule_ids:
+- CP-04
+bound_object_refs:
+- 01_contracts_and_schemas/m1_object_model/styling_decision_trace.schema.v0.1.json
+consumes_via_profile: m2_evaluation_profile
+machine_checkable_fields:
+  stability_rate:
+    type: number
+    minimum: 0
+    maximum: 1
+  threshold:
+    type: string
+    const: '>= 85%'
+  trials_per_question:
+    type: integer
+    minimum: 2
+  solution_family_aware:
+    type: boolean
+    const: true

@@ -1,0 +1,93 @@
+schema_version: '0.1'
+pack_id: DIYU-CBFSK-M2-CALIBRATION-LAUNCH-PACK
+pack_version: 1.1.0
+generated_by: ci/tools/build_calibration_pack.py
+derived_from: 03_m2_evaluation_foundation/calibration/public_calibration_set.v0.1.yaml
+single_source_rule: 题目只有一处定义；本包是派生物，手改会被判据重新派生比对时抓到。
+independently_distributable: true
+case_count: 90
+batch_size: 10
+batch_count: 9
+review_unit_count: 90
+candidate_count: 90
+review_prompt:
+  path: review_prompt.shared.v1.1.0.md
+  sha256: 3cf282afc7c007a9b48c758d7fc23e9c7747ed1a22bfd921b47d7874529d73a7
+  shared_by_both_sides: true
+  only_identity_line_differs: true
+must_not_contain:
+  kinds:
+  - 项目治理上下文
+  - 既往结论
+  - 其他评审结果
+  - 候选输出的边界侧标签
+  tokens:
+  - m2_frozen
+  - execution_status
+  - milestone
+  - 里程碑
+  - 候选 Commit
+  - Guardian
+  - 总顾问
+  - 裁决
+  - DIYU-CBFSK-FOUNDER
+  - COND-0
+  - BLOCK_M2
+  - 'PR #'
+  - M2-EP
+  - 隐藏集
+  - STORE-A
+  - founder_signature_eligible
+  - APPROVE_WITH_CONDITIONS
+  - 锚点判定
+  - founder_review_queue
+  anchor_keys:
+  - boundary_position
+  - constructed_judgment
+  - expected_judgment
+  why: 分歧率要测的是两位评审员各自的判断。评审员一旦知道项目卡在哪、或上一轮别人怎么判的，他会往那个方向靠——测出来的一致是靠过去的，不是各自看出来的。
+file_count: 16
+files:
+- path: README_分发说明.md
+  sha256: 8f69352bd09bebb09bbfdf5d8f5d4d3ce088ec25f1de0f15ef9ba2758d80c84c
+- path: batches/batch_01.jsonl
+  sha256: be9ba4217d6d043102c437bb227eaf200420b46ed6d22c4cba0ec1cb4c8845b5
+- path: batches/batch_02.jsonl
+  sha256: 8e05dd44e53c677832d005af6db52d3ac1ca6ae3655779bde177890cf866a24b
+- path: batches/batch_03.jsonl
+  sha256: 86f7e0229f720f4d2fcbe9f87769038772f3c3d7907af27139f0e468d2442a09
+- path: batches/batch_04.jsonl
+  sha256: 96cf9f5746b7eac7ac59aa7339f026d6ba2e40ba45a6befc272aa7605fcbdea6
+- path: batches/batch_05.jsonl
+  sha256: 6ca318fff52d28003ecba9fa4a9d0a4c3c515f08d7397575e82245f9841e208e
+- path: batches/batch_06.jsonl
+  sha256: dba7842de557e0424a46fe03698755cd38cfd2573990cf961808a751eac8747a
+- path: batches/batch_07.jsonl
+  sha256: 1dd2bc881b2556bfbc968e153fad4e043c6f611e27b30e4ce18c62bc08c24a75
+- path: batches/batch_08.jsonl
+  sha256: 83af62fa30a76696fd93c2a72495b3da878cd06506e5fbf5c86a93ce3f09e08b
+- path: batches/batch_09.jsonl
+  sha256: 6949ccbb144c301c973fcec41a0250c5da74ed0a0f13b94cc1f46dcf5fc21282
+- path: cases/public_calibration_cases.jsonl
+  sha256: 376ac9929941b2c2310d41932cc1db5c074c0555a07339f92640277967fd5557
+- path: hard_gates.json
+  sha256: 390b18efe5afbf05f5d3a7447f208db7eb242014532123720e868c0f4b10f49e
+- path: identity_lines.yaml
+  sha256: e84919f6da9615d2c2f34d22bcdf9fdf0f5da7a2ff0aadf8c740ea887c351756
+- path: output_format.md
+  sha256: f0cd25ea6e0eb72fa69f779aad20e048c91f9fef94d2de4cf52a14b74a5ed046
+- path: review_prompt.shared.v1.1.0.md
+  sha256: 3cf282afc7c007a9b48c758d7fc23e9c7747ed1a22bfd921b47d7874529d73a7
+- path: scoring_anchors.json
+  sha256: d4903e723b1f48e3d241f0f6734fa3146f3b4cf9f417011bf01e310f7c95a567
+failure_states:
+- PACK_DERIVATION_DRIFT
+- PACK_MANIFEST_HASH_STALE
+- PACK_CASE_SET_DRIFT
+- PACK_BATCH_PARTITION_BROKEN
+- PACK_CONTAINS_GOVERNANCE_CONTEXT
+- PACK_PROMPT_HASH_MISMATCH
+- PACK_FILE_MISSING
+- PACK_CONTAINS_ANCHOR_LABEL
+- PACK_CANDIDATE_MISSING
+- PACK_UNDECLARED_FILE

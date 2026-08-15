@@ -1,0 +1,21 @@
+fixture_id: N186-ruling-clause-not-found-in-flag-authorization
+description: 裁决文件存在，但引用的条款键在文件里解析不出来。
+checker: check_project_state
+expected: FAIL
+payload:
+  ruling_claims:
+  - where: state_flag_authorizations.flags.m2_started
+    reference: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+    ruling_id: DIYU-CBFSK-FOUNDER-M2-CHARTER-001
+    kind: founder_ruling
+    file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-M2-CHARTER-001.yaml
+    file_exists: true
+    clause_path: milestone_plan_m2
+    clause_resolves: false
+  flags: {}
+  authorizations: {}
+  never_authorizable_declared: []
+  execution_status: M2_IN_PROGRESS
+  execution_status_authorization: {}
+  candidate_marked_as_effective_truth: false
+  forbidden_claim_hits: []

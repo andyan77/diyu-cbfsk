@@ -1,0 +1,37 @@
+fixture_id: M2-P08
+description: 四维度齐备、不合成总分、dry-run 两次字节相同、零真实模型调用、OD-M2-01 已登记。
+checker: check_m2_tournament
+expected: PASS
+payload:
+  contract_dimensions:
+  - quality
+  - cost
+  - latency
+  - human_intervention
+  contract_dimension_count: 4
+  all_required: true
+  dimensions_without_aggregation: []
+  dimensions_without_fields: []
+  dimensions_with_frozen_threshold: []
+  no_single_composite_score_enforced: true
+  arms_with_composite_score: []
+  forbidden_runtime_imports: []
+  declared_model_api_calls: 0
+  declared_network_access: false
+  dry_run_executed: true
+  dry_run_digest_first: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  dry_run_digest_second: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  dry_run_arm_count: 2
+  dry_run_exercised_failing_gate: true
+  arms_with_failed_gate_not_marked_failed: []
+  arms_missing_dimensions: []
+  open_decision:
+    open_decision_id: OD-M2-01
+    status: NOT_EXECUTED
+    cost_range_usd:
+    - 15
+    - 120
+    time_estimate_range:
+    - 2
+    - 8
+    evidence_level: inferred

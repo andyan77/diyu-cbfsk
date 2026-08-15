@@ -135,14 +135,19 @@ active_baseline_candidates:
     authorization_ref: >-
       执行 Prompt v2.0 §15.1（README.md 列为本任务必须修改的产品文档）；
       本轮追加授权＝Founder 签署包 DIYU-CBFSK-FOUNDER-SIGNOFF-001 第六条执行序列。
-    post_change_binary_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
+    post_change_binary_sha256: f4f62d4125dd99320f8d04af0183e80f6df846679c926ebc1c7cccf5f636444b
     post_change_note: >-
       入参哈希 e5a4d75c… 是 Phase 0 输入快照。post_change_binary_sha256 始终只钉「当前交付态」
       这一个值，任何未登记的再改都会被 check_baseline_hashes 当场拦下；每一次授权改写都必须
       同时在 authorized_modification_history 里留一条，说明授权来源与改动内容。
     authorized_modification_history:
+      - change_id: README-MOD-13
+        authorization_ref: DIYU-CBFSK-FOUNDER-BR0-START-001（BR0 启动裁决书 v0.1，Founder 原文逐字落盘）
+        binary_sha256: f4f62d4125dd99320f8d04af0183e80f6df846679c926ebc1c7cccf5f636444b
+        landed_in_commit: BR0_START_RULING_LANDING_COMMIT
+        content: 裁决目录补 FOUNDER-M1-PASS-001 / RD-M1-01 / FOUNDER-BR0-START-001；支线段补启动裁决书链接、BR0-EP01 AUTHORIZED 但前置未满足、候选分支待审说明
       - change_id: README-MOD-12
-        authorization_ref: BR0-EP00 启动准备包 v0.2 EP00-02／EP00-03A（Founder 于 2026-08-15 会话内下发并授权推进；无独立签署裁决文件）
+        authorization_ref: BR0-EP00 启动准备包 v0.2 EP00-02／EP00-03A（Founder 于 2026-08-15 会话内下发并授权推进；启动裁决书当时尚未签署）
         binary_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
         landed_in_commit: 91173113584978dc80b16975b9f5b5efab368029
         content: 删除「## 当前项目状态」下整段 yaml 状态块，替换为一行指向 PRD_v1.2_change_map.yaml 的 resulting_state；Checker 计数 21→24；新增「支线（BR0—BR8）」一段；活基线表格与 `**当前活基线 · `SIGNED`**` 承重串逐字未动

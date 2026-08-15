@@ -1,0 +1,38 @@
+schema_version: '0.1'
+founder_ruling_id: DIYU-CBFSK-FOUNDER-BR0-START-001
+project_id: DIYU-CBFSK-001
+title: BR0 启动裁决书 v0.1
+ruling_date: '2026-08-15'
+issued_by: Founder
+milestone: BR0
+
+article_1_baseline:
+  baseline_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
+  runtime_base_branch: main
+
+article_2_candidate_m2:
+  decision: NOT_MERGED
+  status: SUSPENDED_REFERENCE
+  backport: 仅 3 个判据（report_number_traceability / founder_confirmation_binding /
+            collect_derivation_discipline）；其余 25 个留 deferred_items
+
+article_3_readme:
+  decision: 删除重复状态块，保留 hash pin 与活基线 marker
+
+article_4_secret_boundary:
+  decision: 由业务词扫描改为真实敏感信息检测
+
+article_5_m2_adr:
+  decision: 暂停维护，分类留档
+
+article_6_br0_ep01:
+  decision: AUTHORIZED
+  precondition: BR0-EP00 回执 PASS 且 PR 合并入 main
+
+scope_freeze_rule:
+  effective_from_this_ruling: true
+  rule: BR0-EP00 范围自本裁决签署起冻结；此后新发现一律进 deferred_items，
+        不回改本包、不新增子任务
+
+signed_by: Founder
+signed_at: '2026-08-15'

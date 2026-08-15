@@ -201,6 +201,11 @@ evidence_refs:
   classification_ref: 01_contracts_and_schemas/branch_baseline.v0.1.yaml checker_delta / m2_adr_classification
 
 # --- 需要 Founder 裁定的条件 -------------------------------------------------
+open_conditions_status: ALL_RESOLVED
+open_conditions_status_note: >-
+  三条全部关闭：COND-01 / COND-02 由 EP00-FIX 的 Founder 裁决 R-01 / R-04 关闭，
+  COND-03 由《BR0 启动裁决书 v0.1》签署关闭。本回执不再挂任何未决条件。
+
 open_conditions:
   - id: COND-BR0EP00-01
     status: RESOLVED_BY_FOUNDER_RULING
@@ -222,12 +227,22 @@ open_conditions:
       接受推导值，但必须标 waiver_timestamp_provenance（值 derived_from_signed_at），不得呈现为原生字段
     forbidden_action: 执行侧不得自行改写 Founder 签署回执（未改，git diff 可验）
   - id: COND-BR0EP00-03
-    status: OPEN
+    status: CLOSED
+    closed_by: DIYU-CBFSK-FOUNDER-BR0-START-001
+    closed_at: "2026-08-15"
+    closed_at_commit: 2133f74e66f6389aa7832613f522e759f0c699d5
     statement: >-
-      BR0-EP01 的放行条件为 FOUNDER_RULING_A1_A5_NOT_SIGNED（顶层 authority.entry_blocker）。
-      仓内不存在《BR0 启动裁决书 v0.1》（A1—A5）文件。
-    requires: Founder 签署该裁决书
-    closes_automatically_on: 裁决书签署落盘；签署同时范围冻结生效（scope_freeze_rule）
+      BR0-EP01 的放行条件曾为 FOUNDER_RULING_A1_A5_NOT_SIGNED（顶层 authority.entry_blocker）。
+      仓内当时不存在《BR0 启动裁决书 v0.1》（A1—A5）文件。
+    resolution: >-
+      Founder 于 2026-08-15 签署《BR0 启动裁决书 v0.1》，YAML 原文由 Founder 直接给出，
+      执行侧逐字落 governance/founder_rulings/DIYU-CBFSK-FOUNDER-BR0-START-001.yaml。
+      entry_blocker 解除，scope_freeze_rule 转 EFFECTIVE。
+    wording_provenance: FOUNDER_VERBATIM
+    superseded_draft_note: >-
+      原文送达前，执行侧曾按 Founder 确认的草案落过一份 A1—A5（DIYU-CBFSK-FOUNDER-BR0-LAUNCH-001，
+      措辞由执行侧起草）。原文一到即整份删除，不保留、不并存——同一份裁决两份并存，
+      下游就分不清哪份是真的。两者实质一致，逐条对齐见 branch_baseline.v0.1.yaml 的 ruling_alignment。
     not_a_defect_of_this_package: true
 
 known_issues:
@@ -266,7 +281,7 @@ delivery_channel:
   merge_authority: Founder（本包属 L3：触及 CI、角色可用性与状态位）
 
 next_action: >-
-  1) Founder 签《BR0 启动裁决书 v0.1》（A1—A5）→ COND-03 关闭、范围冻结生效；
-  2) Guardian 审 PR → 合并 main；
+  1) 【已完成】Founder 签《BR0 启动裁决书 v0.1》（A1—A5）→ COND-03 关闭、范围冻结生效；
+  2) Guardian 审 PR #4 → Founder 批准后合并 main（裁决 article_6 的前置第二项，当前 NOT_MET）；
   3) 基于合并后的 candidate_commit JIT 编译 BR0-EP01 Runtime Skeleton。
-  在此之前不得开始任何 Runtime 施工。
+  签署 ≠ 审查通过 ≠ 可以开工：第 2 步未完成前不得开始任何 Runtime 施工。

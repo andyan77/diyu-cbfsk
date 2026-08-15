@@ -239,14 +239,51 @@ EP01 这个编号让给 Runtime Skeleton。
 |---|---|
 | COND-01 commit_events 守护对象 | RESOLVED_BY_FOUNDER_RULING（R-01，保持 A 版 ＋ 本报告 unreviewed_commits 补偿） |
 | COND-02 waiver_timestamp 来源 | RESOLVED_BY_FOUNDER_RULING（R-04，标 `derived_from_signed_at`，签署回执未动） |
-| COND-03 A1—A5 裁决书 | OPEN——不是本包缺陷，签署即自动关闭，同时范围冻结生效 |
+| COND-03 启动裁决书 | **CLOSED**——Founder 已于 2026-08-15 签署《BR0 启动裁决书 v0.1》 |
 
-本包结论：**PASS**。
+三条全部关闭，本回执不再挂任何未决条件。本包结论：**PASS**。
+
+### 裁决落盘方式
+
+`DIYU-CBFSK-FOUNDER-BR0-START-001`，YAML 原文由 Founder 直接给出，执行侧**逐字落盘**，
+未新增、未扩张、未解释性改写任何一条。六条 `article_1`…`article_6` ＋ `scope_freeze_rule`。
+
+原文送达前，执行侧曾按 Founder 确认的草案落过一份 A1—A5（措辞由执行侧起草，明标非 Founder 原文）。
+**原文一到即整份删除，不保留、不并存**——同一份裁决两份并存，下游就分不清哪份是真的。
+两者实质一致，逐条对齐记录在 `branch_baseline.v0.1.yaml` 的 `ruling_alignment`。
+
+### 六条裁决落在哪
+
+| 条 | 落点 | 状态 |
+|---|---|---|
+| `article_1_baseline` | `baseline_commit` / `runtime_base_branch` | ALIGNED |
+| `article_2_candidate_m2` | 仅 3 个判据回迁，其余 25 个（B 类 7 ＋ C 类 18）留 `deferred_items` | ALIGNED |
+| `article_3_readme` | EP00-02 已交付：删整段状态块，保留 hash pin 与活基线 marker | ALIGNED |
+| `article_4_secret_boundary` | EP00-03B 已交付：业务词扫描 → 真实敏感信息检测 | ALIGNED |
+| `article_5_m2_adr` | 暂停维护、分类留档——六份 ADR 一份都没复制到 main | ALIGNED |
+| `article_6_br0_ep01` | `decision: AUTHORIZED`，前置「回执 PASS 且 PR 合并入 main」 | 前置未满足 |
+
+`article_2` 说「其余 25 个留 deferred_items」；本仓把它们再分成
+B 类（BR2 收口逐个重评）与 C 类（支线不恢复 M2 评测基座）。那是**怎么 defer** 的细化，
+不是改动裁决——一个都没迁入。
+
+### 签署关掉了什么、没关掉什么
+
+| | |
+|---|---|
+| **关掉** | `entry_blocker` 解除；`scope_freeze_rule` 转 `EFFECTIVE`；BR0-EP01 判 `AUTHORIZED` |
+| **没关掉** | PR #4 合并 main（`article_6` 前置第二项，当前 NOT_MET）；Guardian 审查；BR0-EP01 开工 |
+
+授权 ≠ 前置已满足 ≠ 可以开工，三件事是三道门。
 
 ## 十一、之后的顺序
 
-1. Founder 签《BR0 启动裁决书 v0.1》（A1—A5）→ COND-03 关闭、`scope_freeze_rule` 生效
-2. Guardian 审 PR → 合并 main
+1. ~~Founder 签《BR0 启动裁决书 v0.1》~~ **已完成** → COND-03 关闭、`scope_freeze_rule` 生效
+2. Guardian 审 PR #4 → Founder 批准后合并 main（`article_6` 前置第二项）
 3. 基于合并后的 candidate_commit，JIT 编译 BR0-EP01 Runtime Skeleton
+   （`br0_ep01_requirements` 强制三条：pytest ≥1 真实测试 / 首次 migration `tenant_id NOT NULL` / JIT 不提前冻结）
 
 本 PR 标题注明「待 Guardian 审查，勿合并」，执行侧不自行合并。
+
+**范围已冻结**（`scope_freeze_rule.effective_from_this_ruling: true`）：此后新发现一律进 `deferred_items`，不回改本包、不新增子任务。
+Guardian 审查提出的缺陷修复不受此限——修缺陷不是扩范围。

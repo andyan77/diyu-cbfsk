@@ -80,7 +80,7 @@ M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_
 | 目录 | 内容 |
 |---|---|
 | `governance/baseline/` | Founder 钉死的基线 Manifest、迁移记录 |
-| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001、FOUNDER-M1-RUNTHROUGH-001） |
+| `governance/founder_rulings/` | Founder 裁决原件（FR-ORG-002、FR-EVAL-003、FR-GRANULARITY-005、FR-PROCESS-006、FOUNDER-M0-DECISION-001、FOUNDER-M1-GATE-001、FOUNDER-M1-RUNTHROUGH-001、FOUNDER-M1-PASS-001、RD-M1-01、FOUNDER-BR0-START-001） |
 | `governance/bootstrap/` | `role_operating_model.v0.2.yaml`：角色与执行治理的**唯一规范源** |
 | `governance/roles/` `governance/prompts/` | 角色合同与角色 Prompt（由规范源生成） |
 | `governance/conditions/` | `CONDITIONAL` 条件关闭台账 |
@@ -99,7 +99,7 @@ M1 交付报告见 [`11_reports_and_receipts/m1_delivery_report.md`](11_reports_
 
 `笛语支线系统架构PRD_v0.3.2.docx` 是支线产品真源候选，状态 `FOUNDER_REVIEW_CANDIDATE`，**未签署、未生效**，不取代 PRD v1.2。`归档_支线v0.3/` 保存 v0.3.1 与 v0.3 设计输入，不属主线 `归档_v1.x/` 治理链。
 
-BR0-EP00 启动准备包已落盘：基线与 M2 资产边界见 [`01_contracts_and_schemas/branch_baseline.v0.1.yaml`](01_contracts_and_schemas/branch_baseline.v0.1.yaml)，复用钉版本台账见 [`01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml`](01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml)，执行合同模板与派发纪律见 [`execution/`](execution/)，交付报告与回执见 [`11_reports_and_receipts/BR0/BR0-EP00/`](11_reports_and_receipts/BR0/BR0-EP00/)。`candidate/m2` 维持 SUSPENDED_REFERENCE，未合并。BR0-EP01 Runtime Skeleton **未开工**。
+BR0-EP00 启动准备包已落盘：基线与 M2 资产边界见 [`01_contracts_and_schemas/branch_baseline.v0.1.yaml`](01_contracts_and_schemas/branch_baseline.v0.1.yaml)，复用钉版本台账见 [`01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml`](01_contracts_and_schemas/pinned_reuse_ledger.v0.1.yaml)，执行合同模板与派发纪律见 [`execution/`](execution/)，交付报告与回执见 [`11_reports_and_receipts/BR0/BR0-EP00/`](11_reports_and_receipts/BR0/BR0-EP00/)。`candidate/m2` 维持 SUSPENDED_REFERENCE，未合并。《BR0 启动裁决书 v0.1》见 [`governance/founder_rulings/DIYU-CBFSK-FOUNDER-BR0-START-001.yaml`](governance/founder_rulings/DIYU-CBFSK-FOUNDER-BR0-START-001.yaml)（Founder 原文逐字落盘，六条 ＋ 范围冻结规则）。裁决判 BR0-EP01 `AUTHORIZED`，但前置「回执 PASS 且 PR 合并入 main」的第二项未满足——BR0-EP01 Runtime Skeleton **未开工**，候选分支 `br0/ep00-bootstrap-readiness` 待 Guardian 审查后由 Founder 批准合并。
 
 ## 工具与 CI
 

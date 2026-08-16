@@ -7,7 +7,7 @@
 |---|---|
 | 包号 | BR0-EP01 |
 | 基线 Commit | `8f327c354afb5dc6ec085e48dc6eaf28f4272a13` |
-| 候选 Commit | `ad375df6b0587ed3db5aadfe1bac373b1d41ccfa` |
+| 候选 Commit | `77fc90ba754c247a35e2777308e9ff4f1f82b021` |
 | 分支 | `br0/ep01-runtime-skeleton` |
 | 结论 | **PASS** |
 
@@ -64,16 +64,17 @@ PRD v0.3.2 §10.5 把这件事写成硬要求，理由不是洁癖。`tenant_id`
 | PostgreSQL | 18 | 18.4 |
 | Node.js | 24 LTS | 24.13.0 |
 | Vite / React | 不使用 RSC，锁定已修复版本 | Vite 7.3.6 / React 19.2.4，RSC 未启用 |
-| Ant Design | 企业级中后台 UI | 5.29.3 |
+| Ant Design | 企业级中后台 UI | 6.6.0 |
 | Playwright | 关键 E2E 工具 | 1.62.1 |
+| 类型检查 / 提交前门禁 | Ruff、Pyright、pre-commit | pyright 1.1.411（strict），pre-commit 4.6.2（local hooks 挂 ruff + pyright） |
 
 附录 D 原文：技术版本在 BR0 以 lockfile、SBOM 和安全扫描结果为准。
 本包提交三份 lockfile（`uv.lock`、`web/package-lock.json`、`e2e/package-lock.json`），
 以上取值全部可复算。
 
-两处版本落点与执行合同的写法不同，均为 registry 上不存在该版本号：
-Vite 取 7.3.6、Ant Design 取 5.29.3，
-都是各自主版本线上现有的最高版。详见回执 `stack_actual.version_pin_deviations`。
+技术栈偏离一律登记在回执的 `deviation` 段（单一定义处），当前 3 项：
+Vite 取 7.3.6（合同写的版本号在 registry 上不存在，取同主版本线最高版）；
+类型检查器与 Ant Design 两项偏离已在 FIX-A 内消除，条目保留作为痕迹。详见第十一节。
 
 ---
 
@@ -190,12 +191,109 @@ provision 脚本现算得 `18001`。写死会当场抢端口。
 
 ## 十、未决事项
 
-回执登记已知问题若干条，均已写明「在什么条件下咬人」：
+回执登记的已知问题均已写明「在什么条件下咬人」：
 RLS 策略尚未启用（NOBYPASSRLS 目前是空守卫）、lockfile 落点与合同目录树字面不同、
-边界扫描保持字面严格因而三处注释改用同义表述、mypy 在 3.14 腿上仍按 3.13 语义检查、
-Staging 未装定时备份 timer。详见
+边界扫描保持字面严格因而若干注释改用同义表述、类型检查在 3.14 腿上仍按 3.13 语义、
+Staging 未装定时备份 timer，以及 FIX-A 新增的三条（见第十一节）。详见
 `11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_receipt.yaml` 的 `known_issues`。
 
 **下一步**：Founder 指派 Guardian 在隔离工作区审查本 PR。
 Guardian 必须实跑三个既有 workflow 与 `runtime-ci.yml`，不得只跑 `ci/run_all_checks.py`——
 BR0-EP00 期间已发生过因只跑本地判据而漏掉红闸的覆盖缺口。执行侧不自行合并。
+
+---
+
+## 十一、FIX-A（Founder 追加执行包）
+
+候选 Commit `77fc90ba754c247a35e2777308e9ff4f1f82b021`，基线 `21a592668ddf97fe566873504d35a88b6993726c`。
+
+### 删掉一个看起来在校验、实际什么都不做的函数
+
+`tenant_of()` 全仓 0 个调用点，
+签名读起来像「按用户取租户」，函数体却把 `user_id` 直接 `del` 掉、不做任何校验。
+在 RLS 为空的当下，应用层失误没有兜底——这种函数留着，迟早有人照着它的签名去用它。
+删除，不保留、不改签名、不加消音指令。
+
+防复发加了 ruff 的 ARG 规则。实测既有告警
+0 处，
+远低于合同给的阈值，因此**全局**启用，未做 per-file 限定。
+顺带删掉一条永远不生效的死抑制指令——它压的规则根本不在 select 里。
+
+### 类型检查器回归 PRD 指定的那一个
+
+PRD v0.3.2 技术栈章节两处点名 Ruff、Pyright、pre-commit，本包首版却用了另一个工具，
+而且没按规则登记为偏离。FIX-A 换回 Pyright（strict），并补上 pre-commit 这一环——
+装了不挂等于没装。
+
+Pyright strict 首跑 14 处报错，
+逐个真修 14 处，
+降档 0 处、未修
+0 处。三类根因都不是「检查器太严」：
+
+- 根路由处理器写成 `create_app` 里的闭包，装饰器是它唯一的引用点，静态检查看不见它被用过 → 提到模块级显式注册
+- `default_factory=dict` 只能推出未知键值类型 → 改用带参泛型别名做工厂
+- TestClient 的响应整体退化为未知类型 → 根因是 starlette 1.6 明确要求 httpx2 而依赖里装的是旧版，换掉即解，顺带消掉那条弃用警告
+
+pre-commit 用的是 local hooks，跑的就是 lockfile 锁定的那两份工具，与 CI 同版本。
+挂 mirror 仓会让两边版本各自漂移——本包已经因为这类漂移出现过一次「本地绿而 CI 红」。
+
+### Ant Design 升到 v6
+
+先实测再处置：`npm view antd dist-tags` 的 `latest` 是
+6.6.0，即 v6 已 GA，落在分支①。
+
+于是从 5.29.3 升到
+6.6.0 并精确钉版。
+源码改动 0 行——
+用到的组件在 v6 上全部沿用，类型检查与构建一次通过，E2E 全绿。
+
+时机是关键：前端此刻只有 3 个源文件，
+这是升级成本的最低点。等内容工作台建完再升，成本量级完全不同。
+
+### 补上偏离登记规则
+
+`execution/README.md` 新增「技术栈偏离登记规则」，所有执行包继承。三种形态都要登记：
+工具替换、跨大版本、lockfile 内小版本漂移。
+
+这条规则的由来就是本包自己：首版同时漏掉了前两种，只登记了第三种。
+小版本漂移一眼看得见所以顺手记了；工具替换和跨大版本影响更大，却因为「反正能跑通」被当成实现细节略过。
+
+### ECS 部署段的审查缺口
+
+Guardian 不连 ECS，这一段超出它的只读审查权限，标 `NOT_VERIFIABLE_BY_GUARDIAN`。
+补偿控制是窗口 B 的独立只读复核，其**原始输出逐字**并入回执
+`ecs_independent_verification.raw_output`，未摘要、未改写——
+转录方式还做了机器校验：写入后重新解析并与源文本全等比对，结果一致。
+
+窗口 B 八项判定全 PASS，`SHARED_HOST_INCIDENT: 无`。它同时给回两条反馈，都已收下：
+核查清单第三项「18000 由支线占用」的期望值写错了（合同规定占用则 +1，支线实际在 18001）；
+Nginx「逐字未变」在没有部署前快照的前提下无法严格证明，只给到 mtime 级证据。
+
+**口令一项不算已核验。** 「初始口令现场随机生成、跑完即删」是本执行窗口的自述，
+窗口 B 明确未做判定（核验要读口令材料，超出其清单），故标
+`SELF_ATTESTED_NOT_INDEPENDENTLY_VERIFIED`。
+
+### FIX-A 验收
+
+9 条全部 blocking，逐条 PASS：
+
+| ID | 判据 | 结果 |
+|---|---|---|
+| A-01 | tenant_of 全仓命中为零、无消音指令 | **PASS** |
+| A-02 | ruff 已启用 ARG 且 check 通过 | **PASS** |
+| A-03 | 旧检查器全仓命中为零、Pyright strict 已接入 CI 且实跑通过 | **PASS** |
+| A-04 | pre-commit 挂 ruff + pyright 且 --all-files 通过 | **PASS** |
+| A-05 | dist-tags 原始输出已贴、分支判断与输出一致 | **PASS** |
+| A-06 | 三形态偏离登记规则已落、deviation 三项齐 | **PASS** |
+| A-07 | 两条登记已落 | **PASS** |
+| A-08 | 窗口 B 输出逐字并入、口令项如实标注 | **PASS** |
+| A-09 | 全量闸与 8 个 workflow 全绿、工作区干净 | **PASS** |
+
+### FIX-A 新增的未决事项
+
+- **Staging 落后仓库 HEAD**：FIX-A 合同明令「不连 ECS」，因此未重新部署。
+  Staging 上的工作台仍是 antd v5 构建。谁拿它当「HEAD 的样子」验前端，看到的是旧版 UI。
+- **ARG 挡不住 `del` 惯用法**：ARG 对被引用过的参数不报警，而 `del x` 就是一次引用。
+  它挡得住「新写的函数忘了用参数」，挡不住「用 del 抹掉后再什么都不做」——
+  被删掉的 `tenant_of` 恰是后一种。真正挡住它的是纪律，不是判据。
+- **口令自述未经独立核验**，见上。

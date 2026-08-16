@@ -53,6 +53,10 @@ reports:
     template: 11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_report.md.tmpl
     status: templated
     literal_allowlist: []
+    note: >-
+      FIX-A 的交付内容写在同一份报告的第十一节里，不另起第二份报告——
+      同一个执行包拆成两份交付报告，会让「这一包到底交了什么」需要读者自己去合并两处口径。
+      因此本条登记同时覆盖 BR0-EP01 首版与 FIX-A。
 
   - report: 11_reports_and_receipts/m0_delivery_report.md
     status: legacy_untemplated

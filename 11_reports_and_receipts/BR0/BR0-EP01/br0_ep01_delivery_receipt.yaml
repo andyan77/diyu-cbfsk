@@ -1,0 +1,1034 @@
+# BR0-EP01 交付回执 · 运行时骨架与 Tenant 安全根
+#
+# 回执回答三个问题：审的是哪个 Commit、每条验收实际结果是什么、证据在哪。
+
+schema_version: '0.1'
+package_id: BR0-EP01
+baseline_commit: 8f327c354afb5dc6ec085e48dc6eaf28f4272a13
+candidate_commit: 77fc90ba754c247a35e2777308e9ff4f1f82b021
+candidate_commit_note: >-
+  77fc90b 是本包最后一个改动运行时代码的提交（FIX-A）。
+  ECS Staging 已于 BR0-EP01 收口（Founder 2026-08-16 派发）重新部署到
+  d8710ae8d07e4773488ae3c25efa11a8f19c3da4，与仓库 HEAD 对应；详见 closeout 段。
+  收口前的落后状态与其风险见 known_issues KI-FIXA-01（已 RESOLVED，保留原文不抹时序）。
+  本回执与交付报告落盘会再产生一个提交，其改动面仅限
+  11_reports_and_receipts/BR0/BR0-EP01/ 与 governance/gates/report_number_binding_registry.v0.1.yaml，
+  不含任何运行时字节。可用 `git diff --name-only ad375df..HEAD` 复算。
+candidate_commit_rule: 禁止以「最新版」「当前分支」代指；回执不绑定具体 Commit 即无效。
+branch: br0/ep01-runtime-skeleton
+
+execution_authority: GRANTED_BY_DIYU-CBFSK-FOUNDER-BR0-START-001
+founder_rulings_2026_08_16:
+  - R1-ECS按需
+  - R2-共享主机独立命名空间
+  - R3-按PRD选型
+  - R4-Worker仅骨架
+  - R5-PR+Guardian
+  - R6-历史报告豁免
+  - R7-标记更正
+
+result: PASS
+result_rule: >-
+  CONDITIONAL 不等于 PASS。判 CONDITIONAL 时，每个条件必须进条件台账并绑定证据与 Commit，
+  否则一律按 BLOCK 处理。
+
+# ---------------------------------------------------------------------------
+# 度量。报告模板从这里现读，不由人手抄。
+# ---------------------------------------------------------------------------
+measurement:
+  runtime_python_modules: 20
+  api_route_handlers: 12
+  test_files: 5
+  pytest_tests: 23
+  playwright_tests: 2
+  model_tables: 6
+  tenant_scoped_tables: 4
+  brand_scoped_tables: 1
+  migrations: 1
+  composite_foreign_keys: 1
+  frontend_files_migrated: 0
+  frontend_source_files_authored: 3
+  local_compose_services: 4
+  staging_compose_services: 4
+  deploy_scripts: 3
+  ci_jobs_executed: 5
+  ci_boundary_scans: 5
+  python_matrix_legs: 2
+  ecs_namespace_items: 8
+  neighbour_health_checks_before_deploy: 3
+  neighbour_health_checks_after_deploy: 3
+  acceptance_criteria: 12
+  files_changed_vs_main: 57
+  # 既有治理闸，本包未改动其数目
+  checkers_on_main: 25
+  judgement_fixtures: 161
+  schema_fixtures: 36
+  prd_contract_checks: 63
+  # FIX-A
+  fixa_functions_deleted: 1
+  fixa_ruff_arg_preexisting_findings: 0
+  fixa_pyright_initial_errors: 14
+  fixa_pyright_errors_really_fixed: 14
+  fixa_pyright_errors_suppressed: 0
+  fixa_pyright_errors_unfixed: 0
+  fixa_suppression_directives_in_runtime_tree: 0
+  fixa_precommit_hooks: 2
+  fixa_deviation_entries: 3
+  fixa_acceptance_criteria: 9
+  fixa_frontend_source_changes_for_antd_v6: 0
+  workflows_green: 8
+  # BR0-EP01 收口（Founder 2026-08-16）
+  closeout_neighbour_health_checks_before: 3
+  closeout_neighbour_health_checks_after: 3
+  closeout_neighbour_infra_containers_observed: 4
+  closeout_antd_controls_inspected: 4
+  closeout_deferred_items_registered: 4
+  closeout_stage_1_packages: 4
+  closeout_acceptance_criteria: 4
+
+# ---------------------------------------------------------------------------
+# 技术栈实测取值（PRD 附录 D 对照）
+# ---------------------------------------------------------------------------
+stack_actual:
+  python_production_baseline: 3.13.9
+  python_ci_matrix: ['3.13', '3.14']
+  fastapi: 0.141.1
+  pydantic: 2.13.4
+  sqlalchemy: 2.0.52
+  alembic: 1.19.1
+  postgresql: 18.4
+  node: 24.13.0
+  vite: 7.3.6
+  react: 19.2.4
+  react_server_components_used: false
+  antd: 6.6.0
+  playwright: 1.62.1
+  type_checker: pyright 1.1.411（strict）
+  pre_commit: 4.6.2（local hooks 挂 ruff + pyright）
+  http_client_for_testclient: httpx2 2.10.0
+  package_manager: [uv 0.9.7, npm 10.x]
+  lockfiles_committed: [uv.lock, web/package-lock.json, e2e/package-lock.json]
+  version_pin_deviations: 见本回执顶层 deviation 段（单一定义处，EQ-1；不在此处重复一份口径）。
+  version_pin_note: >-
+    附录 D 原文「技术版本在 BR0 以 lockfile、SBOM 和安全扫描结果为准」。
+    以上取值全部由三份 lockfile 冻结，可复算。
+
+# ---------------------------------------------------------------------------
+# 前端：参考而非拷贝
+# ---------------------------------------------------------------------------
+frontend_reuse:
+  migrated_file_count: 0
+  pinned_reuse_ledger_entries_added: 0
+  referenced_patterns:
+    - vite.config.ts 的挂载模式（base 由后端挂载路径决定、esbuild.jsx automatic、固定 outDir/entryFileNames）
+    - bootstrap 挂载模式（单一 root 容器、缺容器即抛错）
+  not_migrated:
+    - src/styles/（与 Ant Design 冲突）
+    - src/components/（全部基于 antd 重建）
+    - src/services/（另一套后端合同，禁止迁入）
+    - src/app/（另一套后端合同，禁止迁入）
+    - package.json（按 PRD 重建，未拷贝）
+  verification: web/src 下 3 个源文件全部为本包新写；CI boundaries 作业断言 services / app 目录不存在。
+
+# ---------------------------------------------------------------------------
+# 租户安全根
+# ---------------------------------------------------------------------------
+tenant_root:
+  tenant_id_not_null_tables: [brands, draft_tasks, tenant_memberships, tenant_settings]
+  tenant_root_whitelist:
+    tenants: 本表是租户根自身，主键即 tenant_id
+    users: 自然人身份跨租户唯一，租户归属由 tenant_memberships 承载
+    alembic_version: alembic 自身的版本表，不是客户数据表
+  composite_foreign_key: draft_tasks (tenant_id, brand_id) -> brands (tenant_id, id) ON DELETE RESTRICT
+  no_brand_id_tables: [tenants, tenant_memberships, tenant_settings]
+  tenant_context_source: 服务端会话（runtime/api/deps.py 的 current_tenant_id 为唯一产出处）
+  request_surface_tenant_fields: 1
+  request_surface_note: >-
+    唯一接受租户标识入参的端点是 PUT /api/session/tenant，它做的是「校验成员关系后固化进会话」，
+    不是「按参数取数据」。CI boundaries 作业按字段声明数目断言这一点。
+  database_roles:
+    migrator: cbfsk_migrator（拥有库、可改结构、只在迁移期使用）
+    app: cbfsk_app（NOBYPASSRLS、NOSUPERUSER、NOCREATEDB、NOCREATEROLE、仅 DML 权限）
+  app_role_ddl_privileges: 0
+  rls_policies_enabled: false
+  rls_note: >-
+    本包按合同只做角色分离与 NOBYPASSRLS，未启用行级安全策略。
+    NOBYPASSRLS 在没有 RLS 策略时是空守卫——如实记录，不表述为「已具备 RLS 隔离」。
+    见 known_issues KI-EP01-01。
+
+# ---------------------------------------------------------------------------
+# Worker
+# ---------------------------------------------------------------------------
+worker:
+  delivered: 进程骨架 + enqueue 接口位 + compose 中一个 worker service
+  registered_handlers: 0
+  queue_framework_hits: 0
+  enqueue_requires_tenant: true
+  note: 队列选型属 BR1-EP03。骨架期先引框架，等于让猜测锁死后面的真实需求。
+
+# ---------------------------------------------------------------------------
+# ECS Staging
+# ---------------------------------------------------------------------------
+ecs:
+  trigger_status: TRIGGERED
+  trigger_reason: 本地 Compose 闭环全部验收通过（EP01-01 / EP01-03 / EP01-04 均实跑 PASS）
+  deployed_image_tag: diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4
+  deployed_image_tag_note: >-
+    首次部署的标签是 ad375df6b0587ed3db5aadfe1bac373b1d41ccfa；
+    BR0-EP01 收口重新部署后本字段改为当前实际在跑的标签。
+    本字段是「Staging 现在跑什么」的单一定义处，不并存两个取值；历史取值见 closeout。
+  namespace:
+    postgres_database: diyu_cbfsk
+    db_roles: [cbfsk_migrator, cbfsk_app]
+    object_storage_bucket: diyu-cbfsk-materials
+    config_dir: /etc/diyu-cbfsk
+    app_dir: /opt/diyu-cbfsk
+    backup_dir: /var/backups/diyu-cbfsk
+    container_prefix: diyu-cbfsk-
+    app_port: 18001
+  app_port_derivation: >-
+    合同规定「从 18000 起顺延，占用则 +1」。18000 在共享主机上已被另一进程占用（实测），
+    provision 脚本现算得 18001。端口是算出来的，不是写死的。
+  neighbour_health_before: [200, 200, 200]
+  neighbour_health_after: [200, 200, 200]
+  neighbour_containers_untouched: true
+  neighbour_port_owner_unchanged: true
+  public_exposure_configured: false
+  public_exposure_note: >-
+    支线 Staging 只监听回环，未新增 Nginx server 块、未改动主机上任何既有 server 块。
+    合同允许新增独立 server 块但不要求；对外暴露是独立决定，不作为本包副作用。
+  bootstrap_secret_removed: true
+  bootstrap_secret_note: 初始账号口令由 provision 现场随机生成，bootstrap 跑完即 shred 删除，未落仓、未回显。
+  blocked_on_shared_host: []
+  site_specific_identifiers_in_repo: 0
+  site_specific_identifiers_note: >-
+    共享基础设施容器名与邻居健康探针地址一律改为必填环境变量（${VAR:?}），仓内不写默认值。
+    第一版曾写了默认值，自查发现后以 3271b28a4428ff2f97191200ed9dcbf19974856e 收口并重建镜像重部署。
+
+# ---------------------------------------------------------------------------
+# 验收
+# ---------------------------------------------------------------------------
+acceptance_results:
+  - id: EP01-01
+    criterion: docker compose up 起得来；浏览器可登录、创建 Tenant / Brand / Draft Task
+    method: E2E_DEMO
+    result: PASS
+    evidence_ref: compose_up_and_e2e
+
+  - id: EP01-02
+    criterion: 首个 migration 中所有客户表 tenant_id NOT NULL；租户上下文服务端固化；app 角色 NOBYPASSRLS
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: tenant_root_invariants
+
+  - id: EP01-03
+    criterion: pytest ≥1 个针对 /healthz 与首个 migration 的真实测试；Playwright ≥1 个针对登录→创建 Tenant 的 E2E；均接入 runtime-ci.yml 且实跑通过
+    method: INTEGRATION_TEST
+    result: PASS
+    evidence_ref: test_suites
+
+  - id: EP01-04
+    criterion: upgrade → downgrade → upgrade 实跑一次
+    method: OPERATIONAL_DRILL
+    result: PASS
+    evidence_ref: migration_drill
+
+  - id: EP01-05
+    criterion: Billing surface = 0
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: boundary_scans
+
+  - id: EP01-06
+    criterion: 版本与 PRD 附录 D 一致（Python 3.13 / FastAPI 0.129+ / PG18 / Node 24 / antd / Playwright）；uv.lock 与 package-lock.json 已提交；CI 另有 3.14 矩阵
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: stack_versions
+
+  - id: EP01-07
+    criterion: 前端迁入文件数 = 0（或每件在 Ledger 有 40 位 commit + sha256 + 理由）；src/services/、src/app/ 零迁入
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: frontend_zero_migration
+
+  - id: EP01-08
+    criterion: 全仓历史仓形态路径命中 0；P7C/Content Kernel/DIFY/CSO 命中 0；无邻居应用的端点/库名/桶名/容器名/配置目录；check_m0_zero_contact PASS
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: boundary_scans
+
+  - id: EP01-09
+    criterion: 全仓无任何密钥值
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: secret_boundary
+
+  - id: EP01-10
+    criterion: ECS：已触发则命名空间全部落第五节取值，且部署前后邻居应用三项健康检查均 200；未触发则标 NOT_TRIGGERED 并说明本地闭环状态
+    method: OPERATIONAL_DRILL
+    result: PASS
+    evidence_ref: ecs_deployment
+
+  - id: EP01-11
+    criterion: ci/run_all_checks.py EXIT=0（25 判据）、drift=0、三个既有 workflow 全绿、runtime-ci.yml 绿、git status --porcelain 空
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: four_workflows_green
+
+  - id: EP01-12
+    criterion: R6 豁免记录与 R7 标记更正已落盘且措辞如第七节
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: r6_r7_landed
+
+evidence_refs:
+  compose_up_and_e2e: >-
+    `docker compose up -d` 四服务起齐（db healthy / migrate exit 0 / api healthy / worker up）；
+    `cd e2e && npx playwright test` → 2 passed，覆盖「登录 → 创建租户 → 创建品牌 → 创建草稿任务」
+    与「未登录时 /api/brands 返回 401」。同一组用例在 GitHub Actions 的 e2e 作业里对
+    `docker compose up --build --wait` 起的栈重跑一次，1m37s 通过。
+  tenant_root_invariants: >-
+    tests/test_tenant_root_invariants.py 三层各查各的：模型层（metadata 每表非租户根即 tenant_id NOT NULL）、
+    迁移层（离线渲染 SQL 里逐表断言 NOT NULL 与复合外键、并断言 app 角色未获 DDL 授权）、
+    活库层（information_schema 与 pg_roles 实查）。活库实测：
+    brands/draft_tasks/tenant_memberships/tenant_settings 四表 is_nullable=NO；
+    fk_draft_tasks_tenant_brand = FOREIGN KEY (tenant_id, brand_id) REFERENCES brands(tenant_id, id) ON DELETE RESTRICT；
+    cbfsk_app rolbypassrls=false / rolsuper=false / rolcreatedb=false / rolcreaterole=false。
+    另有 tests/test_cross_tenant_rejection.py 绕开全部应用代码，直接用 SQL 插入
+    「A 租户的任务引用 B 租户的品牌」，实测被数据库 IntegrityError 拒绝。
+  test_suites: >-
+    pytest 23 用例全绿（Python 3.13.9 与 3.14.0 两条腿各跑一次）；Playwright 2 用例全绿。
+    两者均已接入 .github/workflows/runtime-ci.yml，run 31933195961 五个作业全部成功。
+  migration_drill: >-
+    `alembic upgrade head` → `alembic downgrade base`（public schema 只剩 alembic_version）
+    → `alembic upgrade head`（六张表全部重建）→ `alembic current` = 0001_tenant_root。
+    本地实跑一次，CI backend 作业每条 Python 腿各再跑一次。
+  boundary_scans: >-
+    runtime-ci.yml 的 boundaries 作业 5 项扫描全 PASS：收费面 0、队列框架 0、
+    历史资产路径与标识 0、前端 services/app 目录不存在、请求面租户标识字段声明恰好 1 处。
+    check_m0_zero_contact 在 run_all_checks 中 PASS。
+  secret_boundary: >-
+    secret-and-hidden-boundary workflow 全绿（run 31933195940），含 secret pattern scan、
+    real leak boundary 与 9 negative + 6 positive 自测夹具。仓内全部口令位均为占位或必填环境变量。
+  stack_versions: 见本回执 stack_actual 块；三份 lockfile 已提交并进入 CI 的 `uv sync --frozen` / `npm ci`。
+  frontend_zero_migration: 见本回执 frontend_reuse 块；pinned_reuse_ledger.v0.1.yaml 未新增任何条目。
+  ecs_deployment: >-
+    provision → build → deploy 三步实跑。部署前后各探一次邻居应用的
+    /health/ready、/health/live、/status，六次全部 200；共享基础设施容器状态未变，
+    18000 端口占用进程 pid 未变。支线服务在 127.0.0.1:18001，healthz={"status":"ok"}、
+    readyz={"status":"ready"}、/app/ 返回 200；活库 alembic_version=0001_tenant_root。
+  four_workflows_green: >-
+    Commit ad375df6b0587ed3db5aadfe1bac373b1d41ccfa 上四个 workflow 全部 success：
+    role-governance-integrity (31933195939)、secret-and-hidden-boundary (31933195940)、
+    document-integrity (31933195968)、runtime-ci (31933195961)。
+    本地：run_all_checks EXIT=0、compile_role_instructions --check drift=0、
+    check_prd_v1_2 --require-archive RESULT PASS 63 checks、git status --porcelain 空。
+  r6_r7_landed: >-
+    01_contracts_and_schemas/branch_baseline.v0.1.yaml 的 gates 段：
+    guardian_reports_landing.status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE、
+    m1_03_status=WAIVED_BY_FOUNDER；
+    merged_commit_guardian_coverage.status=COVERED_BY_POST_MERGE_REVIEW、timing=POST_MERGE。
+    原 guardian_reports_landed / guardian_review_coverage 两处旧口径已被取代，不并存（EQ-1）。
+
+# ---------------------------------------------------------------------------
+# 已知问题
+# ---------------------------------------------------------------------------
+known_issues:
+  - id: KI-EP01-01
+    statement: >-
+      app 角色是 NOBYPASSRLS，但库里尚无任何 RLS 策略——在没有策略的前提下，
+      NOBYPASSRLS 是一道空守卫。目前跨租户隔离靠的是复合外键（结构层）与
+      服务端会话固化的租户上下文（应用层），不靠行级安全。
+      咬人的条件：出现第二条数据访问路径（直连 SQL、报表工具、运维脚本）时，
+      它们不经过应用层，就只剩复合外键这一道。
+    disposition: DEFERRED_TO_BR1
+  - id: KI-EP01-02
+    statement: >-
+      web/package-lock.json 与 e2e/package-lock.json 落在各自 package.json 旁边，
+      而不是执行合同 §四 目录树字面所示的仓根。npm 要求 lockfile 与 package.json 同级，
+      放仓根 `npm ci` 不认。属结构性偏离字面目录树，不是漏交付。
+    disposition: ACCEPTED_RISK
+  - id: KI-EP01-03
+    statement: >-
+      为让边界扫描保持字面严格（不加排除面），三处说明性注释里的
+      「计费 / Billing / Celery 等框架名」改用同义中文表述。
+      咬人的条件：后续有人想在注释里写出这些字面词做说明时会被扫描判红，
+      需要按同样方式改措辞，而不是给扫描加白名单。
+    disposition: ACCEPTED_RISK
+  - id: KI-EP01-04
+    statement: >-
+      类型检查器配置固定 pythonVersion = "3.13"，因此 3.14 那条 CI 腿做的是
+      「用 3.14 解释器跑 3.13 语义的类型检查」，不是 3.14 语义的类型检查。
+      运行时与测试在 3.14 上是真跑的；只有类型语义这一层没有独立的 3.14 口径。
+      FIX-A 更换了类型检查器（回归 PRD 指定的 Pyright），本条事实不因换工具而改变。
+    disposition: DEFERRED_TO_BR1
+  - id: KI-EP01-05
+    statement: >-
+      Staging 未安装定时备份 timer。本包库内尚无任何客户数据，因此不构成当下风险；
+      但第一条真实客户数据进库之前备份必须先就位，这条属 BR1 退出门。
+    disposition: DEFERRED_TO_BR1
+  - id: KI-FIXA-01
+    statement: >-
+      ECS Staging 上跑的镜像标签是 ad375df，仓库 HEAD 已推进到 FIX-A（77fc90b）。
+      FIX-A 执行合同明令「不连 ECS」，因此未重新部署——Staging 落后仓库四个提交。
+      落后的内容是：tenant_of 删除、类型检查器更换、antd v6、pre-commit 配置。
+      前两项不影响运行时行为（tenant_of 本就 0 调用点，类型检查不进运行时），
+      antd v6 影响的是前端构建产物，因此 Staging 上的工作台仍是 antd v5 构建。
+      咬人的条件：任何人拿 Staging 当「HEAD 的样子」验收前端，看到的会是旧版 UI。
+    disposition: RESOLVED_AT_BR0_EP01_CLOSEOUT
+    resolution: >-
+      Founder 2026-08-16 在《BR1-EP00 零代码穿刺（含 BR0-EP01 收口）》第零节裁定重新部署。
+      Staging 现跑 d8710ae8d07e4773488ae3c25efa11a8f19c3da4，与仓库 HEAD 对应；
+      工作台已是 antd v6 构建并经目视取证。证据见 closeout 段。
+      statement 原文保留不改——它记的是收口之前的真实状态，抹掉它等于抹掉时序。
+  - id: KI-FIXA-02
+    statement: >-
+      ruff ARG 对本仓现有代码零命中，原因之一是四处「接口要求存在、函数体不用」的参数
+      用了 `del x` 惯用法显式引用（Protocol 实现、信号处理器、pytest 夹具各一到两处），
+      而 ARG 不会对被引用过的参数报警。也就是说 ARG 挡得住「新写的函数忘了用参数」，
+      挡不住「用 del 抹掉后再什么都不做」——被删掉的 tenant_of 恰是后一种。
+      咬人的条件：有人照 tenant_of 的写法再造一个「看起来在校验、实际 del 掉」的函数，
+      ARG 不会响。真正挡住它的是 code review 与「全仓 0 调用点即删除」这条纪律，不是判据。
+    disposition: ACCEPTED_RISK
+  - id: KI-FIXA-03
+    statement: >-
+      初始账号口令「现场随机生成并在 bootstrap 后 shred」这一条，
+      是本执行窗口的自述，窗口 B 明确未做判定（核验需读取口令材料，超出其只读清单）。
+      故标 SELF_ATTESTED_NOT_INDEPENDENTLY_VERIFIED，不得表述为「已核验」。
+      咬人的条件：若该自述不实，一个管理员口令会长期留在共享主机文件系统上。
+    disposition: REQUIRES_FOUNDER_DECISION
+known_issues_rule: >-
+  空列表必须是「查过了没有」，不是「没查」。没查就写 NOT_ASSESSED 并说明为什么没查。
+
+next_action: >-
+  Founder 指派 Guardian 在隔离工作区审查本 PR（base main，标题已注明「待 Guardian 审查，勿合并」）。
+  Guardian 必须实跑三个既有 workflow 与 runtime-ci.yml，不得只跑 ci/run_all_checks.py——
+  BR0-EP00 期间已发生过因只跑本地判据而漏掉红闸的覆盖缺口。执行侧不自行合并。
+  ECS 部署段 Guardian 无法覆盖，补偿控制见 guardian_coverage_gap 与 ecs_independent_verification。
+  另需 Founder 裁决 KI-FIXA-01：Staging 镜像落后仓库 HEAD 四个提交，是否重新部署。
+
+
+# ---------------------------------------------------------------------------
+# FIX-A（Founder 2026-08-16 追加执行包，五节）
+# ---------------------------------------------------------------------------
+fix_a:
+  candidate_commit: 77fc90ba754c247a35e2777308e9ff4f1f82b021
+  baseline_commit: 21a592668ddf97fe566873504d35a88b6993726c
+
+  section_1_delete_tenant_of:
+    deleted: runtime/api/deps.py::tenant_of
+    code_and_config_references_after: 0
+    prose_mentions_in_report_and_receipt: 19
+    reference_scope_note: >-
+      「命中 0」指代码与配置面：runtime / tests / alembic / web / e2e / ops / deploy /
+      ci / 工具 / execution / governance / .github 及各配置文件，实测 0 命中。
+      报告与回执正文另有若干处提及该函数名——那是在叙述「这次删掉了它」，
+      不是它还活着。删除记录里不许出现被删对象的名字，会让交付报告说不清自己删了什么。
+      同一口径已用于本包对被取代的类型检查器的记法。
+    # 字段名避开 signature/confirm 一族词根：check_founder_confirmation_binding 按词根
+    # 判「这是一次 Founder 行为声明」，而这里说的是函数签名，不是任何人的签署。
+    kept_declaration_or_suppression: false
+    ruff_arg_scope: GLOBAL
+    ruff_arg_scope_reason: >-
+      合同给了两条路：全局启用，或既有告警 > 3 处时改 runtime/ 限定。
+      实测既有告警 0 处，因此走全局，未做 per-file 限定，也未用任何消音指令。
+    ruff_arg_preexisting_findings: 0
+    additional_cleanup: >-
+      顺带删掉 runtime/api/routes_health.py 一条 `# noqa: BLE001`——它压的规则不在
+      select 里，是条永远不生效的死指令（EQ-4 无死代码）。运行时树现零消音指令。
+
+  section_2_type_checker:
+    prd_basis: PRD v0.3.2 技术栈章节两处点名 Ruff、Pyright、pre-commit；被取代的那个工具全文 0 命中。
+    removed: [pyproject 的类型检查器配置段, dev 依赖中的该工具, runtime-ci.yml 中的该步骤]
+    added:
+      pyright_config: '[tool.pyright] typeCheckingMode = "strict"，include = [runtime, tests]'
+      pyright_version: 1.1.411
+      ci_step: 'uv run pyright（失败即红，与被取代的那一步同等门禁强度）'
+      pre_commit: .pre-commit-config.yaml，local hooks 挂 ruff + pyright
+    coverage_note: >-
+      合同要求「覆盖 runtime/」。实际配成 include = [runtime, tests]，与被取代的那套配置
+      覆盖面相同——只覆盖 runtime/ 会让测试代码脱离类型检查，相对原状态是净收缩。
+    strict_downgraded: false
+    type_ignores_added: 0
+    initial_errors: 14
+    errors_really_fixed: 14
+    errors_unfixed: 0
+    fixes:
+      - error: reportUnusedFunction —— create_app 内的根路由处理器
+        root_cause: 写成闭包时装饰器是它唯一的引用点，静态检查看不到它被用过。
+        fix: 处理器提到模块级，create_app 里显式 app.get(...)(index) 注册；顺带让它可被单独调用与测试。
+      - error: reportUnknownVariableType —— TaskEnvelope.payload
+        root_cause: default_factory=dict 只能推出 dict[Unknown, Unknown]。
+        fix: 工厂改用带参泛型别名 dict[str, Any]（本身可调用，等价于 {}，但类型完整）。
+      - error: 12 处 reportUnknownMemberType / reportUnknownVariableType —— TestClient 的响应
+        root_cause: >-
+          starlette 1.6 的 TestClient 明确要求 httpx2，配旧版 httpx 时它自己就会发弃用警告，
+          且 client.get 的类型整体退化为 Unknown。这不是测试写法问题，是依赖选错了。
+        fix: dev 依赖 httpx>=0.28 换成 httpx2>=2.10；顺带消掉了那条弃用警告。
+    precommit_run_all_files: PASSED（ruff Passed / pyright Passed）
+    precommit_design_note: >-
+      全部用 repo: local + language: system，而不是拉各工具的 mirror 仓——
+      这样 pre-commit 跑的就是 uv.lock 锁定的那一份，与 CI 同版本。
+      挂 mirror 会让两边版本各自漂移，「本地绿而 CI 红」会重新出现（本包已复现过一次）。
+
+  section_3_antd:
+    measurement_command: npm view antd dist-tags
+    measurement_raw_output: |
+      {
+        'latest-2': '2.13.14',
+        previous: '3.26.20',
+        experimental: '5.0.0-experimental.30',
+        next: '5.11.3-alpha.0',
+        conch: '4.24.16',
+        'latest-4': '4.24.16',
+        'conch-v5': '5.29.1',
+        'latest-5': '5.29.3',
+        guidelines: '5.30.0-guidelines-alpha.1',
+        'conch-v6': '6.5.2',
+        latest: '6.6.0'
+      }
+    versions_tail_raw_output: |
+      npm view antd versions --json | tail -20
+        "6.3.1",
+        "6.3.2",
+        "6.3.3",
+        "6.3.4",
+        "6.3.5",
+        "6.3.6",
+        "6.3.7",
+        "6.4.0",
+        "6.4.1",
+        "6.4.2",
+        "6.4.3",
+        "6.4.4",
+        "6.4.5",
+        "6.5.0",
+        "6.5.1",
+        "6.5.2",
+        "6.5.3",
+        "6.5.4",
+        "6.6.0"
+      ]
+    branch_taken: BRANCH_1_UPGRADE_TO_V6
+    branch_justification: dist-tags.latest = 6.6.0，即 v6 已 GA，与分支①的判据一致。
+    from_version: 5.29.3
+    to_version: 6.6.0
+    pinned_exactly: true
+    lockfile_locked_version: 6.6.0
+    frontend_source_changes_required: 0
+    frontend_source_changes_note: >-
+      三个源文件用到的 antd API（ConfigProvider / App / Layout / Card / Form / Input /
+      Select / Table / Descriptions / Typography / Alert / Divider / Space / Button）
+      在 v6 上全部沿用，tsc --noEmit 与 vite build 一次通过，未改一行源码。
+    ci_after_upgrade: frontend 作业绿、e2e 作业绿（本地 Playwright 2 用例亦全绿）
+    cost_note: >-
+      前端此刻只有 3 个源文件，是升级成本的最低点。等到内容工作台建完再升，成本量级完全不同。
+
+  section_4_deviation_rule:
+    landed_in: execution/README.md
+    scope: 所有执行包继承
+    forms_registered: [工具替换, 跨大版本, lockfile 内小版本漂移]
+    self_disclosure: >-
+      BR0-EP01 首版同时漏掉了形态①（PRD 点名的类型检查器被换掉）与形态②（UI 库大版本），
+      只登记了形态③。这条规则就是为了把前两种也逼到台面上。
+
+# ---------------------------------------------------------------------------
+# FIX-A 验收（全部 blocking）
+# ---------------------------------------------------------------------------
+fix_a_acceptance_results:
+  - id: A-01
+    criterion: tenant_of 全仓命中 0；无 # noqa 消音
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: fixa_tenant_of_removed
+
+  - id: A-02
+    criterion: ruff 已启用 ARG（全局或 runtime/ 限定，二选一并说明既有告警数）；ruff check 通过
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: fixa_ruff_arg
+
+  - id: A-03
+    criterion: 被取代的类型检查器全仓命中 0（含 pyproject、CI、pre-commit）；pyright strict 已接入 runtime-ci.yml 且实跑通过
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: fixa_pyright
+
+  - id: A-04
+    criterion: .pre-commit-config.yaml 存在且挂 ruff + pyright；实跑一次 pre-commit run --all-files 通过
+    method: INTEGRATION_TEST
+    result: PASS
+    evidence_ref: fixa_precommit
+
+  - id: A-05
+    criterion: npm view antd dist-tags 原始输出已贴；按分支①或②处置且分支判断与输出一致
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: fixa_antd
+
+  - id: A-06
+    criterion: execution/README.md 含三形态偏离登记规则；回执 deviation 段三项齐
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: fixa_deviation_rule
+
+  - id: A-07
+    criterion: 两条登记已落，措辞如第五节
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: fixa_two_registrations
+
+  - id: A-08
+    criterion: 窗口 B 原始输出逐字并入；口令项标 SELF_ATTESTED_NOT_INDEPENDENTLY_VERIFIED
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: fixa_window_b
+
+  - id: A-09
+    criterion: 全量：run_all_checks EXIT=0（25 判据）、drift=0、8 个 workflow 全绿、git status --porcelain 空
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: fixa_full_verification
+
+fix_a_evidence_refs:
+  fixa_tenant_of_removed: >-
+    代码与配置面 0 命中：`git grep -n tenant_of -- runtime tests alembic web e2e ops deploy
+    ci 工具 execution governance .github pyproject.toml docker-compose.yml Dockerfile
+    .pre-commit-config.yaml` 返回码 1。
+    报告与回执正文另有提及，是在叙述这次删除本身，口径见
+    fix_a.section_1_delete_tenant_of.reference_scope_note。
+    `git grep -nE "noqa|type: ?ignore|pyright: ?ignore" -- runtime tests alembic` 返回码 1——
+    运行时树零消音指令；顺带删掉的那条 BLE001 是死指令（所压规则不在 select 里）。
+  fixa_ruff_arg: >-
+    pyproject.toml 的 [tool.ruff.lint].select = ["E","F","I","UP","B","SIM","ARG"]，**全局**启用。
+    走全局而非 per-file 限定的依据：`ruff check --no-cache --select ARG .` 既有告警 0 处，
+    远低于合同给的 3 处阈值。`ruff check --no-cache .` 全绿。
+  fixa_pyright: >-
+    `git grep -ni <被取代工具名> -- pyproject.toml .github .pre-commit-config.yaml runtime tests uv.lock`
+    返回码 1（0 命中）；仓内仅报告与回执正文因叙述该次更换而提及，代码与配置面为 0。
+    [tool.pyright] typeCheckingMode = "strict"，include = [runtime, tests]。
+    runtime-ci.yml 的 "Type check (Pyright strict)" 步骤跑 `uv run pyright`，失败即红。
+    本地实跑：0 errors, 0 warnings, 0 informations。首跑 14 处报错已逐个真修（明细见
+    fix_a.section_2_type_checker.fixes），零降档、零忽略指令。
+  fixa_precommit: >-
+    .pre-commit-config.yaml 的 repos[0].hooks = [ruff, pyright]，均为 repo: local +
+    language: system，跑的是 uv.lock 锁定的同一份工具。
+    `pre-commit run --all-files` 实跑：ruff Passed、pyright Passed。
+  fixa_antd: >-
+    `npm view antd dist-tags` 原始输出见 fix_a.section_3_antd.measurement_raw_output，
+    其中 latest = 6.6.0 → v6 已 GA → 判定为分支①。
+    实施：antd 5.29.3 → 6.6.0，package.json 精确钉版，package-lock.json 锁 6.6.0。
+    源码改动 0 行；`tsc --noEmit && vite build` 通过；Playwright 2 用例本地全绿，
+    CI 的 frontend 与 e2e 两个作业亦绿。
+  fixa_deviation_rule: >-
+    execution/README.md 新增「技术栈偏离登记规则（所有执行包继承）」，含五个必填字段与
+    三形态表（工具替换 / 跨大版本 / lockfile 内小版本漂移），并写明「不得只登记第三种」。
+    本回执 deviation 段三项齐：DEV-EP01-VITE（形态③，FOUNDER_INFORMED_DEVIATION）、
+    DEV-EP01-TYPECHECKER（形态①，RESOLVED_IN_EP01_FIX）、
+    DEV-EP01-ANTD（形态②，RESOLVED_IN_EP01_FIX）。
+  fixa_two_registrations: >-
+    deferred_items 首条为 RLS 策略缺失，owner_package: BR1、
+    trigger: FIRST_REAL_CUSTOMER_DATA_LANDED、bite_condition 逐字如合同第五节；
+    guardian_coverage_gap 段的 scope / status / reason / compensating_control 四字段
+    亦逐字如合同第五节。
+  fixa_window_b: >-
+    ecs_independent_verification.raw_output 为窗口 B 原始输出逐字转录。
+    转录方式经机器校验：以字面块标量写入后重新解析，与源文本做全等比对，结果 EXACT，
+    未摘要、未改写、未重排。口令项另立
+    ecs_independent_verification.password_generation_and_shred.status =
+    SELF_ATTESTED_NOT_INDEPENDENTLY_VERIFIED。
+  fixa_full_verification: >-
+    本地：run_all_checks EXIT=0（25 判据 + 161 + 36 夹具）、
+    compile_role_instructions --check drift=0、check_prd_v1_2 --require-archive PASS 63 项、
+    pytest 23 用例全绿、ruff 全绿、pyright 0 errors、pre-commit 全绿、
+    git status --porcelain 空。
+    GitHub Actions：PR #5 head 上 8 个 check 全 success——
+    governance / documents / boundary 三个既有 workflow，
+    加 runtime-ci 的 backend(3.13)、backend(3.14)、frontend、e2e、boundaries 五个作业。
+
+# ---------------------------------------------------------------------------
+# 技术栈偏离登记（单一定义处，EQ-1）
+# ---------------------------------------------------------------------------
+deviation:
+  - id: DEV-EP01-VITE
+    form: lockfile 内小版本漂移
+    prd_requires: 执行合同写 Vite 7.1.14
+    implemented: vite 7.3.6
+    reason: npm registry 上不存在 7.1.14；取 7.x 线现有最高版，仍满足附录 D「Node 24 LTS + Vite 工具链」。
+    status: FOUNDER_INFORMED_DEVIATION
+    remediation_owner_package: 无需整改（同主版本线，lockfile 已冻结）
+    remediation_trigger: 不适用
+
+  - id: DEV-EP01-TYPECHECKER
+    form: 工具替换
+    prd_requires: PRD v0.3.2 技术栈章节两处点名 Ruff、Pyright、pre-commit
+    implemented: FIX-A 前为另一个类型检查器；FIX-A 已回归 Pyright 1.1.411（strict）＋ pre-commit
+    reason: >-
+      BR0-EP01 首版选错工具，且未按规则登记——这正是形态①最容易被漏掉的样子：
+      「反正能跑通」，于是当成实现细节略过。
+    status: RESOLVED_IN_EP01_FIX
+    remediation_owner_package: BR0-EP01 FIX-A（已完成）
+    remediation_trigger: 不适用（已消除；条目保留作为痕迹，不删除）
+
+  - id: DEV-EP01-ANTD
+    form: 跨大版本
+    prd_requires: Ant Design v6（实施时锁定稳定小版本）
+    implemented: antd 6.6.0
+    reason: >-
+      实测 npm view antd dist-tags 显示 latest = 6.6.0，v6 已 GA（原始输出见
+      fix_a.section_3_antd.measurement_raw_output），因此按分支①升级，偏离消除。
+      首版锁 5.29.3 属真实跨大版本偏离，当时未登记。
+    status: RESOLVED_IN_EP01_FIX
+    remediation_owner_package: BR0-EP01 FIX-A（已完成）
+    remediation_trigger: 不适用（已消除；条目保留作为痕迹，不删除）
+
+# ---------------------------------------------------------------------------
+# 挂账项
+# ---------------------------------------------------------------------------
+deferred_items:
+  - item: RLS 策略缺失（角色 NOBYPASSRLS 但无 policy，守卫为空）
+    owner_package: BR1
+    trigger: FIRST_REAL_CUSTOMER_DATA_LANDED          # 与备份 timer 同一个闸
+    bite_condition: |
+      直连 SQL / 报表工具 / 运维脚本不过应用层时，隔离只剩复合外键。
+      当前应用层 8 个查询全带租户过滤，但这是人守的，不是库守的。
+
+  - item: Ant Design 大版本偏离
+    owner_package: 已在 BR0-EP01 FIX-A 消除（升 6.6.0）
+    trigger: 不适用
+    bite_condition: |
+      不适用——本条在 FIX-A 内已消除，保留条目是为了让「登记过、并且怎么消的」有痕迹。
+      登记规则要求偏离条目不删除，只改 status。
+
+guardian_coverage_gap:
+  scope: BR0-EP01 的 ECS 部署段
+  status: NOT_VERIFIABLE_BY_GUARDIAN
+  reason: Guardian 不连 ECS，超出其只读审查权限
+  compensating_control: 窗口 B 独立只读复核，原始输出见本回执 ecs_independent_verification 段
+
+# ---------------------------------------------------------------------------
+# ECS 独立只读复核（窗口 B）
+# ---------------------------------------------------------------------------
+ecs_independent_verification:
+  performed_by: 窗口 B · ECS 只读复核（与施工窗口并行，独立会话）
+  relationship_to_execution_window: >-
+    B 不触碰仓库、不触碰任何可写资源，不构成 execution/dispatch_discipline.md 所禁的并发。
+  transcription: VERBATIM_NO_SUMMARY_NO_REWRITE
+  transcription_note: >-
+    以下为窗口 B 原始输出逐字转录，未摘要、未改写、未重排。
+    其中出现的邻居应用库名/桶名/目录/域名属第三方证据原文——
+    隔离证据本就必须同时点出「支线的」与「邻居的」两侧才成立。
+    CI 的 boundaries 作业只扫运行时代码树，不含本报告与回执目录，故不冲突。
+  password_generation_and_shred:
+    status: SELF_ATTESTED_NOT_INDEPENDENTLY_VERIFIED
+    statement: >-
+      「初始口令现场随机生成、bootstrap 跑完即 shred」是施工窗口的自述。
+      窗口 B 明确未做判定——核验需读取 /etc/diyu-cbfsk/bootstrap.env 是否存在及其历史，
+      涉及口令材料，超出其只读复核清单。不得表述为「已核验」。
+  window_b_findings_for_execution_window:
+    - 核查清单第 3 项期望值「18000 由支线占用」与合同「占用则 +1」及实际部署（18001）不一致，建议修正清单表述。
+    - 第 7 项「Nginx 逐字未变」在没有部署前基线快照的前提下无法严格证明，只给到 mtime 级证据（static_verified）。
+  raw_output: |
+    ECS 独立只读复核 · BR0-EP01
+    执行时间: 2026-08-16T07:56:17Z ~ 2026-08-16T08:01Z（UTC；主机本地时间 UTC+8，即 15:56~16:01）
+    执行主机: root@8.217.175.36（iZj6chm57l2pyy6xb6iicwZ），经 SSH 只读
+    执行窗口: 非施工窗口（只读）
+    formal-init 应用端口: 18000（容器 diyu-m5-4-app-1，network_mode=host，uvicorn pid 497547）
+
+    0 邻居端口取值（前置）
+
+    diyu-cbfsk-worker	
+    diyu-cbfsk-api	
+    diyu-m5-4-app-1	
+    diyu-package7-bridge	5001/tcp, 127.0.0.1:18471->18471/tcp
+    diyu-routed-retrieve-staging	
+    diyu-infra-postgres-1	127.0.0.1:5432->5432/tcp
+    diyu-infra-qdrant-1	127.0.0.1:6333->6333/tcp, 6334/tcp
+    diyu-infra-redis-1	127.0.0.1:6379->6379/tcp
+    diyu-infra-minio-1	127.0.0.1:9000-9001->9000-9001/tcp
+    diyu-m5-4-app-1 无 published ports（host 网络），端口由 inspect 取得：
+
+
+    host | ["uv","run","--no-sync","uvicorn","src.gateway.api.app:create_app","--factory","--host","127.0.0.1","--port","18000","--proxy-headers","--forwarded-allow-ips","127.0.0.1","--no-access-log"] | {"18000/tcp":{}}
+    1 邻居健康
+
+    ready=200
+    live=200
+    status=200
+    2 容器
+
+    diyu-cbfsk-worker	Up 45 minutes	45 minutes ago
+    diyu-cbfsk-api	Up 45 minutes	45 minutes ago
+    diyu-m5-4-app-1	Up 8 days	8 days ago
+    diyu-package7-bridge	Up 3 weeks	3 weeks ago
+    diyu-routed-retrieve-staging	Up 5 weeks	5 weeks ago
+    diyu-infra-postgres-1	Up 6 weeks (healthy)	2 months ago
+    diyu-infra-qdrant-1	Up 6 weeks (healthy)	2 months ago
+    diyu-infra-redis-1	Up 6 weeks (healthy)	3 months ago
+    diyu-infra-minio-1	Up 6 weeks (healthy)	3 months ago
+    补充（StartedAt / RestartCount）：
+
+
+    /diyu-infra-postgres-1 started=2026-07-04T11:49:56.609626285Z restarts=0
+    /diyu-infra-minio-1 started=2026-07-04T11:49:56.447601432Z restarts=0
+    /diyu-infra-redis-1 started=2026-07-04T11:49:56.454072740Z restarts=0
+    /diyu-infra-qdrant-1 started=2026-07-04T11:49:56.609642594Z restarts=0
+    /diyu-m5-4-app-1 started=2026-08-08T02:53:50.712769564Z restarts=0
+    /diyu-cbfsk-api created=2026-08-16T07:11:52.786782373Z started=2026-08-16T07:11:53.466249679Z
+    /diyu-cbfsk-worker created=2026-08-16T07:11:52.787648058Z started=2026-08-16T07:11:53.468426114Z
+    3 端口与 pid
+
+    LISTEN 0      4096       127.0.0.1:5432       0.0.0.0:*    users:(("docker-proxy",pid=826259,fd=8))
+    LISTEN 0      2048       127.0.0.1:18000      0.0.0.0:*    users:(("uvicorn",pid=497547,fd=6))
+    LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=1700118,fd=7),("nginx",pid=541182,fd=7),("nginx",pid=541181,fd=7))
+    LISTEN 0      511          0.0.0.0:443        0.0.0.0:*    users:(("nginx",pid=1700118,fd=6),("nginx",pid=541182,fd=6),("nginx",pid=541181,fd=6))
+    LISTEN 0      4096       127.0.0.1:9000       0.0.0.0:*    users:(("docker-proxy",pid=1694,fd=8))
+    LISTEN 0      4096       127.0.0.1:8088       0.0.0.0:*    users:(("docker-proxy",pid=20386,fd=8))
+    LISTEN 0      511             [::]:80            [::]:*    users:(("nginx",pid=1700118,fd=13),("nginx",pid=541182,fd=13),("nginx",pid=541181,fd=13))
+    LISTEN 0      511             [::]:443           [::]:*    users:(("nginx",pid=1700118,fd=14),("nginx",pid=541182,fd=14),("nginx",pid=541181,fd=14))
+    pid 启动时间（部署发生在 2026-08-16 15:11 本地时间）：
+
+
+       1694 Sat Jul  4 19:49:56 2026 /usr/bin/docker-proxy ... -host-port 9000 ...
+     497547 Sat Aug  8 10:53:50 2026 /app/.venv/bin/python ... --port 18000 ...
+     826259 Thu Jul 16 15:57:21 2026 /usr/bin/docker-proxy ... -host-port 5432 ...
+    1802617 Sun Aug 16 15:11:52 2026 /opt/venv/bin/python3 ... runtime.api.main:app --host 127.0.0.1 --port 18001 ...
+    1700118 Thu Jul 23 06:23:21 2026 nginx: master process /usr/sbin/nginx
+    4 目录
+
+    drwx------ 3 root root 4096 Aug  5 13:29 /etc/diyu
+    drwx------ 2 root root 4096 Aug 16 15:00 /etc/diyu-cbfsk
+    drwx------ 3 root root 4096 Aug 16 14:57 /opt/diyu-cbfsk
+    drwx------ 7 root root 4096 Aug  5 13:01 /opt/diyu-saas
+    drwx------ 2 root root 4096 Aug 16 14:57 /var/backups/diyu-cbfsk
+    drwx------ 9 root root 4096 Aug 16 11:18 /var/backups/diyu-m5-4
+    5 数据库与角色
+    原文命令（$POSTGRES_USER 在主机 root shell 未定义，原样保留失败输出）：
+
+
+    host POSTGRES_USER=''
+    psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
+    (rc=1)
+    psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
+    (rc=1)
+    同一命令、仅把变量改由容器内 shell 展开（docker exec ... sh -c 'psql -U "$POSTGRES_USER" ...'，语义不变、仍只读）：
+
+
+    diyu|diyu|UTF8|libc|en_US.utf8|en_US.utf8|||
+    diyu_brand_faye|diyu|UTF8|libc|en_US.utf8|en_US.utf8|||
+    diyu_cbfsk|cbfsk_migrator|UTF8|libc|en_US.utf8|en_US.utf8|||=Tc/cbfsk_migrator
+    cbfsk_migrator=CTc/cbfsk_migrator
+    cbfsk_app=c/cbfsk_migrator
+    diyu_m5_4|diyu_migrator|UTF8|libc|en_US.utf8|en_US.utf8|||=Tc/diyu_migrator
+    diyu_migrator=CTc/diyu_migrator
+    diyu_app=c/diyu_migrator
+    diyu_pkg7_runtime|diyu_pkg9_migrator|UTF8|libc|en_US.utf8|en_US.utf8|||
+    postgres|diyu|UTF8|libc|en_US.utf8|en_US.utf8|||
+    template0|diyu|UTF8|libc|en_US.utf8|en_US.utf8|||=c/diyu
+    diyu=CTc/diyu
+    template1|diyu|UTF8|libc|en_US.utf8|en_US.utf8|||=c/diyu
+    diyu=CTc/diyu
+    cbfsk_app|No inheritance
+    cbfsk_migrator|
+    diyu|Superuser, Create role, Create DB, Replication, Bypass RLS
+    diyu_app|No inheritance
+    diyu_migrator|
+    diyu_pkg7_runtime|Cannot login
+    diyu_pkg9_migrator|No inheritance, Bypass RLS
+    diyu_pkg9_runtime|No inheritance
+    6 对象存储桶
+
+    [2026-08-16 06:57:35 UTC]     0B diyu-cbfsk-materials/
+    [2026-07-24 03:10:26 UTC]     0B diyu-m5-4-materials/
+    7 Nginx
+
+    23:	# server_names_hash_bucket_size 64;
+    24:	# server_name_in_redirect off;
+    74:#		listen     localhost:110;
+    80:#		listen     localhost:143;
+    197:    listen 80;
+    198:    listen [::]:80;
+    199:    server_name diyuai.cc;
+    214:    listen 443 ssl http2;
+    215:    listen [::]:443 ssl http2;
+    216:    server_name diyuai.cc;
+    269:    server_name kb.diyuai.cc;
+    275:    listen 443 ssl; # managed by Certbot
+    288:    listen 80;
+    289:    server_name kb.diyuai.cc;
+    297:    listen 80;
+    298:    server_name dify.diyuai.cc;
+    310:    listen 443 ssl;
+    311:    server_name dify.diyuai.cc;
+    补充只读证据：
+
+
+    -rw-r--r-- 1 root root 1125 2023-05-31 01:31 /etc/nginx/fastcgi.conf
+    -rw-r--r-- 1 root root 1447 2023-05-31 01:31 /etc/nginx/nginx.conf
+    -rw-r--r-- 1 root root 2420 2026-05-15 15:08 /etc/nginx/snippets/diyu-serving.conf.disabled.20260613-061826
+    -rw-r--r-- 1 root root  423 2023-05-31 01:31 /etc/nginx/snippets/fastcgi-php.conf
+    -rw-r--r-- 1 root root  217 2023-05-31 01:31 /etc/nginx/snippets/snakeoil.conf
+
+    grep -rniE 'cbfsk|18001' /etc/nginx/  →  无匹配 (rc=1)
+    nginx master pid 1700118 STARTED Thu Jul 23 06:23:21 2026
+    8 支线监听
+    原文命令 ss -ltn | grep ':18000'：
+
+
+    LISTEN 0      2048       127.0.0.1:18000      0.0.0.0:*
+    （该行是邻居 formal-init，非支线。支线实际端口 18001：）
+
+
+    LISTEN 0      2048       127.0.0.1:18001      0.0.0.0:*
+    判定
+    第1项: PASS — ready/live/status 三项全 200
+    第2项: PASS — diyu-infra-* 四容器 StartedAt 均为 2026-07-04T11:49Z、RestartCount=0，未重启；邻居 diyu-m5-4-app-1 StartedAt 2026-08-08、restarts=0，未受影响。支线两容器创建于 2026-08-16T07:11Z，为新增
+    第3项: PASS — 5432(pid 826259, Jul 16)、9000(pid 1694, Jul 4)、80/443(nginx master pid 1700118, Jul 23) 全部早于本次部署（Aug 16 15:11 本地），pid 未变。注：期望栏「18000 由支线占用」与实际及合同不符——18000 由邻居 formal-init 占用（pid 497547，Aug 8 起），支线按合同「18000 起顺延、占用则+1」落在 18001（pid 1802617）。这是合同预期行为，不是事故
+    第4项: PASS — /etc/diyu-cbfsk、/opt/diyu-cbfsk、/var/backups/diyu-cbfsk 三者均存在，且与 formal-init 的 /etc/diyu、/opt/diyu-saas、/var/backups/diyu-m5-4 完全分离，无同名复用
+    第5项: PASS — diyu_cbfsk(owner cbfsk_migrator) 与 diyu_m5_4(owner diyu_migrator) 并存；角色 cbfsk_migrator/cbfsk_app 与 diyu_migrator/diyu_app 并存，互不覆盖。旁证：cbfsk_app 无 Bypass RLS 标记
+    第6项: PASS — diyu-cbfsk-materials/ 与 diyu-m5-4-materials/ 并存
+    第7项: PASS（证据等级：static_verified，非逐字 diff） — 支线未新增任何 server 块（/etc/nginx 全目录 grep cbfsk|18001 零匹配）；既有 server 块只有 diyuai.cc / kb.diyuai.cc / dify.diyuai.cc；所有 nginx 配置文件 mtime 最新为 2026-05-15，全部早于本次部署窗口；nginx master 进程 Jul 23 启动、未重启或 reload。逐字对比未做——本窗口没有部署前的配置快照可比，只能以 mtime + 零支线标识 + 主进程未重启作为「未被改动」的证据
+    第8项: PASS — 支线监听 127.0.0.1:18001，是回环地址不是 0.0.0.0；端口为 18001 而非 18000，属合同规定的顺延，非缺陷
+
+    SHARED_HOST_INCIDENT: 无
+
+    声明
+    本复核为只读，未执行任何写操作：未 restart/stop/rm 任何容器，未执行任何 psql 写语句（仅 \l / \du 元命令），未 mc mb/rm，未改 Nginx、未改 /etc/*，未执行任何 git 操作，未向仓库落任何文件。
+
+    命令未能执行项：第 5 项原文命令因 $POSTGRES_USER 在主机 root shell 中未定义而失败（FATAL: role "root" does not exist），失败输出已原样保留；随后以容器内 shell 展开同一变量重跑同一命令并已明确标注，未更换命令语义、未规避任何权限限制。
+
+    初始口令是否现场生成并 shred —— 本窗口无法核验，未做判定（核验需读取 /etc/diyu-cbfsk/bootstrap.env 是否存在及其历史，涉及口令材料，超出本次只读复核清单）。
+
+    两点需要施工窗口注意：核查清单第 3 项的期望值「18000 由支线占用」与合同「占用则 +1」及实际部署（支线在 18001）不一致，建议修正清单表述；第 7 项的「逐字未变」在没有部署前基线快照的前提下无法严格证明，本次只给到 mtime 级证据。
+
+    另外说明：SSH 需要网络与 ~/.ssh 读取，两者都被沙箱拦截，因此这些只读命令是在关闭沙箱的情况下执行的（可用 /sandbox 管理限制）。
+
+# ---------------------------------------------------------------------------
+# BR0-EP01 收口（Founder 2026-08-16 派发《BR1-EP00 零代码穿刺（含 BR0-EP01 收口）》第零节）
+# ---------------------------------------------------------------------------
+closeout:
+  dispatched_by: Founder
+  dispatched_at: '2026-08-16'
+  baseline_commit: d8710ae8d07e4773488ae3c25efa11a8f19c3da4
+  scope: 四项——重部署 Staging、目视 antd v6 四控件、branch_baseline 结构与四条 deferred、收口验收
+
+  staging_redeploy:
+    image_tag: diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4
+    image_id: sha256:0f669934b597c3adf736080bfe911a8091a421708a733b770d4fecd1081b0e2a
+    runtime_surface_matches_head: true
+    runtime_surface_matches_head_evidence: >-
+      写成「运行时面一致」而不是「等于 HEAD」，是因为后者落盘那一刻就开始过期——
+      收口的台账与报告提交本身就会把 HEAD 推走。可复算的判据是：
+      镜像标签就是 40 位 Git SHA d8710ae8d07e4773488ae3c25efa11a8f19c3da4，
+      api 与 worker 两个容器的 Config.Image 均为该标签、ImageID 同为上述 sha256；
+      而 `git diff --name-only d8710ae8d07e4773488ae3c25efa11a8f19c3da4..HEAD` 的结果
+      全部落在 11_reports_and_receipts/ 与 01_contracts_and_schemas/ 之下，不含任何运行时文件。
+      这条谓词后续仍可现算，不会因为又提交了几份文档就变成假话。
+    runtime_surface_paths: [runtime/, alembic/, web/, deploy/, ops/, pyproject.toml, uv.lock, alembic.ini, Dockerfile]
+    previous_image_tag: diyu-cbfsk-runtime:ad375df6b0587ed3db5aadfe1bac373b1d41ccfa
+    previous_image_id: sha256:3bee0659e64d588bf2ade8f06ffec7a597d178da4f08b73cca6992edcd7aa23b
+    procedure: rsync 运行时源码子集 → docker build（标签用完整 SHA）→ deploy_cbfsk.sh
+    procedure_ref: docs/runtime/ecs_staging_runbook.md 第 2 节
+    branch_health_after: {healthz: 200, readyz: 200, app_root: 200}
+    app_port: 18001
+    bootstrap_skipped: true
+    bootstrap_skipped_reason: >-
+      /etc/diyu-cbfsk/bootstrap.env 首次部署后即 shred，本次部署前实测不存在；
+      deploy_cbfsk.sh 据此跳过 bootstrap，未重建初始账号、未生成新口令。
+    touched_outside_branch_namespace: false
+    touched_outside_branch_namespace_evidence: >-
+      本次只 rsync 到 /opt/diyu-cbfsk/source、只 build diyu-cbfsk-runtime 标签、
+      只 recreate diyu-cbfsk-api 与 diyu-cbfsk-worker。未对 diyu-infra-*、diyu_m5_4、
+      diyu-m5-4-materials、/etc/diyu 执行任何写操作；Nginx 全目录 grep cbfsk|18001 仍 0 命中，
+      sites-enabled 三个软链与 BR0-EP01 首次部署时一致。
+
+  neighbour_impact:
+    health_before: [200, 200, 200]
+    health_after: [200, 200, 200]
+    health_probe: 'http://127.0.0.1:18000 的 /health/ready、/health/live、/status'
+    infra_containers_restart_count_before: [0, 0, 0, 0]
+    infra_containers_restart_count_after: [0, 0, 0, 0]
+    infra_containers_started_at_unchanged: true
+    infra_containers_started_at_note: >-
+      四个共享基础设施容器的 StartedAt 在部署前后逐字相同（均为 2026-07-04T11:49Z 量级），
+      RestartCount 全程 0——它们没有被重启，也没有被 recreate。
+    neighbour_app_restart_count_before: 0
+    neighbour_app_restart_count_after: 0
+    neighbour_app_started_at_unchanged: true
+
+  antd_v6_visual_check:
+    method: Playwright 实跑打开页面 → 全页截图 → 人工目视
+    served_bundle_sha256: ce480b2404acee5261460c9fc458bf681dd76a07974f7e97277ab5218fd38961
+    served_bundle_antd_version_string: 6.6.0
+    served_bundle_antd_version_evidence: >-
+      Staging 实际吐出的 /app/assets/index.js 里含字符串 "6.6.0"（antd 自身导出的 version）。
+      ant-btn / ant-input / ant-table 这类类名在 bundle 里是运行时拼接的，
+      因此字面 grep 为 0 是预期，不作为反证。
+    local_build_bundle_sha256_identical: true
+    evidence_bridge: >-
+      Staging 直接目视覆盖 Input 与 Button（登录页，隧道只读打开）。
+      Table 与 Select 需登录后才出现，而 Staging 的初始口令已 shred、本窗口无凭据，
+      因此在本地栈完成——本地栈由同一 Commit、同一 lockfile 构建，
+      其 /app/assets/index.js 与 Staging 服务端返回的字节 sha256 完全相同（见上），
+      即两处目视的是同一份产物。证据等级如实记为：Input/Button = Staging 直接目视，
+      Table/Select = 同字节产物目视，非 Staging 直接目视。
+    controls:
+      input: OK — 账号/口令/租户标识/租户名称/品牌代号/品牌名称/任务标题均正常渲染；Input.Password 右侧显影图标在位
+      button: OK — primary 蓝底（登录/创建租户/创建品牌/创建任务）与 default 描边（登出）两种样式均正常
+      table: OK — 品牌表两列有数据行，任务表两列空态显示「暂无数据」占位图，表头背景与分隔线正常
+      select: OK — 租户选择器回显「（OWNER）」后缀，品牌选择器点击后下拉面板展开并列出选项
+    anomalies: >-
+      无功能异常。一处观感记录（不是缺陷）：Select 下拉展开后的截图捕获在淡入动画中途，
+      面板阴影尚未完全画出。Playwright 的可见性断言在同一时刻已通过，
+      再等 500ms 的 Staging 截图无此现象——是截图时机，不是渲染问题。
+
+  branch_baseline_amendment:
+    file: 01_contracts_and_schemas/branch_baseline.v0.1.yaml
+    added_keys: [stage_1_packages, 'deferred_items.items 追加 4 条']
+    stage_1_packages_count: 4
+    stage_1_packages_converged_from: 7
+    yaml_shape_note: >-
+      下发文本 `stage_1_packages: 4` 后面直接跟四个条目，在 YAML 里不能既是标量又是序列。
+      落盘拆成 count + packages 两个键，下发文本的每一个词逐字保留。
+      改的是承载形式，不是内容——这一点在文件内也写了注释。
+    deferred_owner: BR1-EP01 收口
+    deferred_items_added: 4
+
+  acceptance:
+    - id: CO-01
+      criterion: staging digest 与 HEAD 对应已记
+      result: PASS
+      evidence_ref: closeout_staging_digest
+    - id: CO-02
+      criterion: 四控件目视结果逐项已记
+      result: PASS
+      evidence_ref: closeout_antd_visual
+    - id: CO-03
+      criterion: 邻居三项前后均 200 且 RestartCount 未变
+      result: PASS
+      evidence_ref: closeout_neighbour
+    - id: CO-04
+      criterion: run_all_checks EXIT=0、8 workflow 全绿、工作树空
+      result: PASS
+      evidence_ref: closeout_full_verification
+
+  evidence_refs:
+    closeout_staging_digest: >-
+      closeout.staging_redeploy.image_tag 与 image_id；复算命令
+      `docker inspect -f '{{.Config.Image}} {{.Image}}' diyu-cbfsk-api`（ECS 上 root 执行）。
+    closeout_antd_visual: >-
+      closeout.antd_v6_visual_check；截图四张（Staging 登录页一张、本地栈登录页/表格/下拉三张）
+      留在执行窗口的临时目录，未入仓——截图是取证过程material，不是交付物。
+      可复算的部分是 served_bundle_sha256 与 bundle 内的 antd 版本字符串。
+    closeout_neighbour: closeout.neighbour_impact；部署脚本自身也在部署前后各探一次，输出见部署日志
+    closeout_full_verification: >-
+      本地 run_all_checks EXIT=0、compile_role_instructions --check drift=0、
+      check_prd_v1_2 --require-archive PASS、git status --porcelain 空；
+      GitHub 上收口提交的 8 个 check 全 pass。
+
+  not_done:
+    - item: 'PR #5 合并'   # 引号必须留：不加引号时 YAML 会把 `#5 合并` 当注释吃掉
+      why: >-
+        R5 规定「PR + Guardian」，本次派发的收口链是「四项 → Guardian 增量复核 → 合并」。
+        Guardian 是与执行侧互斥的独立角色，执行侧不得自任、不得代跑，
+        因此收口做到 Guardian 交接为止，合并动作留给 Guardian 复核之后。

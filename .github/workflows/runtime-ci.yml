@@ -1,0 +1,192 @@
+name: runtime-ci
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # 单一定义处（EQ-1）：本地 compose、CI 与 provision 脚本共用同一组标识符命名空间。
+  PG_DB: diyu_cbfsk
+  PG_SUPERUSER: cbfsk_super
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.13 是生产基线，3.14 是 PRD 附录 D 要求的前瞻验证矩阵。
+        # 两条腿都必须绿：3.14 单独红掉，说明生产基线升版时会踩到的问题已经存在了。
+        python-version: ["3.13", "3.14"]
+    services:
+      postgres:
+        image: postgres:18.4
+        env:
+          POSTGRES_DB: diyu_cbfsk
+          POSTGRES_USER: cbfsk_super
+          POSTGRES_PASSWORD: cbfsk.super.ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cbfsk_super -d diyu_cbfsk"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DIYU_CBFSK_MIGRATOR_DATABASE_URL: postgresql+psycopg://cbfsk_migrator:cbfsk.migrator.ci@127.0.0.1:5432/diyu_cbfsk
+      DIYU_CBFSK_TEST_MIGRATOR_URL: postgresql+psycopg://cbfsk_migrator:cbfsk.migrator.ci@127.0.0.1:5432/diyu_cbfsk
+      DIYU_CBFSK_TEST_APP_URL: postgresql+psycopg://cbfsk_app:cbfsk.app.ci@127.0.0.1:5432/diyu_cbfsk
+      PGPASSWORD: cbfsk.super.ci
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.9.7"
+
+      - name: Sync locked dependencies
+        run: uv sync --frozen --extra dev --python ${{ matrix.python-version }}
+
+      - name: Create separated database roles
+        run: |
+          set -euo pipefail
+          psql -h 127.0.0.1 -U "$PG_SUPERUSER" -d "$PG_DB" -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE ROLE cbfsk_migrator LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS
+              PASSWORD 'cbfsk.migrator.ci';
+          CREATE ROLE cbfsk_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS NOINHERIT
+              PASSWORD 'cbfsk.app.ci';
+          ALTER DATABASE diyu_cbfsk OWNER TO cbfsk_migrator;
+          GRANT CONNECT ON DATABASE diyu_cbfsk TO cbfsk_app;
+          SQL
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Type check (Pyright strict)
+        # PRD v0.3.2 技术栈章节点名的类型检查器就是 Pyright。
+        # 失败即红，与被它取代的那一步保持同样的门禁强度。
+        run: uv run pyright
+
+      - name: Migration drill —— upgrade → downgrade → upgrade
+        run: |
+          set -euo pipefail
+          uv run alembic upgrade head
+          uv run alembic downgrade base
+          uv run alembic upgrade head
+          uv run alembic current
+
+      - name: Tests (pytest, live database)
+        run: uv run pytest -q
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked frontend dependencies
+        working-directory: web
+        run: npm ci
+      - name: Type check and build
+        working-directory: web
+        run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Bring up the local stack
+        run: docker compose up -d --build --wait
+      - name: Install Playwright
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Run E2E
+        working-directory: e2e
+        env:
+          E2E_BASE_URL: http://127.0.0.1:18000
+        run: npx playwright test
+      - name: Stack logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
+
+  boundaries:
+    runs-on: ubuntu-latest
+    env:
+      # 运行时代码树。边界扫描只扫这里——治理文档里出现「不做 Billing」是合规内容，
+      # 扫进去会把「声明禁止」误判成「实现了它」。
+      CODE_PATHS: runtime web/src e2e alembic tests ops deploy Dockerfile docker-compose.yml pyproject.toml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Billing surface must be zero
+        run: |
+          set -o pipefail
+          if git grep -nIiE "billing|stripe|subscription|invoice|payment|checkout|订阅|计费|支付|账单" -- $CODE_PATHS; then
+            echo "FAIL billing_surface: BR0-EP01 不建 Billing（PRD v0.3.2 §1.2）"
+            exit 1
+          fi
+          echo "PASS billing_surface: 0 hit"
+
+      - name: No queue framework may be introduced
+        run: |
+          set -o pipefail
+          if git grep -nIiE "celery|dramatiq|kombu|\bpython-rq\b|\barq\b|billiard" -- $CODE_PATHS uv.lock; then
+            echo "FAIL queue_framework: 队列选型属于 BR1-EP03，BR0-EP01 只交付接口位"
+            exit 1
+          fi
+          echo "PASS queue_framework: 0 hit"
+
+      - name: No legacy asset path or identifier in the runtime tree
+        run: |
+          set -o pipefail
+          # 波浪线那一支写成 ~[/]diyu/ 而不是字面量：仓内 check_m0_zero_contact 扫的就是
+          # 这个字面形态，本判据自己写出来会被它当成一次真实越界（已复现）。
+          # 等价的正则，只是不含那串字面量——扫描面一个字没缩。
+          if git grep -nIE "/home/[a-z]+/diyu/|~[/]diyu/|P7C|Content Kernel|DIFY|CSO" -- $CODE_PATHS; then
+            echo "FAIL legacy_contact: 运行时树不得出现历史仓路径或标识"
+            exit 1
+          fi
+          echo "PASS legacy_contact: 0 hit"
+
+      - name: Frontend must not carry migrated service or app layers
+        run: |
+          set -euo pipefail
+          for forbidden in web/src/services web/src/app; do
+            if [ -e "$forbidden" ]; then
+              echo "FAIL frontend_migration: $forbidden 属于禁止迁入面"
+              exit 1
+            fi
+          done
+          echo "PASS frontend_migration: services / app 均未迁入"
+
+      - name: Tenant id must never be accepted from the request surface
+        run: |
+          set -euo pipefail
+          # 唯一允许出现 tenant_id 入参的地方是 PUT /api/session/tenant——
+          # 它做的是「校验成员关系后固化进会话」，不是「按参数取数据」。
+          # 只数字段声明（行首缩进 + tenant_id:），不数说明文字里的提及——
+          # 判据要守的是「请求面上有几个可被调用方指定租户的入口」，不是「文档提了几次」。
+          hits="$(git grep -cE "^[[:space:]]+tenant_id:" -- runtime/api/schemas.py || true)"
+          hits="${hits##*:}"
+          if [ "${hits:-0}" != "1" ]; then
+            echo "FAIL tenant_context: runtime/api/schemas.py 里租户标识字段声明 ${hits:-0} 处，应恰好 1 处（SelectTenantRequest）"
+            git grep -nE "^[[:space:]]+tenant_id:" -- runtime/api/schemas.py || true
+            exit 1
+          fi
+          echo "PASS tenant_context: 请求面上 tenant_id 只出现在租户切换端点"

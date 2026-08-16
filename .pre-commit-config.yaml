@@ -1,0 +1,31 @@
+# 提交前门禁。PRD v0.3.2 技术栈章节把 Ruff、Pyright、pre-commit 写在同一句里，
+# 三者是一套：pre-commit 是把前两者真正挂上去的那一环，装了不挂等于没装。
+#
+# 全部用 repo: local + language: system，而不是拉各工具的 mirror 仓：
+# 这样 pre-commit 跑的就是 uv.lock 锁定的那一份 Ruff / Pyright，
+# 与 runtime-ci.yml 里跑的是同一个版本。挂 mirror 的话两边版本各自漂移，
+# 本地绿而 CI 红这种事会重新出现（本包已因 ruff 排序推断差异复现过一次）。
+default_install_hook_types: [pre-commit]
+fail_fast: false
+
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff（lint，与 CI 同一份配置）
+        entry: uv run ruff check --force-exclude
+        language: system
+        types_or: [python, pyi]
+        # 与 pyproject.toml 的 [tool.ruff].include 对齐：ci/ 与 工具/ 是 M0/M1 冻结的
+        # 治理判据，不进本包的 lint 面。
+        files: ^(runtime|tests|alembic)/
+
+      - id: pyright
+        name: pyright（strict，与 CI 同一份配置）
+        entry: uv run pyright
+        language: system
+        types_or: [python, pyi]
+        files: ^(runtime|tests)/
+        # 整项目一次过，不按文件切：strict 档下跨模块推断要看全量，
+        # 只喂改动文件会漏掉调用方那一侧的类型错。
+        pass_filenames: false

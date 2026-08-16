@@ -1,0 +1,80 @@
+# 本地闭环。容器名一律 diyu-cbfsk- 前缀、库名 diyu_cbfsk、端口 18000——
+# 与共享主机上其他应用的命名空间完全不重叠。
+#
+# 本文件里的口令是**开发取值**，只服务于 127.0.0.1 上的本地栈。
+# ECS 侧的取值由 deploy/provision_cbfsk.sh 用 openssl rand 现场生成，绝不复用这里的。
+
+name: diyu-cbfsk
+
+services:
+  db:
+    image: postgres:18.4
+    container_name: diyu-cbfsk-postgres
+    environment:
+      POSTGRES_DB: diyu_cbfsk
+      POSTGRES_USER: cbfsk_super
+      POSTGRES_PASSWORD: cbfsk.super.local
+    volumes:
+      - ./ops/postgres/001_roles.sql:/docker-entrypoint-initdb.d/001_roles.sql:ro
+      # PG18 起，镜像把数据放进 /var/lib/postgresql/<major>/，所以卷必须挂在
+      # /var/lib/postgresql 而不是它的 data 子目录——挂错会在启动时直接拒绝。
+      - cbfsk_pgdata:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:15432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cbfsk_super -d diyu_cbfsk"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  migrate:
+    build:
+      context: .
+    image: diyu-cbfsk-runtime:local
+    container_name: diyu-cbfsk-migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DIYU_CBFSK_MIGRATOR_DATABASE_URL: postgresql+psycopg://cbfsk_migrator:cbfsk.migrator.local@db:5432/diyu_cbfsk
+      DIYU_CBFSK_APP_DATABASE_URL: postgresql+psycopg://cbfsk_app:cbfsk.app.local@db:5432/diyu_cbfsk
+      DIYU_CBFSK_INITIAL_OPS_USERNAME: cbfsk-ops
+      DIYU_CBFSK_INITIAL_OPS_PASSWORD: cbfsk.ops.local
+    command: ["sh", "-c", "alembic upgrade head && python -m runtime.bootstrap"]
+    restart: "no"
+
+  api:
+    build:
+      context: .
+    image: diyu-cbfsk-runtime:local
+    container_name: diyu-cbfsk-api
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DIYU_CBFSK_RUNTIME_MODE: development
+      DIYU_CBFSK_APP_DATABASE_URL: postgresql+psycopg://cbfsk_app:cbfsk.app.local@db:5432/diyu_cbfsk
+      DIYU_CBFSK_PUBLIC_URL: http://127.0.0.1:18000
+    ports:
+      - "127.0.0.1:18000:18000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:18000/healthz').status==200 else 1)\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  worker:
+    build:
+      context: .
+    image: diyu-cbfsk-runtime:local
+    container_name: diyu-cbfsk-worker
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DIYU_CBFSK_APP_DATABASE_URL: postgresql+psycopg://cbfsk_app:cbfsk.app.local@db:5432/diyu_cbfsk
+    command: ["python", "-m", "runtime.worker.main"]
+
+volumes:
+  cbfsk_pgdata:
+    name: diyu-cbfsk-pgdata

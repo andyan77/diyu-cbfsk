@@ -1,0 +1,65 @@
+# ECS Staging 编排。与本地 docker-compose.yml 的分工：
+#   本地   —— 自带 PostgreSQL 容器，是一次性的开发栈
+#   Staging —— 复用共享主机上既有的 PostgreSQL/MinIO，只跑 api 与 worker
+#
+# network_mode: host + 只监听 127.0.0.1：支线服务不对公网开端口，
+# 对外暴露与否由 Nginx 单独裁决，不由容器编排顺手决定。
+services:
+  api:
+    image: ${DIYU_CBFSK_IMAGE_REF:?DIYU_CBFSK_IMAGE_REF is required}
+    pull_policy: never
+    container_name: diyu-cbfsk-api
+    env_file:
+      - /etc/diyu-cbfsk/app.env
+    network_mode: host
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=64m
+    restart: unless-stopped
+    init: true
+    command:
+      - sh
+      - -ec
+      - exec uvicorn runtime.api.main:app --host 127.0.0.1 --port "$${DIYU_CBFSK_APP_PORT}"
+        --proxy-headers --forwarded-allow-ips 127.0.0.1 --no-access-log
+
+  worker:
+    image: ${DIYU_CBFSK_IMAGE_REF:?DIYU_CBFSK_IMAGE_REF is required}
+    pull_policy: never
+    container_name: diyu-cbfsk-worker
+    env_file:
+      - /etc/diyu-cbfsk/app.env
+    network_mode: host
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=64m
+    restart: unless-stopped
+    init: true
+    command: ["python", "-m", "runtime.worker.main"]
+
+  migrate:
+    image: ${DIYU_CBFSK_IMAGE_REF:?DIYU_CBFSK_IMAGE_REF is required}
+    pull_policy: never
+    container_name: diyu-cbfsk-migrate
+    env_file:
+      - /etc/diyu-cbfsk/migrator.env
+    network_mode: host
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=64m
+    profiles: ["maintenance"]
+    command: ["alembic", "upgrade", "head"]
+
+  bootstrap:
+    image: ${DIYU_CBFSK_IMAGE_REF:?DIYU_CBFSK_IMAGE_REF is required}
+    pull_policy: never
+    container_name: diyu-cbfsk-bootstrap
+    env_file:
+      - /etc/diyu-cbfsk/app.env
+      - /etc/diyu-cbfsk/bootstrap.env
+    network_mode: host
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=64m
+    profiles: ["maintenance"]
+    command: ["python", "-m", "runtime.bootstrap"]

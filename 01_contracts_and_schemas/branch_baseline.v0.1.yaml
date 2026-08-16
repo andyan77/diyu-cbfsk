@@ -88,20 +88,30 @@ gates:
     9ad5f94 的 GitHub CI 为红（documents / boundary 两 job FAIL），
     合它等于把红闸带进 main；95dbc5d 是修复后的同一支线 head，六个 check run 全 pass。
     Founder 批准的是「合并」这个动作，目标哈希随修复前进。
-  guardian_review_coverage:
-    reviewed_commit: 9ad5f94eca7f64cf012c7aa7cc653ea6d7dd725c
+  # R7（Founder 2026-08-16 裁定）：合并覆盖标记按事实更正。
+  # 单一定义处（EQ-1）——本块取代原 guardian_review_coverage，不并存两处口径。
+  merged_commit_guardian_coverage:
+    reviewed_commit_at_merge_time: 9ad5f94eca7f64cf012c7aa7cc653ea6d7dd725c
     merged_commit: 95dbc5dd8bc1d15d7721d56ce4eb03a1a5ccce84
-    status: MERGED_COMMIT_NOT_COVERED_BY_GUARDIAN_REVIEW
-    note: >-
-      Guardian 的 APPROVE 覆盖 9ad5f94 这一个树状态。实际合并的 95dbc5d 多出一个
-      commit（BR0-M1-PRE 合并前修复，5 文件 / +90 −11），未经 Guardian 复核。
-      Founder 在知悉该差异后仍显式批准合并——这是知情裁决，不是流程被绕过。
-      如实记录，不得表述为「已通过 Guardian 审查」。
-  guardian_reports_landed: false
-  guardian_reports_note: >-
-    A-4 要求逐字转录 Guardian 报告原文落 governance/reports/。原文未进入本工作区，
-    执行侧无法转录未见过的文本，也不得代写——那是红线「把 AI 评审冒充外部专家」。
-    待 Founder 提供原文后单独落盘并在 report_number_binding_registry 登记。
+    status: COVERED_BY_POST_MERGE_REVIEW      # 由 NOT_COVERED 转
+    covered_up_to: 8f327c354afb5dc6ec085e48dc6eaf28f4272a13
+    timing: POST_MERGE                        # 明写：事后补审，非合并前已审
+    note: 合并时 Guardian 结论只覆盖 9ad5f94；95dbc5d 与 8f327c3 由 Guardian 事后补审覆盖。
+          时序不得抹去。
+
+  # R6（Founder 2026-08-16 裁定）：BR0-EP00 期间三轮 Guardian 报告原文豁免补落盘。
+  # 取代原 guardian_reports_landed / guardian_reports_note 两个字段。
+  guardian_reports_landing:
+    status: EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE
+    scope: BR0-EP00 期间三轮 Guardian 报告原文（61d929d / ed0e789 / 9ad5f94）
+    reason: 原文已不可取得；Founder 明确豁免补落盘
+    waived_by: Founder
+    waiver_date: '2026-08-16'
+    m1_03_status: WAIVED_BY_FOUNDER      # 不得记为 MET
+    scope_limit: |
+      本豁免仅覆盖上述三轮历史报告。BR0-EP01 及此后每个执行包自己的交付报告
+      仍必须落盘并在 report_number_binding_registry 登记——
+      否则 check_report_number_traceability 被架空。
 
 # ---------------------------------------------------------------------------
 # 一之二、两份执行 Prompt 的合并去重记录
@@ -187,10 +197,48 @@ deferred_items:
         只有在两份台账合入同一文件的那一刻才会当场拦下合并。
         这是正确行为，但不等于「已被守住」——合并方必须在合并前人工重编号，
         不得等判据报红再处理。
+    # BR0-EP01 收口时由 Founder 点名的四项（2026-08-16）。四条都属交付物自身的口径缺陷，
+    # 不阻塞 BR0-EP01 合并，按 scope_freeze_rule 一律进 deferred，不回改本包。
+    - item: 'BR0-EP01 回执 A-01 判据行被裸 # 截断，且范围写「全仓」与证据面不符'
+      owner_package: BR1-EP01 收口
+    - item: BR0-EP01 回执 A-09「本地 23 用例全绿」与实测 18 passed / 5 skipped 不符
+      owner_package: BR1-EP01 收口
+    - item: BR0-EP01 回执 ecs_independent_verification 段含邻居公网 IP 与主机名，需脱敏
+      owner_package: BR1-EP01 收口
+    - item: PRD 变更说明与规划 HTML 仍写 27 包，需同步为 24
+      owner_package: BR1-EP01 收口
   already_in_prd_do_not_recreate:
     - Human Review 边界
     - 发布策略与人工审核在环（D-25）
     - Deliverable Superiority Test 协议（附录 I）
+
+# ---------------------------------------------------------------------------
+# 一之三之二、第一阶段包结构（Founder 2026-08-16 裁决）
+# ---------------------------------------------------------------------------
+# 下发文本是五行速记，其中「stage_1_packages: 4」与随后的四个条目在 YAML 里
+# 不能同时是标量和序列。这里拆成 count + packages 两个键落盘，逐字保留下发文本的
+# 每一个词；拆的是承载形式，不是内容。
+stage_1_packages:
+  count: 4
+  count_note: Founder 2026-08-16 裁决，由 7 收敛
+  packages:
+    - id: BR0-EP00
+      title: 启动准备
+      question: 我们准备好了吗
+      state: 已完成
+    - id: BR0-EP01
+      title: Runtime Skeleton
+      question: 系统能运行了吗
+      state: 本次收口
+    - id: BR1-EP00
+      title: 零代码穿刺
+      question: 用户愿买吗
+      constraint: 不得并入开发包
+    - id: BR1-EP01
+      title: 首条价值切片
+      question: 产品闭环成立吗
+      absorbs: 原 EP01~EP04
+      checkpoints_in_package: 4
 
 scope_freeze_rule:
   effective_from: FOUNDER_RULING_BR0_START_001_SIGNED

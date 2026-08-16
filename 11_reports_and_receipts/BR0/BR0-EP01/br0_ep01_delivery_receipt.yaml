@@ -400,7 +400,14 @@ fix_a:
 
   section_1_delete_tenant_of:
     deleted: runtime/api/deps.py::tenant_of
-    repo_wide_references_after: 0
+    code_and_config_references_after: 0
+    prose_mentions_in_report_and_receipt: 19
+    reference_scope_note: >-
+      「命中 0」指代码与配置面：runtime / tests / alembic / web / e2e / ops / deploy /
+      ci / 工具 / execution / governance / .github 及各配置文件，实测 0 命中。
+      报告与回执正文另有若干处提及该函数名——那是在叙述「这次删掉了它」，
+      不是它还活着。删除记录里不许出现被删对象的名字，会让交付报告说不清自己删了什么。
+      同一口径已用于本包对被取代的类型检查器的记法。
     # 字段名避开 signature/confirm 一族词根：check_founder_confirmation_binding 按词根
     # 判「这是一次 Founder 行为声明」，而这里说的是函数签名，不是任何人的签署。
     kept_declaration_or_suppression: false
@@ -568,7 +575,11 @@ fix_a_acceptance_results:
 
 fix_a_evidence_refs:
   fixa_tenant_of_removed: >-
-    `git grep -n tenant_of -- .` 返回码 1（0 命中，含未跟踪文件）。
+    代码与配置面 0 命中：`git grep -n tenant_of -- runtime tests alembic web e2e ops deploy
+    ci 工具 execution governance .github pyproject.toml docker-compose.yml Dockerfile
+    .pre-commit-config.yaml` 返回码 1。
+    报告与回执正文另有提及，是在叙述这次删除本身，口径见
+    fix_a.section_1_delete_tenant_of.reference_scope_note。
     `git grep -nE "noqa|type: ?ignore|pyright: ?ignore" -- runtime tests alembic` 返回码 1——
     运行时树零消音指令；顺带删掉的那条 BLE001 是死指令（所压规则不在 select 里）。
   fixa_ruff_arg: >-

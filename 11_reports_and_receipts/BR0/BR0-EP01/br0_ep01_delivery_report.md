@@ -311,11 +311,13 @@ FIX-A 交付之后，Founder 另发一包做收口，四件事：重部署 Stagi
 |---|---|
 | 镜像标签 | `diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4` |
 | 镜像 ID | `sha256:0f669934b597c3adf736080bfe911a8091a421708a733b770d4fecd1081b0e2a` |
-| 与仓库 HEAD 对应 | `True` |
+| 运行时面与 HEAD 一致 | `True` |
 | 支线端口 | `18001` |
 
 标签就是 40 位 Git SHA，因此「Staging 在跑哪个 Commit」不需要另设一套对照表——
-标签本身就是答案。初始账号未重建：`bootstrap.env` 首次部署后即 shred，本次实测不存在，
+标签本身就是答案。这里写的是「运行时面一致」而不是「等于 HEAD」：收口的台账与报告
+提交本身就会把 HEAD 推走，写成等号的证据落盘那一刻就开始过期。可复算的判据是
+`git diff --name-only d8710ae..HEAD` 的结果全部落在台账与合同目录下，不含运行时文件。初始账号未重建：`bootstrap.env` 首次部署后即 shred，本次实测不存在，
 部署脚本据此跳过 bootstrap，没有生成任何新口令。
 
 ### 邻居未被打扰

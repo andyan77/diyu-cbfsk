@@ -915,10 +915,16 @@ closeout:
   staging_redeploy:
     image_tag: diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4
     image_id: sha256:0f669934b597c3adf736080bfe911a8091a421708a733b770d4fecd1081b0e2a
-    corresponds_to_repo_head: true
-    corresponds_to_repo_head_evidence: >-
-      镜像标签就是 40 位 Git SHA，与本次收口的 baseline_commit 逐字相同；
-      api 与 worker 两个容器的 Config.Image 均为该标签，ImageID 同为上述 sha256。
+    runtime_surface_matches_head: true
+    runtime_surface_matches_head_evidence: >-
+      写成「运行时面一致」而不是「等于 HEAD」，是因为后者落盘那一刻就开始过期——
+      收口的台账与报告提交本身就会把 HEAD 推走。可复算的判据是：
+      镜像标签就是 40 位 Git SHA d8710ae8d07e4773488ae3c25efa11a8f19c3da4，
+      api 与 worker 两个容器的 Config.Image 均为该标签、ImageID 同为上述 sha256；
+      而 `git diff --name-only d8710ae8d07e4773488ae3c25efa11a8f19c3da4..HEAD` 的结果
+      全部落在 11_reports_and_receipts/ 与 01_contracts_and_schemas/ 之下，不含任何运行时文件。
+      这条谓词后续仍可现算，不会因为又提交了几份文档就变成假话。
+    runtime_surface_paths: [runtime/, alembic/, web/, deploy/, ops/, pyproject.toml, uv.lock, alembic.ini, Dockerfile]
     previous_image_tag: diyu-cbfsk-runtime:ad375df6b0587ed3db5aadfe1bac373b1d41ccfa
     previous_image_id: sha256:3bee0659e64d588bf2ade8f06ffec7a597d178da4f08b73cca6992edcd7aa23b
     procedure: rsync 运行时源码子集 → docker build（标签用完整 SHA）→ deploy_cbfsk.sh

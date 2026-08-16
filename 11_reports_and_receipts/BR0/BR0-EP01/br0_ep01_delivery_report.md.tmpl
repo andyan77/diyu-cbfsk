@@ -311,11 +311,13 @@ FIX-A 交付之后，Founder 另发一包做收口，四件事：重部署 Stagi
 |---|---|
 | 镜像标签 | `{{ref:11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_receipt.yaml#closeout.staging_redeploy.image_tag}}` |
 | 镜像 ID | `{{ref:11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_receipt.yaml#closeout.staging_redeploy.image_id}}` |
-| 与仓库 HEAD 对应 | `{{ref:11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_receipt.yaml#closeout.staging_redeploy.corresponds_to_repo_head}}` |
+| 运行时面与 HEAD 一致 | `{{ref:11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_receipt.yaml#closeout.staging_redeploy.runtime_surface_matches_head}}` |
 | 支线端口 | `{{ref:11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_receipt.yaml#closeout.staging_redeploy.app_port}}` |
 
 标签就是 40 位 Git SHA，因此「Staging 在跑哪个 Commit」不需要另设一套对照表——
-标签本身就是答案。初始账号未重建：`bootstrap.env` 首次部署后即 shred，本次实测不存在，
+标签本身就是答案。这里写的是「运行时面一致」而不是「等于 HEAD」：收口的台账与报告
+提交本身就会把 HEAD 推走，写成等号的证据落盘那一刻就开始过期。可复算的判据是
+`git diff --name-only d8710ae..HEAD` 的结果全部落在台账与合同目录下，不含运行时文件。初始账号未重建：`bootstrap.env` 首次部署后即 shred，本次实测不存在，
 部署脚本据此跳过 bootstrap，没有生成任何新口令。
 
 ### 邻居未被打扰

@@ -291,9 +291,75 @@ Nginx「逐字未变」在没有部署前快照的前提下无法严格证明，
 
 ### FIX-A 新增的未决事项
 
-- **Staging 落后仓库 HEAD**：FIX-A 合同明令「不连 ECS」，因此未重新部署。
-  Staging 上的工作台仍是 antd v5 构建。谁拿它当「HEAD 的样子」验前端，看到的是旧版 UI。
+- **Staging 落后仓库 HEAD**：FIX-A 合同明令「不连 ECS」，因此当时未重新部署，
+  Staging 上的工作台仍是旧版构建。**已在 BR0-EP01 收口解除**，见第十二节。
 - **ARG 挡不住 `del` 惯用法**：ARG 对被引用过的参数不报警，而 `del x` 就是一次引用。
   它挡得住「新写的函数忘了用参数」，挡不住「用 del 抹掉后再什么都不做」——
   被删掉的 `tenant_of` 恰是后一种。真正挡住它的是纪律，不是判据。
 - **口令自述未经独立核验**，见上。
+
+---
+
+## 十二、BR0-EP01 收口（Founder 2026-08-16 派发）
+
+FIX-A 交付之后，Founder 另发一包做收口，四件事：重部署 Staging、目视 antd v6、
+把第一阶段包结构与四条新发现落进 `branch_baseline.v0.1.yaml`、跑收口验收。
+
+### 重部署
+
+| 维度 | 取值 |
+|---|---|
+| 镜像标签 | `diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4` |
+| 镜像 ID | `sha256:0f669934b597c3adf736080bfe911a8091a421708a733b770d4fecd1081b0e2a` |
+| 与仓库 HEAD 对应 | `True` |
+| 支线端口 | `18001` |
+
+标签就是 40 位 Git SHA，因此「Staging 在跑哪个 Commit」不需要另设一套对照表——
+标签本身就是答案。初始账号未重建：`bootstrap.env` 首次部署后即 shred，本次实测不存在，
+部署脚本据此跳过 bootstrap，没有生成任何新口令。
+
+### 邻居未被打扰
+
+部署前后各探一次邻居应用的 `/health/ready`、`/health/live`、`/status`，
+前 3 次与后
+3 次全部 200；
+4 个共享基础设施容器的
+`RestartCount` 全程为零，`StartedAt` 前后逐字相同——它们没有被重启，也没有被 recreate。
+Nginx 全目录搜支线标识仍是零命中。
+
+### antd v6 目视
+
+4 类控件逐项目视，结论见回执
+`closeout.antd_v6_visual_check.controls`：Input、Button、Table、Select 全部正常渲染。
+
+证据等级分两段，如实分开写：Input 与 Button 是在 Staging 上直接打开登录页目视的；
+Table 与 Select 要登录后才出现，而 Staging 的初始口令已经 shred、执行侧没有凭据，
+因此是在本地栈目视的。两者不是「差不多的构建」——本地栈产出的 `/app/assets/index.js`
+与 Staging 服务端实际返回的字节 SHA-256 完全相同，目视的是同一份产物。
+Staging 返回的 bundle 里带着 antd 自己导出的版本字符串
+`6.6.0`。
+
+### 结构与延期
+
+`branch_baseline.v0.1.yaml` 新增第一阶段包结构，共
+4 个包（由七收敛）；
+另追加 4 条延期项，
+owner 均为 `BR1-EP01 收口`。这四条都是本包交付物自身的口径缺陷——
+判据行被裸 `#` 截断、用例数表述与实测不符、独立复核段含邻居公网标识需脱敏、
+PRD 变更说明与规划 HTML 的包数未同步。按 `scope_freeze_rule`，
+新发现一律进 `deferred_items`，不回改本包。
+
+### 收口验收
+
+| 编号 | 判据 | 结果 |
+|---|---|---|
+| CO-01 | staging digest 与 HEAD 对应已记 | **PASS** |
+| CO-02 | 四控件目视结果逐项已记 | **PASS** |
+| CO-03 | 邻居三项前后均 200 且 RestartCount 未变 | **PASS** |
+| CO-04 | 全量闸绿、workflow 全绿、工作树空 | **PASS** |
+
+### 没做的那一件
+
+派发的收口链是「四件事 → Guardian 增量复核 → 合并 PR」。执行侧做到 Guardian 交接为止：
+Guardian 是与执行侧互斥的独立角色，自任或代跑都等于把审查做成自审。
+合并动作留在 Guardian 复核之后。

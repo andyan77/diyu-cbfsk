@@ -197,10 +197,48 @@ deferred_items:
         只有在两份台账合入同一文件的那一刻才会当场拦下合并。
         这是正确行为，但不等于「已被守住」——合并方必须在合并前人工重编号，
         不得等判据报红再处理。
+    # BR0-EP01 收口时由 Founder 点名的四项（2026-08-16）。四条都属交付物自身的口径缺陷，
+    # 不阻塞 BR0-EP01 合并，按 scope_freeze_rule 一律进 deferred，不回改本包。
+    - item: 'BR0-EP01 回执 A-01 判据行被裸 # 截断，且范围写「全仓」与证据面不符'
+      owner_package: BR1-EP01 收口
+    - item: BR0-EP01 回执 A-09「本地 23 用例全绿」与实测 18 passed / 5 skipped 不符
+      owner_package: BR1-EP01 收口
+    - item: BR0-EP01 回执 ecs_independent_verification 段含邻居公网 IP 与主机名，需脱敏
+      owner_package: BR1-EP01 收口
+    - item: PRD 变更说明与规划 HTML 仍写 27 包，需同步为 24
+      owner_package: BR1-EP01 收口
   already_in_prd_do_not_recreate:
     - Human Review 边界
     - 发布策略与人工审核在环（D-25）
     - Deliverable Superiority Test 协议（附录 I）
+
+# ---------------------------------------------------------------------------
+# 一之三之二、第一阶段包结构（Founder 2026-08-16 裁决）
+# ---------------------------------------------------------------------------
+# 下发文本是五行速记，其中「stage_1_packages: 4」与随后的四个条目在 YAML 里
+# 不能同时是标量和序列。这里拆成 count + packages 两个键落盘，逐字保留下发文本的
+# 每一个词；拆的是承载形式，不是内容。
+stage_1_packages:
+  count: 4
+  count_note: Founder 2026-08-16 裁决，由 7 收敛
+  packages:
+    - id: BR0-EP00
+      title: 启动准备
+      question: 我们准备好了吗
+      state: 已完成
+    - id: BR0-EP01
+      title: Runtime Skeleton
+      question: 系统能运行了吗
+      state: 本次收口
+    - id: BR1-EP00
+      title: 零代码穿刺
+      question: 用户愿买吗
+      constraint: 不得并入开发包
+    - id: BR1-EP01
+      title: 首条价值切片
+      question: 产品闭环成立吗
+      absorbs: 原 EP01~EP04
+      checkpoints_in_package: 4
 
 scope_freeze_rule:
   effective_from: FOUNDER_RULING_BR0_START_001_SIGNED

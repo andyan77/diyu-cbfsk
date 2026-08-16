@@ -8,9 +8,9 @@ baseline_commit: 8f327c354afb5dc6ec085e48dc6eaf28f4272a13
 candidate_commit: 77fc90ba754c247a35e2777308e9ff4f1f82b021
 candidate_commit_note: >-
   77fc90b 是本包最后一个改动运行时代码的提交（FIX-A）。
-  ECS 上实际部署的镜像标签仍是 ad375df6b0587ed3db5aadfe1bac373b1d41ccfa——
-  FIX-A 的执行合同明令「不连 ECS」，因此未重新部署，Staging 落后于仓库 HEAD。
-  见 known_issues KI-FIXA-01。
+  ECS Staging 已于 BR0-EP01 收口（Founder 2026-08-16 派发）重新部署到
+  d8710ae8d07e4773488ae3c25efa11a8f19c3da4，与仓库 HEAD 对应；详见 closeout 段。
+  收口前的落后状态与其风险见 known_issues KI-FIXA-01（已 RESOLVED，保留原文不抹时序）。
   本回执与交付报告落盘会再产生一个提交，其改动面仅限
   11_reports_and_receipts/BR0/BR0-EP01/ 与 governance/gates/report_number_binding_registry.v0.1.yaml，
   不含任何运行时字节。可用 `git diff --name-only ad375df..HEAD` 复算。
@@ -77,6 +77,14 @@ measurement:
   fixa_acceptance_criteria: 9
   fixa_frontend_source_changes_for_antd_v6: 0
   workflows_green: 8
+  # BR0-EP01 收口（Founder 2026-08-16）
+  closeout_neighbour_health_checks_before: 3
+  closeout_neighbour_health_checks_after: 3
+  closeout_neighbour_infra_containers_observed: 4
+  closeout_antd_controls_inspected: 4
+  closeout_deferred_items_registered: 4
+  closeout_stage_1_packages: 4
+  closeout_acceptance_criteria: 4
 
 # ---------------------------------------------------------------------------
 # 技术栈实测取值（PRD 附录 D 对照）
@@ -164,7 +172,11 @@ worker:
 ecs:
   trigger_status: TRIGGERED
   trigger_reason: 本地 Compose 闭环全部验收通过（EP01-01 / EP01-03 / EP01-04 均实跑 PASS）
-  deployed_image_tag: diyu-cbfsk-runtime:ad375df6b0587ed3db5aadfe1bac373b1d41ccfa
+  deployed_image_tag: diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4
+  deployed_image_tag_note: >-
+    首次部署的标签是 ad375df6b0587ed3db5aadfe1bac373b1d41ccfa；
+    BR0-EP01 收口重新部署后本字段改为当前实际在跑的标签。
+    本字段是「Staging 现在跑什么」的单一定义处，不并存两个取值；历史取值见 closeout。
   namespace:
     postgres_database: diyu_cbfsk
     db_roles: [cbfsk_migrator, cbfsk_app]
@@ -363,7 +375,12 @@ known_issues:
       前两项不影响运行时行为（tenant_of 本就 0 调用点，类型检查不进运行时），
       antd v6 影响的是前端构建产物，因此 Staging 上的工作台仍是 antd v5 构建。
       咬人的条件：任何人拿 Staging 当「HEAD 的样子」验收前端，看到的会是旧版 UI。
-    disposition: DEFERRED_REQUIRES_FOUNDER_DECISION
+    disposition: RESOLVED_AT_BR0_EP01_CLOSEOUT
+    resolution: >-
+      Founder 2026-08-16 在《BR1-EP00 零代码穿刺（含 BR0-EP01 收口）》第零节裁定重新部署。
+      Staging 现跑 d8710ae8d07e4773488ae3c25efa11a8f19c3da4，与仓库 HEAD 对应；
+      工作台已是 antd v6 构建并经目视取证。证据见 closeout 段。
+      statement 原文保留不改——它记的是收口之前的真实状态，抹掉它等于抹掉时序。
   - id: KI-FIXA-02
     statement: >-
       ruff ARG 对本仓现有代码零命中，原因之一是四处「接口要求存在、函数体不用」的参数
@@ -886,3 +903,126 @@ ecs_independent_verification:
 
     另外说明：SSH 需要网络与 ~/.ssh 读取，两者都被沙箱拦截，因此这些只读命令是在关闭沙箱的情况下执行的（可用 /sandbox 管理限制）。
 
+# ---------------------------------------------------------------------------
+# BR0-EP01 收口（Founder 2026-08-16 派发《BR1-EP00 零代码穿刺（含 BR0-EP01 收口）》第零节）
+# ---------------------------------------------------------------------------
+closeout:
+  dispatched_by: Founder
+  dispatched_at: '2026-08-16'
+  baseline_commit: d8710ae8d07e4773488ae3c25efa11a8f19c3da4
+  scope: 四项——重部署 Staging、目视 antd v6 四控件、branch_baseline 结构与四条 deferred、收口验收
+
+  staging_redeploy:
+    image_tag: diyu-cbfsk-runtime:d8710ae8d07e4773488ae3c25efa11a8f19c3da4
+    image_id: sha256:0f669934b597c3adf736080bfe911a8091a421708a733b770d4fecd1081b0e2a
+    corresponds_to_repo_head: true
+    corresponds_to_repo_head_evidence: >-
+      镜像标签就是 40 位 Git SHA，与本次收口的 baseline_commit 逐字相同；
+      api 与 worker 两个容器的 Config.Image 均为该标签，ImageID 同为上述 sha256。
+    previous_image_tag: diyu-cbfsk-runtime:ad375df6b0587ed3db5aadfe1bac373b1d41ccfa
+    previous_image_id: sha256:3bee0659e64d588bf2ade8f06ffec7a597d178da4f08b73cca6992edcd7aa23b
+    procedure: rsync 运行时源码子集 → docker build（标签用完整 SHA）→ deploy_cbfsk.sh
+    procedure_ref: docs/runtime/ecs_staging_runbook.md 第 2 节
+    branch_health_after: {healthz: 200, readyz: 200, app_root: 200}
+    app_port: 18001
+    bootstrap_skipped: true
+    bootstrap_skipped_reason: >-
+      /etc/diyu-cbfsk/bootstrap.env 首次部署后即 shred，本次部署前实测不存在；
+      deploy_cbfsk.sh 据此跳过 bootstrap，未重建初始账号、未生成新口令。
+    touched_outside_branch_namespace: false
+    touched_outside_branch_namespace_evidence: >-
+      本次只 rsync 到 /opt/diyu-cbfsk/source、只 build diyu-cbfsk-runtime 标签、
+      只 recreate diyu-cbfsk-api 与 diyu-cbfsk-worker。未对 diyu-infra-*、diyu_m5_4、
+      diyu-m5-4-materials、/etc/diyu 执行任何写操作；Nginx 全目录 grep cbfsk|18001 仍 0 命中，
+      sites-enabled 三个软链与 BR0-EP01 首次部署时一致。
+
+  neighbour_impact:
+    health_before: [200, 200, 200]
+    health_after: [200, 200, 200]
+    health_probe: 'http://127.0.0.1:18000 的 /health/ready、/health/live、/status'
+    infra_containers_restart_count_before: [0, 0, 0, 0]
+    infra_containers_restart_count_after: [0, 0, 0, 0]
+    infra_containers_started_at_unchanged: true
+    infra_containers_started_at_note: >-
+      四个共享基础设施容器的 StartedAt 在部署前后逐字相同（均为 2026-07-04T11:49Z 量级），
+      RestartCount 全程 0——它们没有被重启，也没有被 recreate。
+    neighbour_app_restart_count_before: 0
+    neighbour_app_restart_count_after: 0
+    neighbour_app_started_at_unchanged: true
+
+  antd_v6_visual_check:
+    method: Playwright 实跑打开页面 → 全页截图 → 人工目视
+    served_bundle_sha256: ce480b2404acee5261460c9fc458bf681dd76a07974f7e97277ab5218fd38961
+    served_bundle_antd_version_string: 6.6.0
+    served_bundle_antd_version_evidence: >-
+      Staging 实际吐出的 /app/assets/index.js 里含字符串 "6.6.0"（antd 自身导出的 version）。
+      ant-btn / ant-input / ant-table 这类类名在 bundle 里是运行时拼接的，
+      因此字面 grep 为 0 是预期，不作为反证。
+    local_build_bundle_sha256_identical: true
+    evidence_bridge: >-
+      Staging 直接目视覆盖 Input 与 Button（登录页，隧道只读打开）。
+      Table 与 Select 需登录后才出现，而 Staging 的初始口令已 shred、本窗口无凭据，
+      因此在本地栈完成——本地栈由同一 Commit、同一 lockfile 构建，
+      其 /app/assets/index.js 与 Staging 服务端返回的字节 sha256 完全相同（见上），
+      即两处目视的是同一份产物。证据等级如实记为：Input/Button = Staging 直接目视，
+      Table/Select = 同字节产物目视，非 Staging 直接目视。
+    controls:
+      input: OK — 账号/口令/租户标识/租户名称/品牌代号/品牌名称/任务标题均正常渲染；Input.Password 右侧显影图标在位
+      button: OK — primary 蓝底（登录/创建租户/创建品牌/创建任务）与 default 描边（登出）两种样式均正常
+      table: OK — 品牌表两列有数据行，任务表两列空态显示「暂无数据」占位图，表头背景与分隔线正常
+      select: OK — 租户选择器回显「（OWNER）」后缀，品牌选择器点击后下拉面板展开并列出选项
+    anomalies: >-
+      无功能异常。一处观感记录（不是缺陷）：Select 下拉展开后的截图捕获在淡入动画中途，
+      面板阴影尚未完全画出。Playwright 的可见性断言在同一时刻已通过，
+      再等 500ms 的 Staging 截图无此现象——是截图时机，不是渲染问题。
+
+  branch_baseline_amendment:
+    file: 01_contracts_and_schemas/branch_baseline.v0.1.yaml
+    added_keys: [stage_1_packages, 'deferred_items.items 追加 4 条']
+    stage_1_packages_count: 4
+    stage_1_packages_converged_from: 7
+    yaml_shape_note: >-
+      下发文本 `stage_1_packages: 4` 后面直接跟四个条目，在 YAML 里不能既是标量又是序列。
+      落盘拆成 count + packages 两个键，下发文本的每一个词逐字保留。
+      改的是承载形式，不是内容——这一点在文件内也写了注释。
+    deferred_owner: BR1-EP01 收口
+    deferred_items_added: 4
+
+  acceptance:
+    - id: CO-01
+      criterion: staging digest 与 HEAD 对应已记
+      result: PASS
+      evidence_ref: closeout_staging_digest
+    - id: CO-02
+      criterion: 四控件目视结果逐项已记
+      result: PASS
+      evidence_ref: closeout_antd_visual
+    - id: CO-03
+      criterion: 邻居三项前后均 200 且 RestartCount 未变
+      result: PASS
+      evidence_ref: closeout_neighbour
+    - id: CO-04
+      criterion: run_all_checks EXIT=0、8 workflow 全绿、工作树空
+      result: PASS
+      evidence_ref: closeout_full_verification
+
+  evidence_refs:
+    closeout_staging_digest: >-
+      closeout.staging_redeploy.image_tag 与 image_id；复算命令
+      `docker inspect -f '{{.Config.Image}} {{.Image}}' diyu-cbfsk-api`（ECS 上 root 执行）。
+    closeout_antd_visual: >-
+      closeout.antd_v6_visual_check；截图四张（Staging 登录页一张、本地栈登录页/表格/下拉三张）
+      留在执行窗口的临时目录，未入仓——截图是取证过程material，不是交付物。
+      可复算的部分是 served_bundle_sha256 与 bundle 内的 antd 版本字符串。
+    closeout_neighbour: closeout.neighbour_impact；部署脚本自身也在部署前后各探一次，输出见部署日志
+    closeout_full_verification: >-
+      本地 run_all_checks EXIT=0、compile_role_instructions --check drift=0、
+      check_prd_v1_2 --require-archive PASS、git status --porcelain 空；
+      GitHub 上收口提交的 8 个 check 全 pass。
+
+  not_done:
+    - item: 'PR #5 合并'   # 引号必须留：不加引号时 YAML 会把 `#5 合并` 当注释吃掉
+      why: >-
+        R5 规定「PR + Guardian」，本次派发的收口链是「四项 → Guardian 增量复核 → 合并」。
+        Guardian 是与执行侧互斥的独立角色，执行侧不得自任、不得代跑，
+        因此收口做到 Guardian 交接为止，合并动作留给 Guardian 复核之后。

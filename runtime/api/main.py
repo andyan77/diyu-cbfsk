@@ -42,11 +42,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     if STATIC_DIST_DIR.is_dir():
         app.mount(STATIC_MOUNT_PATH, StaticFiles(directory=STATIC_DIST_DIR, html=True), name="workbench")
 
-    @app.get("/", include_in_schema=False)
-    def index() -> RedirectResponse:
-        return RedirectResponse(url=f"{STATIC_MOUNT_PATH}/")
+    # 处理器定义在模块级、这里显式注册：写成 create_app 内的闭包时，
+    # 装饰器是它唯一的引用点，静态检查看不到它被用过（reportUnusedFunction）。
+    # 提到模块级顺带让它可以被单独调用与测试。
+    app.get("/", include_in_schema=False)(index)
 
     return app
+
+
+def index() -> RedirectResponse:
+    """根路径重定向到工作台挂载点。"""
+    return RedirectResponse(url=f"{STATIC_MOUNT_PATH}/")
 
 
 app = create_app()

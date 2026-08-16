@@ -25,7 +25,9 @@ class TaskEnvelope:
 
     task_name: str
     tenant_id: str
-    payload: dict[str, Any] = field(default_factory=dict)
+    # 工厂写 dict 会被推成 dict[Unknown, Unknown]——带参泛型别名本身可调用，
+    # dict[str, Any]() 等价于 {}，但类型是完整的。
+    payload: dict[str, Any] = field(default_factory=dict[str, Any])
     task_id: str = field(default_factory=new_id)
     enqueued_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 

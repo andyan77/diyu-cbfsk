@@ -67,8 +67,10 @@ jobs:
       - name: Lint (ruff)
         run: uv run ruff check .
 
-      - name: Type check (mypy strict)
-        run: uv run mypy
+      - name: Type check (Pyright strict)
+        # PRD v0.3.2 技术栈章节点名的类型检查器就是 Pyright。
+        # 失败即红，与被它取代的那一步保持同样的门禁强度。
+        run: uv run pyright
 
       - name: Migration drill —— upgrade → downgrade → upgrade
         run: |

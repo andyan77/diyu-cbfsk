@@ -25,7 +25,9 @@ def readyz(response: Response) -> dict[str, str]:
     try:
         with get_engine().connect() as connection:
             connection.execute(text("SELECT 1"))
-    except Exception as exc:  # noqa: BLE001 —— 探针必须吞掉细节，不把连接串回给调用方
+    # 探针必须吞掉细节，不把连接串回给调用方。
+    # 这里原来挂了一条抑制指令，但它压的规则根本不在 select 里——是条死指令，删掉（EQ-4）。
+    except Exception as exc:
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
         return {"status": "unavailable", "reason": type(exc).__name__}
     return {"status": "ready"}

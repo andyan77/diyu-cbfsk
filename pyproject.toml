@@ -17,9 +17,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3",
-    "httpx>=0.28",
+    # starlette 1.6 的 TestClient 明确要求 httpx2；配 httpx1 时它自己也会发弃用警告，
+    # 且 client.get 的类型整体退化为 Unknown，strict 档下直接报错。
+    "httpx2>=2.10",
     "ruff>=0.9",
-    "mypy>=1.14",
+    # PRD v0.3.2 技术栈章节两处点名 Ruff、Pyright、pre-commit，未提任何其他类型检查器。
+    # BR0-EP01 首版选错了工具，本次回归 PRD 指定的那一个。
+    "pyright>=1.1.390",
+    "pre-commit>=4.0",
 ]
 
 [build-system]
@@ -38,7 +43,7 @@ src = ["runtime", "tests"]
 include = ["runtime/**/*.py", "tests/**/*.py", "alembic/**/*.py", "pyproject.toml"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM"]
+select = ["E", "F", "I", "UP", "B", "SIM", "ARG"]
 
 [tool.ruff.lint.isort]
 # 显式声明本仓包名。不声明的话 ruff 靠 src 与已安装包推断首party，
@@ -46,16 +51,16 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 # 已复现：本地 all checks passed，CI 判 I001。
 known-first-party = ["runtime", "tests"]
 
-[tool.mypy]
-python_version = "3.13"
-strict = true
-files = ["runtime", "tests"]
-plugins = []
-namespace_packages = true
-
-[[tool.mypy.overrides]]
-module = ["alembic.*"]
-ignore_missing_imports = true
+[tool.pyright]
+# 与被取代的那套 strict 配置等价严格度。降 typeCheckingMode 等于把这道闸关掉——
+# 报错要逐个真修，不许改档位、不许批量忽略。
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+include = ["runtime", "tests"]
+exclude = ["**/__pycache__", ".venv", "web", "e2e", "ci", "工具", "alembic/versions"]
+venvPath = "."
+venv = ".venv"
+reportMissingTypeStubs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

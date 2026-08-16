@@ -14,7 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from runtime.db import session_scope
-from runtime.domain.models import Tenant, TenantMembership, User
+from runtime.domain.models import TenantMembership, User
 
 SESSION_USER_KEY = "user_id"
 SESSION_TENANT_KEY = "active_tenant_id"
@@ -59,11 +59,3 @@ def current_tenant_id(request: Request, db: DbSession, user: CurrentUser) -> str
 
 
 TenantId = Annotated[str, Depends(current_tenant_id)]
-
-
-def tenant_of(db: Session, tenant_id: str, user_id: str) -> Tenant:
-    tenant = db.get(Tenant, tenant_id)
-    if tenant is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="TENANT_NOT_FOUND")
-    del user_id
-    return tenant

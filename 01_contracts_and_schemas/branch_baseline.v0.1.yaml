@@ -251,6 +251,39 @@ permanent_governance_rules:
         README-MOD-14 登记。依本条，这些联动登记项不必逐次裁决，但已在交付报告中列明。
 
 # ---------------------------------------------------------------------------
+# 一之六、现役门禁改动记录（GR-GATE-01 要求的独立治理动作）
+# ---------------------------------------------------------------------------
+active_gate_change_record:
+  rule_invoked: GR-GATE-01
+  rule_text_at: permanent_governance_rules.rules[GR-GATE-01]
+  changes:
+    - gate: 工具/check_prd_v1_2.py
+      package: BR0-M1-PRE（合并前修复，非 BR0-EP00 范围内）
+      founder_authorization: in_session_dispatch，2026-08-15，Founder 选定「改判据，改读 change_map」
+      is_removal_or_downgrade: false
+      what_changed: >-
+        README lifecycle 断言此前同时要求 README 里出现字面串 prd_v1_2_effective: true。
+        该字段的定义处是 PRD_v1.2_change_map.yaml 的 resulting_state，lifecycle_state()
+        本就从那里现读——README 那一份是同一事实的第二个定义处（EQ-1）。
+        EP00-02 依裁决 article_3_readme 删掉 README 状态块后，判据仍在量已经搬走的位置。
+        现改为：状态位在真源上断言，README 只留它自己承载的标记（SIGNED / 归档目录 / 签署包编号）。
+      why_not_a_downgrade: >-
+        判据总数 62 → 63，不是减少。新增的那条读**未经强转的原值**并要求它是货真价实的布尔：
+        bool("false") 是 True，字段若被写成字符串，整条生命周期判定会静默翻面——
+        这个洞在改造前不存在断言。三段分支口径一字未动。
+      reverse_injection_evidence:
+        - 把真源字段改成字符串 "false" → FAIL「prd_v1_2_effective is a real boolean at its single source」→ 恢复后 PASS
+        - 把 README 的 归档_v1.1/ 标记改掉 → FAIL「README lifecycle markers: missing=['归档_v1.1/']」→ 恢复后 PASS
+    - gate: .github/workflows/secret-and-hidden-boundary.yml
+      package: BR0-M1-PRE
+      is_removal_or_downgrade: false
+      what_changed: 检测器一字未改，扫描面一寸未缩
+      what_actually_changed: >-
+        改的是交付报告的措辞。报告里描述检测器能力的那句话把「STORE-A」与「凭证」连写，
+        被检测器自己命中。选择改措辞而不是把报告加进排除面——排除面一扩，
+        下次真泄露落在被排除路径里就检不出来了。
+
+# ---------------------------------------------------------------------------
 # 二、基线
 # ---------------------------------------------------------------------------
 baseline_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
@@ -479,7 +512,7 @@ br0_ep01_requirements:
     jit_compiled_from_ep00_candidate_commit: true
 
   why_pytest_is_mandatory: >-
-    本包交付后 main 上共 24 个确定性判据，全部读 YAML / DOCX / Markdown，
+    本包交付后 main 上共 25 个确定性判据，全部读 YAML / DOCX / Markdown，
     对运行时代码结构性失明。不加 pytest 这一条，BR0 之后「CI 全绿」关于功能正确性一个字也没说。
   migration_detail:
     scope: v0.3.2 D-TENANT-DAY1 点名的客户所属对象

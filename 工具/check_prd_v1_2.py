@@ -99,16 +99,20 @@ def check_m0_lists(checker: Checker) -> None:
     checker.check(not errors, "M0 fourteen items (delegated to ci/checkers)", "; ".join(errors))
 
 
-def lifecycle_state() -> tuple[bool, bool]:
-    """(v1.2 已生效, 活基线已切换到 v1.2) —— 单一真源：change map 的 resulting_state。
+def lifecycle_state() -> tuple[bool, bool, object]:
+    """(v1.2 已生效, 活基线已切换到 v1.2, prd_v1_2_effective 原值) —— 单一真源：change map 的 resulting_state。
 
     此前用 --require-archive 这个 CLI 开关表达同一件事，等于把生命周期状态写成两处；
     现在只从状态派生，开关退化为「断言状态确实已到该阶段」。
+
+    第三个返回值是**未经强转的原值**。调用方要能分辨 True 与 "false"：bool("false") 是 True，
+    只看强转结果的话，字段被写成字符串会让整条生命周期判定静默翻面。真源只读一次（EQ-1）。
     """
     import yaml
 
     state = yaml.safe_load(CHANGE_MAP.read_text(encoding="utf-8"))["resulting_state"]
-    return bool(state["prd_v1_2_effective"]), state["current_active_baseline"] == "PRD_v1.2"
+    raw_effective = state.get("prd_v1_2_effective", "<missing>")
+    return bool(state["prd_v1_2_effective"]), state["current_active_baseline"] == "PRD_v1.2", raw_effective
 
 
 def main() -> None:
@@ -120,7 +124,7 @@ def main() -> None:
     )
     args = parser.parse_args()
     checker = Checker()
-    effective, switched = lifecycle_state()
+    effective, switched, raw_effective = lifecycle_state()
 
     for path in (PRD, M0, RECEIPT, README, CHANGE_MAP):
         checker.check(path.exists(), f"file exists: {path.name}")
@@ -196,14 +200,31 @@ def main() -> None:
     checker.contains_all(m0_text, ["DIYU-CBFSK-EXEC-REQ-M0-003", "PRD v1.2", "M0不得实际接收", "M0不得运行多模态", "M0不得建立搭配师人设记忆生产库", "M0不得启用自动发布", "人设与语感闭环", "多模态事实边界", "扩展兼容"], "M0 v1.2 control and Guardian additions")
     checker.contains_all(receipt_text, ["DIYU-CBFSK-PRD-V1.2-VERIFY-RECEIPT-001", "D-17", "D-26", "D-28", "D-29", "S1—S8", "READY_FOR_GUARDIAN", "m0_authorized: false", "production_servable: false", "guardian_review_completed: false", "chatgpt_remote_review_completed: false"], "verification receipt identifiers and final state")
 
-    readme_state_tokens = (
-        ["SIGNED", "prd_v1_2_effective: true", "归档_v1.1/", "DIYU-CBFSK-FOUNDER-SIGNOFF-001"]
-        if switched
-        else ["PENDING_FOUNDER_SIGNATURE", "prd_v1_2_effective: true", "DIYU-CBFSK-FOUNDER-SIGNOFF-001"]
-        if effective
-        else ["PENDING_FOUNDER_SIGNATURE", "READY_FOR_GUARDIAN", "prd_v1_2_effective: false", "目前没有 `归档_v1.1/`"]
+    # BR0-M1-PRE（Founder 单独授权，依 GR-GATE-01 记为独立治理动作，非其他任务的副作用）：
+    # prd_v1_2_effective 的定义处是 PRD_v1.2_change_map.yaml 的 resulting_state，
+    # lifecycle_state() 已从那里现读。此前本条同时要求 README 里出现同名字面串——
+    # 同一事实两个定义处（EQ-1）。BR0-EP00 EP00-02 依裁决 article_3_readme 删掉 README
+    # 状态块后，判据仍在量已经搬走的位置，于是红。
+    #
+    # 改的是量在哪里，不是量什么：README 只留它自己承载的标记（SIGNED / 归档目录 /
+    # 签署包编号），状态位本身回到真源上断言。三段分支与既有口径一字未动。
+    #
+    # 真源侧补一条防假绿断言：lifecycle_state() 对该字段做了 bool() 强转，
+    # 字段若变成字符串 "false" 会被静默转成 True，整条生命周期判定随之翻面。
+    # 因此这里读原值，要求它是货真价实的布尔，不是「能转成布尔的东西」。
+    checker.check(
+        raw_effective is True or raw_effective is False,
+        "prd_v1_2_effective is a real boolean at its single source",
+        f"PRD_v1.2_change_map.yaml resulting_state.prd_v1_2_effective={raw_effective!r}",
     )
-    checker.contains_all(readme_text, readme_state_tokens, "README lifecycle state block")
+    readme_state_tokens = (
+        ["SIGNED", "归档_v1.1/", "DIYU-CBFSK-FOUNDER-SIGNOFF-001"]
+        if switched
+        else ["PENDING_FOUNDER_SIGNATURE", "DIYU-CBFSK-FOUNDER-SIGNOFF-001"]
+        if effective
+        else ["PENDING_FOUNDER_SIGNATURE", "READY_FOR_GUARDIAN", "目前没有 `归档_v1.1/`"]
+    )
+    checker.contains_all(readme_text, readme_state_tokens, "README lifecycle markers")
     checker.contains_all(readme_text, ["当前活基线", "PRD v1.2", "DIYU-CBFSK-EXEC-REQ-M0-003", "Founder 真实品牌注入", "Codex 夹具合成回退", "多模态商品理解", "人设连续性", "自媒体原生语感", "VisualMerchandisingExtensionPort", "RealtimeSalesAssistExtensionPort", "five_category_activation_readiness=100%", "合理多解原则", "LLM-off 不变性"], "README current-baseline index")
     checker.contains_all(
         prd_text,

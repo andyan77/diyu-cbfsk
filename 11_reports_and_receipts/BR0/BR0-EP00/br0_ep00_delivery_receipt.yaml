@@ -272,6 +272,21 @@ known_issues:
     disposition: RESOLVED
     resolved_by: EP00-FIX 第五节 —— Founder 已确认六行定义，落 execution/README.md，模板同步取真值
     residual: 无；该占位符全仓归零（execution/README.md 为语义单一定义处）
+  - id: KI-07
+    statement: >-
+      AC-02 的判据写的是「README 改动后 ci/run_all_checks.py EXIT=0」。项目 CLAUDE.md
+      的「校验」一节列了三条命令，run_all_checks.py 只是其中一条；另两条
+      （compile_role_instructions.py --check、工具/check_prd_v1_2.py）不在它的 CHECKERS 里，
+      也没有任何本地入口强制同跑。结果是：EP00-02 删 README 状态块后
+      工具/check_prd_v1_2.py 在 GitHub Actions 上持续判红，而 AC-02 一直绿。
+      同期 boundary 闸也因交付报告自匹配持续判红。两处均已在 BR0-M1-PRE 修复，
+      但**覆盖面缺口本身没修**：仍然没有一个本地命令能一次跑完三条闸。
+      执行侧的漏检同样如实记录——全程只跑了三条里的前两条，也没查过 PR 的 Actions 状态。
+    disposition: DEFERRED_REQUIRES_FOUNDER_DECISION
+    owner_package: BR0-EP01（最小 CI 建设时一并收口）
+    candidate_fix: >-
+      让 ci/run_all_checks.py 末尾串跑另两条闸，或新增一个 ci/run_gates.py 统一入口。
+      两条路都改动现役门禁的运行方式，依 GR-GATE-01 须单独授权，本包未做。
   - id: KI-06
     statement: >-
       FIX2-09 的「全仓无符号占位符残留」扫描命中一处未被消除的值：

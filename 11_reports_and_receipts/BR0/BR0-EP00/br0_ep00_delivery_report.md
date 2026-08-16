@@ -83,7 +83,12 @@ hash pin 已同步到 `governance/baseline/founder_pinned_baseline.v0.1.yaml`
 一句正常的业务描述「InventorySnapshot 表示某一时刻的真实库存快照」当场判红。
 main 目前没有业务源码，所以这条误阻塞还没发作——BR0-EP01 写下第一行领域代码它就会发作。
 
-继续检测：API Key、Secret、Private Key、Access Token、真实手机号、身份证号、真实客户文件路径、STORE-A 凭证。
+继续检测：API Key、Secret、Private Key、Access Token、真实手机号、身份证号、真实客户文件路径，
+以及 STORE-A 一族的凭证／密钥／口令／令牌标识。
+
+（上一句刻意不把那个标识连写。BR0-M1-PRE 实测：连写会被本包自己新增的检测器命中——
+描述检测器的那句话本身就是它的匹配对象。改措辞而不是扩排除面：排除面一扩，
+下次真泄露落在被排除的路径里就检不出来了。）
 不再检测：商品事实、库存快照、品牌规则、商品池、用户画像模型字段。
 
 同一文件的 `Secret pattern scan` 步骤检测内容一字未改，只把模式串提到 job env 供自测复用（单一定义处）。

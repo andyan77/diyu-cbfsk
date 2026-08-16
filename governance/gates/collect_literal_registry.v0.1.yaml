@@ -29,6 +29,9 @@ sweep:
   evidence_level: runtime_verified
   scanned_checkers_at_sweep: 24
   reswept_at_package: EP00-FIX（R-03 改造 check_workspace_attestation.collect() 后重扫，仍为 0 处）
+  reswept_at_package_2: >-
+    EP00-FIX-2（check_sequential_registration 迁入后重扫，扫描面 24 → 25 个 checker，仍为 0 处）。
+    新迁判据的 collect() 全部由 founder_pinned_baseline 现读并逐条 git show 复算，无字面量事实源。
   sites_found_before_repair: 8
   sites_remaining_after_repair: 0
   disposition_rule: >-

@@ -1,0 +1,33 @@
+fixture_id: N201-landed-commit-not-resolved
+description: 登记项的 landed_in_commit 写成 M1_EP03_CLOSEOUT_COMMIT 这类符号名——解析不到唯一对象（NB-M2-04）。
+checker: check_sequential_registration
+expected: FAIL
+payload:
+  registries:
+  - registry: README.md.authorized_modification_history
+    numbers:
+    - 2
+    - 1
+    prefixes:
+    - README-MOD
+    - README-MOD
+    malformed_ids: []
+    entries:
+    - change_id: README-MOD-02
+      is_newest: true
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      landed_commit_blob_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+    - change_id: README-MOD-01
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: M1_EP03_CLOSEOUT_COMMIT
+      landed_commit_is_full_hash: false
+      tracked_path: README.md
+      binary_sha256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      landed_commit_blob_sha256: null

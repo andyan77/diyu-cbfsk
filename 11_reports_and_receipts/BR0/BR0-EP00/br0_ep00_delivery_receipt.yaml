@@ -6,13 +6,15 @@ produced_from_template_note: 本回执是该模板的第一次真实使用——
 package_id: BR0-EP00
 package_title: 启动准备包（Baseline Alignment & Runtime Bootstrap Readiness）
 baseline_commit: a5564e1a4455b6521ae3c5e0b15385052c86c867
-candidate_commit: 91173113584978dc80b16975b9f5b5efab368029
+candidate_commit: null
 candidate_branch: br0/ep00-bootstrap-readiness
 candidate_commit_note: >-
-  首次落盘时本回执与被它描述的交付物同处一个提交，无法自指，故当时写作
-  BR0_EP00_LANDING_COMMIT。该提交已成为过去，此处回填为确定哈希——回填由
-  git rev-parse 可复算，不是新的声称。候选落在独立分支，未合并 main：
-  本包触及 CI、角色与状态，属 L3，合并须 Founder 批准。
+  本回执与它描述的交付物始终同处一个提交，无法自指。此处留空，不写符号名、
+  也不回填某一次的确定哈希——回填过一次（eddbcd1 写入 9117311…），随后本包又新增
+  两个提交，那个值当场过期。凡是每次交付都会变的值，写死就等于制造下一次不一致。
+  真值由 git 现算：本分支 `git rev-parse HEAD`，或 PR #4 的 head。
+  候选落在独立分支，未合并 main：本包触及 CI、角色与状态，属 L3，合并须 Founder 批准。
+candidate_commit_resolution: GIT_REV_PARSE_HEAD_AT_REVIEW_TIME
 
 authority:
   founder_approval_ref: FOUNDER-SESSION-AUTHORIZATION-2026-08-15-BR0-EP00
@@ -66,11 +68,11 @@ derived_field_provenance:
 # --- 实测值：报告里的每一个计数数字都从这里读，不由人手抄 --------------------
 measurement:
   checkers_before: 21
-  checkers_after: 24
-  checkers_backported: 3
-  fixtures_total_after: 156
-  fixtures_added: 24
-  fixtures_added_note: 迁入 21 份负例 ＋ 新写 P44 / P45 两份正例（补齐两个迁入判据的正向侧）＋ EP00-FIX 新写 N110 负例（证明工作区佐证改扫目录后逐份在读）；P21 因下限由 3 升 4 改名并补第四批次，不计入新增
+  checkers_after: 25
+  checkers_backported: 4
+  fixtures_total_after: 161
+  fixtures_added: 29
+  fixtures_added_note: 迁入 21 份负例 ＋ 新写 P44 / P45 两份正例（补齐两个迁入判据的正向侧）＋ EP00-FIX 新写 N110 负例（证明工作区佐证改扫目录后逐份在读）＋ EP00-FIX-2 迁入 N201—N204 四份负例、新写 P46 正例（正例载荷取自 collect() 实跑的真实 pinned baseline 快照，不造空数据）；P21 因下限由 3 升 4 改名并补第四批次，不计入新增
   schema_fixtures: 36
   literal_sites_found: 8
   literal_sites_remaining: 0
@@ -82,6 +84,10 @@ measurement:
   security_negative_fixtures: 9
   security_positive_fixtures: 6
   m2_checker_delta_total: 28
+  symbolic_landed_commits_repaired: 11
+  symbolic_placeholders_remaining: 0
+  permanent_governance_rules_landed: 2
+  ep00_fix2_self_repairs: 3
   m2_adr_total: 6
   minimum_guarded_runs: 4
   guarded_execution_batches: 4
@@ -266,6 +272,27 @@ known_issues:
     disposition: RESOLVED
     resolved_by: EP00-FIX 第五节 —— Founder 已确认六行定义，落 execution/README.md，模板同步取真值
     residual: 无；该占位符全仓归零（execution/README.md 为语义单一定义处）
+  - id: KI-06
+    statement: >-
+      FIX2-09 的「全仓无符号占位符残留」扫描命中一处未被消除的值：
+      governance/receipts/guardian_handoff_package.yaml 的
+      candidate_commit: RECORDED_IN_CANDIDATE_FREEZE_RECEIPT。
+      判定它不是占位符——它是指向另一份记录的指针，而该记录
+      （candidate_freeze_receipt.yaml candidate_commit）确实存放 40 位哈希
+      9335180f9e1fd3d480f9b39e0a23597ee52079c7，同文件 review_target_note 还明写
+      「禁止以最新版代指」。与 M1_EP03_CLOSEOUT_COMMIT 那类「假装在指某个提交、实则解析不到」
+      不同类。断言门对该值单独放行，但放行是显式的：当场复算指针目标必须是 40 位哈希，
+      指不到即判失败。若 Founder 认为指针也应就地展开为哈希，属另一包的改动面，本包未做。
+    disposition: DECLARED_EXCEPTION_NOT_SILENT
+  - id: KI-05
+    statement: >-
+      README-MOD 编号在 br0/ep00-bootstrap-readiness 与 candidate/m2 上并行分配，
+      MOD-12、MOD-13 两个号被双方各自占用。check_sequential_registration 守的是
+      「同一台账内唯一且连续」，两条分支各自单看均合法，因此它不会提前预警，
+      只在两份台账合入同一文件的那一刻当场拦下合并。这是正确行为，
+      但不等于「已被守住」——合并方必须在合并前人工重编号。
+    disposition: DEFERRED_TO_MERGE_OF_CANDIDATE_M2
+    owner_package: 合并 candidate/m2 的那一包
   - id: KI-04
     statement: >-
       check_compliance_ledger 的清单下限现读合规合同，但仍经 payload 传入，夹具理论上可把
@@ -281,6 +308,8 @@ delivery_channel:
   merge_authority: Founder（本包属 L3：触及 CI、角色可用性与状态位）
 
 next_action: >-
+  0) 【已完成】EP00-FIX-2 收口补丁 v2：check_sequential_registration 提前迁入（裁决①）、
+  GR-GATE-01 / GR-LINKED-01 两条永久规则文本迁入 main（裁决②）、三件自修；
   1) 【已完成】Founder 签《BR0 启动裁决书 v0.1》（A1—A5）→ COND-03 关闭、范围冻结生效；
   2) Guardian 审 PR #4 → Founder 批准后合并 main（裁决 article_6 的前置第二项，当前 NOT_MET）；
   3) 基于合并后的 candidate_commit JIT 编译 BR0-EP01 Runtime Skeleton。

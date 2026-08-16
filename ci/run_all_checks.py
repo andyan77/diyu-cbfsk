@@ -40,6 +40,8 @@ CHECKERS = [
     "check_report_number_traceability",
     "check_founder_confirmation_binding",
     "check_collect_derivation_discipline",
+    # BR0-EP00 EP00-FIX-2 裁决①：check_sequential_registration 由 B 类重分类为 A 类后迁入。
+    "check_sequential_registration",
 ]
 
 

@@ -107,7 +107,7 @@ BR0-EP00 启动准备包已落盘：基线与 M2 资产边界见 [`01_contracts_
 - `工具/check_prd_v1_2.py`：版本、编号、对象数量、FR 追溯、M0 十四项、M11/M12、D-28/D-29 锚点、废弃措辞与 README／归档一致性。
 - `工具/audit_docx_package.py`：DOCX ZIP CRC、必需 OOXML 部件、XML 可解析性与页眉版本。
 - `ci/compile_role_instructions.py`：从规范源确定性生成三份指令投影，`--check` 用于漂移检测。
-- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配、报告数字溯源、Founder 确认绑定、collect 派生纪律共 24 个确定性 Checker。后三个由 BR0-EP00 自 `candidate/m2` 选择性迁入，各自的登记册在 `governance/gates/`。
+- `ci/checkers/`：UUID、基线哈希、DOCX 规范化哈希、活真源唯一性、角色模型（含红线清单指纹）、工作区佐证、任务分级、条件台账、合规台账、隐藏边界、外部评审声明、M0 十四项、项目状态、工程量口径、投影一致性、裁决覆盖、M0 四字段完备、M0 零接触、M0 清单闭环、M1 对象覆盖、M1 品类适配、报告数字溯源、Founder 确认绑定、collect 派生纪律、顺序登记编号共 25 个确定性 Checker。后四个由 BR0-EP00 自 `candidate/m2` 选择性迁入——前三个各自的登记册在 `governance/gates/`；顺序登记编号守的是 `governance/baseline/founder_pinned_baseline.v0.1.yaml` 里 `authorized_modification_history` 的编号序列与落地提交，无独立登记册。
 - `ci/run_fixtures.py`：判据层 fixture——用字面量 payload 驱动每个 Checker 的 `validate()`；fixture 从不调用 `collect()`，因此被测代码不能自己造出「通过」的证据。
 - `ci/run_schema_fixtures.py`：结构层 fixture——用字面量实例驱动 M1 对象 JSON Schema 本身；每份 Schema 正负各一，只证明「对的能过」不算验证过。
 - `ci/run_all_checks.py`：一次运行全部 Checker 并逐项打印 PASS/FAIL。

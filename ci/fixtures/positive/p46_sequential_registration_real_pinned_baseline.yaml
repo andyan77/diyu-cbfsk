@@ -1,0 +1,169 @@
+fixture_id: P46-sequential-registration-real-pinned-baseline
+description: main 侧 founder_pinned_baseline.v0.1.yaml 的 README-MOD 登记册真实快照（EP00-FIX-2 修复后，取自 collect()
+  实跑，基线提交 61d929db0ec855f8e3b661db6fe29a7d1580c372 之上的工作区状态）。14 条编号唯一且连续、最新一条排在最前；13 条 landed_in_commit
+  为 40 位哈希且该提交下的 README 哈希与登记值相符，最新一条 README-MOD-14 自指、留空并声明 self_reference_limitation。正例不造空数据——空登记册由
+  n204 单独行使。
+checker: check_sequential_registration
+expected: PASS
+payload:
+  registries:
+  - registry: governance/baseline/founder_pinned_baseline.v0.1.yaml:README.md.authorized_modification_history
+    numbers:
+    - 14
+    - 13
+    - 12
+    - 11
+    - 10
+    - 9
+    - 8
+    - 7
+    - 6
+    - 5
+    - 1
+    - 4
+    - 3
+    - 2
+    prefixes:
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    - README-MOD
+    malformed_ids: []
+    entries:
+    - change_id: README-MOD-14
+      is_newest: true
+      self_referential: true
+      self_reference_limitation: 本条与它描述的 README 改动同处一个提交，落盘时该提交尚不存在，无法自指。 landed_in_commit 留空而不写符号名——符号名与「最新版」同性质，解析不到唯一对象。
+        真值由 git 现算：按本条 binary_sha256 回扫 `git rev-list --reverse --all -- README.md`，取首个命中提交。
+      landed_in_commit: null
+      landed_commit_is_full_hash: false
+      tracked_path: README.md
+      binary_sha256: 825c03e0ef3b527f5ebcab23526d3e0efb6b331242f3b2468df7f58b0889b77d
+      landed_commit_blob_sha256: null
+    - change_id: README-MOD-13
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 61d929db0ec855f8e3b661db6fe29a7d1580c372
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: f4f62d4125dd99320f8d04af0183e80f6df846679c926ebc1c7cccf5f636444b
+      landed_commit_blob_sha256: f4f62d4125dd99320f8d04af0183e80f6df846679c926ebc1c7cccf5f636444b
+    - change_id: README-MOD-12
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 91173113584978dc80b16975b9f5b5efab368029
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
+      landed_commit_blob_sha256: 59088f7c40373b51ff136bee609e67ee163c15b1e166a40a61b8f714241ed7db
+    - change_id: README-MOD-11
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: c3f6ad372306cc12f139cf38624e9a5cea2cf329
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986
+      landed_commit_blob_sha256: 79bba20d7f1b2b841f5c9d0986da9fcca1f0042ee68a9214d00747c9b5962986
+    - change_id: README-MOD-10
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 37f636c73dac1be7457dfc951984b43532056804
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d
+      landed_commit_blob_sha256: 5215754e7c04c8ea7bbc9d9e7a8cc8023b2e7decb099fd3ddd3c30434ebc0d1d
+    - change_id: README-MOD-09
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 6499431c66f7bf4a234bd830ee4c810e1ac78694
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
+      landed_commit_blob_sha256: ac42056e6bbf4f758c049eb26dc3c2db8219a0902e2eb48698ff942b1e321b22
+    - change_id: README-MOD-08
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 38d13b7dc451ee2372aee8ca3ca2d49c23866c33
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 81eaf7a76c35b050b12ad26b53f07940d38af9ae075eff52314234b9b5abe0bc
+      landed_commit_blob_sha256: 81eaf7a76c35b050b12ad26b53f07940d38af9ae075eff52314234b9b5abe0bc
+    - change_id: README-MOD-07
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 8eaf5f25987d787a546096b6a60a4e6a6b5a30f4
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 2ab1981c69e90041e199dc545697ab5ca521e639d8ee1b35bdc43d735dc3fc3a
+      landed_commit_blob_sha256: 2ab1981c69e90041e199dc545697ab5ca521e639d8ee1b35bdc43d735dc3fc3a
+    - change_id: README-MOD-06
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 76a1394ee0ba1fae45fac6225167e431c2cd34d7
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 752aa5f8fe54eb11a3673059b0964c108b81db823b64020761b7cd6cd336bdb9
+      landed_commit_blob_sha256: 752aa5f8fe54eb11a3673059b0964c108b81db823b64020761b7cd6cd336bdb9
+    - change_id: README-MOD-05
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 334e69bfdeaabd731a5184fa3958e479d029f69f
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 3d3c4cc82ed64ea7e5bd5dded5920a3a3e8deca6419276b0bcbd61f6f5e98f5a
+      landed_commit_blob_sha256: 3d3c4cc82ed64ea7e5bd5dded5920a3a3e8deca6419276b0bcbd61f6f5e98f5a
+    - change_id: README-MOD-01
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: a235b558095b8f85ebc921aab853434dc406761d
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
+      landed_commit_blob_sha256: 60942ea4346bd0893583aff202127192710e02cfea9f2cc765d4cdadec138a31
+    - change_id: README-MOD-04
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 2780e65dc32b20576635b887bd7634663afe531b
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: bb99823b6ac6f17c7c88784a98ed3ef34acd7afb99f8af795d5c6382dd6ede65
+      landed_commit_blob_sha256: bb99823b6ac6f17c7c88784a98ed3ef34acd7afb99f8af795d5c6382dd6ede65
+    - change_id: README-MOD-03
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: 1153fc703e381be70d5bbd7d31790644a72cf78a
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8
+      landed_commit_blob_sha256: 7bf5bd50a0bbae0f00a00052f4a41119bd620dc9ad7b445e25a203fea6b510a8
+    - change_id: README-MOD-02
+      is_newest: false
+      self_referential: false
+      self_reference_limitation: null
+      landed_in_commit: dcd64842fb9c69d3ee5eb3042e0fda924f5605eb
+      landed_commit_is_full_hash: true
+      tracked_path: README.md
+      binary_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503
+      landed_commit_blob_sha256: 192d277a3fc7e25a7e29f215bdad316e260e928d2ec05ccd8a3e4d89fe962503

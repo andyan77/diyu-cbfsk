@@ -34,8 +34,8 @@ candidate/m2 只用 `git show candidate/m2:<path>` 读取，未 merge、未 cher
 
 | 类 | 数量 | 处置 |
 |---|---|---|
-| A 类 | 3 | 本包迁入并接入 CI |
-| B 类 | 7 | BR2 收口时逐个重评 |
+| A 类 | 4 | 本包迁入并接入 CI |
+| B 类 | 6 | BR2 收口时逐个重评 |
 | C 类 | 18 | 不迁入（M2 评测基座自身对象） |
 
 **M2 ADR 共 6 份，只分类不搬运：**
@@ -97,13 +97,14 @@ main 目前没有业务源码，所以这条误阻塞还没发作——BR0-EP01 
 
 ## 五、治理资产迁移
 
-只迁三个，且各自把依赖树补齐——它们在 main 上原本一个都跑不起来。
+共迁 4 个，且各自把依赖树补齐——前三个在 main 上原本一个都跑不起来。
 
 | 判据 | 补齐的依赖 |
 |---|---|
 | `check_report_number_traceability` | `ci/tools/render_report.py`（main 无 `ci/tools/` 目录）＋ 报告编号绑定登记册 |
 | `check_founder_confirmation_binding` | `_common.clause_resolves` ＋ Founder 确认绑定登记册 |
 | `check_collect_derivation_discipline` | 字面量登记册（标准库 `ast`，无其他依赖） |
+| `check_sequential_registration`（EP00-FIX-2 追加） | 无——依赖的五个 `_common` 函数 main 上全有，`_common.py` 零改动；被守对象是既有 `founder_pinned_baseline` 台账，无需新建登记册 |
 
 `_common.py` 只补了 `clause_resolves`。m2 上另有 `extract_ruling_id` 与 `founder_ruling_evidence`，
 逐个确认后**没有一个**被 A 类判据使用——迁进来就是死代码（EQ-4），因此不迁。
@@ -126,9 +127,81 @@ main 目前没有业务源码，所以这条误阻塞还没发作——BR0-EP01 
 签署回执或基线 Manifest 的具名条款——条款路径现场解析，凭空写的路径解析不出来。
 **未新建任何 Founder Decision 格式**，绑定一律指向既有 `governance/founder_rulings/*.yaml` 与回执。
 
-判据总数 21 → 24；
-夹具 156 份全部按声明行为，结构层夹具
+判据总数 21 → 25；
+夹具 161 份全部按声明行为，结构层夹具
 36 份同样全绿。
+
+---
+
+## 五之二、EP00-FIX-2 收口补丁 v2
+
+首版收口后 Founder 追加两条裁决 ＋ 三件自修。两项裁决均属**已冻结内容的自相矛盾修复**，
+按 `scope_freeze_rule` 的「缺陷修复不受此限」执行，不是新增范围。
+
+### 裁决①　`check_sequential_registration` 由 B 类提前迁为 A 类
+
+B 类的判准原文是「到 BR2 收口时，该判据在支线上是否已经有真实被守护对象。有则迁入」。
+**它今天就有**：`founder_pinned_baseline.v0.1.yaml` 里的 README-MOD 登记项正是它的被守对象。
+原分类的 `why_deferred` 写「守的是执行包顺序登记，支线 `execution/` 无实例」——
+把被守对象认成了执行包登记面，而判据实际读的是 `authorized_modification_history`。
+分类结果与自己的判准矛盾，属缺陷。
+
+迁移成本远低于 EP00-04 那三个：依赖的 `ROOT` / `cli` / `is_full_commit_hash` / `load_yaml` /
+`sha256_text` 五个函数 main 上全部已有，`_common.py` **零改动**，不需要新建任何登记册。
+
+**迁入当场判红 11 条。** 这不是噪音，是它上线第一件守到的事：
+`founder_pinned_baseline` 的 README-MOD 登记项里，多数 `landed_in_commit` 写的是
+`M1_EP03_CLOSEOUT_COMMIT`、`M0_PASS_EFFECTIVE_COMMIT` 这类符号名——与被禁用的「最新版」同性质，
+解析不到唯一对象，而在此之前没有任何判据在守。
+
+修法是复算，不是放宽：对每条登记的 `binary_sha256`，取
+`git rev-list --reverse --all -- README.md` 中第一个使 README 内容哈希等于该值的提交。
+三重对照——
+
+- **算法自证**：两条本已是确定哈希的条目用同一算法复算，README-MOD-01 复出 `a235b558…`、
+  README-MOD-12 复出 `9117311…`，与既登记值逐字相符；
+- **语义对照**：每个复算出的提交，其 subject 与原符号名一一对应
+  （`M1_EP03_CLOSEOUT_COMMIT` → `37f636c` 「M1-EP03 集成与收口」）；
+- **父子对照**：README-MOD-02 的符号名自称是 `9335180f…` 的子提交，复算出的 `dcd64842` 的父提交正是该哈希。
+
+符号占位符残留 0 处。
+
+扫描另有一处未消除的值，判定为**不同类**并显式放行（KI-06）：`guardian_handoff_package.yaml` 的
+`candidate_commit: RECORDED_IN_CANDIDATE_FREEZE_RECEIPT` 是指向另一份记录的指针，
+而那份记录确实存放 `9335180f…`。放行不是免检——断言门当场复算指针目标，指不到 40 位哈希即判失败。
+
+**跨分支撞号已入 `deferred_items`，并写明它没被守住**：`br0/ep00` 与 `candidate/m2` 并行占用了
+MOD-12、MOD-13 两个号。本判据守的是「同一台账内唯一且连续」，两条分支各自单看都合法，
+因此它不会提前预警，只在两份台账合入同一文件的那一刻当场拦下合并。这是正确行为，
+但**不等于「已被守住」**——合并方必须在合并前人工重编号，不得等判据报红再处理。
+
+### 裁决②　两条永久治理规则文本迁入 main
+
+`GR-GATE-01` 与 `GR-LINKED-01` 在 M2 期确立并声明「全项目长期生效」，
+但原文此前只存在于未合并的 `candidate/m2`——一条声称全项目生效的规则，主干上援引不到。
+本包把两条文本迁入 `branch_baseline.v0.1.yaml` 的 `permanent_governance_rules`，
+共 2 条，由脚本自源文件 `general_rule.statement` 直取，未经手抄。
+
+**迁的是规则，不是它的判据。** 两条的 `enforcement` 一律 `MANUAL_FOUNDER_AUTHORIZATION_ONLY`：
+`GR-GATE-01` 的执行判据 `check_m2_gate_retirement_guard` 绑定 M2 台账，归 C 类不迁，
+因此它在 main 上**没有自动化强制**，只是可援引的书面规则——不得表述为「已由判据强制」。
+`non_goals_and_stop_conditions.v1.0.yaml` 属 `M0_FROZEN`，本包零改动。
+
+`GR-LINKED-01` 在本包当场被援引：新增判据连带要求 README 判据计数与列名同步、
+pin 重算、README-MOD-14 登记。依该条，这些联动登记项不必逐次裁决，但须在报告中列明——即本段。
+
+### 三件自修
+
+| # | 修的是什么 | 怎么修 |
+|---|---|---|
+| 1 | 回执 `candidate_commit` 指向 `9117311…`，而同文件的度量属更后面的提交 | 留空 ＋ 声明由 `git rev-parse HEAD` 现算。不回填另一个会再次过期的哈希——它已经过期过一次 |
+| 2 | `README-MOD-13` 的 `landed_in_commit` 是符号占位符 | 与其余符号名同批复算为确定哈希（`61d929d…`）。本包改 README 后新增的 `README-MOD-14` 才是自指条目，按留空 ＋ `self_reference_limitation` 声明处理 |
+| 3 | `founder_ruling_wording_is_founder_verbatim: true` 表述不准确 | 改为 `wording_source: guardian_drafted_founder_approved`。「执行侧逐字转录」与「措辞出自 Founder 之手」是两件事，前者成立，后者不成立 |
+
+自修 2 与执行 Prompt 的字面表述有一处偏离，已经 Founder 当场裁决：Prompt 原写
+「`README-MOD-13` 留空 ＋ 声明」，但本包为同步判据计数必须改 README，连带产生 `README-MOD-14`，
+MOD-13 随之不再是最新一条——而判据允许留空的路径只对**最新一条自指项**开放。
+Founder 裁定改 README 并把 MOD-13 回填为它真实的落地提交。
 
 ---
 
@@ -245,8 +318,14 @@ EP01 这个编号让给 Runtime Skeleton。
 
 ### 裁决落盘方式
 
-`DIYU-CBFSK-FOUNDER-BR0-START-001`，YAML 原文由 Founder 直接给出，执行侧**逐字落盘**，
-未新增、未扩张、未解释性改写任何一条。六条 `article_1`…`article_6` ＋ `scope_freeze_rule`。
+`DIYU-CBFSK-FOUNDER-BR0-START-001`，措辞由 Guardian 起草、Founder 批准后以 YAML 原文下发；
+执行侧对下发文本**逐字落盘**，未新增、未扩张、未解释性改写任何一条。
+六条 `article_1`…`article_6` ＋ `scope_freeze_rule`。
+
+口径更正（EP00-FIX-2 自修 3）：首版写作 `founder_ruling_wording_is_founder_verbatim: true`，
+不准确。「执行侧逐字转录」成立，「措辞出自 Founder 之手」不成立，两件事不能合成一句话。
+现记为 `wording_source: guardian_drafted_founder_approved` ＋
+`transcription_fidelity: verbatim_from_founder_dispatched_text`。
 
 原文送达前，执行侧曾按 Founder 确认的草案落过一份 A1—A5（措辞由执行侧起草，明标非 Founder 原文）。
 **原文一到即整份删除，不保留、不并存**——同一份裁决两份并存，下游就分不清哪份是真的。
@@ -257,15 +336,19 @@ EP01 这个编号让给 Runtime Skeleton。
 | 条 | 落点 | 状态 |
 |---|---|---|
 | `article_1_baseline` | `baseline_commit` / `runtime_base_branch` | ALIGNED |
-| `article_2_candidate_m2` | 仅 3 个判据回迁，其余 25 个（B 类 7 ＋ C 类 18）留 `deferred_items` | ALIGNED |
+| `article_2_candidate_m2` | 仅 4 个判据回迁，其余 24 个（B 类 6 ＋ C 类 18）留 `deferred_items` | ALIGNED |
 | `article_3_readme` | EP00-02 已交付：删整段状态块，保留 hash pin 与活基线 marker | ALIGNED |
 | `article_4_secret_boundary` | EP00-03B 已交付：业务词扫描 → 真实敏感信息检测 | ALIGNED |
 | `article_5_m2_adr` | 暂停维护、分类留档——六份 ADR 一份都没复制到 main | ALIGNED |
 | `article_6_br0_ep01` | `decision: AUTHORIZED`，前置「回执 PASS 且 PR 合并入 main」 | 前置未满足 |
 
-`article_2` 说「其余 25 个留 deferred_items」；本仓把它们再分成
-B 类（BR2 收口逐个重评）与 C 类（支线不恢复 M2 评测基座）。那是**怎么 defer** 的细化，
-不是改动裁决——一个都没迁入。
+`article_2` 原文写的是「仅 3 个判据（report_number_traceability / founder_confirmation_binding / collect_derivation_discipline）；其余 25 个留 deferred_items」。本仓把延期的那批再分成
+B 类（BR2 收口逐个重评）与 C 类（支线不恢复 M2 评测基座），那是**怎么 defer** 的细化，不是改动裁决。
+
+签署之后，Founder 在 EP00-FIX-2 裁决①中把 `check_sequential_registration` 提前迁入，
+回迁数与延期数随之变为 4 与 24。
+**改动这两个数字的是 Founder 的后一次裁决，不是执行侧自行调数**——裁决书本体一字未改，
+原文的数字是签署当时的分类快照，修正记录在 `ruling_alignment` 的 `amended_by_ruling`。
 
 ### 签署关掉了什么、没关掉什么
 
@@ -284,6 +367,7 @@ B 类（BR2 收口逐个重评）与 C 类（支线不恢复 M2 评测基座）�
    （`br0_ep01_requirements` 强制三条：pytest ≥1 真实测试 / 首次 migration `tenant_id NOT NULL` / JIT 不提前冻结）
 
 本 PR 标题注明「待 Guardian 审查，勿合并」，执行侧不自行合并。
+EP00-FIX-2 之后 Guardian 只需**增量复核**本轮改动，已过部分不重审。
 
 **范围已冻结**（`scope_freeze_rule.effective_from_this_ruling: true`）：此后新发现一律进 `deferred_items`，不回改本包、不新增子任务。
 Guardian 审查提出的缺陷修复不受此限——修缺陷不是扩范围。

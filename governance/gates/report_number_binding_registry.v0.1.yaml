@@ -42,10 +42,15 @@ discovery:
       支线报告按 <BRn>/<BRn-EPmm>/ 两级归档，比主线深一层。加 glob 而不是逐条登记——
       否则下一份支线报告会因为路径深一层而自动绕开本册。扫描范围只可扩大，不可收窄。
 
-report_count: 5
+report_count: 6
 reports:
   - report: 11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_report.md
     template: 11_reports_and_receipts/BR0/BR0-EP00/br0_ep00_delivery_report.md.tmpl
+    status: templated
+    literal_allowlist: []
+
+  - report: 11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_report.md
+    template: 11_reports_and_receipts/BR0/BR0-EP01/br0_ep01_delivery_report.md.tmpl
     status: templated
     literal_allowlist: []
 

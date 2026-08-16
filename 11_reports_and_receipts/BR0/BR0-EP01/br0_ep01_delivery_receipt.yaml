@@ -1,0 +1,350 @@
+# BR0-EP01 交付回执 · 运行时骨架与 Tenant 安全根
+#
+# 回执回答三个问题：审的是哪个 Commit、每条验收实际结果是什么、证据在哪。
+
+schema_version: '0.1'
+package_id: BR0-EP01
+baseline_commit: 8f327c354afb5dc6ec085e48dc6eaf28f4272a13
+candidate_commit: ad375df6b0587ed3db5aadfe1bac373b1d41ccfa
+candidate_commit_note: >-
+  ad375df 是本包最后一个改动运行时代码的提交，也是 ECS 上实际部署的镜像标签。
+  本回执与交付报告落盘会再产生一个提交，其改动面仅限
+  11_reports_and_receipts/BR0/BR0-EP01/ 与 governance/gates/report_number_binding_registry.v0.1.yaml，
+  不含任何运行时字节。可用 `git diff --name-only ad375df..HEAD` 复算。
+candidate_commit_rule: 禁止以「最新版」「当前分支」代指；回执不绑定具体 Commit 即无效。
+branch: br0/ep01-runtime-skeleton
+
+execution_authority: GRANTED_BY_DIYU-CBFSK-FOUNDER-BR0-START-001
+founder_rulings_2026_08_16:
+  - R1-ECS按需
+  - R2-共享主机独立命名空间
+  - R3-按PRD选型
+  - R4-Worker仅骨架
+  - R5-PR+Guardian
+  - R6-历史报告豁免
+  - R7-标记更正
+
+result: PASS
+result_rule: >-
+  CONDITIONAL 不等于 PASS。判 CONDITIONAL 时，每个条件必须进条件台账并绑定证据与 Commit，
+  否则一律按 BLOCK 处理。
+
+# ---------------------------------------------------------------------------
+# 度量。报告模板从这里现读，不由人手抄。
+# ---------------------------------------------------------------------------
+measurement:
+  runtime_python_modules: 20
+  api_route_handlers: 12
+  test_files: 5
+  pytest_tests: 23
+  playwright_tests: 2
+  model_tables: 6
+  tenant_scoped_tables: 4
+  brand_scoped_tables: 1
+  migrations: 1
+  composite_foreign_keys: 1
+  frontend_files_migrated: 0
+  frontend_source_files_authored: 3
+  local_compose_services: 4
+  staging_compose_services: 4
+  deploy_scripts: 3
+  ci_jobs_executed: 5
+  ci_boundary_scans: 5
+  python_matrix_legs: 2
+  ecs_namespace_items: 8
+  neighbour_health_checks_before_deploy: 3
+  neighbour_health_checks_after_deploy: 3
+  acceptance_criteria: 12
+  files_changed_vs_main: 57
+  # 既有治理闸，本包未改动其数目
+  checkers_on_main: 25
+  judgement_fixtures: 161
+  schema_fixtures: 36
+  prd_contract_checks: 63
+
+# ---------------------------------------------------------------------------
+# 技术栈实测取值（PRD 附录 D 对照）
+# ---------------------------------------------------------------------------
+stack_actual:
+  python_production_baseline: 3.13.9
+  python_ci_matrix: ['3.13', '3.14']
+  fastapi: 0.141.1
+  pydantic: 2.13.4
+  sqlalchemy: 2.0.52
+  alembic: 1.19.1
+  postgresql: 18.4
+  node: 24.13.0
+  vite: 7.3.6
+  react: 19.2.4
+  react_server_components_used: false
+  antd: 5.29.3
+  playwright: 1.62.1
+  package_manager: [uv 0.9.7, npm 10.x]
+  lockfiles_committed: [uv.lock, web/package-lock.json, e2e/package-lock.json]
+  version_pin_deviations:
+    - requested: vite 7.1.14
+      actual: 7.3.6
+      reason: npm registry 无 7.1.14 该版本；取 7.x 线现有最高版，仍满足附录 D「Node 24 + Vite 工具链」。
+    - requested: antd 5.29.7
+      actual: 5.29.3
+      reason: npm registry 无 5.29.7；取 5.x 线现有最高版。antd 6 已发布但属主版本跨越，不在本包范围内。
+  version_pin_note: >-
+    附录 D 原文「技术版本在 BR0 以 lockfile、SBOM 和安全扫描结果为准」。
+    以上取值全部由三份 lockfile 冻结，可复算。
+
+# ---------------------------------------------------------------------------
+# 前端：参考而非拷贝
+# ---------------------------------------------------------------------------
+frontend_reuse:
+  migrated_file_count: 0
+  pinned_reuse_ledger_entries_added: 0
+  referenced_patterns:
+    - vite.config.ts 的挂载模式（base 由后端挂载路径决定、esbuild.jsx automatic、固定 outDir/entryFileNames）
+    - bootstrap 挂载模式（单一 root 容器、缺容器即抛错）
+  not_migrated:
+    - src/styles/（与 Ant Design 冲突）
+    - src/components/（全部基于 antd 重建）
+    - src/services/（另一套后端合同，禁止迁入）
+    - src/app/（另一套后端合同，禁止迁入）
+    - package.json（按 PRD 重建，未拷贝）
+  verification: web/src 下 3 个源文件全部为本包新写；CI boundaries 作业断言 services / app 目录不存在。
+
+# ---------------------------------------------------------------------------
+# 租户安全根
+# ---------------------------------------------------------------------------
+tenant_root:
+  tenant_id_not_null_tables: [brands, draft_tasks, tenant_memberships, tenant_settings]
+  tenant_root_whitelist:
+    tenants: 本表是租户根自身，主键即 tenant_id
+    users: 自然人身份跨租户唯一，租户归属由 tenant_memberships 承载
+    alembic_version: alembic 自身的版本表，不是客户数据表
+  composite_foreign_key: draft_tasks (tenant_id, brand_id) -> brands (tenant_id, id) ON DELETE RESTRICT
+  no_brand_id_tables: [tenants, tenant_memberships, tenant_settings]
+  tenant_context_source: 服务端会话（runtime/api/deps.py 的 current_tenant_id 为唯一产出处）
+  request_surface_tenant_fields: 1
+  request_surface_note: >-
+    唯一接受租户标识入参的端点是 PUT /api/session/tenant，它做的是「校验成员关系后固化进会话」，
+    不是「按参数取数据」。CI boundaries 作业按字段声明数目断言这一点。
+  database_roles:
+    migrator: cbfsk_migrator（拥有库、可改结构、只在迁移期使用）
+    app: cbfsk_app（NOBYPASSRLS、NOSUPERUSER、NOCREATEDB、NOCREATEROLE、仅 DML 权限）
+  app_role_ddl_privileges: 0
+  rls_policies_enabled: false
+  rls_note: >-
+    本包按合同只做角色分离与 NOBYPASSRLS，未启用行级安全策略。
+    NOBYPASSRLS 在没有 RLS 策略时是空守卫——如实记录，不表述为「已具备 RLS 隔离」。
+    见 known_issues KI-EP01-01。
+
+# ---------------------------------------------------------------------------
+# Worker
+# ---------------------------------------------------------------------------
+worker:
+  delivered: 进程骨架 + enqueue 接口位 + compose 中一个 worker service
+  registered_handlers: 0
+  queue_framework_hits: 0
+  enqueue_requires_tenant: true
+  note: 队列选型属 BR1-EP03。骨架期先引框架，等于让猜测锁死后面的真实需求。
+
+# ---------------------------------------------------------------------------
+# ECS Staging
+# ---------------------------------------------------------------------------
+ecs:
+  trigger_status: TRIGGERED
+  trigger_reason: 本地 Compose 闭环全部验收通过（EP01-01 / EP01-03 / EP01-04 均实跑 PASS）
+  deployed_image_tag: diyu-cbfsk-runtime:ad375df6b0587ed3db5aadfe1bac373b1d41ccfa
+  namespace:
+    postgres_database: diyu_cbfsk
+    db_roles: [cbfsk_migrator, cbfsk_app]
+    object_storage_bucket: diyu-cbfsk-materials
+    config_dir: /etc/diyu-cbfsk
+    app_dir: /opt/diyu-cbfsk
+    backup_dir: /var/backups/diyu-cbfsk
+    container_prefix: diyu-cbfsk-
+    app_port: 18001
+  app_port_derivation: >-
+    合同规定「从 18000 起顺延，占用则 +1」。18000 在共享主机上已被另一进程占用（实测），
+    provision 脚本现算得 18001。端口是算出来的，不是写死的。
+  neighbour_health_before: [200, 200, 200]
+  neighbour_health_after: [200, 200, 200]
+  neighbour_containers_untouched: true
+  neighbour_port_owner_unchanged: true
+  public_exposure_configured: false
+  public_exposure_note: >-
+    支线 Staging 只监听回环，未新增 Nginx server 块、未改动主机上任何既有 server 块。
+    合同允许新增独立 server 块但不要求；对外暴露是独立决定，不作为本包副作用。
+  bootstrap_secret_removed: true
+  bootstrap_secret_note: 初始账号口令由 provision 现场随机生成，bootstrap 跑完即 shred 删除，未落仓、未回显。
+  blocked_on_shared_host: []
+  site_specific_identifiers_in_repo: 0
+  site_specific_identifiers_note: >-
+    共享基础设施容器名与邻居健康探针地址一律改为必填环境变量（${VAR:?}），仓内不写默认值。
+    第一版曾写了默认值，自查发现后以 3271b28a4428ff2f97191200ed9dcbf19974856e 收口并重建镜像重部署。
+
+# ---------------------------------------------------------------------------
+# 验收
+# ---------------------------------------------------------------------------
+acceptance_results:
+  - id: EP01-01
+    criterion: docker compose up 起得来；浏览器可登录、创建 Tenant / Brand / Draft Task
+    method: E2E_DEMO
+    result: PASS
+    evidence_ref: compose_up_and_e2e
+
+  - id: EP01-02
+    criterion: 首个 migration 中所有客户表 tenant_id NOT NULL；租户上下文服务端固化；app 角色 NOBYPASSRLS
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: tenant_root_invariants
+
+  - id: EP01-03
+    criterion: pytest ≥1 个针对 /healthz 与首个 migration 的真实测试；Playwright ≥1 个针对登录→创建 Tenant 的 E2E；均接入 runtime-ci.yml 且实跑通过
+    method: INTEGRATION_TEST
+    result: PASS
+    evidence_ref: test_suites
+
+  - id: EP01-04
+    criterion: upgrade → downgrade → upgrade 实跑一次
+    method: OPERATIONAL_DRILL
+    result: PASS
+    evidence_ref: migration_drill
+
+  - id: EP01-05
+    criterion: Billing surface = 0
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: boundary_scans
+
+  - id: EP01-06
+    criterion: 版本与 PRD 附录 D 一致（Python 3.13 / FastAPI 0.129+ / PG18 / Node 24 / antd / Playwright）；uv.lock 与 package-lock.json 已提交；CI 另有 3.14 矩阵
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: stack_versions
+
+  - id: EP01-07
+    criterion: 前端迁入文件数 = 0（或每件在 Ledger 有 40 位 commit + sha256 + 理由）；src/services/、src/app/ 零迁入
+    method: DETERMINISTIC_CHECK
+    result: PASS
+    evidence_ref: frontend_zero_migration
+
+  - id: EP01-08
+    criterion: 全仓历史仓形态路径命中 0；P7C/Content Kernel/DIFY/CSO 命中 0；无邻居应用的端点/库名/桶名/容器名/配置目录；check_m0_zero_contact PASS
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: boundary_scans
+
+  - id: EP01-09
+    criterion: 全仓无任何密钥值
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: secret_boundary
+
+  - id: EP01-10
+    criterion: ECS：已触发则命名空间全部落第五节取值，且部署前后邻居应用三项健康检查均 200；未触发则标 NOT_TRIGGERED 并说明本地闭环状态
+    method: OPERATIONAL_DRILL
+    result: PASS
+    evidence_ref: ecs_deployment
+
+  - id: EP01-11
+    criterion: ci/run_all_checks.py EXIT=0（25 判据）、drift=0、三个既有 workflow 全绿、runtime-ci.yml 绿、git status --porcelain 空
+    method: CI_FULL_RUN
+    result: PASS
+    evidence_ref: four_workflows_green
+
+  - id: EP01-12
+    criterion: R6 豁免记录与 R7 标记更正已落盘且措辞如第七节
+    method: DETERMINISTIC_GREP
+    result: PASS
+    evidence_ref: r6_r7_landed
+
+evidence_refs:
+  compose_up_and_e2e: >-
+    `docker compose up -d` 四服务起齐（db healthy / migrate exit 0 / api healthy / worker up）；
+    `cd e2e && npx playwright test` → 2 passed，覆盖「登录 → 创建租户 → 创建品牌 → 创建草稿任务」
+    与「未登录时 /api/brands 返回 401」。同一组用例在 GitHub Actions 的 e2e 作业里对
+    `docker compose up --build --wait` 起的栈重跑一次，1m37s 通过。
+  tenant_root_invariants: >-
+    tests/test_tenant_root_invariants.py 三层各查各的：模型层（metadata 每表非租户根即 tenant_id NOT NULL）、
+    迁移层（离线渲染 SQL 里逐表断言 NOT NULL 与复合外键、并断言 app 角色未获 DDL 授权）、
+    活库层（information_schema 与 pg_roles 实查）。活库实测：
+    brands/draft_tasks/tenant_memberships/tenant_settings 四表 is_nullable=NO；
+    fk_draft_tasks_tenant_brand = FOREIGN KEY (tenant_id, brand_id) REFERENCES brands(tenant_id, id) ON DELETE RESTRICT；
+    cbfsk_app rolbypassrls=false / rolsuper=false / rolcreatedb=false / rolcreaterole=false。
+    另有 tests/test_cross_tenant_rejection.py 绕开全部应用代码，直接用 SQL 插入
+    「A 租户的任务引用 B 租户的品牌」，实测被数据库 IntegrityError 拒绝。
+  test_suites: >-
+    pytest 23 用例全绿（Python 3.13.9 与 3.14.0 两条腿各跑一次）；Playwright 2 用例全绿。
+    两者均已接入 .github/workflows/runtime-ci.yml，run 31933195961 五个作业全部成功。
+  migration_drill: >-
+    `alembic upgrade head` → `alembic downgrade base`（public schema 只剩 alembic_version）
+    → `alembic upgrade head`（六张表全部重建）→ `alembic current` = 0001_tenant_root。
+    本地实跑一次，CI backend 作业每条 Python 腿各再跑一次。
+  boundary_scans: >-
+    runtime-ci.yml 的 boundaries 作业 5 项扫描全 PASS：收费面 0、队列框架 0、
+    历史资产路径与标识 0、前端 services/app 目录不存在、请求面租户标识字段声明恰好 1 处。
+    check_m0_zero_contact 在 run_all_checks 中 PASS。
+  secret_boundary: >-
+    secret-and-hidden-boundary workflow 全绿（run 31933195940），含 secret pattern scan、
+    real leak boundary 与 9 negative + 6 positive 自测夹具。仓内全部口令位均为占位或必填环境变量。
+  stack_versions: 见本回执 stack_actual 块；三份 lockfile 已提交并进入 CI 的 `uv sync --frozen` / `npm ci`。
+  frontend_zero_migration: 见本回执 frontend_reuse 块；pinned_reuse_ledger.v0.1.yaml 未新增任何条目。
+  ecs_deployment: >-
+    provision → build → deploy 三步实跑。部署前后各探一次邻居应用的
+    /health/ready、/health/live、/status，六次全部 200；共享基础设施容器状态未变，
+    18000 端口占用进程 pid 未变。支线服务在 127.0.0.1:18001，healthz={"status":"ok"}、
+    readyz={"status":"ready"}、/app/ 返回 200；活库 alembic_version=0001_tenant_root。
+  four_workflows_green: >-
+    Commit ad375df6b0587ed3db5aadfe1bac373b1d41ccfa 上四个 workflow 全部 success：
+    role-governance-integrity (31933195939)、secret-and-hidden-boundary (31933195940)、
+    document-integrity (31933195968)、runtime-ci (31933195961)。
+    本地：run_all_checks EXIT=0、compile_role_instructions --check drift=0、
+    check_prd_v1_2 --require-archive RESULT PASS 63 checks、git status --porcelain 空。
+  r6_r7_landed: >-
+    01_contracts_and_schemas/branch_baseline.v0.1.yaml 的 gates 段：
+    guardian_reports_landing.status=EXPLICITLY_WAIVED_WITH_RISK_ACCEPTANCE、
+    m1_03_status=WAIVED_BY_FOUNDER；
+    merged_commit_guardian_coverage.status=COVERED_BY_POST_MERGE_REVIEW、timing=POST_MERGE。
+    原 guardian_reports_landed / guardian_review_coverage 两处旧口径已被取代，不并存（EQ-1）。
+
+# ---------------------------------------------------------------------------
+# 已知问题
+# ---------------------------------------------------------------------------
+known_issues:
+  - id: KI-EP01-01
+    statement: >-
+      app 角色是 NOBYPASSRLS，但库里尚无任何 RLS 策略——在没有策略的前提下，
+      NOBYPASSRLS 是一道空守卫。目前跨租户隔离靠的是复合外键（结构层）与
+      服务端会话固化的租户上下文（应用层），不靠行级安全。
+      咬人的条件：出现第二条数据访问路径（直连 SQL、报表工具、运维脚本）时，
+      它们不经过应用层，就只剩复合外键这一道。
+    disposition: DEFERRED_TO_BR1
+  - id: KI-EP01-02
+    statement: >-
+      web/package-lock.json 与 e2e/package-lock.json 落在各自 package.json 旁边，
+      而不是执行合同 §四 目录树字面所示的仓根。npm 要求 lockfile 与 package.json 同级，
+      放仓根 `npm ci` 不认。属结构性偏离字面目录树，不是漏交付。
+    disposition: ACCEPTED_RISK
+  - id: KI-EP01-03
+    statement: >-
+      为让边界扫描保持字面严格（不加排除面），三处说明性注释里的
+      「计费 / Billing / Celery 等框架名」改用同义中文表述。
+      咬人的条件：后续有人想在注释里写出这些字面词做说明时会被扫描判红，
+      需要按同样方式改措辞，而不是给扫描加白名单。
+    disposition: ACCEPTED_RISK
+  - id: KI-EP01-04
+    statement: >-
+      mypy 配置固定 python_version = "3.13"，因此 3.14 那条 CI 腿做的是
+      「用 3.14 解释器跑 3.13 语义的类型检查」，不是 3.14 语义的类型检查。
+      运行时与测试在 3.14 上是真跑的；只有类型语义这一层没有独立的 3.14 口径。
+    disposition: DEFERRED_TO_BR1
+  - id: KI-EP01-05
+    statement: >-
+      Staging 未安装定时备份 timer。本包库内尚无任何客户数据，因此不构成当下风险；
+      但第一条真实客户数据进库之前备份必须先就位，这条属 BR1 退出门。
+    disposition: DEFERRED_TO_BR1
+known_issues_rule: >-
+  空列表必须是「查过了没有」，不是「没查」。没查就写 NOT_ASSESSED 并说明为什么没查。
+
+next_action: >-
+  Founder 指派 Guardian 在隔离工作区审查本 PR（base main，标题已注明「待 Guardian 审查，勿合并」）。
+  Guardian 必须实跑三个既有 workflow 与 runtime-ci.yml，不得只跑 ci/run_all_checks.py——
+  BR0-EP00 期间已发生过因只跑本地判据而漏掉红闸的覆盖缺口。执行侧不自行合并。

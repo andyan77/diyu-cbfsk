@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+
 from runtime.adapters.object_storage import NullObjectStorage, tenant_object_key
 from runtime.worker.main import HANDLERS, run_once
 from runtime.worker.queue import InMemoryTaskQueue, TaskEnvelope, enqueue

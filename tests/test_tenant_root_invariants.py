@@ -18,9 +18,10 @@ from contextlib import redirect_stdout
 import pytest
 from alembic import command
 from alembic.config import Config
+from sqlalchemy import Engine, inspect, text
+
 from runtime.domain.base import BRAND_SCOPED_TABLES, NO_BRAND_ID_TABLES, TENANT_ROOT_TABLES, Base
 from runtime.domain.models import Brand, DraftTask, Tenant, TenantMembership, TenantSettings, User
-from sqlalchemy import Engine, inspect, text
 from tests.conftest import OFFLINE_URL, TEST_MIGRATOR_URL_ENV, requires_live_db
 
 # 引用一次，保证 metadata 完整（导入即注册）。

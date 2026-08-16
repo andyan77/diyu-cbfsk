@@ -10,9 +10,10 @@ from __future__ import annotations
 import os
 
 from alembic import context
+from sqlalchemy import engine_from_config, pool
+
 from runtime.domain.base import Base
 from runtime.domain.models import Brand, DraftTask, Tenant, TenantMembership, TenantSettings, User
-from sqlalchemy import engine_from_config, pool
 
 # 导入模型是为了让 Base.metadata 完整。显式引用一次，免得 linter 判为未使用而删掉。
 _MODELS = (Brand, DraftTask, Tenant, TenantMembership, TenantSettings, User)

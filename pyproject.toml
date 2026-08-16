@@ -40,6 +40,12 @@ include = ["runtime/**/*.py", "tests/**/*.py", "alembic/**/*.py", "pyproject.tom
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
+[tool.ruff.lint.isort]
+# 显式声明本仓包名。不声明的话 ruff 靠 src 与已安装包推断首party，
+# 本地（项目已 uv sync 进 .venv）与 CI 会推出不同结果，同一份代码两边排序不一致——
+# 已复现：本地 all checks passed，CI 判 I001。
+known-first-party = ["runtime", "tests"]
+
 [tool.mypy]
 python_version = "3.13"
 strict = true

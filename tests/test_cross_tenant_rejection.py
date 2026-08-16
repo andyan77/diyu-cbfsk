@@ -12,6 +12,7 @@ import uuid
 import pytest
 from sqlalchemy import Engine, text
 from sqlalchemy.exc import IntegrityError
+
 from tests.conftest import requires_live_db
 
 

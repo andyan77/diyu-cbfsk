@@ -66,16 +66,25 @@ shred -u /etc/diyu-cbfsk/bootstrap.env
 
 ## 4. 验证
 
+本手册一律用变量指代共享基础设施容器与邻居端点，不写它们的实际名字——
+那是部署环境的事实，不是支线仓的内容：
+
+```bash
+export DIYU_CBFSK_POSTGRES_CONTAINER=<共享 PostgreSQL 容器名>
+export DIYU_CBFSK_MINIO_CONTAINER=<共享 MinIO 容器名>
+export DIYU_CBFSK_NEIGHBOUR_PROBE=<邻居应用健康探针基址>
+```
+
 ```bash
 port="$(sed -n 's/^DIYU_CBFSK_APP_PORT=//p' /etc/diyu-cbfsk/app.env)"
 curl -sS "http://127.0.0.1:$port/healthz"    # {"status":"ok"}
 curl -sS "http://127.0.0.1:$port/readyz"     # {"status":"ready"}
 
 # 租户安全根的活库证据
-docker exec diyu-infra-postgres-1 psql -U "$POSTGRES_USER" -d diyu_cbfsk -c \
+docker exec "$DIYU_CBFSK_POSTGRES_CONTAINER" psql -U "$POSTGRES_USER" -d diyu_cbfsk -c \
   "SELECT table_name, is_nullable FROM information_schema.columns
     WHERE column_name='tenant_id' AND table_schema='public' ORDER BY table_name;"
-docker exec diyu-infra-postgres-1 psql -U "$POSTGRES_USER" -d diyu_cbfsk -c \
+docker exec "$DIYU_CBFSK_POSTGRES_CONTAINER" psql -U "$POSTGRES_USER" -d diyu_cbfsk -c \
   "SELECT rolname, rolbypassrls FROM pg_roles WHERE rolname LIKE 'cbfsk%';"
 ```
 
@@ -92,7 +101,7 @@ docker exec diyu-infra-postgres-1 psql -U "$POSTGRES_USER" -d diyu_cbfsk -c \
 
 ```bash
 docker rm -f diyu-cbfsk-api diyu-cbfsk-worker
-docker exec -i diyu-infra-postgres-1 psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+docker exec -i "$DIYU_CBFSK_POSTGRES_CONTAINER" psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
   -c 'DROP DATABASE diyu_cbfsk' -c 'DROP ROLE cbfsk_app' -c 'DROP ROLE cbfsk_migrator'
 rm -rf /etc/diyu-cbfsk /opt/diyu-cbfsk
 ```

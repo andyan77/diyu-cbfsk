@@ -13,8 +13,11 @@ if [[ $(id -u) -ne 0 ]]; then
   exit 1
 fi
 
-postgres_container="${DIYU_CBFSK_POSTGRES_CONTAINER:-diyu-infra-postgres-1}"
-minio_container="${DIYU_CBFSK_MINIO_CONTAINER:-diyu-infra-minio-1}"
+# 共享基础设施容器名由部署方现场给定，仓内**不写默认值**：
+# 主机上其他应用的容器名不是支线的知识，钉进仓等于把别人的运行资源写成本仓常量。
+# 没给就直接退出，比猜一个名字然后连错容器安全。
+postgres_container="${DIYU_CBFSK_POSTGRES_CONTAINER:?set DIYU_CBFSK_POSTGRES_CONTAINER}"
+minio_container="${DIYU_CBFSK_MINIO_CONTAINER:?set DIYU_CBFSK_MINIO_CONTAINER}"
 
 config_dir="/etc/diyu-cbfsk"
 app_dir="/opt/diyu-cbfsk"

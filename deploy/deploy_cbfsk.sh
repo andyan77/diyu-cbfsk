@@ -21,7 +21,9 @@ app_dir="/opt/diyu-cbfsk"
 source_dir="$app_dir/source"
 compose_file="$source_dir/deploy/docker-compose.staging.yml"
 config_dir="/etc/diyu-cbfsk"
-neighbour_probe="${DIYU_CBFSK_NEIGHBOUR_PROBE:-https://diyuai.cc}"
+# 邻居应用的健康探针地址同样由部署方给定，仓内不写默认值——
+# 那是别人的对外端点，不属于支线仓的内容。
+neighbour_probe="${DIYU_CBFSK_NEIGHBOUR_PROBE:?set DIYU_CBFSK_NEIGHBOUR_PROBE}"
 
 test -f "$config_dir/app.env"
 test -f "$config_dir/migrator.env"

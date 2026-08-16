@@ -19,3 +19,14 @@ __pycache__/
 *.pdf
 ~$*.docx
 .DS_Store
+
+# ── BR0-EP01 运行时骨架的本地产物 ──
+.venv/
+web/node_modules/
+web/dist/
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/

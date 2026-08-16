@@ -1,0 +1,56 @@
+[project]
+name = "diyu-cbfsk-runtime"
+version = "0.1.0"
+description = "笛语跨品牌服装搭配专家内核 · BR0-EP01 运行时骨架（Tenant 安全根）"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.129.0",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    "sqlalchemy>=2.0.51",
+    "alembic>=1.14",
+    "psycopg[binary]>=3.2",
+    "itsdangerous>=2.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "httpx>=0.28",
+    "ruff>=0.9",
+    "mypy>=1.14",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["runtime"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+src = ["runtime", "tests"]
+# 只检本包新落的运行时代码。ci/ 与 工具/ 是 M0/M1 已冻结的治理判据，
+# BR0-EP01 不得顺手重排它们——那会让 Guardian 的审查面从「新增运行时」变成「全仓 diff」。
+include = ["runtime/**/*.py", "tests/**/*.py", "alembic/**/*.py", "pyproject.toml"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["runtime", "tests"]
+plugins = []
+namespace_packages = true
+
+[[tool.mypy.overrides]]
+module = ["alembic.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

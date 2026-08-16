@@ -65,16 +65,43 @@ authority:
   br0_ep01_decision: AUTHORIZED
   br0_ep01_precondition: BR0-EP00 回执 PASS 且 PR 合并入 main
   br0_ep01_precondition_source: DIYU-CBFSK-FOUNDER-BR0-START-001 article_6_br0_ep01（逐字）
-  br0_ep01_precondition_state:
-    receipt_pass: MET
-    pr_merged_into_main: NOT_MET
-  br0_ep01_start: BLOCKED_UNTIL_PR_MERGED
-  br0_ep01_start_note: >-
-    裁决已判 AUTHORIZED，但前置的第二项未满足——PR #4 尚未合并 main。
-    授权 ≠ 前置已满足 ≠ 可以开工。合并本身另受红线「在 Founder 批准前合并 main」约束，
-    且本包属 L3，按仓内常设流程须 Guardian 审过后由 Founder 批准。
+  br0_ep01_precondition_state_at: gates   # 三道门的单一定义处在顶层 gates 段，此处不复制一份
   br0_ep01_identity: Runtime Skeleton
   runtime_development: false
+
+# ---------------------------------------------------------------------------
+# 一之一之二、三道门（BR0-M1 Phase A A-5）
+# ---------------------------------------------------------------------------
+# 这是三道门状态的**单一定义处**。authority 段只指向这里，不复制值——
+# 同一事实两个定义处，正是 EP00-02 从 README 拆掉的那种毛病。
+gates:
+  receipt_pass: MET
+  pr_merged_into_main: MET
+  br0_ep01_start: UNBLOCKED
+  merged_commit: 95dbc5dd8bc1d15d7721d56ce4eb03a1a5ccce84
+  merged_at: "2026-08-16T02:47:52Z"
+  merge_mode: FAST_FORWARD_ONLY
+  merge_mode_evidence: a5564e1..main 区间 0 个 merge commit，7 个线性提交
+  merge_authorization: Founder 于 2026-08-15 会话内显式批准合并（BR0-M1 Phase A）
+  merged_head_differs_from_prompt_target: >-
+    执行 Prompt A-2 写的目标是 9ad5f94。实际合并的是 95dbc5d——
+    9ad5f94 的 GitHub CI 为红（documents / boundary 两 job FAIL），
+    合它等于把红闸带进 main；95dbc5d 是修复后的同一支线 head，六个 check run 全 pass。
+    Founder 批准的是「合并」这个动作，目标哈希随修复前进。
+  guardian_review_coverage:
+    reviewed_commit: 9ad5f94eca7f64cf012c7aa7cc653ea6d7dd725c
+    merged_commit: 95dbc5dd8bc1d15d7721d56ce4eb03a1a5ccce84
+    status: MERGED_COMMIT_NOT_COVERED_BY_GUARDIAN_REVIEW
+    note: >-
+      Guardian 的 APPROVE 覆盖 9ad5f94 这一个树状态。实际合并的 95dbc5d 多出一个
+      commit（BR0-M1-PRE 合并前修复，5 文件 / +90 −11），未经 Guardian 复核。
+      Founder 在知悉该差异后仍显式批准合并——这是知情裁决，不是流程被绕过。
+      如实记录，不得表述为「已通过 Guardian 审查」。
+  guardian_reports_landed: false
+  guardian_reports_note: >-
+    A-4 要求逐字转录 Guardian 报告原文落 governance/reports/。原文未进入本工作区，
+    执行侧无法转录未见过的文本，也不得代写——那是红线「把 AI 评审冒充外部专家」。
+    待 Founder 提供原文后单独落盘并在 report_number_binding_registry 登记。
 
 # ---------------------------------------------------------------------------
 # 一之二、两份执行 Prompt 的合并去重记录

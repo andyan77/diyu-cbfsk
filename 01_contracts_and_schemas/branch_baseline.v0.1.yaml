@@ -34,12 +34,19 @@ authority:
       cleared_at_commit: 2133f74e66f6389aa7832613f522e759f0c699d5
   founder_ruling_file: governance/founder_rulings/DIYU-CBFSK-FOUNDER-BR0-START-001.yaml
   founder_ruling_id: DIYU-CBFSK-FOUNDER-BR0-START-001
-  wording_source: guardian_drafted_founder_approved
-  wording_source_note: >-
-    口径更正（EP00-FIX-2 自修 3）：此前写作 founder_ruling_wording_is_founder_verbatim: true，
-    表述不准确。准确的是——裁决措辞由 Guardian 起草，Founder 批准后以 YAML 原文下发；
-    执行侧对下发的原文逐字落盘，未新增、未扩张、未解释性改写任何一条。
-    「执行侧逐字转录」与「措辞出自 Founder 之手」是两件事，前者成立，后者不成立。
+  wording_source: planning_surface_drafted_founder_approved
+  wording_source_role_id: CLAUDE_PLANNING_AND_VERIFICATION_SURFACE
+  wording_source_role_ref: governance/bootstrap/role_operating_model.v0.2.yaml
+  wording_source_note: |
+    裁决措辞由 Cowork 规划与核验工作面（CLAUDE_PLANNING_AND_VERIFICATION_SURFACE）起草，
+    Founder 批准后以 YAML 原文下发，执行侧逐字转录。
+    CLAUDE_INDEPENDENT_GUARDIAN 未参与本裁决的任何起草。
+  role_overlap_disclosure: |
+    BR0-EP00 期间，Cowork 规划与核验工作面既提供过核验意见、又起草过执行 prompt
+    与本裁决草案。依 role_operating_model.v0.2 该角色 formal_guardian: false、
+    independent_review_vote: false，其核验意见属非正式预检查，不得表述为独立审查。
+    本包的独立审查由 CLAUDE_INDEPENDENT_GUARDIAN 在隔离工作区完成，
+    该工作面未参与任何起草，其结论的独立性不受本条影响。
   transcription_fidelity: verbatim_from_founder_dispatched_text
   founder_ruling_transcription_note: >-
     裁决共六条 article_1…article_6 ＋ scope_freeze_rule，落盘时与下发文本逐字相符。

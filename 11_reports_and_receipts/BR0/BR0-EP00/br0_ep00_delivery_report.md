@@ -196,7 +196,7 @@ pin 重算、README-MOD-14 登记。依该条，这些联动登记项不必逐�
 |---|---|---|
 | 1 | 回执 `candidate_commit` 指向 `9117311…`，而同文件的度量属更后面的提交 | 留空 ＋ 声明由 `git rev-parse HEAD` 现算。不回填另一个会再次过期的哈希——它已经过期过一次 |
 | 2 | `README-MOD-13` 的 `landed_in_commit` 是符号占位符 | 与其余符号名同批复算为确定哈希（`61d929d…`）。本包改 README 后新增的 `README-MOD-14` 才是自指条目，按留空 ＋ `self_reference_limitation` 声明处理 |
-| 3 | `founder_ruling_wording_is_founder_verbatim: true` 表述不准确 | 改为 `wording_source: guardian_drafted_founder_approved`。「执行侧逐字转录」与「措辞出自 Founder 之手」是两件事，前者成立，后者不成立 |
+| 3 | `founder_ruling_wording_is_founder_verbatim: true` 表述不准确 | 改为 `wording_source: planning_surface_drafted_founder_approved`（EP00-FIX-3 更正起草人归属）。「执行侧逐字转录」与「措辞出自 Founder 之手」是两件事，前者成立，后者不成立 |
 
 自修 2 与执行 Prompt 的字面表述有一处偏离，已经 Founder 当场裁决：Prompt 原写
 「`README-MOD-13` 留空 ＋ 声明」，但本包为同步判据计数必须改 README，连带产生 `README-MOD-14`，
@@ -318,14 +318,25 @@ EP01 这个编号让给 Runtime Skeleton。
 
 ### 裁决落盘方式
 
-`DIYU-CBFSK-FOUNDER-BR0-START-001`，措辞由 Guardian 起草、Founder 批准后以 YAML 原文下发；
-执行侧对下发文本**逐字落盘**，未新增、未扩张、未解释性改写任何一条。
+`DIYU-CBFSK-FOUNDER-BR0-START-001`，措辞由 **Cowork 规划与核验工作面**
+（`CLAUDE_PLANNING_AND_VERIFICATION_SURFACE`）起草、Founder 批准后以 YAML 原文下发；
+执行侧对下发文本**逐字转录**，未新增、未扩张、未解释性改写任何一条。
 六条 `article_1`…`article_6` ＋ `scope_freeze_rule`。
 
-口径更正（EP00-FIX-2 自修 3）：首版写作 `founder_ruling_wording_is_founder_verbatim: true`，
-不准确。「执行侧逐字转录」成立，「措辞出自 Founder 之手」不成立，两件事不能合成一句话。
-现记为 `wording_source: guardian_drafted_founder_approved` ＋
-`transcription_fidelity: verbatim_from_founder_dispatched_text`。
+口径更正分两次。首版写作 `founder_ruling_wording_is_founder_verbatim: true`，不准确——
+「执行侧逐字转录」成立，「措辞出自 Founder 之手」不成立，两件事不能合成一句话。
+EP00-FIX-2 自修 3 改了一版，把起草人认成 Guardian，仍然错。
+**EP00-FIX-3 更正为 `wording_source: planning_surface_drafted_founder_approved`**，
+并补 `wording_source_role_id` 指向规范源实存角色 ＋ `role_overlap_disclosure`。
+`transcription_fidelity: verbatim_from_founder_dispatched_text` 两次都未动。
+
+**`CLAUDE_INDEPENDENT_GUARDIAN` 未参与本裁决的任何起草。** 这不是措辞洁癖：
+把独立审查角色写成起草人，等于在记录上抹掉起草与审查的分离。规划与核验工作面在
+BR0-EP00 期间既出过核验意见、又起草过执行 prompt 与本裁决草案；依
+`role_operating_model.v0.2` 该角色 `formal_guardian: false`、`independent_review_vote: false`，
+其核验意见属**非正式预检查，不得表述为独立审查**。本包的独立审查由
+`CLAUDE_INDEPENDENT_GUARDIAN` 在隔离工作区完成，该工作面未参与任何起草，
+其结论的独立性不受本条影响。
 
 原文送达前，执行侧曾按 Founder 确认的草案落过一份 A1—A5（措辞由执行侧起草，明标非 Founder 原文）。
 **原文一到即整份删除，不保留、不并存**——同一份裁决两份并存，下游就分不清哪份是真的。
